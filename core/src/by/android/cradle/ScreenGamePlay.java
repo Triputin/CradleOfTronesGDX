@@ -13,9 +13,10 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
 public class ScreenGamePlay extends BaseScreen {
     private GameField gameField;
-    float gameFieldX;
-    float gameFieldY;
-    boolean flag = false ;
+    private float gameFieldX;
+    private float gameFieldY;
+    private boolean flag = false ;
+    private Item lastSelectedItem;
     public void initialize()
     {
         BaseActor.setWorldBounds(800,600);
@@ -32,6 +33,7 @@ public class ScreenGamePlay extends BaseScreen {
                     for (by.android.cradle.BaseActor CoinActor : by.android.cradle.BaseActor.getList(mainStage, "by.android.cradle.Coin")){
                         if(CoinActor.getBoundaryPolygon().contains(x+gameFieldX,y+gameFieldX)){
                             ((Coin)CoinActor).setSelected(true);
+                            lastSelectedItem =(Coin) CoinActor;
                         }
                     }
                 }
@@ -48,9 +50,6 @@ public class ScreenGamePlay extends BaseScreen {
 
                         }
                     }
-
-
-                System.out.println("up");
             }
             @Override
             public boolean mouseMoved(InputEvent event, float x, float y){
@@ -65,7 +64,14 @@ public class ScreenGamePlay extends BaseScreen {
                     if ( ie.getType().equals(InputEvent.Type.touchDragged)&&flag ){
                         for (by.android.cradle.BaseActor CoinActor : by.android.cradle.BaseActor.getList(mainStage, "by.android.cradle.Coin")){
                             if(CoinActor.getBoundaryPolygon().contains(x+gameFieldX,y+gameFieldX)){
-                                ((Coin)CoinActor).setSelected(true);
+                                if(lastSelectedItem.isNear(((Coin)CoinActor).getRow(),((Coin)CoinActor).getCol())){
+                                    if(!((Coin)CoinActor).isSelected()){
+                                        ((Coin)CoinActor).setSelected(true);
+                                        lastSelectedItem=((Coin)CoinActor);
+                                    }
+
+                                }
+
                             }
                         }
                     }
@@ -80,7 +86,7 @@ public class ScreenGamePlay extends BaseScreen {
         gameField.setTouchable(Touchable.enabled);
      for(int i = 0;i<4;i++){
             for(int j = 0;j<4;j++){
-                new Coin(gameFieldX+i*64,gameFieldX+j*64, mainStage);
+                new Coin(gameFieldX+i*64,gameFieldX+j*64, mainStage,j,i);
             }
         }
 
