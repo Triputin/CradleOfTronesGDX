@@ -5,23 +5,23 @@ import com.badlogic.gdx.scenes.scene2d.Touchable;
 
 public class Coin extends Item {
 
-    public Coin(float x, float y, Stage s,int row,int col)
+    public Coin(float x, float y,int width, int height, Stage s,int row,int col)
     {
-        super(x,y,s, Touchable.disabled,row,col);
-        loadTexture("assets/coin.jpg");
+        super(x,y,width, height,s,Touchable.disabled,row,col);
+        setSelected(false, SelDirection.ArrowToNorth);
         setBoundaryPolygon(8);
 
     }
 
     @Override
-    public void setSelected(boolean selected) {
+    public void setSelected(boolean selected, SelDirection selDirection) {
         if(selected){
-            loadTexture("assets/coinpressed.jpg");
+            loadTexture("assets/coinpressed.jpg", (int) getWidth(), (int) getHeight());
         }else {
-            loadTexture("assets/coin.jpg");
+            loadTexture("assets/coin1.png", (int) getWidth(), (int) getHeight());
         }
 
-        super.setSelected(selected);
+        super.setSelected(selected, selDirection);
     }
 
 }

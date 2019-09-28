@@ -13,9 +13,13 @@ public class GameField extends BaseActor {
     public GameField(float x, float y, Stage s,float width,float height)
     {
         super(x,y,s,Touchable.enabled);
-       this.setColor(255,255,255,255);
-       //loadTexture("assets/marble.jpg");
-        Texture imgTexture = new Texture(Gdx.files.internal("assets/marble.jpg"));
+       //this.setColor(255,255,255,255);
+       loadTexture("assets/game_of_thrones_locations4.jpg", (int) width,(int) height);
+        setHeight(height);
+        setWidth(width);
+
+        // repeated texture
+        /*Texture imgTexture = new Texture(Gdx.files.internal("assets/marble.jpg"));
         imgTexture.setWrap(Texture.TextureWrap.MirroredRepeat, Texture.TextureWrap.MirroredRepeat);
         TextureRegion imgTextureRegion = new TextureRegion(imgTexture);
         imgTextureRegion.setRegion(0,0,128*4,128*4);
@@ -26,10 +30,13 @@ public class GameField extends BaseActor {
         img.setSize(width,height);
         img.setPosition(0,0);
         addActor(img);
-       img.setBounds(0,0,width,height);
-       img.setTouchable(Touchable.enabled);
+        img.setBounds(0,0,width,height);
+        img.setTouchable(Touchable.enabled);
         setTouchable(Touchable.enabled);
         setBounds(x,y,width,height);
+        */
+
+
     }
 /*
     @Override

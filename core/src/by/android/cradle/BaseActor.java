@@ -1,5 +1,6 @@
 package by.android.cradle;
 
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 
@@ -144,7 +145,7 @@ public class BaseActor extends Group
      * @param loop should the animation loop
      * @return animation created (useful for storing multiple animations)
      */
-    public Animation<TextureRegion> loadAnimationFromFiles(String[] fileNames, float frameDuration, boolean loop)
+    public Animation<TextureRegion> loadAnimationFromFiles(String[] fileNames, float frameDuration, boolean loop, int width, int height)
     { 
         int fileCount = fileNames.length;
         Array<TextureRegion> textureArray = new Array<TextureRegion>();
@@ -152,9 +153,26 @@ public class BaseActor extends Group
         for (int n = 0; n < fileCount; n++)
         {   
             String fileName = fileNames[n];
-            Texture texture = new Texture( Gdx.files.internal(fileName) );
+            //Texture texture = new Texture( Gdx.files.internal(fileName) );
+            //texture.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);
+
+            // Изменяем размер загружаемой картинки из файла на заданный
+            Pixmap pixmap200 = new Pixmap(Gdx.files.internal(fileName));
+            Pixmap pixmap100 = new Pixmap(width, height, pixmap200.getFormat());
+            pixmap100.drawPixmap(pixmap200,
+                    0, 0, pixmap200.getWidth(), pixmap200.getHeight(),
+                    0, 0, pixmap100.getWidth(), pixmap100.getHeight()
+            );
+            Texture texture = new Texture(pixmap100);
             texture.setFilter( TextureFilter.Linear, TextureFilter.Linear );
-            textureArray.add( new TextureRegion( texture ) );
+            pixmap200.dispose();
+            pixmap100.dispose();
+
+
+            TextureRegion textureRegion=new TextureRegion( texture );
+            //textureRegion.setRegionWidth(128);
+            //textureRegion.setRegionHeight(128);
+            textureArray.add(textureRegion);
         }
 
         Animation<TextureRegion> anim = new Animation<TextureRegion>(frameDuration, textureArray);
@@ -213,11 +231,11 @@ public class BaseActor extends Group
      *  @param fileName names of image file
      *  @return animation created (useful for storing multiple animations)
      */
-    public Animation<TextureRegion> loadTexture(String fileName)
+    public Animation<TextureRegion> loadTexture(String fileName, int width, int height)
     {
         String[] fileNames = new String[1];
         fileNames[0] = fileName;
-        return loadAnimationFromFiles(fileNames, 1, true);
+        return loadAnimationFromFiles(fileNames, 1, true, width, height);
     }
 
     /**
