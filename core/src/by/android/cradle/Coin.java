@@ -8,7 +8,7 @@ public class Coin extends Item {
     public Coin(float x, float y,int width, int height, Stage s,int row,int col)
     {
         super(x,y,width, height,s,Touchable.disabled,row,col);
-        setSelected(false, SelDirection.ArrowToNorth);
+        setSelected(false, SelDirection.None);
         setBoundaryPolygon(8);
 
     }
