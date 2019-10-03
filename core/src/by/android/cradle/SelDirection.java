@@ -8,5 +8,9 @@ public enum SelDirection {
     ArrowToWest,
     HorizontalLine,
     VerticalLine,
+    UpToRight,
+    UpToLeft,
+    DownToRight,
+    DownToLeft,
     None
 }

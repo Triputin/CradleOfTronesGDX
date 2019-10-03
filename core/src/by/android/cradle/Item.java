@@ -12,14 +12,27 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 public class Item extends BaseActor {
 
     private boolean selected;
+
+    public boolean isSelectedFirst() {
+        return selectedFirst;
+    }
+
+    public void setSelectedFirst(boolean selectedFirst) {
+        this.selectedFirst = selectedFirst;
+    }
+
+    private boolean selectedFirst; // indicates that item was the first selected
     private int row;
     private int col;
     private SelDirection selectedDirection;
     private Image lineImage;
 
+    public SelDirection getSelectedDirection() {
+        return selectedDirection;
+    }
 
 
-    public Item(float x, float y,int width, int height, Stage s, Touchable touchable,int row,int col)
+    public Item(float x, float y, int width, int height, Stage s, Touchable touchable, int row, int col)
     {
         super(x,y,s, touchable);
         this.row = row;
@@ -28,6 +41,7 @@ public class Item extends BaseActor {
         setHeight(height);
         setWidth(width);
         selectedDirection = SelDirection.None;
+        selectedFirst=false;
     }
 
     public void AddImageDirection()
