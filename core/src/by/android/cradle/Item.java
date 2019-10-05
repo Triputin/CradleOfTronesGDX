@@ -12,6 +12,14 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 public class Item extends BaseActor {
 
     private boolean selected;
+    private boolean selectedFirst; // indicates that item was the first selected
+    private Item previous;
+    private Item next;
+    private int row;
+    private int col;
+    private SelDirection selectedDirection;
+    private Image lineImage;
+
 
     public boolean isSelectedFirst() {
         return selectedFirst;
@@ -20,12 +28,6 @@ public class Item extends BaseActor {
     public void setSelectedFirst(boolean selectedFirst) {
         this.selectedFirst = selectedFirst;
     }
-
-    private boolean selectedFirst; // indicates that item was the first selected
-    private int row;
-    private int col;
-    private SelDirection selectedDirection;
-    private Image lineImage;
 
     public SelDirection getSelectedDirection() {
         return selectedDirection;
@@ -44,18 +46,49 @@ public class Item extends BaseActor {
         selectedFirst=false;
     }
 
-    public void AddImageDirection()
+    private void AddImageDirection()
     {
         Pixmap pixmap200;
         if (selectedDirection!=SelDirection.None) {
-            // Изменяем размер загружаемой картинки из файла на заданный
-            if ((selectedDirection==SelDirection.ArrowToEast) || (selectedDirection==SelDirection.ArrowToWest)|| (selectedDirection==SelDirection.HorizontalLine)) {
-                 pixmap200 = new Pixmap(Gdx.files.internal("assets/linehoriz.png"));
-            }
-            else {
-                 pixmap200 = new Pixmap(Gdx.files.internal("assets/linevert.png"));
+
+            switch (selectedDirection){
+
+                case ArrowToEast:
+                    pixmap200 = new Pixmap(Gdx.files.internal("assets/arrowtoeast.png"));
+                    break;
+                case ArrowToWest:
+                    pixmap200 = new Pixmap(Gdx.files.internal("assets/arrowtowest.png"));
+                    break;
+                case HorizontalLine:
+                    pixmap200 = new Pixmap(Gdx.files.internal("assets/linehoriz.png"));
+                    break;
+                case ArrowToNorth:
+                    pixmap200 = new Pixmap(Gdx.files.internal("assets/arrowtonorth.png"));
+                    break;
+                case ArrowToSouth:
+                    pixmap200 = new Pixmap(Gdx.files.internal("assets/arrowtosouth.png"));
+                    break;
+                case VerticalLine:
+                    pixmap200 = new Pixmap(Gdx.files.internal("assets/linevert.png"));
+                    break;
+                case UpToLeft:
+                    pixmap200 = new Pixmap(Gdx.files.internal("assets/LineCorner03.png"));
+                    break;
+                case UpToRight:
+                    pixmap200 = new Pixmap(Gdx.files.internal("assets/LineCorner04.png"));
+                    break;
+                case DownToLeft:
+                    pixmap200 = new Pixmap(Gdx.files.internal("assets/LineCorner02.png"));
+                    break;
+                case DownToRight:
+                    pixmap200 = new Pixmap(Gdx.files.internal("assets/LineCorner01.png"));
+                    break;
+                    default:
+                        pixmap200 = new Pixmap(Gdx.files.internal("assets/linehoriz.png"));
             }
 
+
+            // Изменяем размер загружаемой картинки из файла на заданный
             Pixmap pixmap100 = new Pixmap((int) getWidth(), (int) getHeight(), pixmap200.getFormat());
             pixmap100.drawPixmap(pixmap200,
                     0, 0, pixmap200.getWidth(), pixmap200.getHeight(),
@@ -88,8 +121,10 @@ public class Item extends BaseActor {
 
     }
 
-    public SelDirection findDirection ( Item firstItem, Item secondItem){
+    private SelDirection findDirection ( Item firstItem, Item secondItem){
         SelDirection selDirection = SelDirection.None;
+        if(firstItem==null || secondItem==null)return  selDirection;
+
         if ((firstItem.getCol()==secondItem.getCol())&&(firstItem.getRow()==secondItem.getRow())){
             selDirection = SelDirection.None;
             return selDirection;
@@ -112,14 +147,59 @@ public class Item extends BaseActor {
         return selDirection;
     }
 
+    public SelDirection findDirection (){
+        SelDirection selDirection = SelDirection.None;
+        if (previous==null){
+            return selDirection;
+        }
+
+        if (next==null){
+            selDirection = findDirection(previous, this);
+            return selDirection;
+
+        }
+        ItemPos prevPos = findItemPos(previous);
+        ItemPos nextPos = findItemPos(next);
+        //System.out.println("prevPos "+ prevPos+ "  Col "+previous.getCol()+"  Row "+previous.getRow());
+        //System.out.println("nextPos "+nextPos+ "  Col "+next.getCol()+"  Row "+next.getRow());
+        if (prevPos==ItemPos.Up && nextPos==ItemPos.Right) selDirection=SelDirection.UpToRight;
+        if (prevPos==ItemPos.Up && nextPos==ItemPos.Down) selDirection=SelDirection.VerticalLine;
+        if (prevPos==ItemPos.Up && nextPos==ItemPos.Left) selDirection=SelDirection.UpToLeft;
+        if (prevPos==ItemPos.Right && nextPos==ItemPos.Down) selDirection=SelDirection.DownToRight;
+        if (prevPos==ItemPos.Right && nextPos==ItemPos.Left) selDirection=SelDirection.HorizontalLine;
+        if (prevPos==ItemPos.Right && nextPos==ItemPos.Up) selDirection=SelDirection.UpToRight;
+        if (prevPos==ItemPos.Down && nextPos==ItemPos.Left) selDirection=SelDirection.DownToLeft;
+        if (prevPos==ItemPos.Down && nextPos==ItemPos.Up) selDirection=SelDirection.VerticalLine;
+        if (prevPos==ItemPos.Down && nextPos==ItemPos.Right) selDirection=SelDirection.DownToRight;
+        if (prevPos==ItemPos.Left && nextPos==ItemPos.Up) selDirection=SelDirection.UpToLeft;
+        if (prevPos==ItemPos.Left && nextPos==ItemPos.Right) selDirection=SelDirection.HorizontalLine;
+        if (prevPos==ItemPos.Left && nextPos==ItemPos.Down) selDirection=SelDirection.DownToLeft;
+        return selDirection;
+    }
+
+    private ItemPos findItemPos (Item item)
+    {
+        if (item.getRow()<row) return ItemPos.Down;
+        if (item.getRow()>row) return ItemPos.Up;
+        if (item.getCol()>col) return ItemPos.Right;
+        if (item.getCol()<col) return ItemPos.Left;
+        return ItemPos.None;
+    }
 
     public boolean isSelected() {
         return selected;
     }
 
-    public void setSelected(boolean selected, SelDirection selDirection) {
+    public void setSelected(boolean selected, Item previous) {
         this.selected = selected;
-        this.selectedDirection = selDirection;
+        if (previous != this) this.previous= previous;
+        this.selectedDirection = findDirection(previous,this);
+        AddImageDirection();
+    }
+
+    public void setSelectedNext(Item next){
+        this.next = next;
+        this.selectedDirection =findDirection();
         AddImageDirection();
     }
 

@@ -43,7 +43,7 @@ public class ScreenGamePlay extends BaseScreen {
                             if (lastSelectedItem==null){
                                 lastSelectedItem =(Coin) CoinActor;
                             }
-                            ((Coin)CoinActor).setSelected(true, lastSelectedItem.findDirection(lastSelectedItem,(Item)CoinActor));
+                            ((Coin)CoinActor).setSelected(true, lastSelectedItem);
                             lastSelectedItem =(Coin) CoinActor;
                         }
                     }
@@ -53,7 +53,7 @@ public class ScreenGamePlay extends BaseScreen {
                             if (lastSelectedItem==null){
                                 lastSelectedItem =(Coin2) CoinActor;
                             }
-                            ((Coin2)CoinActor).setSelected(true, lastSelectedItem.findDirection(lastSelectedItem,(Item)CoinActor));
+                            ((Coin2)CoinActor).setSelected(true, lastSelectedItem);
                             lastSelectedItem =(Coin2) CoinActor;
                         }
                     }
@@ -65,11 +65,11 @@ public class ScreenGamePlay extends BaseScreen {
             public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
                     flag = false;
                     InputEvent ie = (InputEvent)event;
+                if (lastSelectedItem==null) return;
                     String className = lastSelectedItem.getClass().getName();
                     if ( ie.getType().equals(InputEvent.Type.touchUp) ){
                         for (by.android.cradle.BaseActor CoinActor : by.android.cradle.BaseActor.getList(mainStage, className)){
-                                ((Item)CoinActor).setSelected(false,SelDirection.None);
-
+                                ((Item)CoinActor).setSelected(false,null);
                         }
                         lastSelectedItem=null;
                     }
@@ -82,8 +82,9 @@ public class ScreenGamePlay extends BaseScreen {
             @Override
             public void touchDragged(InputEvent event, float x, float y, int pointer){
                 InputEvent ie = (InputEvent)event;
-                String className = lastSelectedItem.getClass().getName();
+                if (lastSelectedItem==null) return;
                 if(flag){
+                    String className = lastSelectedItem.getClass().getName();
                     if ( ie.getType().equals(InputEvent.Type.touchDragged)){
 
                         for (by.android.cradle.BaseActor CoinActor : by.android.cradle.BaseActor.getList(mainStage, className)){
@@ -93,15 +94,11 @@ public class ScreenGamePlay extends BaseScreen {
                                         if (lastSelectedItem==null){
                                             lastSelectedItem =(Item) CoinActor;
                                         }
-                                        ((Item)CoinActor).setSelected(true, lastSelectedItem.findDirection(lastSelectedItem,(Item)CoinActor));
+                                        ((Item)CoinActor).setSelected(true, lastSelectedItem);
                                         if (lastSelectedItem.getSelectedDirection()==SelDirection.None){
-                                            lastSelectedItem.setSelected(true,lastSelectedItem.findDirection(lastSelectedItem,(Item)CoinActor));
+                                            lastSelectedItem.setSelected(true,lastSelectedItem);
                                         }
-                                        SelDirection d1 = lastSelectedItem.getSelectedDirection();
-                                        SelDirection d2 = ((Item)CoinActor).getSelectedDirection();
-                                        if (d1!=d2){
-
-                                        }
+                                        lastSelectedItem.setSelectedNext((Item)CoinActor);// change image after next selected
                                         lastSelectedItem=((Item)CoinActor);
                                     }
 
