@@ -15,8 +15,23 @@ public class Item extends BaseActor {
     private boolean selectedFirst; // indicates that item was the first selected
     private Item previous;
     private Item next;
-    private int row;
-    private int col;
+    private Cell cell;
+
+    public Item(float x, float y, int width, int height, Stage s, Touchable touchable, int row, int col)
+    {
+        super(x,y,s, touchable);
+        cell = new Cell(row,col);
+        this.selected = false;
+        setHeight(height);
+        setWidth(width);
+        selectedDirection = SelDirection.None;
+        selectedFirst=false;
+    }
+
+    public Cell getCell() {
+        return cell;
+    }
+
     private SelDirection selectedDirection;
     private Image lineImage;
 
@@ -31,19 +46,6 @@ public class Item extends BaseActor {
 
     public SelDirection getSelectedDirection() {
         return selectedDirection;
-    }
-
-
-    public Item(float x, float y, int width, int height, Stage s, Touchable touchable, int row, int col)
-    {
-        super(x,y,s, touchable);
-        this.row = row;
-        this.col = col;
-        this.selected = false;
-        setHeight(height);
-        setWidth(width);
-        selectedDirection = SelDirection.None;
-        selectedFirst=false;
     }
 
     private void AddImageDirection()
@@ -150,7 +152,16 @@ public class Item extends BaseActor {
     public SelDirection findDirection (){
         SelDirection selDirection = SelDirection.None;
         if (previous==null){
-            return selDirection;
+            if (next ==null) {
+                return selDirection;
+            }else{
+                if (next.getRow()!=this.getRow()){
+                    selDirection= SelDirection.VerticalLine;
+                }else{
+                    selDirection= SelDirection.HorizontalLine;
+                }
+                return selDirection;
+            }
         }
 
         if (next==null){
@@ -179,10 +190,10 @@ public class Item extends BaseActor {
 
     private ItemPos findItemPos (Item item)
     {
-        if (item.getRow()<row) return ItemPos.Down;
-        if (item.getRow()>row) return ItemPos.Up;
-        if (item.getCol()>col) return ItemPos.Right;
-        if (item.getCol()<col) return ItemPos.Left;
+        if (item.getRow()<cell.getRow()) return ItemPos.Down;
+        if (item.getRow()>cell.getRow()) return ItemPos.Up;
+        if (item.getCol()>cell.getCol()) return ItemPos.Right;
+        if (item.getCol()<cell.getCol()) return ItemPos.Left;
         return ItemPos.None;
     }
 
@@ -192,6 +203,11 @@ public class Item extends BaseActor {
 
     public void setSelected(boolean selected, Item previous) {
         this.selected = selected;
+        if(selected==false){
+            this.previous=null;
+            this.next=null;
+        }
+
         if (previous != this) this.previous= previous;
         this.selectedDirection = findDirection(previous,this);
         AddImageDirection();
@@ -204,22 +220,37 @@ public class Item extends BaseActor {
     }
 
     public int getRow() {
-        return row;
+        return cell.getRow();
     }
 
     public int getCol() {
-        return col;
+        return cell.getCol();
     }
 
     public boolean isNear(int row2 , int col2){
         //Диагонали?
         //System.out.println(row2+" "+col2+" "+row+" "+col);
-        if(!((row2!=row)&&(col!=col2))){
+        if(!((row2!=cell.getRow())&&(cell.getCol()!=col2))){
             //Расстояние?
-            if((Math.abs(row-row2)<2)&&(Math.abs(col-col2)<2)) {
+            if((Math.abs(cell.getRow()-row2)<2)&&(Math.abs(cell.getCol()-col2)<2)) {
                 return true;
             }
         }
       return false;
+    }
+
+    public Item getNext(){
+        return next;
+    }
+
+    public int getCountOfSelectedItems()
+    {
+        int count=1;
+        Item item1 = this;
+        while (item1.getNext()!=null){
+            item1 = item1.getNext();
+            count++;
+        }
+        return count;
     }
 }

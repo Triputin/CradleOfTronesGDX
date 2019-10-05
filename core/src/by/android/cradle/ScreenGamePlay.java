@@ -11,6 +11,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
+import java.util.ArrayList;
+
 public class ScreenGamePlay extends BaseScreen {
     private final int CellSize = 128;
     private final int CellCount = 5;
@@ -19,6 +21,8 @@ public class ScreenGamePlay extends BaseScreen {
     private float gameFieldY;
     private boolean flag = false ;
     private Item lastSelectedItem;
+    private Item firstSelectedItem;
+
     public void initialize()
     {
         BaseActor.setWorldBounds(CellSize*CellCount,CellSize*CellCount);
@@ -42,6 +46,7 @@ public class ScreenGamePlay extends BaseScreen {
                         if(CoinActor.getBoundaryPolygon().contains(x+gameFieldX,y+gameFieldX)){
                             if (lastSelectedItem==null){
                                 lastSelectedItem =(Coin) CoinActor;
+                                firstSelectedItem= lastSelectedItem;
                             }
                             ((Coin)CoinActor).setSelected(true, lastSelectedItem);
                             lastSelectedItem =(Coin) CoinActor;
@@ -52,6 +57,7 @@ public class ScreenGamePlay extends BaseScreen {
                         if(CoinActor.getBoundaryPolygon().contains(x+gameFieldX,y+gameFieldX)){
                             if (lastSelectedItem==null){
                                 lastSelectedItem =(Coin2) CoinActor;
+                                firstSelectedItem= lastSelectedItem;
                             }
                             ((Coin2)CoinActor).setSelected(true, lastSelectedItem);
                             lastSelectedItem =(Coin2) CoinActor;
@@ -68,10 +74,16 @@ public class ScreenGamePlay extends BaseScreen {
                 if (lastSelectedItem==null) return;
                     String className = lastSelectedItem.getClass().getName();
                     if ( ie.getType().equals(InputEvent.Type.touchUp) ){
-                        for (by.android.cradle.BaseActor CoinActor : by.android.cradle.BaseActor.getList(mainStage, className)){
+
+                        if (firstSelectedItem.getCountOfSelectedItems()>=3) {
+                            FillRemovedCells(removeSelectedItems());
+                        }else{
+                            for (by.android.cradle.BaseActor CoinActor : by.android.cradle.BaseActor.getList(mainStage, className)){
                                 ((Item)CoinActor).setSelected(false,null);
+                            }
                         }
-                        lastSelectedItem=null;
+                        lastSelectedItem = null;
+                        firstSelectedItem = null;
                     }
             }
             @Override
@@ -129,5 +141,27 @@ public class ScreenGamePlay extends BaseScreen {
     public void update(float dt)
     {
 
+    }
+
+    public ArrayList<Cell> removeSelectedItems(){
+        ArrayList<Cell> arrayList = new ArrayList<>();
+        if (firstSelectedItem==null)return arrayList;
+        Item item1= firstSelectedItem;
+        Item item2=null;
+        while (item1.getNext()!=null){
+            item2 = item1.getNext();
+            arrayList.add(item1.getCell());
+            item1.remove();
+            item1=item2;
+        }
+        item1.remove();
+        lastSelectedItem=null;
+        firstSelectedItem=null;
+        return arrayList;
+    }
+
+    public void FillRemovedCells(ArrayList<Cell> arrayList){
+
+        //arrayList.forEach();
     }
 }
