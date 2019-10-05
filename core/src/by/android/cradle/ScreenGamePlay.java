@@ -4,9 +4,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
@@ -154,6 +156,7 @@ public class ScreenGamePlay extends BaseScreen {
             item1.remove();
             item1=item2;
         }
+        arrayList.add(item1.getCell());
         item1.remove();
         lastSelectedItem=null;
         firstSelectedItem=null;
@@ -161,7 +164,26 @@ public class ScreenGamePlay extends BaseScreen {
     }
 
     public void FillRemovedCells(ArrayList<Cell> arrayList){
+        Cell cell;
+        int x0;
+        int y0;
+        int x;
+        int y;
+        cell = arrayList.get(0);
+        x0=cell.getCol();
+        y0=cell.getRow();
 
-        //arrayList.forEach();
+        for (int i=0; i<arrayList.size();i++){
+            Item item;
+            cell = arrayList.get(i);
+            x=cell.getCol();
+            y=cell.getRow();
+            item = item=new Jem01(gameFieldX +x0 * CellSize, gameFieldX + y0 * CellSize, CellSize, CellSize, mainStage, x, y);
+            Action spin = Actions.rotateBy(30, 1);
+            item.addAction(Actions.moveTo(gameFieldX +x * CellSize, gameFieldX + y * CellSize,1));
+            //item.addAction( Actions.forever(spin) );
+        }
+
+
     }
 }
