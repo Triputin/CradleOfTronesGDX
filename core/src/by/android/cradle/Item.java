@@ -188,7 +188,7 @@ public class Item extends BaseActor {
         return selDirection;
     }
 
-    private ItemPos findItemPos (Item item)
+    public ItemPos findItemPos (Item item)
     {
         if (item.getRow()<cell.getRow()) return ItemPos.Down;
         if (item.getRow()>cell.getRow()) return ItemPos.Up;
@@ -225,6 +225,11 @@ public class Item extends BaseActor {
 
     public int getCol() {
         return cell.getCol();
+    }
+
+    public void setCell(Cell cell) {
+        this.cell = new Cell(cell);
+
     }
 
     public boolean isNear(int row2 , int col2){

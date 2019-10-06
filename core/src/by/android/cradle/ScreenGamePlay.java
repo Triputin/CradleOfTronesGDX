@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Action;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
@@ -24,6 +25,7 @@ public class ScreenGamePlay extends BaseScreen {
     private boolean flag = false ;
     private Item lastSelectedItem;
     private Item firstSelectedItem;
+    private ItemPos directionToFill;
 
     public void initialize()
     {
@@ -32,8 +34,32 @@ public class ScreenGamePlay extends BaseScreen {
         gameFieldY=0;
         gameField = new GameField(gameFieldX,gameFieldX,mainStage,CellSize*CellCount,CellSize*CellCount);
 
+        Button.ButtonStyle buttonStyle = new Button.ButtonStyle();
+
+        Texture buttonTex = new Texture( Gdx.files.internal("assets/undo.png") );
+        TextureRegion buttonRegion =  new TextureRegion(buttonTex);
+        buttonStyle.up = new TextureRegionDrawable( buttonRegion );
+
+        Button restartButton = new Button( buttonStyle );
+        restartButton.setColor( Color.CYAN );
+        restartButton.setPosition(720,520);
+        uiStage.addActor(restartButton);
+
+        restartButton.addListener(new InputListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                InputEvent ie = (InputEvent)event;
+                if ( ie.getType().equals(InputEvent.Type.touchDown) ) {
+
+                }
+                return false;
+            }
+        });
         //gameField.boundToWorld();
         gameField.setTouchable(Touchable.enabled);
+
+
+
 
         gameField.addListener(new InputListener() {
             @Override
@@ -129,11 +155,8 @@ public class ScreenGamePlay extends BaseScreen {
 
      for(int i = 0;i<CellCount;i++){
             for(int j = 0;j<CellCount;j++){
-                if (Math.random()>0.5){
-                    new Coin2(gameFieldX + i * CellSize, gameFieldX + j * CellSize, CellSize, CellSize, mainStage, j, i);
-                }else {
-                    new Coin(gameFieldX + i * CellSize, gameFieldX + j * CellSize, CellSize, CellSize, mainStage, j, i);
-                }
+                CreateNewItemForStart(j,i);
+
             }
         }
 
@@ -148,6 +171,7 @@ public class ScreenGamePlay extends BaseScreen {
     public ArrayList<Cell> removeSelectedItems(){
         ArrayList<Cell> arrayList = new ArrayList<>();
         if (firstSelectedItem==null)return arrayList;
+        directionToFill = firstSelectedItem.getNext().findItemPos(firstSelectedItem);
         Item item1= firstSelectedItem;
         Item item2=null;
         while (item1.getNext()!=null){
@@ -164,6 +188,9 @@ public class ScreenGamePlay extends BaseScreen {
     }
 
     public void FillRemovedCells(ArrayList<Cell> arrayList){
+        ArrayList<Item> newItems = new ArrayList<>();
+        ArrayList<Cell> newCells;
+
         Cell cell;
         int x0;
         int y0;
@@ -173,17 +200,129 @@ public class ScreenGamePlay extends BaseScreen {
         x0=cell.getCol();
         y0=cell.getRow();
 
+//Создаем змейку из существующих и новых элементов
+        newCells = FindCellsToMove(cell,directionToFill);
+        newItems = FindItemsToMove(newCells);
+        AddNewItems(newCells,newItems,arrayList.size(),cell);
+
         for (int i=0; i<arrayList.size();i++){
-            Item item;
-            cell = arrayList.get(i);
-            x=cell.getCol();
-            y=cell.getRow();
-            item = item=new Jem01(gameFieldX +x0 * CellSize, gameFieldX + y0 * CellSize, CellSize, CellSize, mainStage, x, y);
-            Action spin = Actions.rotateBy(30, 1);
-            item.addAction(Actions.moveTo(gameFieldX +x * CellSize, gameFieldX + y * CellSize,1));
+            newItems.get(0).setCell(arrayList.get(i));
+            newItems.get(0).addAction(Actions.after(Actions.moveTo(gameFieldX +newItems.get(0).getCol() * CellSize, gameFieldX + newItems.get(0).getRow() * CellSize,0.1f)));
+            for(int j=1; j<newItems.size();j++){
+               newItems.get(j).setCell(newCells.get(j-1));
+                newItems.get(j).addAction(Actions.after(Actions.moveTo(gameFieldX +newItems.get(j).getCol() * CellSize, gameFieldX + newItems.get(j).getRow() * CellSize,0.1f)));
+            }
+           for(int j = 0;j<newCells.size();j++){
+               newCells.get(j).setCol(newItems.get(j).getCol());
+               newCells.get(j).setRow(newItems.get(j).getRow());
+           }
+            //Actions.forever( Actions.delay(1));
+           // Action spin = Actions.rotateBy(30, 1);
             //item.addAction( Actions.forever(spin) );
+
         }
 
 
+    }
+    private ArrayList<Cell> FindCellsToMove(Cell firstCell,ItemPos itemPos){
+        int count = 0;
+        ArrayList<Cell> arrayList = new ArrayList<>();
+        Cell cell;
+        switch (itemPos){
+            case Up: count= CellCount- firstCell.getRow()-1;
+            break;
+            case Down: count=  firstCell.getRow();
+                break;
+            case Right: count= CellCount- firstCell.getCol()-1;
+                break;
+            case Left: count=  firstCell.getCol();
+                break;
+        }
+        for (int i = 0;i<count;i++){
+            switch (itemPos){
+                case Up: cell = new Cell(firstCell.getRow()+1+i,firstCell.getCol());
+                arrayList.add(cell);
+                    break;
+                case Down: cell = new Cell(firstCell.getRow()-1-i,firstCell.getCol());
+                    arrayList.add(cell);
+                    break;
+                case Right:cell = new Cell(firstCell.getRow(),firstCell.getCol()+1+i);
+                    arrayList.add(cell);
+                    break;
+                case Left: cell = new Cell(firstCell.getRow(),firstCell.getCol()-1-i);
+                    arrayList.add(cell);
+                    break;
+            }
+        }
+        return arrayList;
+    }
+    public ArrayList<Item> FindItemsToMove (ArrayList<Cell> arrayList){
+        ArrayList<Item> arrayListItems = new ArrayList<>();
+        for(int i = 0;i<arrayList.size();i++){
+
+
+            for (Actor a : mainStage.getActors())
+            {
+                if ( Item.class.isAssignableFrom(a.getClass()) ){
+                    if( (arrayList.get(i).getCol()==((Item)a).getCol())&&(arrayList.get(i).getRow()==((Item)a).getRow())){
+                        arrayListItems.add( (Item) a );
+                    }
+
+                }
+
+            }
+        }
+        return arrayListItems;
+    }
+    public void AddNewItems(ArrayList<Cell> arrayListCells,ArrayList<Item> arrayListItems,int count,Cell fCell){
+        Cell cell;
+        Cell firstCell;
+        if(arrayListCells.size()>0) {
+            firstCell = arrayListCells.get(arrayListCells.size() - 1);
+        }else {
+            firstCell = fCell;
+        }
+        for(int i = 0;i<count;i++){
+            switch (directionToFill){
+                case Up: cell = new Cell(firstCell.getRow()+1+i,firstCell.getCol());
+                    arrayListCells.add(cell);
+                   arrayListItems.add( CreateNewItem(cell.getRow(),cell.getCol()));
+                    break;
+                case Down: cell = new Cell(firstCell.getRow()-1-i,firstCell.getCol());
+                    arrayListCells.add(cell);
+                    arrayListItems.add( CreateNewItem(cell.getRow(),cell.getCol()));
+                    break;
+                case Right:cell = new Cell(firstCell.getRow(),firstCell.getCol()+1+i);
+                    arrayListCells.add(cell);
+                    arrayListItems.add( CreateNewItem(cell.getRow(),cell.getCol()));
+                    break;
+                case Left: cell = new Cell(firstCell.getRow(),firstCell.getCol()-1-i);
+                    arrayListCells.add(cell);
+                    arrayListItems.add( CreateNewItem(cell.getRow(),cell.getCol()));
+                    break;
+            }
+
+        }
+    }
+    private Item CreateNewItem (int row,int col){
+        Item item ;
+        if (Math.random()>0.5){
+            item = new Coin2(gameFieldX + col * CellSize, gameFieldX + row * CellSize, CellSize, CellSize, mainStage, row, col);
+        }else {
+           item= new Coin(gameFieldX + col * CellSize, gameFieldX + row * CellSize, CellSize, CellSize, mainStage, row, col);
+        }
+        return item;
+    }
+    private Item CreateNewItemForStart(int row,int col){
+        Item item ;
+        if (Math.random()>0.5){
+            item = new Coin2(gameFieldX - CellSize, gameFieldX -CellSize, CellSize, CellSize, mainStage, row, col);
+        }else {
+            item= new Coin(gameFieldX - CellSize, gameFieldX -CellSize, CellSize, CellSize, mainStage, row, col);
+        }
+
+        item.addAction(Actions.moveTo(gameFieldX + col * CellSize, gameFieldX + row * CellSize,1));
+
+        return item;
     }
 }

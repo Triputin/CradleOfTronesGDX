@@ -8,6 +8,10 @@ public class Cell {
         Row = row;
         Col = col;
     }
+    public Cell(Cell cell){
+        this.Row =cell.getRow();
+        this.Col = cell.getCol();
+    }
     public int getRow() {
         return Row;
     }
