@@ -17,7 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import java.util.ArrayList;
 
 public class ScreenGamePlay extends BaseScreen {
-    private final int CellSize = 128;
+    private int cellSize;
     private final int CellCount = 5;
     private GameField gameField;
     private float gameFieldX;
@@ -29,10 +29,18 @@ public class ScreenGamePlay extends BaseScreen {
 
     public void initialize()
     {
-        BaseActor.setWorldBounds(CellSize*CellCount,CellSize*CellCount);
+        // Get screen size
+        int w = Gdx.graphics.getWidth();
+        int h = Gdx.graphics.getHeight();
+        if (w<h) {
+            h=w;
+        } else w=h;
+        cellSize = w/CellCount;
+
+        BaseActor.setWorldBounds(cellSize*CellCount,cellSize*CellCount);
         gameFieldX=0;
         gameFieldY=0;
-        gameField = new GameField(gameFieldX,gameFieldX,mainStage,CellSize*CellCount,CellSize*CellCount);
+        gameField = new GameField(gameFieldX,gameFieldX,mainStage,cellSize*CellCount,cellSize*CellCount);
 
         Button.ButtonStyle buttonStyle = new Button.ButtonStyle();
 
@@ -50,7 +58,7 @@ public class ScreenGamePlay extends BaseScreen {
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 InputEvent ie = (InputEvent)event;
                 if ( ie.getType().equals(InputEvent.Type.touchDown) ) {
-
+                    RestartLevel();
                 }
                 return false;
             }
@@ -207,10 +215,10 @@ public class ScreenGamePlay extends BaseScreen {
 
         for (int i=0; i<arrayList.size();i++){
             newItems.get(0).setCell(arrayList.get(i));
-            newItems.get(0).addAction(Actions.after(Actions.moveTo(gameFieldX +newItems.get(0).getCol() * CellSize, gameFieldX + newItems.get(0).getRow() * CellSize,0.1f)));
+            newItems.get(0).addAction(Actions.after(Actions.moveTo(gameFieldX +newItems.get(0).getCol() * cellSize, gameFieldX + newItems.get(0).getRow() * cellSize,0.1f)));
             for(int j=1; j<newItems.size();j++){
                newItems.get(j).setCell(newCells.get(j-1));
-                newItems.get(j).addAction(Actions.after(Actions.moveTo(gameFieldX +newItems.get(j).getCol() * CellSize, gameFieldX + newItems.get(j).getRow() * CellSize,0.1f)));
+                newItems.get(j).addAction(Actions.after(Actions.moveTo(gameFieldX +newItems.get(j).getCol() * cellSize, gameFieldX + newItems.get(j).getRow() * cellSize,0.1f)));
             }
            for(int j = 0;j<newCells.size();j++){
                newCells.get(j).setCol(newItems.get(j).getCol());
@@ -259,8 +267,6 @@ public class ScreenGamePlay extends BaseScreen {
     public ArrayList<Item> FindItemsToMove (ArrayList<Cell> arrayList){
         ArrayList<Item> arrayListItems = new ArrayList<>();
         for(int i = 0;i<arrayList.size();i++){
-
-
             for (Actor a : mainStage.getActors())
             {
                 if ( Item.class.isAssignableFrom(a.getClass()) ){
@@ -307,22 +313,28 @@ public class ScreenGamePlay extends BaseScreen {
     private Item CreateNewItem (int row,int col){
         Item item ;
         if (Math.random()>0.5){
-            item = new Coin2(gameFieldX + col * CellSize, gameFieldX + row * CellSize, CellSize, CellSize, mainStage, row, col);
+            item = new Coin2(gameFieldX + col * cellSize, gameFieldX + row * cellSize, cellSize, cellSize, mainStage, row, col);
         }else {
-           item= new Coin(gameFieldX + col * CellSize, gameFieldX + row * CellSize, CellSize, CellSize, mainStage, row, col);
+           item= new Coin(gameFieldX + col * cellSize, gameFieldX + row * cellSize, cellSize, cellSize, mainStage, row, col);
         }
         return item;
     }
     private Item CreateNewItemForStart(int row,int col){
         Item item ;
         if (Math.random()>0.5){
-            item = new Coin2(gameFieldX - CellSize, gameFieldX -CellSize, CellSize, CellSize, mainStage, row, col);
+            item = new Coin2(gameFieldX - cellSize, gameFieldX -cellSize, cellSize, cellSize, mainStage, row, col);
         }else {
-            item= new Coin(gameFieldX - CellSize, gameFieldX -CellSize, CellSize, CellSize, mainStage, row, col);
+            item= new Coin(gameFieldX - cellSize, gameFieldX -cellSize, cellSize, cellSize, mainStage, row, col);
         }
-
-        item.addAction(Actions.moveTo(gameFieldX + col * CellSize, gameFieldX + row * CellSize,1));
-
+        //item.addAction(Actions.scaleTo(-1,-1,1));
+        item.addAction(Actions.moveTo(gameFieldX + col * cellSize, gameFieldX + row * cellSize,1));
+        //item.addAction(Actions.scaleTo(1,1,5));
         return item;
+    }
+
+    private void RestartLevel() {
+        mainStage.clear();
+        initialize();
+
     }
 }
