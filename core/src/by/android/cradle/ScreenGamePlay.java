@@ -32,25 +32,26 @@ public class ScreenGamePlay extends BaseScreen {
         // Get screen size
         int w = Gdx.graphics.getWidth();
         int h = Gdx.graphics.getHeight();
+        h=h-70; //place for top menu items
         if (w<h) {
             h=w;
         } else w=h;
         cellSize = w/CellCount;
 
         BaseActor.setWorldBounds(cellSize*CellCount,cellSize*CellCount);
-        gameFieldX=0;
+        gameFieldX=(Gdx.graphics.getWidth()-w)/2;
         gameFieldY=0;
-        gameField = new GameField(gameFieldX,gameFieldX,mainStage,cellSize*CellCount,cellSize*CellCount);
+        gameField = new GameField(gameFieldX,gameFieldY,mainStage,cellSize*CellCount,cellSize*CellCount);
 
         Button.ButtonStyle buttonStyle = new Button.ButtonStyle();
 
-        Texture buttonTex = new Texture( Gdx.files.internal("assets/undo.png") );
+        Texture buttonTex = new Texture( Gdx.files.internal("undo.png") );
         TextureRegion buttonRegion =  new TextureRegion(buttonTex);
         buttonStyle.up = new TextureRegionDrawable( buttonRegion );
 
         Button restartButton = new Button( buttonStyle );
         restartButton.setColor( Color.CYAN );
-        restartButton.setPosition(720,520);
+        restartButton.setPosition(gameFieldX,h+5);
         uiStage.addActor(restartButton);
 
         restartButton.addListener(new InputListener() {
@@ -79,7 +80,7 @@ public class ScreenGamePlay extends BaseScreen {
 
                         //Coin
                     for (by.android.cradle.BaseActor CoinActor : by.android.cradle.BaseActor.getList(mainStage, "by.android.cradle.Coin")){
-                        if(CoinActor.getBoundaryPolygon().contains(x+gameFieldX,y+gameFieldX)){
+                        if(CoinActor.getBoundaryPolygon().contains(x+gameFieldX,y+gameFieldY)){
                             if (lastSelectedItem==null){
                                 lastSelectedItem =(Coin) CoinActor;
                                 firstSelectedItem= lastSelectedItem;
@@ -90,7 +91,7 @@ public class ScreenGamePlay extends BaseScreen {
                     }
                     //Coin2
                     for (by.android.cradle.BaseActor CoinActor : by.android.cradle.BaseActor.getList(mainStage, "by.android.cradle.Coin2")){
-                        if(CoinActor.getBoundaryPolygon().contains(x+gameFieldX,y+gameFieldX)){
+                        if(CoinActor.getBoundaryPolygon().contains(x+gameFieldX,y+gameFieldY)){
                             if (lastSelectedItem==null){
                                 lastSelectedItem =(Coin2) CoinActor;
                                 firstSelectedItem= lastSelectedItem;
@@ -136,7 +137,7 @@ public class ScreenGamePlay extends BaseScreen {
                     if ( ie.getType().equals(InputEvent.Type.touchDragged)){
 
                         for (by.android.cradle.BaseActor CoinActor : by.android.cradle.BaseActor.getList(mainStage, className)){
-                            if(CoinActor.getBoundaryPolygon().contains(x+gameFieldX,y+gameFieldX)){
+                            if(CoinActor.getBoundaryPolygon().contains(x+gameFieldX,y+gameFieldY)){
                                 if(lastSelectedItem.isNear(((Item)CoinActor).getRow(),((Item)CoinActor).getCol())){
                                     if(!((Item)CoinActor).isSelected()){
                                         if (lastSelectedItem==null){
@@ -215,10 +216,10 @@ public class ScreenGamePlay extends BaseScreen {
 
         for (int i=0; i<arrayList.size();i++){
             newItems.get(0).setCell(arrayList.get(i));
-            newItems.get(0).addAction(Actions.after(Actions.moveTo(gameFieldX +newItems.get(0).getCol() * cellSize, gameFieldX + newItems.get(0).getRow() * cellSize,0.1f)));
+            newItems.get(0).addAction(Actions.after(Actions.moveTo(gameFieldX +newItems.get(0).getCol() * cellSize, gameFieldY + newItems.get(0).getRow() * cellSize,0.1f)));
             for(int j=1; j<newItems.size();j++){
                newItems.get(j).setCell(newCells.get(j-1));
-                newItems.get(j).addAction(Actions.after(Actions.moveTo(gameFieldX +newItems.get(j).getCol() * cellSize, gameFieldX + newItems.get(j).getRow() * cellSize,0.1f)));
+                newItems.get(j).addAction(Actions.after(Actions.moveTo(gameFieldX +newItems.get(j).getCol() * cellSize, gameFieldY + newItems.get(j).getRow() * cellSize,0.1f)));
             }
            for(int j = 0;j<newCells.size();j++){
                newCells.get(j).setCol(newItems.get(j).getCol());
@@ -313,21 +314,21 @@ public class ScreenGamePlay extends BaseScreen {
     private Item CreateNewItem (int row,int col){
         Item item ;
         if (Math.random()>0.5){
-            item = new Coin2(gameFieldX + col * cellSize, gameFieldX + row * cellSize, cellSize, cellSize, mainStage, row, col);
+            item = new Coin2(gameFieldX + col * cellSize, gameFieldY + row * cellSize, cellSize, cellSize, mainStage, row, col);
         }else {
-           item= new Coin(gameFieldX + col * cellSize, gameFieldX + row * cellSize, cellSize, cellSize, mainStage, row, col);
+           item= new Coin(gameFieldX + col * cellSize, gameFieldY + row * cellSize, cellSize, cellSize, mainStage, row, col);
         }
         return item;
     }
     private Item CreateNewItemForStart(int row,int col){
         Item item ;
         if (Math.random()>0.5){
-            item = new Coin2(gameFieldX - cellSize, gameFieldX -cellSize, cellSize, cellSize, mainStage, row, col);
+            item = new Coin2(gameFieldX - cellSize, gameFieldY -cellSize, cellSize, cellSize, mainStage, row, col);
         }else {
-            item= new Coin(gameFieldX - cellSize, gameFieldX -cellSize, cellSize, cellSize, mainStage, row, col);
+            item= new Coin(gameFieldX - cellSize, gameFieldY -cellSize, cellSize, cellSize, mainStage, row, col);
         }
         //item.addAction(Actions.scaleTo(-1,-1,1));
-        item.addAction(Actions.moveTo(gameFieldX + col * cellSize, gameFieldX + row * cellSize,1));
+        item.addAction(Actions.moveTo(gameFieldX + col * cellSize, gameFieldY + row * cellSize,1));
         //item.addAction(Actions.scaleTo(1,1,5));
         return item;
     }

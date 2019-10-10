@@ -14,7 +14,7 @@ public class GameField extends BaseActor {
     {
         super(x,y,s,Touchable.enabled);
        //this.setColor(255,255,255,255);
-       loadTexture("assets/game_of_thrones_locations4.jpg", (int) width,(int) height);
+       loadTexture("game_of_thrones_locations4.jpg", (int) width,(int) height);
         setHeight(height);
         setWidth(width);
 

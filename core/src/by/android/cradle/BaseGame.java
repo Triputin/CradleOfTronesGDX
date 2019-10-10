@@ -49,7 +49,7 @@ public abstract class BaseGame extends Game
 
         // parameters for generating a custom bitmap font
         FreeTypeFontGenerator fontGenerator = 
-            new FreeTypeFontGenerator(Gdx.files.internal("assets/OpenSans.ttf"));
+            new FreeTypeFontGenerator(Gdx.files.internal("opensans.ttf"));
         FreeTypeFontParameter fontParameters = new FreeTypeFontParameter();
         fontParameters.size = 48;
         fontParameters.color = Color.WHITE;
@@ -66,7 +66,7 @@ public abstract class BaseGame extends Game
         
         textButtonStyle = new TextButtonStyle();
 
-        Texture   buttonTex   = new Texture( Gdx.files.internal("assets/button.png") );
+        Texture   buttonTex   = new Texture( Gdx.files.internal("button.png") );
         NinePatch buttonPatch = new NinePatch(buttonTex, 24,24,24,24);
         textButtonStyle.up    = new NinePatchDrawable( buttonPatch );
         textButtonStyle.font      = customFont;

@@ -56,37 +56,37 @@ public class Item extends BaseActor {
             switch (selectedDirection){
 
                 case ArrowToEast:
-                    pixmap200 = new Pixmap(Gdx.files.internal("assets/arrowtoeast.png"));
+                    pixmap200 = new Pixmap(Gdx.files.internal("arrowtoeast.png"));
                     break;
                 case ArrowToWest:
-                    pixmap200 = new Pixmap(Gdx.files.internal("assets/arrowtowest.png"));
+                    pixmap200 = new Pixmap(Gdx.files.internal("arrowtowest.png"));
                     break;
                 case HorizontalLine:
-                    pixmap200 = new Pixmap(Gdx.files.internal("assets/linehoriz.png"));
+                    pixmap200 = new Pixmap(Gdx.files.internal("linehoriz.png"));
                     break;
                 case ArrowToNorth:
-                    pixmap200 = new Pixmap(Gdx.files.internal("assets/arrowtonorth.png"));
+                    pixmap200 = new Pixmap(Gdx.files.internal("arrowtonorth.png"));
                     break;
                 case ArrowToSouth:
-                    pixmap200 = new Pixmap(Gdx.files.internal("assets/arrowtosouth.png"));
+                    pixmap200 = new Pixmap(Gdx.files.internal("arrowtosouth.png"));
                     break;
                 case VerticalLine:
-                    pixmap200 = new Pixmap(Gdx.files.internal("assets/linevert.png"));
+                    pixmap200 = new Pixmap(Gdx.files.internal("linevert.png"));
                     break;
                 case UpToLeft:
-                    pixmap200 = new Pixmap(Gdx.files.internal("assets/LineCorner03.png"));
+                    pixmap200 = new Pixmap(Gdx.files.internal("LineCorner03.png"));
                     break;
                 case UpToRight:
-                    pixmap200 = new Pixmap(Gdx.files.internal("assets/LineCorner04.png"));
+                    pixmap200 = new Pixmap(Gdx.files.internal("LineCorner04.png"));
                     break;
                 case DownToLeft:
-                    pixmap200 = new Pixmap(Gdx.files.internal("assets/LineCorner02.png"));
+                    pixmap200 = new Pixmap(Gdx.files.internal("LineCorner02.png"));
                     break;
                 case DownToRight:
-                    pixmap200 = new Pixmap(Gdx.files.internal("assets/LineCorner01.png"));
+                    pixmap200 = new Pixmap(Gdx.files.internal("LineCorner01.png"));
                     break;
                     default:
-                        pixmap200 = new Pixmap(Gdx.files.internal("assets/linehoriz.png"));
+                        pixmap200 = new Pixmap(Gdx.files.internal("linehoriz.png"));
             }
 
 
