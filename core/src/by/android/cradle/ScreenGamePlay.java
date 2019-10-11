@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
 import java.util.ArrayList;
@@ -26,9 +27,15 @@ public class ScreenGamePlay extends BaseScreen {
     private Item lastSelectedItem;
     private Item firstSelectedItem;
     private ItemPos directionToFill;
+    private GameRes gameRes;
+    private Label goldQuantityLabel;
+    private Label woodQuantityLabel;
 
     public void initialize()
     {
+
+        gameRes = new GameRes();
+
         // Get screen size
         int w = Gdx.graphics.getWidth();
         int h = Gdx.graphics.getHeight();
@@ -42,6 +49,17 @@ public class ScreenGamePlay extends BaseScreen {
         gameFieldX=(Gdx.graphics.getWidth()-w)/2;
         gameFieldY=0;
         gameField = new GameField(gameFieldX,gameFieldY,mainStage,cellSize*CellCount,cellSize*CellCount);
+
+
+        goldQuantityLabel = new Label("Gold: "+0, BaseGame.labelStyle);
+        goldQuantityLabel.setColor( Color.CYAN );
+        goldQuantityLabel.setPosition( gameFieldX+100,h+5 );
+        uiStage.addActor(goldQuantityLabel);
+
+        woodQuantityLabel = new Label("Wood: "+0, BaseGame.labelStyle);
+        woodQuantityLabel.setColor( Color.CYAN );
+        woodQuantityLabel.setPosition( gameFieldX+350,h+5 );
+        uiStage.addActor(woodQuantityLabel);
 
         Button.ButtonStyle buttonStyle = new Button.ButtonStyle();
 
@@ -100,6 +118,19 @@ public class ScreenGamePlay extends BaseScreen {
                             lastSelectedItem =(Coin2) CoinActor;
                         }
                     }
+
+                    //Wood
+                    for (by.android.cradle.BaseActor CoinActor : by.android.cradle.BaseActor.getList(mainStage, "by.android.cradle.Wood")){
+                        if(CoinActor.getBoundaryPolygon().contains(x+gameFieldX,y+gameFieldY)){
+                            if (lastSelectedItem==null){
+                                lastSelectedItem =(Wood) CoinActor;
+                                firstSelectedItem= lastSelectedItem;
+                            }
+                            ((Wood)CoinActor).setSelected(true, lastSelectedItem);
+                            lastSelectedItem =(Wood) CoinActor;
+                        }
+                    }
+
                 }
 
                 return true;
@@ -181,15 +212,20 @@ public class ScreenGamePlay extends BaseScreen {
         ArrayList<Cell> arrayList = new ArrayList<>();
         if (firstSelectedItem==null)return arrayList;
         directionToFill = firstSelectedItem.getNext().findItemPos(firstSelectedItem);
+        String className;
         Item item1= firstSelectedItem;
         Item item2=null;
         while (item1.getNext()!=null){
             item2 = item1.getNext();
             arrayList.add(item1.getCell());
+            className = item1.getClass().getName();
+            IncreaseRes(className);
             item1.remove();
             item1=item2;
         }
         arrayList.add(item1.getCell());
+        className = item1.getClass().getName();
+        IncreaseRes(className);
         item1.remove();
         lastSelectedItem=null;
         firstSelectedItem=null;
@@ -313,19 +349,30 @@ public class ScreenGamePlay extends BaseScreen {
     }
     private Item CreateNewItem (int row,int col){
         Item item ;
-        if (Math.random()>0.5){
+        if (Math.random()<0.5){
             item = new Coin2(gameFieldX + col * cellSize, gameFieldY + row * cellSize, cellSize, cellSize, mainStage, row, col);
         }else {
-           item= new Coin(gameFieldX + col * cellSize, gameFieldY + row * cellSize, cellSize, cellSize, mainStage, row, col);
+            if (Math.random()<0.6) {
+                item= new Coin(gameFieldX + col * cellSize, gameFieldY + row * cellSize, cellSize, cellSize, mainStage, row, col);
+            }else{
+                item= new Wood(gameFieldX + col * cellSize, gameFieldY + row * cellSize, cellSize, cellSize, mainStage, row, col);
+            }
+
         }
         return item;
     }
+
     private Item CreateNewItemForStart(int row,int col){
         Item item ;
-        if (Math.random()>0.5){
+        if (Math.random()<0.3){
             item = new Coin2(gameFieldX - cellSize, gameFieldY -cellSize, cellSize, cellSize, mainStage, row, col);
         }else {
-            item= new Coin(gameFieldX - cellSize, gameFieldY -cellSize, cellSize, cellSize, mainStage, row, col);
+            if (Math.random()<0.6) {
+                item = new Coin(gameFieldX - cellSize, gameFieldY - cellSize, cellSize, cellSize, mainStage, row, col);
+            }
+            else{
+                item = new Wood(gameFieldX - cellSize, gameFieldY - cellSize, cellSize, cellSize, mainStage, row, col);
+            }
         }
         //item.addAction(Actions.scaleTo(-1,-1,1));
         item.addAction(Actions.moveTo(gameFieldX + col * cellSize, gameFieldY + row * cellSize,1));
@@ -336,6 +383,22 @@ public class ScreenGamePlay extends BaseScreen {
     private void RestartLevel() {
         mainStage.clear();
         initialize();
+
+    }
+
+    public void IncreaseRes(String className){
+
+        switch (className)
+        {
+            case "by.android.cradle.Coin2": gameRes.Gold++;
+                goldQuantityLabel.setText("Gold: "+gameRes.Gold);
+            break;
+            case "by.android.cradle.Wood": gameRes.Wood++;
+                woodQuantityLabel.setText("Wood: "+gameRes.Wood);
+                break;
+
+        }
+
 
     }
 }
