@@ -220,12 +220,24 @@ public class ScreenGamePlay extends BaseScreen {
             arrayList.add(item1.getCell());
             className = item1.getClass().getName();
             IncreaseRes(className);
+            //Explosion
+            ExplosionEffect boom = new ExplosionEffect();
+            boom.centerAtActor( item1 );
+            boom.start();
+            mainStage.addActor(boom);
+
             item1.remove();
             item1=item2;
         }
         arrayList.add(item1.getCell());
         className = item1.getClass().getName();
         IncreaseRes(className);
+        //Explosion
+        ExplosionEffect boom = new ExplosionEffect();
+        boom.centerAtActor( item1 );
+        boom.start();
+        mainStage.addActor(boom);
+
         item1.remove();
         lastSelectedItem=null;
         firstSelectedItem=null;
@@ -382,6 +394,7 @@ public class ScreenGamePlay extends BaseScreen {
 
     private void RestartLevel() {
         mainStage.clear();
+        uiStage.clear();
         initialize();
 
     }
@@ -400,5 +413,9 @@ public class ScreenGamePlay extends BaseScreen {
         }
 
 
+    }
+    public void resize (int width, int height) {
+        mainStage.getViewport().update(width, height, true);
+        uiStage.getViewport().update(width, height, true);
     }
 }
