@@ -28,6 +28,10 @@ public class Cell {
         Col = col;
     }
 
+    public boolean isEqual(Cell o) {
+        if( (o.getRow()==this.getRow())&& o.getCol()==this.getCol()){
+            return true;
+        }else return false;
 
-
+    }
 }

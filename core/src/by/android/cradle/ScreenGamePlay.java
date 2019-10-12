@@ -82,6 +82,25 @@ public class ScreenGamePlay extends BaseScreen {
                 return false;
             }
         });
+
+
+        Button testButton = new Button( buttonStyle );
+        restartButton.setColor( Color.CYAN );
+        restartButton.setPosition(gameFieldX-100,h+5);
+        uiStage.addActor(testButton);
+
+        testButton.addListener(new InputListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                InputEvent ie = (InputEvent)event;
+                if ( ie.getType().equals(InputEvent.Type.touchDown) ) {
+                    SelectSolution(gameField.FindSolutions(CellCount,mainStage));
+                }
+                return false;
+            }
+        });
+
+
         //gameField.boundToWorld();
         gameField.setTouchable(Touchable.enabled);
 
@@ -203,6 +222,33 @@ public class ScreenGamePlay extends BaseScreen {
 
 
     }
+
+    public void SelectSolution(ArrayList<ArrayList<Item>> arrayLists){
+        if (flag){return;}
+
+        if(arrayLists.size()<1){
+        // We need to restart level because no steps remains...
+            RestartLevel();
+            return;
+
+        }
+
+        //Choose solution randomly
+        int sol = (int) Math.round(Math.random()*(arrayLists.size()-1));
+        if (sol>(arrayLists.size()-1)){
+            sol = arrayLists.size()-1;
+        }
+        ArrayList<Item> arrayList = arrayLists.get(sol);
+        if (arrayList.size()<3){return;}
+        arrayList.get(0).setSelected(true,null);
+        arrayList.get(0).setSelectedNext(arrayList.get(1));
+        for (int i=1;i<arrayList.size()-1;i++){
+            arrayList.get(i).setSelected(true,arrayList.get(i-1));
+            arrayList.get(i).setSelectedNext(arrayList.get(i+1));
+        }
+        arrayList.get(arrayList.size()-1).setSelected(true,arrayList.get(arrayList.size()-2));
+    }
+
     public void update(float dt)
     {
 

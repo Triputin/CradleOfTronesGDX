@@ -40,9 +40,10 @@ public class Item extends BaseActor {
         return selectedFirst;
     }
 
-    public void setSelectedFirst(boolean selectedFirst) {
+   /* public void setSelectedFirst(boolean selectedFirst) {
         this.selectedFirst = selectedFirst;
     }
+    */
 
     public SelDirection getSelectedDirection() {
         return selectedDirection;
