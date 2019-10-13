@@ -19,7 +19,7 @@ import java.util.ArrayList;
 
 public class ScreenGamePlay extends BaseScreen {
     private int cellSize;
-    private final int CellCount = 5;
+    private final int CellCount = 7;
     private GameField gameField;
     private float gameFieldX;
     private float gameFieldY;
@@ -48,7 +48,7 @@ public class ScreenGamePlay extends BaseScreen {
         BaseActor.setWorldBounds(cellSize*CellCount,cellSize*CellCount);
         gameFieldX=(Gdx.graphics.getWidth()-w)/2;
         gameFieldY=0;
-        gameField = new GameField(gameFieldX,gameFieldY,mainStage,cellSize*CellCount,cellSize*CellCount);
+        gameField = new GameField(gameFieldX,gameFieldY,mainStage,cellSize*CellCount,cellSize*CellCount,CellCount);
 
 
         goldQuantityLabel = new Label("Gold: "+0, BaseGame.labelStyle);
@@ -271,6 +271,8 @@ public class ScreenGamePlay extends BaseScreen {
             boom.centerAtActor( item1 );
             boom.start();
             mainStage.addActor(boom);
+            gameField.changeGameCell(item1.getCell());
+
 
             item1.remove();
             item1=item2;
@@ -284,6 +286,7 @@ public class ScreenGamePlay extends BaseScreen {
         boom.start();
         mainStage.addActor(boom);
 
+        gameField.changeGameCell(item1.getCell());
         item1.remove();
         lastSelectedItem=null;
         firstSelectedItem=null;

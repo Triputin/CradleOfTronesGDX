@@ -12,13 +12,32 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import java.util.ArrayList;
 
 public class GameField extends BaseActor {
-    public GameField(float x, float y, Stage s,float width,float height)
+    private ArrayList<GameCell> gameCells ;
+
+    public GameField(float x, float y, Stage s,float width,float height,int cellsCount)
     {
         super(x,y,s,Touchable.enabled);
-       //this.setColor(255,255,255,255);
-       loadTexture("game_of_thrones_locations4.jpg", (int) width,(int) height);
+        gameCells = new ArrayList<>();
+        int cellSizeX = (int)width/cellsCount;
+        int cellSizeY = (int)height/cellsCount;
+        loadTexture("game_of_thrones_locations4.jpg", (int) width,(int) height);
         setHeight(height);
         setWidth(width);
+        GameCell gameCell;
+
+        for (int i = 0;i<cellsCount;i++){
+            for (int j = 0;j<cellsCount;j++){
+                gameCell = new GameCell(x+i*cellSizeX,y+j*cellSizeY,cellSizeX,cellSizeY,s, Touchable.disabled,j,i);
+                gameCells.add(gameCell);
+                if(Math.random()<0.3){
+                    gameCell.setLockLevel(1);
+                }
+
+            }
+        }
+       //this.setColor(255,255,255,255);
+
+
 
         // repeated texture
         /*Texture imgTexture = new Texture(Gdx.files.internal("assets/marble.jpg"));
@@ -192,6 +211,15 @@ public void PrintSolutions(ArrayList<ArrayList<Item>> arrayLists){
         System.out.println("Solution "+i+":");
         for (int j=0; j<arrayList.size();j++){
             System.out.println(j+":  Col: "+arrayList.get(j).getCell().getCol()+" Row: "+arrayList.get(j).getCell().getRow());
+        }
+    }
+
+}
+public void changeGameCell(Cell cell){
+    for(int i = 0;i<gameCells.size();i++){
+        if(gameCells.get(i).getCell().isEqual(cell)){
+            gameCells.get(i).unLock(cell);
+
         }
     }
 }

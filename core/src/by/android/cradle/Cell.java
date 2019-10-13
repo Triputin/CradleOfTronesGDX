@@ -4,6 +4,10 @@ public class Cell {
     private int Row;
     private int Col;
 
+
+
+
+
     public Cell(int row, int col){
         Row = row;
         Col = col;
@@ -27,6 +31,8 @@ public class Cell {
     public void setCol(int col) {
         Col = col;
     }
+
+
 
     public boolean isEqual(Cell o) {
         if( (o.getRow()==this.getRow())&& o.getCol()==this.getCol()){
