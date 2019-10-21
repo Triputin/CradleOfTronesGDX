@@ -50,16 +50,21 @@ public class ScreenGamePlay extends BaseScreen {
         gameFieldY=0;
         gameField = new GameField(gameFieldX,gameFieldY,mainStage,cellSize*CellCount,cellSize*CellCount,CellCount);
 
+        new ResultsActor(gameFieldX,h,cellSize*CellCount,70,uiStage,Touchable.disabled);
 
-        goldQuantityLabel = new Label("Gold: "+0, BaseGame.labelStyle);
+        goldQuantityLabel = new Label(" "+0, BaseGame.labelStyle);
         goldQuantityLabel.setColor( Color.CYAN );
-        goldQuantityLabel.setPosition( gameFieldX+100,h+5 );
+        goldQuantityLabel.setPosition( gameFieldX+150,h+5 );
         uiStage.addActor(goldQuantityLabel);
 
-        woodQuantityLabel = new Label("Wood: "+0, BaseGame.labelStyle);
+        woodQuantityLabel = new Label(" "+0, BaseGame.labelStyle);
         woodQuantityLabel.setColor( Color.CYAN );
-        woodQuantityLabel.setPosition( gameFieldX+350,h+5 );
+        woodQuantityLabel.setPosition( gameFieldX+500,h+5 );
         uiStage.addActor(woodQuantityLabel);
+
+
+
+
 
         Button.ButtonStyle buttonStyle = new Button.ButtonStyle();
 
@@ -453,10 +458,10 @@ public class ScreenGamePlay extends BaseScreen {
         switch (className)
         {
             case "by.android.cradle.Coin2": gameRes.Gold++;
-                goldQuantityLabel.setText("Gold: "+gameRes.Gold);
+                goldQuantityLabel.setText(" "+gameRes.Gold);
             break;
             case "by.android.cradle.Wood": gameRes.Wood++;
-                woodQuantityLabel.setText("Wood: "+gameRes.Wood);
+                woodQuantityLabel.setText(" "+gameRes.Wood);
                 break;
 
         }
