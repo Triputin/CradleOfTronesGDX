@@ -53,13 +53,15 @@ public class ScreenGamePlay extends BaseScreen {
         new ResultsActor(gameFieldX,h,cellSize*CellCount,70,uiStage,Touchable.disabled);
 
         goldQuantityLabel = new Label(" "+0, BaseGame.labelStyle);
-        goldQuantityLabel.setColor( Color.CYAN );
-        goldQuantityLabel.setPosition( gameFieldX+150,h+5 );
+        goldQuantityLabel.setColor( Color.GOLDENROD );
+        goldQuantityLabel.setPosition( gameFieldX+100,h+5 );
+        goldQuantityLabel.setFontScale(0.9f);
         uiStage.addActor(goldQuantityLabel);
 
         woodQuantityLabel = new Label(" "+0, BaseGame.labelStyle);
-        woodQuantityLabel.setColor( Color.CYAN );
-        woodQuantityLabel.setPosition( gameFieldX+500,h+5 );
+        woodQuantityLabel.setColor( Color.GOLDENROD );
+        woodQuantityLabel.setPosition( gameFieldX+300,h+5 );
+        woodQuantityLabel.setFontScale(0.9f);
         uiStage.addActor(woodQuantityLabel);
 
 

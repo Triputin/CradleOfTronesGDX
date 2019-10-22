@@ -29,7 +29,7 @@ public class GameField extends BaseActor {
             for (int j = 0;j<cellsCount;j++){
                 gameCell = new GameCell(x+i*cellSizeX,y+j*cellSizeY,cellSizeX,cellSizeY,s, Touchable.disabled,j,i);
                 gameCells.add(gameCell);
-                if(Math.random()<0.3){
+                if(Math.random()<0.3 && (j>cellsCount/3)&& (j<cellsCount/1.5)&& (i>cellsCount/3)&& (i<cellsCount/1.5)){
                     gameCell.setLockLevel(1);
                 }
 
