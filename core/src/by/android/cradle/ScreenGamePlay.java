@@ -48,7 +48,7 @@ public class ScreenGamePlay extends BaseScreen {
         BaseActor.setWorldBounds(cellSize*CellCount,cellSize*CellCount);
         gameFieldX=(Gdx.graphics.getWidth()-w)/2;
         gameFieldY=0;
-        gameField = new GameField(gameFieldX,gameFieldY,mainStage,cellSize*CellCount,cellSize*CellCount,CellCount);
+        gameField = new GameField(gameFieldX,gameFieldY,mainStage,cellSize*CellCount,cellSize*CellCount,CellCount,1);
 
         new ResultsActor(gameFieldX,h,cellSize*CellCount,70,uiStage,Touchable.disabled);
 
@@ -219,12 +219,7 @@ public class ScreenGamePlay extends BaseScreen {
         });
 
 
-     for(int i = 0;i<CellCount;i++){
-            for(int j = 0;j<CellCount;j++){
-                CreateNewItemForStart(j,i);
-
-            }
-        }
+     GenerateLevel(1);
 
 
 
@@ -473,5 +468,30 @@ public class ScreenGamePlay extends BaseScreen {
     public void resize (int width, int height) {
         mainStage.getViewport().update(width, height, true);
         uiStage.getViewport().update(width, height, true);
+    }
+
+
+    public void GenerateLevel(int levelnumber){
+
+        Item item;
+        for(int i = 0;i<CellCount;i++){
+            for(int j = 0;j<CellCount;j++){
+
+                if (Math.random()<0.3){
+                    item = new Coin2(gameFieldX - cellSize, gameFieldY -cellSize, cellSize, cellSize, mainStage, i, j);
+                }else {
+                    if (Math.random()<0.6) {
+                        item = new Coin(gameFieldX - cellSize, gameFieldY - cellSize, cellSize, cellSize, mainStage, i, j);
+                    }
+                    else{
+                        item = new Wood(gameFieldX - cellSize, gameFieldY - cellSize, cellSize, cellSize, mainStage, i, j);
+                    }
+                }
+                //item.addAction(Actions.scaleTo(-1,-1,1));
+                item.addAction(Actions.moveTo(gameFieldX + j * cellSize, gameFieldY + i * cellSize,1));
+                //item.addAction(Actions.scaleTo(1,1,5));
+
+            }
+        }
     }
 }

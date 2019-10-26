@@ -14,7 +14,7 @@ import java.util.ArrayList;
 public class GameField extends BaseActor {
     private ArrayList<GameCell> gameCells ;
 
-    public GameField(float x, float y, Stage s,float width,float height,int cellsCount)
+    public GameField(float x, float y, Stage s,float width,float height,int cellsCount, int gameLevel)
     {
         super(x,y,s,Touchable.enabled);
         gameCells = new ArrayList<>();
@@ -29,12 +29,10 @@ public class GameField extends BaseActor {
             for (int j = 0;j<cellsCount;j++){
                 gameCell = new GameCell(x+i*cellSizeX,y+j*cellSizeY,cellSizeX,cellSizeY,s, Touchable.disabled,j,i);
                 gameCells.add(gameCell);
-                if(Math.random()<0.3 && (j>cellsCount/3)&& (j<cellsCount/1.5)&& (i>cellsCount/3)&& (i<cellsCount/1.5)){
-                    gameCell.setLockLevel(1);
-                }
-
             }
         }
+
+        GenerateLevel(gameLevel,cellsCount);
        //this.setColor(255,255,255,255);
 
 
@@ -224,5 +222,15 @@ public void changeGameCell(Cell cell){
     }
 }
 
+    public void GenerateLevel(int levelnumber,  int CellCount) {
+        //Generate cells
+        for (int i = 0; i < CellCount; i++) {
+            for (int j = 0; j < CellCount; j++) {
+                if (Math.random() < 0.5 && (j > CellCount / 4) && (j < CellCount / 1.5) && (i > CellCount / 4) && (i < CellCount / 1.5)) {
+                    gameCells.get(i*CellCount + j).setLockLevel(1);
+                }
 
+            }
+        }
+    }
 }
