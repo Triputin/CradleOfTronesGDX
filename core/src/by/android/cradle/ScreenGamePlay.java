@@ -30,11 +30,14 @@ public class ScreenGamePlay extends BaseScreen {
     private GameRes gameRes;
     private Label goldQuantityLabel;
     private Label woodQuantityLabel;
+    private Label breadQuantityLabel;
+    private int gameLevel;
 
     public void initialize()
     {
 
         gameRes = new GameRes();
+        gameLevel = 1 ;
 
         // Get screen size
         int w = Gdx.graphics.getWidth();
@@ -51,7 +54,7 @@ public class ScreenGamePlay extends BaseScreen {
         gameField = new GameField(gameFieldX,gameFieldY,mainStage,cellSize*CellCount,cellSize*CellCount,CellCount,1);
 
         new ResultsActor(gameFieldX,h,cellSize*CellCount,70,uiStage,Touchable.disabled);
-
+        //
         goldQuantityLabel = new Label(" "+0, BaseGame.labelStyle);
         goldQuantityLabel.setColor( Color.GOLDENROD );
         goldQuantityLabel.setPosition( gameFieldX+100,h+5 );
@@ -60,9 +63,15 @@ public class ScreenGamePlay extends BaseScreen {
 
         woodQuantityLabel = new Label(" "+0, BaseGame.labelStyle);
         woodQuantityLabel.setColor( Color.GOLDENROD );
-        woodQuantityLabel.setPosition( gameFieldX+300,h+5 );
+        woodQuantityLabel.setPosition( gameFieldX+350,h+5 );
         woodQuantityLabel.setFontScale(0.9f);
         uiStage.addActor(woodQuantityLabel);
+
+        breadQuantityLabel = new Label(" "+0, BaseGame.labelStyle);
+        breadQuantityLabel.setColor( Color.GOLDENROD );
+        breadQuantityLabel.setPosition( gameFieldX+600,h+5 );
+        breadQuantityLabel.setFontScale(0.9f);
+        uiStage.addActor(breadQuantityLabel);
 
 
 
@@ -157,6 +166,18 @@ public class ScreenGamePlay extends BaseScreen {
                         }
                     }
 
+                    //Bread
+                    for (by.android.cradle.BaseActor CoinActor : by.android.cradle.BaseActor.getList(mainStage, "by.android.cradle.Bread")){
+                        if(CoinActor.getBoundaryPolygon().contains(x+gameFieldX,y+gameFieldY)){
+                            if (lastSelectedItem==null){
+                                lastSelectedItem =(Bread) CoinActor;
+                                firstSelectedItem= lastSelectedItem;
+                            }
+                            ((Bread)CoinActor).setSelected(true, lastSelectedItem);
+                            lastSelectedItem =(Bread) CoinActor;
+                        }
+                    }
+
                 }
 
                 return true;
@@ -179,6 +200,12 @@ public class ScreenGamePlay extends BaseScreen {
                         lastSelectedItem = null;
                         firstSelectedItem = null;
                     }
+                    if( gameField.CheckWin()){
+                        gameLevel++;
+                        gameField.GenerateLevel(gameLevel,CellCount);
+                        GenerateLevel(gameLevel);
+                    }
+
             }
             @Override
             public boolean mouseMoved(InputEvent event, float x, float y){
@@ -412,20 +439,24 @@ public class ScreenGamePlay extends BaseScreen {
     }
     private Item CreateNewItem (int row,int col){
         Item item ;
-        if (Math.random()<0.5){
+        if (Math.random()<0.25){
             item = new Coin2(gameFieldX + col * cellSize, gameFieldY + row * cellSize, cellSize, cellSize, mainStage, row, col);
         }else {
-            if (Math.random()<0.6) {
+            if (Math.random()<0.5) {
                 item= new Coin(gameFieldX + col * cellSize, gameFieldY + row * cellSize, cellSize, cellSize, mainStage, row, col);
             }else{
-                item= new Wood(gameFieldX + col * cellSize, gameFieldY + row * cellSize, cellSize, cellSize, mainStage, row, col);
+                if (Math.random()<0.75) {
+                    item= new Bread(gameFieldX + col * cellSize, gameFieldY + row * cellSize, cellSize, cellSize, mainStage, row, col);
+                }else{
+                    item= new Wood(gameFieldX + col * cellSize, gameFieldY + row * cellSize, cellSize, cellSize, mainStage, row, col);
+                }
             }
 
         }
         return item;
     }
 
-    private Item CreateNewItemForStart(int row,int col){
+  /*  private Item CreateNewItemForStart(int row,int col){
         Item item ;
         if (Math.random()<0.3){
             item = new Coin2(gameFieldX - cellSize, gameFieldY -cellSize, cellSize, cellSize, mainStage, row, col);
@@ -442,7 +473,7 @@ public class ScreenGamePlay extends BaseScreen {
         //item.addAction(Actions.scaleTo(1,1,5));
         return item;
     }
-
+*/
     private void RestartLevel() {
         mainStage.clear();
         uiStage.clear();
@@ -460,6 +491,9 @@ public class ScreenGamePlay extends BaseScreen {
             case "by.android.cradle.Wood": gameRes.Wood++;
                 woodQuantityLabel.setText(" "+gameRes.Wood);
                 break;
+            case "by.android.cradle.Bread": gameRes.Bread++;
+                breadQuantityLabel.setText(" "+gameRes.Bread);
+                break;
 
         }
 
@@ -473,18 +507,37 @@ public class ScreenGamePlay extends BaseScreen {
 
     public void GenerateLevel(int levelnumber){
 
+            ArrayList<Item> arrayListItems = new ArrayList<>();
+                for (Actor a : mainStage.getActors())
+                {
+                    if ( Item.class.isAssignableFrom(a.getClass()) ){
+                        arrayListItems.add((Item)a);
+                    }
+
+                }
+
+                for(int i =0;i<arrayListItems.size();i++){
+                    arrayListItems.get(i).remove();
+                }
+
+
         Item item;
         for(int i = 0;i<CellCount;i++){
             for(int j = 0;j<CellCount;j++){
 
-                if (Math.random()<0.3){
+                if (Math.random()<0.25){
                     item = new Coin2(gameFieldX - cellSize, gameFieldY -cellSize, cellSize, cellSize, mainStage, i, j);
                 }else {
-                    if (Math.random()<0.6) {
+                    if (Math.random()<0.5) {
                         item = new Coin(gameFieldX - cellSize, gameFieldY - cellSize, cellSize, cellSize, mainStage, i, j);
                     }
                     else{
-                        item = new Wood(gameFieldX - cellSize, gameFieldY - cellSize, cellSize, cellSize, mainStage, i, j);
+                        if(Math.random()<0.75){
+                            item = new Wood(gameFieldX - cellSize, gameFieldY - cellSize, cellSize, cellSize, mainStage, i, j);
+                        }else{
+                            item = new Bread(gameFieldX - cellSize, gameFieldY - cellSize, cellSize, cellSize, mainStage, i, j);
+                        }
+
                     }
                 }
                 //item.addAction(Actions.scaleTo(-1,-1,1));

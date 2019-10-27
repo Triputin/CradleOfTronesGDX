@@ -233,4 +233,13 @@ public void changeGameCell(Cell cell){
             }
         }
     }
+
+    public  boolean CheckWin(){
+    for (int i = 0;i<gameCells.size();i++){
+        if(gameCells.get(i).getLockLevel()!=0){
+            return false;
+        }
+    }
+    return true;
+    }
 }
