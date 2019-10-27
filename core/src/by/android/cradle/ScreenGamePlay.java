@@ -3,6 +3,7 @@ package by.android.cradle;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -202,6 +203,7 @@ public class ScreenGamePlay extends BaseScreen {
                     }
                     if( gameField.CheckWin()){
                         gameLevel++;
+                        WinMessage();
                         gameField.GenerateLevel(gameLevel,CellCount);
                         GenerateLevel(gameLevel);
                     }
@@ -247,7 +249,6 @@ public class ScreenGamePlay extends BaseScreen {
 
 
      GenerateLevel(1);
-
 
 
     }
@@ -546,5 +547,16 @@ public class ScreenGamePlay extends BaseScreen {
 
             }
         }
+    }
+
+    public void WinMessage(){
+        BaseActor youWinMessage = new BaseActor(0,0,uiStage,Touchable.disabled);
+        youWinMessage.loadTexture("you-win.png",424,114);
+        youWinMessage.centerAtPosition(400,300);
+        youWinMessage.setOpacity(0);
+        //youWinMessage.addAction( Actions.delay(1) );
+        youWinMessage.addAction( Actions.after( Actions.fadeIn(0.5f) ) );
+        youWinMessage.addAction( Actions.delay(5) );
+        youWinMessage.addAction( Actions.after( Actions.fadeOut(1) ) );
     }
 }
