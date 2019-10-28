@@ -86,7 +86,7 @@ public class ScreenGamePlay extends BaseScreen {
 
         Button restartButton = new Button( buttonStyle );
         restartButton.setColor( Color.CYAN );
-        restartButton.setPosition(gameFieldX,h+5);
+        restartButton.setPosition(gameFieldX-100,h+5);
         uiStage.addActor(restartButton);
 
         restartButton.addListener(new InputListener() {
@@ -102,8 +102,6 @@ public class ScreenGamePlay extends BaseScreen {
 
 
         Button testButton = new Button( buttonStyle );
-        restartButton.setColor( Color.CYAN );
-        restartButton.setPosition(gameFieldX-100,h+5);
         uiStage.addActor(testButton);
 
         testButton.addListener(new InputListener() {
@@ -219,28 +217,49 @@ public class ScreenGamePlay extends BaseScreen {
                 InputEvent ie = (InputEvent)event;
                 if (lastSelectedItem==null) return;
                 if(flag){
-                    String className = lastSelectedItem.getClass().getName();
+                    String className = firstSelectedItem.getClass().getName();
                     if ( ie.getType().equals(InputEvent.Type.touchDragged)){
 
-                        for (by.android.cradle.BaseActor CoinActor : by.android.cradle.BaseActor.getList(mainStage, className)){
-                            if(CoinActor.getBoundaryPolygon().contains(x+gameFieldX,y+gameFieldY)){
-                                if(lastSelectedItem.isNear(((Item)CoinActor).getRow(),((Item)CoinActor).getCol())){
-                                    if(!((Item)CoinActor).isSelected()){
-                                        if (lastSelectedItem==null){
-                                            lastSelectedItem =(Item) CoinActor;
+                        for (by.android.cradle.BaseActor CoinActor : by.android.cradle.BaseActor.getList(mainStage, className)) {
+                            if (CoinActor.getBoundaryPolygon().contains(x + gameFieldX, y + gameFieldY)) {
+                                if (lastSelectedItem.isNear(((Item) CoinActor).getRow(), ((Item) CoinActor).getCol())) {
+                                    if (!((Item) CoinActor).isSelected()) {
+                                        if (lastSelectedItem == null) {
+                                            lastSelectedItem = (Item) CoinActor;
                                         }
-                                        ((Item)CoinActor).setSelected(true, lastSelectedItem);
-                                        if (lastSelectedItem.getSelectedDirection()==SelDirection.None){
-                                            lastSelectedItem.setSelected(true,lastSelectedItem);
+                                        ((Item) CoinActor).setSelected(true, lastSelectedItem);
+                                        if (lastSelectedItem.getSelectedDirection() == SelDirection.None) {
+                                            lastSelectedItem.setSelected(true, lastSelectedItem);
                                         }
-                                        lastSelectedItem.setSelectedNext((Item)CoinActor);// change image after next selected
-                                        lastSelectedItem=((Item)CoinActor);
+                                        lastSelectedItem.setSelectedNext((Item) CoinActor);// change image after next selected
+                                        lastSelectedItem = ((Item) CoinActor);
+                                    }
+
+                                }
+                            }
+                        }
+                        // Do the same for Coin
+                        for (by.android.cradle.BaseActor CoinActor : by.android.cradle.BaseActor.getList(mainStage, "by.android.cradle.Coin")) {
+                            if (CoinActor.getBoundaryPolygon().contains(x + gameFieldX, y + gameFieldY)) {
+                                if (lastSelectedItem.isNear(((Item) CoinActor).getRow(), ((Item) CoinActor).getCol())) {
+                                    if (!((Item) CoinActor).isSelected()) {
+                                                if (lastSelectedItem == null) {
+                                                    lastSelectedItem = (Item) CoinActor;
+                                                }
+                                                ((Item) CoinActor).setSelected(true, lastSelectedItem);
+                                                if (lastSelectedItem.getSelectedDirection() == SelDirection.None) {
+                                                    lastSelectedItem.setSelected(true, lastSelectedItem);
+                                                }
+                                                lastSelectedItem.setSelectedNext((Item) CoinActor);// change image after next selected
+                                                lastSelectedItem = ((Item) CoinActor);
                                     }
 
                                 }
 
                             }
                         }
+
+
                     }
                 }
 
@@ -443,10 +462,10 @@ public class ScreenGamePlay extends BaseScreen {
         if (Math.random()<0.25){
             item = new Coin2(gameFieldX + col * cellSize, gameFieldY + row * cellSize, cellSize, cellSize, mainStage, row, col);
         }else {
-            if (Math.random()<0.5) {
+            if (Math.random()<0.35) {
                 item= new Coin(gameFieldX + col * cellSize, gameFieldY + row * cellSize, cellSize, cellSize, mainStage, row, col);
             }else{
-                if (Math.random()<0.75) {
+                if (Math.random()<0.6) {
                     item= new Bread(gameFieldX + col * cellSize, gameFieldY + row * cellSize, cellSize, cellSize, mainStage, row, col);
                 }else{
                     item= new Wood(gameFieldX + col * cellSize, gameFieldY + row * cellSize, cellSize, cellSize, mainStage, row, col);
@@ -457,24 +476,6 @@ public class ScreenGamePlay extends BaseScreen {
         return item;
     }
 
-  /*  private Item CreateNewItemForStart(int row,int col){
-        Item item ;
-        if (Math.random()<0.3){
-            item = new Coin2(gameFieldX - cellSize, gameFieldY -cellSize, cellSize, cellSize, mainStage, row, col);
-        }else {
-            if (Math.random()<0.6) {
-                item = new Coin(gameFieldX - cellSize, gameFieldY - cellSize, cellSize, cellSize, mainStage, row, col);
-            }
-            else{
-                item = new Wood(gameFieldX - cellSize, gameFieldY - cellSize, cellSize, cellSize, mainStage, row, col);
-            }
-        }
-        //item.addAction(Actions.scaleTo(-1,-1,1));
-        item.addAction(Actions.moveTo(gameFieldX + col * cellSize, gameFieldY + row * cellSize,1));
-        //item.addAction(Actions.scaleTo(1,1,5));
-        return item;
-    }
-*/
     private void RestartLevel() {
         mainStage.clear();
         uiStage.clear();
@@ -552,11 +553,13 @@ public class ScreenGamePlay extends BaseScreen {
     public void WinMessage(){
         BaseActor youWinMessage = new BaseActor(0,0,uiStage,Touchable.disabled);
         youWinMessage.loadTexture("you-win.png",424,114);
-        youWinMessage.centerAtPosition(400,300);
+        youWinMessage.centerAtPosition(gameFieldX+cellSize*CellCount/2,gameFieldX+cellSize*CellCount/2);
         youWinMessage.setOpacity(0);
         //youWinMessage.addAction( Actions.delay(1) );
         youWinMessage.addAction( Actions.after( Actions.fadeIn(0.5f) ) );
-        youWinMessage.addAction( Actions.delay(5) );
+        youWinMessage.addAction( Actions.delay(3) );
         youWinMessage.addAction( Actions.after( Actions.fadeOut(1) ) );
     }
+
+
 }
