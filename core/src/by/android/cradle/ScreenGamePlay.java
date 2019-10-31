@@ -76,7 +76,7 @@ public class ScreenGamePlay extends BaseScreen {
 
 
 
-
+        new SandGlass(gameFieldX+cellSize*CellCount+10,gameFieldY+200,uiStage,150,300);
 
         Button.ButtonStyle buttonStyle = new Button.ButtonStyle();
 
