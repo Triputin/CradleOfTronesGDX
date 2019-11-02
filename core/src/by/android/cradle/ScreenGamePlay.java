@@ -18,13 +18,18 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
 import java.util.ArrayList;
 
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.fadeIn;
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.fadeOut;
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.sequence;
+
 public class ScreenGamePlay extends BaseScreen {
     private int cellSize;
     private final int CellCount = 7;
     private GameField gameField;
     private float gameFieldX;
     private float gameFieldY;
-    private boolean flag = false ;
+    private boolean flag = false ; //indicates that user has already started selecting items
+    //private boolean isEndOfLevelAnimation=false; // indicates that end of level animation is playing
     private Item lastSelectedItem;
     private Item firstSelectedItem;
     private ItemPos directionToFill;
@@ -76,7 +81,7 @@ public class ScreenGamePlay extends BaseScreen {
 
 
 
-        new SandGlass(gameFieldX+cellSize*CellCount+10,gameFieldY+200,uiStage,150,300);
+        new SandGlass(gameFieldX+cellSize*CellCount+10,gameFieldY+200,uiStage,150,300, 180);
 
         Button.ButtonStyle buttonStyle = new Button.ButtonStyle();
 
@@ -201,9 +206,9 @@ public class ScreenGamePlay extends BaseScreen {
                     }
                     if( gameField.CheckWin()){
                         gameLevel++;
-                        WinMessage();
-                        gameField.GenerateLevel(gameLevel,CellCount);
-                        GenerateLevel(gameLevel);
+                        //isEndOfLevelAnimation=true;
+                        WinMessageAndNewLevelCreate();
+
                     }
 
             }
@@ -550,15 +555,42 @@ public class ScreenGamePlay extends BaseScreen {
         }
     }
 
-    public void WinMessage(){
+    public void WinMessageAndNewLevelCreate(){
         BaseActor youWinMessage = new BaseActor(0,0,uiStage,Touchable.disabled);
         youWinMessage.loadTexture("you-win.png",424,114);
         youWinMessage.centerAtPosition(gameFieldX+cellSize*CellCount/2,gameFieldX+cellSize*CellCount/2);
         youWinMessage.setOpacity(0);
         //youWinMessage.addAction( Actions.delay(1) );
-        youWinMessage.addAction( Actions.after( Actions.fadeIn(0.5f) ) );
-        youWinMessage.addAction( Actions.delay(3) );
-        youWinMessage.addAction( Actions.after( Actions.fadeOut(1) ) );
+
+        Action completeAction = new Action(){
+            public boolean act( float delta ) {
+                // Do your stuff
+                gameField.GenerateLevel(gameLevel,CellCount);
+                GenerateLevel(gameLevel);
+                return true;
+            }
+        };
+
+        Action actions = sequence(fadeIn(0.5f), Actions.delay(3) ,fadeOut(1f), completeAction);
+        youWinMessage.addAction( actions );
+        //Explosion
+        ExplosionEffect2 boom1 = new ExplosionEffect2();
+        boom1.setX(youWinMessage.getX());
+        boom1.setY(youWinMessage.getY());
+        boom1.start();
+        mainStage.addActor(boom1);
+        ExplosionEffect2 boom2 = new ExplosionEffect2();
+        boom2.centerAtActor( youWinMessage );
+        boom2.start();
+        mainStage.addActor(boom2);
+        ExplosionEffect2 boom3 = new ExplosionEffect2();
+        boom3.setX(youWinMessage.getX()+youWinMessage.getWidth());
+        boom3.setY(youWinMessage.getY());
+        boom3.start();
+        mainStage.addActor(boom3);
+
+
+
     }
 
 

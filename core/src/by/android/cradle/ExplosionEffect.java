@@ -2,8 +2,8 @@ package by.android.cradle;
 
 public class ExplosionEffect extends ParticleActor
 {
-    public ExplosionEffect()
-    {
+    public ExplosionEffect(){
         super("explosion.pfx", "");
     }
+
 }

@@ -6,7 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.Touchable;
 public class SandGlass extends BaseActor{
 
 
-        public SandGlass(float x, float y, Stage s, int width, int height )
+        public SandGlass(float x, float y, Stage s, int width, int height ,float duration)
         {
             super(x,y,s, Touchable.disabled);
 
@@ -18,7 +18,7 @@ public class SandGlass extends BaseActor{
                             "sandglass/sandglass13.png", "sandglass/sandglass14.png"
                     };
 
-            loadAnimationFromFiles(filenames, 5.5f, true,  width,  height);
+            loadAnimationFromFiles(filenames, duration/14, true,  width,  height);
 
         }
 
