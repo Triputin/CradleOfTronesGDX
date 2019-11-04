@@ -8,6 +8,6 @@ public class CradleGame extends BaseGame
     {
         super.create();
 
-        setActiveScreen( new ScreenGamePlay() );
+        setActiveScreen( new MenuScreen()  );
     }
 }

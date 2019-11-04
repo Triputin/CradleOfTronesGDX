@@ -18,7 +18,7 @@ public class SandGlass extends BaseActor{
                             "sandglass/sandglass13.png", "sandglass/sandglass14.png"
                     };
 
-            loadAnimationFromFiles(filenames, duration/14, true,  width,  height);
+            loadAnimationFromFiles(filenames, duration/14, false,  width,  height);
 
         }
 
