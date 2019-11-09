@@ -68,7 +68,12 @@ public class GameMapScreen extends BaseScreen {
         w = Gdx.graphics.getWidth();
         h = Gdx.graphics.getHeight();
         Kingdom winterfell = new Kingdom(w*0.15f, h*0.75f,50,50,uiStage,Touchable.enabled);
-
+        Kingdom kingdom2 = new Kingdom(w*0.29f, h*0.55f,50,50,uiStage,Touchable.enabled);
+        Kingdom kingdom3 = new Kingdom(w*0.45f, h*0.61f,50,50,uiStage,Touchable.enabled);
+        Kingdom kingdom4 = new Kingdom(w*0.45f, h*0.44f,50,50,uiStage,Touchable.enabled);
+        Kingdom kingdom5 = new Kingdom(w*0.45f, h*0.25f,50,50,uiStage,Touchable.enabled);
+        Kingdom kingdom6 = new Kingdom(w*0.12f, h*0.48f,50,50,uiStage,Touchable.enabled);
+        Kingdom kingdom7 = new Kingdom(w*0.65f, h*0.4f,50,50,uiStage,Touchable.enabled);
         //uiTable.add(title).colspan(2);
        // uiTable.row();
        // uiTable.add(backButton);
