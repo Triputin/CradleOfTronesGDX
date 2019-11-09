@@ -14,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
 import java.util.ArrayList;
@@ -79,10 +80,30 @@ public class ScreenGamePlay extends BaseScreen {
         breadQuantityLabel.setFontScale(0.9f);
         uiStage.addActor(breadQuantityLabel);
 
+        //SandGlass placement
+        float x = gameFieldX+cellSize*CellCount+10;
+        float y =gameFieldY+200;
+        int sw = (int)(Gdx.graphics.getWidth()-x);
+        new SandGlass(x,y,uiStage,sw,sw*2, 180);
 
+        //Gamemap Button
+        TextButton mapButton = new TextButton( "GameMap", BaseGame.textButtonStyle );
+        mapButton.addListener(new InputListener() {
+            public boolean touchDown (InputEvent e, float x, float y, int pointer, int button){
+                if (!(e instanceof InputEvent))
+                    return false;
 
-        new SandGlass(gameFieldX+cellSize*CellCount+10,gameFieldY+200,uiStage,150,300, 180);
+                if (!((InputEvent) e).getType().equals(InputEvent.Type.touchDown))
+                    return false;
 
+                CradleGame.setActiveScreen(new GameMapScreen());
+                return true;
+            }
+        });
+        mapButton.setPosition(0,200);
+        uiStage.addActor(mapButton);
+
+        //Restart button
         Button.ButtonStyle buttonStyle = new Button.ButtonStyle();
 
         Texture buttonTex = new Texture( Gdx.files.internal("undo.png") );
@@ -105,7 +126,7 @@ public class ScreenGamePlay extends BaseScreen {
             }
         });
 
-
+        //FindSolution Button
         Button testButton = new Button( buttonStyle );
         uiStage.addActor(testButton);
 
