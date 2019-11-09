@@ -39,10 +39,10 @@ public class ScreenGamePlay extends BaseScreen {
     private Label woodQuantityLabel;
     private Label breadQuantityLabel;
     private int gameLevel;
-
+    private ScreenGamePlay screenGamePlay;
     public void initialize()
     {
-
+        screenGamePlay = this;
         gameRes = new GameRes();
         gameLevel = 1 ;
 
@@ -96,7 +96,7 @@ public class ScreenGamePlay extends BaseScreen {
                 if (!((InputEvent) e).getType().equals(InputEvent.Type.touchDown))
                     return false;
 
-                CradleGame.setActiveScreen(new GameMapScreen());
+                CradleGame.setActiveScreen(new GameMapScreen(screenGamePlay));
                 return true;
             }
         });
@@ -112,7 +112,7 @@ public class ScreenGamePlay extends BaseScreen {
 
         Button restartButton = new Button( buttonStyle );
         restartButton.setColor( Color.CYAN );
-        restartButton.setPosition(gameFieldX-100,h+5);
+        restartButton.setPosition(50,350);
         uiStage.addActor(restartButton);
 
         restartButton.addListener(new InputListener() {
@@ -128,6 +128,7 @@ public class ScreenGamePlay extends BaseScreen {
 
         //FindSolution Button
         Button testButton = new Button( buttonStyle );
+        testButton.setPosition(50,450);
         uiStage.addActor(testButton);
 
         testButton.addListener(new InputListener() {
@@ -577,22 +578,34 @@ public class ScreenGamePlay extends BaseScreen {
     }
 
     public void WinMessageAndNewLevelCreate(){
+        //Fon
+        BaseActor fon = new BaseActor(0,0,uiStage,Touchable.disabled);
+        fon.loadTexture("fon_orange.png",cellSize*CellCount,cellSize*CellCount);
+        fon.setX(gameFieldX);
+        fon.setY(gameFieldY);
+        //fon.centerAtPosition(gameFieldX+cellSize*CellCount/2,gameFieldY+cellSize*CellCount/2);
+        //fon.setOpacity(80);
+        Action actions = sequence(fadeIn(0.5f), Actions.delay(3) ,fadeOut(1f));
+        fon.addAction(actions);
+
+        //Win message
         BaseActor youWinMessage = new BaseActor(0,0,uiStage,Touchable.disabled);
         youWinMessage.loadTexture("you-win.png",424,114);
-        youWinMessage.centerAtPosition(gameFieldX+cellSize*CellCount/2,gameFieldX+cellSize*CellCount/2);
+        youWinMessage.centerAtPosition(gameFieldX+cellSize*CellCount/2,gameFieldY+cellSize*CellCount/2);
         youWinMessage.setOpacity(0);
         //youWinMessage.addAction( Actions.delay(1) );
 
         Action completeAction = new Action(){
             public boolean act( float delta ) {
                 // Do your stuff
+
                 gameField.GenerateLevel(gameLevel,CellCount);
                 GenerateLevel(gameLevel);
                 return true;
             }
         };
 
-        Action actions = sequence(fadeIn(0.5f), Actions.delay(3) ,fadeOut(1f), completeAction);
+        actions = sequence(fadeIn(0.5f), Actions.delay(3) ,fadeOut(1f), completeAction);
         youWinMessage.addAction( actions );
         //Explosion
         ExplosionEffect2 boom1 = new ExplosionEffect2();
@@ -614,5 +627,9 @@ public class ScreenGamePlay extends BaseScreen {
 
     }
 
+
+    public void LooseLevel(){
+
+    }
 
 }

@@ -9,6 +9,13 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 
 public class GameMapScreen extends BaseScreen {
 
+    ScreenGamePlay screenGamePlay;
+
+    public GameMapScreen(ScreenGamePlay screenGamePlay) {
+        super();
+        this.screenGamePlay = screenGamePlay;
+    }
+
     public void initialize()
     {
 
@@ -16,7 +23,6 @@ public class GameMapScreen extends BaseScreen {
         int h = Gdx.graphics.getHeight();
         BaseActor worldMap = new BaseActor(0,0, mainStage, Touchable.disabled);
         worldMap.loadTexture( "worldmap01.png",w,h );
-        // ocean.setSize(800,600);
 
         // BaseActor title = new BaseActor(0,0, mainStage, Touchable.disabled);
         // title.loadTexture( "assets/starfish-collector.png" );
@@ -33,7 +39,7 @@ public class GameMapScreen extends BaseScreen {
                 if (!((InputEvent) e).getType().equals(InputEvent.Type.touchDown))
                     return false;
 
-                CradleGame.setActiveScreen(new ScreenGamePlay());
+                CradleGame.setActiveScreen(screenGamePlay);
                 return true;
             }
         });
@@ -58,6 +64,10 @@ public class GameMapScreen extends BaseScreen {
         });
 
 
+        //Kingdoms
+        w = Gdx.graphics.getWidth();
+        h = Gdx.graphics.getHeight();
+        Kingdom winterfell = new Kingdom(w*0.15f, h*0.75f,50,50,uiStage,Touchable.enabled);
 
         //uiTable.add(title).colspan(2);
        // uiTable.row();

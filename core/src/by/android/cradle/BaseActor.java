@@ -1,6 +1,7 @@
 package by.android.cradle;
 
 import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.TextureData;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 
@@ -225,6 +226,82 @@ public class BaseActor extends Group
 
         return anim;
     }
+
+    public Animation<TextureRegion> loadAnimationFromSheet(String fileName, int rows, int cols, float frameDuration, boolean loop, int width, int height)
+    {
+        Texture texture = new Texture(Gdx.files.internal(fileName), true);
+        texture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+        int frameWidth = texture.getWidth() / cols;
+        int frameHeight = texture.getHeight() / rows;
+
+        TextureRegion[][] temp = TextureRegion.split(texture, frameWidth, frameHeight);
+
+        Array<TextureRegion> textureArray = new Array<TextureRegion>();
+
+        for (int r = 0; r < rows; r++)
+            for (int c = 0; c < cols; c++){
+
+
+                // Изменяем размер загружаемой картинки из файла на заданный
+                //Pixmap pixmap200 = new Pixmap(Gdx.files.internal(fileName));
+                //if (!temp[r][c].getTexture().getTextureData().isPrepared()) {
+                //    temp[r][c].getTexture().getTextureData().prepare();
+               // }
+
+                //Pixmap pixmap200 = texture.getTextureData().consumePixmap();
+                Pixmap pixmap200 = extractPixmapFromTextureRegion(temp[r][c]);
+                Pixmap pixmap100 = new Pixmap(width, height, pixmap200.getFormat());
+                pixmap100.drawPixmap(pixmap200,
+                        0, 0, pixmap200.getWidth(), pixmap200.getHeight(),
+                        0, 0, pixmap100.getWidth(), pixmap100.getHeight()
+                );
+                Texture texture1 = new Texture(pixmap100);
+                texture1.setFilter( TextureFilter.Linear, TextureFilter.Linear );
+                pixmap200.dispose();
+                pixmap100.dispose();
+                TextureRegion textureRegion=new TextureRegion( texture1 );
+
+                textureArray.add( textureRegion );
+                //textureArray.add( temp[r][c] );
+
+            }
+
+        Animation<TextureRegion> anim = new Animation<TextureRegion>(frameDuration, textureArray);
+
+        if (loop)
+            anim.setPlayMode(Animation.PlayMode.LOOP);
+        else
+            anim.setPlayMode(Animation.PlayMode.NORMAL);
+
+        if (animation == null)
+            setAnimation(anim);
+
+        return anim;
+    }
+
+    public Pixmap extractPixmapFromTextureRegion(TextureRegion textureRegion)
+    {
+        TextureData textureData = textureRegion.getTexture().getTextureData();
+        if (!textureData.isPrepared()) {
+            textureData.prepare();
+        }
+        Pixmap pixmap = new Pixmap(
+                textureRegion.getRegionWidth(),
+                textureRegion.getRegionHeight(),
+                textureData.getFormat()
+        );
+        pixmap.drawPixmap(
+                textureData.consumePixmap(), // The other Pixmap
+                0, // The target x-coordinate (top left corner)
+                0, // The target y-coordinate (top left corner)
+                textureRegion.getRegionX(), // The source x-coordinate (top left corner)
+                textureRegion.getRegionY(), // The source y-coordinate (top left corner)
+                textureRegion.getRegionWidth(), // The width of the area from the other Pixmap in pixels
+                textureRegion.getRegionHeight() // The height of the area from the other Pixmap in pixels
+        );
+        return pixmap;
+    }
+
 
     /**
      *  Convenience method for creating a 1-frame animation from a single texture.
