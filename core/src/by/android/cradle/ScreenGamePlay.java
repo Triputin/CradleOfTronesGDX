@@ -40,6 +40,7 @@ public class ScreenGamePlay extends BaseScreen {
     private Label breadQuantityLabel;
     private int gameLevel;
     private ScreenGamePlay screenGamePlay;
+
     public void initialize()
     {
         screenGamePlay = this;
@@ -526,8 +527,18 @@ public class ScreenGamePlay extends BaseScreen {
 
         }
 
+    }
+
+
+    public void UpdateRes() {
+
+        goldQuantityLabel.setText(" " + gameRes.Gold);
+        woodQuantityLabel.setText(" " + gameRes.Wood);
+        breadQuantityLabel.setText(" " + gameRes.Bread);
+
 
     }
+
     public void resize (int width, int height) {
         mainStage.getViewport().update(width, height, true);
         uiStage.getViewport().update(width, height, true);
@@ -626,6 +637,7 @@ public class ScreenGamePlay extends BaseScreen {
 
 
     }
+
 
 
     public void LooseLevel(){

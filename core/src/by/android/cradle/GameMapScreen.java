@@ -18,7 +18,6 @@ public class GameMapScreen extends BaseScreen {
 
     public void initialize()
     {
-
         int w = Gdx.graphics.getWidth();
         int h = Gdx.graphics.getHeight();
         BaseActor worldMap = new BaseActor(0,0, mainStage, Touchable.disabled);
@@ -28,7 +27,7 @@ public class GameMapScreen extends BaseScreen {
         // title.loadTexture( "assets/starfish-collector.png" );
 
         TextButton backButton = new TextButton( "Back", BaseGame.textButtonStyle );
-        backButton.setPosition(150,100);
+        backButton.setPosition(150,50);
         uiStage.addActor(backButton);
 
         backButton.addListener(new InputListener() {
@@ -44,41 +43,42 @@ public class GameMapScreen extends BaseScreen {
             }
         });
 
-
-        TextButton quitButton = new TextButton( "Quit", BaseGame.textButtonStyle );
-        quitButton.setPosition(300,100);
-        uiStage.addActor(quitButton);
-
-        quitButton.addListener(new InputListener() {
-            public boolean touchDown (InputEvent e, float x, float y, int pointer, int button){
-
-                if (!(e instanceof InputEvent))
-                    return false;
-
-                if (!((InputEvent) e).getType().equals(InputEvent.Type.touchDown))
-                    return false;
-
-                Gdx.app.exit();
-                return true;
-            }
-        });
-
-
         //Kingdoms
         w = Gdx.graphics.getWidth();
         h = Gdx.graphics.getHeight();
-        Kingdom winterfell = new Kingdom(w*0.15f, h*0.75f,50,50,uiStage,Touchable.enabled,KingdomNames.Kingdom_of_the_North);
-        Kingdom kingdom2 = new Kingdom(w*0.29f, h*0.55f,50,50,uiStage,Touchable.enabled,KingdomNames.Kingdom_of_the_Isles_and_Rivers);
-        Kingdom kingdom3 = new Kingdom(w*0.45f, h*0.61f,50,50,uiStage,Touchable.enabled,KingdomNames.Kingdom_of_the_Mountain_and_the_Vale);
-        Kingdom kingdom4 = new Kingdom(w*0.45f, h*0.44f,50,50,uiStage,Touchable.enabled,KingdomNames.Kingdom_of_the_Reach);
-        Kingdom kingdom5 = new Kingdom(w*0.45f, h*0.25f,50,50,uiStage,Touchable.enabled,KingdomNames.Kingdom_of_the_Rock);
-        Kingdom kingdom6 = new Kingdom(w*0.12f, h*0.48f,50,50,uiStage,Touchable.enabled,KingdomNames.Kingdom_of_the_Stormlands);
-        Kingdom kingdom7 = new Kingdom(w*0.65f, h*0.4f,50,50,uiStage,Touchable.enabled,KingdomNames.Principality_of_Dorne);
-        //uiTable.add(title).colspan(2);
-       // uiTable.row();
-       // uiTable.add(backButton);
-       // uiTable.add(quitButton);
+        Kingdom[] kingdoms = new Kingdom[7];
+        kingdoms[0] = new Kingdom(w*0.15f, h*0.75f,50,50,uiStage,Touchable.enabled,KingdomNames.Kingdom_of_the_North);
+        kingdoms[1] = new Kingdom(w*0.29f, h*0.55f,50,50,uiStage,Touchable.enabled,KingdomNames.Kingdom_of_the_Isles_and_Rivers);
+        kingdoms[2] = new Kingdom(w*0.45f, h*0.61f,50,50,uiStage,Touchable.enabled,KingdomNames.Kingdom_of_the_Mountain_and_the_Vale);
+        kingdoms[3] = new Kingdom(w*0.45f, h*0.44f,50,50,uiStage,Touchable.enabled,KingdomNames.Kingdom_of_the_Reach);
+        kingdoms[4] = new Kingdom(w*0.45f, h*0.25f,50,50,uiStage,Touchable.enabled,KingdomNames.Kingdom_of_the_Rock);
+        kingdoms[5] = new Kingdom(w*0.12f, h*0.48f,50,50,uiStage,Touchable.enabled,KingdomNames.Kingdom_of_the_Stormlands);
+        kingdoms[6] = new Kingdom(w*0.65f, h*0.4f,50,50,uiStage,Touchable.enabled,KingdomNames.Principality_of_Dorne);
 
+        InputListener inputListener = new InputListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                if ( event.getType().equals(InputEvent.Type.touchDown) ) {
+                    Kingdom kingdom = (Kingdom) event.getListenerActor();
+                    KingdomRes kingdomRes = kingdom.getKingdomResForAttack();
+                    GameRes.Gold -= kingdomRes.Gold;
+                    GameRes.Wood -= kingdomRes.Wood;
+                    GameRes.Bread -= kingdomRes.Bread;
+                    CradleGame.setActiveScreen(screenGamePlay);
+                    screenGamePlay.UpdateRes();
+                }
+                return false;
+            }
+        };
+
+        for (int i = 0; i < kingdoms.length; i++) {
+            kingdoms[i].addListener(inputListener);
+        }
+
+        // uiTable.add(title).colspan(2);
+        // uiTable.row();
+        // uiTable.add(backButton);
+        // uiTable.add(quitButton);
     }
 
     public void update(float dt)
@@ -94,4 +94,6 @@ public class GameMapScreen extends BaseScreen {
             Gdx.app.exit();
         return false;
     }
+
+
 }

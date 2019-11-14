@@ -7,8 +7,9 @@ import com.badlogic.gdx.scenes.scene2d.Touchable;
 
 public class Kingdom extends BaseActor {
 
-    KingdomNames kingdomNames;
-    KingdomRes kingdomRes;
+    private KingdomNames kingdomNames;
+    private KingdomRes kingdomRes;
+    private int protectionState;
 
     public Kingdom(float x, float y, int width, int height, Stage s, Touchable touchable,KingdomNames kingdomNames)
     {
@@ -16,7 +17,8 @@ public class Kingdom extends BaseActor {
         setHeight(height);
         setWidth(width);
         this.kingdomNames = kingdomNames;
-        KingdomRes kingdomRes = new KingdomRes();
+        kingdomRes = new KingdomRes();
+        protectionState = 5;
 
 
        // Animation<TextureRegion> animation= loadAnimationFromSheet("kingdoms/flaganimation01.png", 2, 3, 0.1f, true,50,50);
