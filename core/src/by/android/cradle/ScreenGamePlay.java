@@ -45,6 +45,10 @@ public class ScreenGamePlay extends BaseScreen {
     {
         screenGamePlay = this;
         gameRes = new GameRes();
+        GameRes.Bread=100;
+        GameRes.Wood=100;
+        GameRes.Gold=50;
+
         gameLevel = 1 ;
 
         // Get screen size

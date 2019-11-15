@@ -31,7 +31,7 @@ public class MenuScreen extends BaseScreen {
                 if (!((InputEvent) e).getType().equals(InputEvent.Type.touchDown))
                     return false;
 
-                CradleGame.setActiveScreen(new ScreenGamePlay());
+                CradleGame.setActiveScreen(new GameMapScreen(new ScreenGamePlay()));
                 return true;
             }
         });
