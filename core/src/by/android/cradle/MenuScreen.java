@@ -3,18 +3,34 @@ package by.android.cradle;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 
 public class MenuScreen extends BaseScreen {
 
     public void initialize()
     {
-       // BaseActor ocean = new BaseActor(0,0, mainStage);
-        //ocean.loadTexture( "assets/water.jpg" );
-       // ocean.setSize(800,600);
+
+        int w = Gdx.graphics.getWidth();
+        int h = Gdx.graphics.getHeight();
+
+        BaseActor castleSky = new BaseActor(-w,0, uiStage,Touchable.disabled);
+        castleSky.loadTexture( "castle/castle03_sky.png",w*2,h );
+        // castle.setSize(800,600);
+        uiTable.addActor(castleSky);
+         Action moveAction = Actions.sequence(Actions.moveBy(0.3f,0),Actions.delay(0.05f));
+        castleSky.addAction( Actions.forever(moveAction) );
+
+        BaseActor castle = new BaseActor(0,0, uiStage,Touchable.disabled);
+        castle.loadTexture( "castle/castle02.png",w,h );
+       // castle.setSize(800,600);
+        uiTable.addActor(castle);
+
+
 
        // BaseActor title = new BaseActor(0,0, mainStage, Touchable.disabled);
        // title.loadTexture( "assets/starfish-collector.png" );
