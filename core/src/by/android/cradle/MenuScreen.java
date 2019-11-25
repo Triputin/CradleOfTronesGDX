@@ -3,6 +3,7 @@ package by.android.cradle;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -18,12 +19,22 @@ public class MenuScreen extends BaseScreen {
         int w = Gdx.graphics.getWidth();
         int h = Gdx.graphics.getHeight();
 
-        BaseActor castleSky = new BaseActor(-w,0, uiStage,Touchable.disabled);
-        castleSky.loadTexture( "castle/castle03_sky.png",w*2,h );
-        // castle.setSize(800,600);
-        uiTable.addActor(castleSky);
-         Action moveAction = Actions.sequence(Actions.moveBy(0.3f,0),Actions.delay(0.05f));
-        castleSky.addAction( Actions.forever(moveAction) );
+        //Flags
+
+        Flag f1=new Flag(w*0.525f,h*0.79f,(int)Math.round(w*0.12f),(int)Math.round(h*0.2f),uiStage,Touchable.enabled,KingdomNames.Kingdom_of_the_North);
+        Flag f2=new Flag(w*0.11f,h*0.48f,(int)Math.round(w*0.08f),(int)Math.round(h*0.15f),uiStage,Touchable.enabled,KingdomNames.Kingdom_of_the_North);
+
+
+        // BaseActor castleSky = new BaseActor(-w,0, uiStage,Touchable.disabled);
+        BaseActorRepeatMove baseActorRepeatMove = new BaseActorRepeatMove(-w,0,w,h,uiStage);
+        //baseActorRepeatMove.loadTexture("castle/castle03_sky.png",w*2,h);
+        uiTable.addActor(baseActorRepeatMove);
+
+        //castleSky.loadTexture( "castle/castle03_sky.png",w*2,h );
+         //castle.setSize(800,600);
+        //uiTable.addActor(castleSky);
+        //Action moveAction = Actions.sequence(Actions.moveBy(0.3f,0),Actions.delay(0.05f));
+        //castleSky.addAction( Actions.forever(moveAction) );
 
         BaseActor castle = new BaseActor(0,0, uiStage,Touchable.disabled);
         castle.loadTexture( "castle/castle02.png",w,h );
@@ -78,6 +89,11 @@ public class MenuScreen extends BaseScreen {
         uiTable.add(startButton);
         uiTable.add(quitButton);
 
+
+
+
+
+
     }
 
     public void update(float dt)
@@ -93,5 +109,7 @@ public class MenuScreen extends BaseScreen {
             Gdx.app.exit();
         return false;
     }
+
+
 }
 

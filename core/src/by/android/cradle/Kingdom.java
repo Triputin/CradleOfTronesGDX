@@ -36,8 +36,8 @@ public class Kingdom extends BaseActor {
                                 "flag_red/flag10.png", "flag_red/flag11.png", "flag_red/flag12.png"
                         };
 
-                 animation = loadAnimationFromFiles(filenames, 0.1f, true,  50,  50);
-               baseActor = new BaseActor((int) getWidth()/2.8f,(int) (getHeight()*0.5f),s,Touchable.enabled);
+                animation = loadAnimationFromFiles(filenames, 0.1f, true,  50,  50);
+                baseActor = new BaseActor((int) getWidth()/2.8f,(int) (getHeight()*0.5f),s,Touchable.enabled);
                 baseActor.setAnimation(animation);
                 addActor(baseActor);
                 baseActor = new BaseActor((int) getWidth()/2.8f,(int) (getHeight()*0.5f),s,Touchable.enabled);
