@@ -40,6 +40,7 @@ public class ScreenGamePlay extends BaseScreen {
     private Label breadQuantityLabel;
     private int gameLevel;
     private ScreenGamePlay screenGamePlay;
+    private SandGlass sandGlass;
 
     public void initialize()
     {
@@ -89,7 +90,7 @@ public class ScreenGamePlay extends BaseScreen {
         float x = gameFieldX+cellSize*CellCount+10;
         float y =gameFieldY+200;
         int sw = (int)(Gdx.graphics.getWidth()-x);
-        new SandGlass(x,y,uiStage,sw,sw*2, 180);
+        sandGlass = new SandGlass(x,y,uiStage,sw,sw*2, 180);
 
         //Gamemap Button
         TextButton mapButton = new TextButton( "GameMap", BaseGame.textButtonStyle );
@@ -614,8 +615,7 @@ public class ScreenGamePlay extends BaseScreen {
             public boolean act( float delta ) {
                 // Do your stuff
 
-                gameField.GenerateLevel(gameLevel,CellCount);
-                GenerateLevel(gameLevel);
+                StartNewLevel(gameLevel);
                 return true;
             }
         };
@@ -642,7 +642,11 @@ public class ScreenGamePlay extends BaseScreen {
 
     }
 
-
+    public void StartNewLevel(int gameLevel){
+        gameField.GenerateLevel(gameLevel,CellCount);
+        GenerateLevel(gameLevel);
+        sandGlass.Restart(180);
+    }
 
     public void LooseLevel(){
 

@@ -104,7 +104,7 @@ public class MenuScreen extends BaseScreen {
     public boolean keyDown(int keyCode)
     {
         if (Gdx.input.isKeyPressed(Input.Keys.ENTER))
-            CradleGame.setActiveScreen( new ScreenGamePlay() );
+            CradleGame.setActiveScreen( new GameMapScreen(new ScreenGamePlay()));
         if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE))
             Gdx.app.exit();
         return false;

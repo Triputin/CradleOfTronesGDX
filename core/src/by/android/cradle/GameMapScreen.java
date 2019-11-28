@@ -66,6 +66,7 @@ public class GameMapScreen extends BaseScreen {
                     GameRes.Bread -= kingdomRes.Bread;
                     CradleGame.setActiveScreen(screenGamePlay);
                     screenGamePlay.UpdateRes();
+                    screenGamePlay.StartNewLevel(1);
                 }
                 return false;
             }
