@@ -40,6 +40,8 @@ import com.badlogic.gdx.scenes.scene2d.Group;
  */
 public class BaseActor extends Group
 {
+
+
     private Animation<TextureRegion> animation;
     private float elapsedTime;
     private boolean animationPaused;
@@ -77,6 +79,11 @@ public class BaseActor extends Group
         deceleration = 0;
 
         boundaryPolygon = null;
+    }
+
+
+    public Animation<TextureRegion> getAnimation() {
+        return animation;
     }
 
     /** 

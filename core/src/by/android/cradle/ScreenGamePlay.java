@@ -90,7 +90,7 @@ public class ScreenGamePlay extends BaseScreen {
         float x = gameFieldX+cellSize*CellCount+10;
         float y =gameFieldY+200;
         int sw = (int)(Gdx.graphics.getWidth()-x);
-        sandGlass = new SandGlass(x,y,uiStage,sw,sw*2, 180);
+        sandGlass = new SandGlass(x,y,uiStage,sw,sw*2, 20);
 
         //Gamemap Button
         TextButton mapButton = new TextButton( "GameMap", BaseGame.textButtonStyle );
@@ -333,7 +333,9 @@ public class ScreenGamePlay extends BaseScreen {
 
     public void update(float dt)
     {
-
+        if (sandGlass.isAnimationFinished()) {
+            LooseLevel();
+        }
     }
 
     public ArrayList<Cell> removeSelectedItems(){
@@ -645,10 +647,17 @@ public class ScreenGamePlay extends BaseScreen {
     public void StartNewLevel(int gameLevel){
         gameField.GenerateLevel(gameLevel,CellCount);
         GenerateLevel(gameLevel);
-        sandGlass.Restart(180);
+        //sandGlass.Restart(180);
+        sandGlass.remove();
+        //SandGlass recreation for restarting of animation
+        float x = gameFieldX+cellSize*CellCount+10;
+        float y = gameFieldY+200;
+        int sw = (int)(Gdx.graphics.getWidth()-x);
+        sandGlass = new SandGlass(x,y,uiStage,sw,sw*2, 20);
     }
 
     public void LooseLevel(){
+        CradleGame.setActiveScreen(new GameMapScreen(screenGamePlay));
 
     }
 
