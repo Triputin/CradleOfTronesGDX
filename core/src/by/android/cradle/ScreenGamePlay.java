@@ -658,7 +658,6 @@ public class ScreenGamePlay extends BaseScreen {
 
     public void LooseLevel(){
         CradleGame.setActiveScreen(new GameMapScreen(screenGamePlay));
-
     }
 
 }
