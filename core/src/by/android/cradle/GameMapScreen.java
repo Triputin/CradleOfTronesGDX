@@ -21,13 +21,13 @@ public class GameMapScreen extends BaseScreen {
         int w = Gdx.graphics.getWidth();
         int h = Gdx.graphics.getHeight();
         BaseActor worldMap = new BaseActor(0,0, mainStage, Touchable.disabled);
-        worldMap.loadTexture( "worldmap01.png",w,h );
+        worldMap.loadTexture( "worldmap02.png",w,h );
 
         // BaseActor title = new BaseActor(0,0, mainStage, Touchable.disabled);
         // title.loadTexture( "assets/starfish-collector.png" );
 
         TextButton backButton = new TextButton( "Back", BaseGame.textButtonStyle );
-        backButton.setPosition(150,50);
+        backButton.setPosition(w*0.02f,h*0.05f);
         uiStage.addActor(backButton);
 
         backButton.addListener(new InputListener() {
@@ -46,14 +46,15 @@ public class GameMapScreen extends BaseScreen {
         //Kingdoms
         w = Gdx.graphics.getWidth();
         h = Gdx.graphics.getHeight();
+        int kingdomsize = h/9;
         Kingdom[] kingdoms = new Kingdom[7];
-        kingdoms[0] = new Kingdom(w*0.15f, h*0.75f,50,50,uiStage,Touchable.enabled,KingdomNames.Kingdom_of_the_North);
-        kingdoms[1] = new Kingdom(w*0.29f, h*0.55f,50,50,uiStage,Touchable.enabled,KingdomNames.Kingdom_of_the_Isles_and_Rivers);
-        kingdoms[2] = new Kingdom(w*0.45f, h*0.61f,50,50,uiStage,Touchable.enabled,KingdomNames.Kingdom_of_the_Mountain_and_the_Vale);
-        kingdoms[3] = new Kingdom(w*0.45f, h*0.44f,50,50,uiStage,Touchable.enabled,KingdomNames.Kingdom_of_the_Reach);
-        kingdoms[4] = new Kingdom(w*0.45f, h*0.25f,50,50,uiStage,Touchable.enabled,KingdomNames.Kingdom_of_the_Rock);
-        kingdoms[5] = new Kingdom(w*0.12f, h*0.48f,50,50,uiStage,Touchable.enabled,KingdomNames.Kingdom_of_the_Stormlands);
-        kingdoms[6] = new Kingdom(w*0.65f, h*0.4f,50,50,uiStage,Touchable.enabled,KingdomNames.Principality_of_Dorne);
+        kingdoms[0] = new Kingdom(w*0.17f, h*0.62f,kingdomsize,kingdomsize,uiStage,Touchable.enabled,KingdomNames.Kingdom_of_the_North);
+        kingdoms[1] = new Kingdom(w*0.28f, h*0.3f,kingdomsize,kingdomsize,uiStage,Touchable.enabled,KingdomNames.Kingdom_of_the_Isles_and_Rivers);
+        kingdoms[2] = new Kingdom(w*0.6f, h*0.4f,kingdomsize,kingdomsize,uiStage,Touchable.enabled,KingdomNames.Kingdom_of_the_Mountain_and_the_Vale);
+        kingdoms[3] = new Kingdom(w*0.4f, h*0.28f,kingdomsize,kingdomsize,uiStage,Touchable.enabled,KingdomNames.Kingdom_of_the_Reach);
+        kingdoms[4] = new Kingdom(w*0.45f, h*0.15f,kingdomsize,kingdomsize,uiStage,Touchable.enabled,KingdomNames.Kingdom_of_the_Rock);
+        kingdoms[5] = new Kingdom(w*0.18f, h*0.25f,kingdomsize,kingdomsize,uiStage,Touchable.enabled,KingdomNames.Kingdom_of_the_Stormlands);
+        kingdoms[6] = new Kingdom(w*0.78f, h*0.35f,kingdomsize,kingdomsize,uiStage,Touchable.enabled,KingdomNames.Principality_of_Dorne);
 
         InputListener inputListener = new InputListener() {
             @Override

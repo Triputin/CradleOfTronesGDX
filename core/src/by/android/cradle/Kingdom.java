@@ -14,8 +14,8 @@ public class Kingdom extends BaseActor {
     public Kingdom(float x, float y, int width, int height, Stage s, Touchable touchable,KingdomNames kingdomNames)
     {
         super(x,y,s, touchable);
-        setHeight(height);
-        setWidth(width);
+        int flagSize = height;
+
         this.kingdomNames = kingdomNames;
         kingdomRes = new KingdomRes();
         protectionState = 5;
@@ -36,16 +36,16 @@ public class Kingdom extends BaseActor {
                                 "flag_red/flag10.png", "flag_red/flag11.png", "flag_red/flag12.png"
                         };
 
-                animation = loadAnimationFromFiles(filenames, 0.1f, true,  50,  50);
-                baseActor = new BaseActor((int) getWidth()/2.8f,(int) (getHeight()*0.5f),s,Touchable.enabled);
+                animation = loadAnimationFromFiles(filenames, 0.1f, true,  flagSize,  flagSize);
+                baseActor = new BaseActor((int) width/2.8f,(int) (height*0.5f),s,Touchable.enabled);
                 baseActor.setAnimation(animation);
                 addActor(baseActor);
-                baseActor = new BaseActor((int) getWidth()/2.8f,(int) (getHeight()*0.5f),s,Touchable.enabled);
+                baseActor = new BaseActor((int) width/2.8f,(int) (height*0.5f),s,Touchable.enabled);
                 animation = loadTexture("flag_red/flagbasement.png", (int) getWidth(), (int) getHeight());
                 baseActor.setAnimation(animation);
                 addActor(baseActor);
 
-                loadTexture("kingdoms/winterfell.png", (int) getWidth(), (int) getHeight());
+                loadTexture("kingdoms/winterfell.png", width, height);
                 break;
             case Kingdom_of_the_Isles_and_Rivers: kingdomRes.Bread = 10;
                 kingdomRes.Gold = 10;
@@ -57,7 +57,7 @@ public class Kingdom extends BaseActor {
                                 "flag_yellow/flag10.png", "flag_yellow/flag11.png", "flag_yellow/flag12.png"
                         };
 
-                 animation = loadAnimationFromFiles(filenames1, 0.1f, true,  50,  50);
+                animation = loadAnimationFromFiles(filenames1, 0.1f, true,  flagSize,  flagSize);
                 baseActor = new BaseActor((int) getWidth()/2.8f,(int) (getHeight()*0.5f),s,Touchable.enabled);
                 baseActor.setAnimation(animation);
                 addActor(baseActor);
@@ -78,7 +78,7 @@ public class Kingdom extends BaseActor {
                                 "flag_purple/flag10.png", "flag_purple/flag11.png", "flag_purple/flag12.png"
                         };
 
-                animation = loadAnimationFromFiles(filenames2, 0.1f, true,  50,  50);
+                animation = loadAnimationFromFiles(filenames2, 0.1f, true,  flagSize,  flagSize);
                 baseActor = new BaseActor((int) getWidth()/2.8f,(int) (getHeight()*0.5f),s,Touchable.enabled);
                 baseActor.setAnimation(animation);
                 addActor(baseActor);
@@ -99,7 +99,7 @@ public class Kingdom extends BaseActor {
                                 "flag_orange/flag10.png", "flag_orange/flag11.png", "flag_orange/flag12.png"
                         };
 
-                animation = loadAnimationFromFiles(filenames3, 0.1f, true,  50,  50);
+                animation = loadAnimationFromFiles(filenames3, 0.1f, true,  flagSize,  flagSize);
                 baseActor = new BaseActor((int) getWidth()/2.8f,(int) (getHeight()*0.5f),s,Touchable.enabled);
                 baseActor.setAnimation(animation);
                 addActor(baseActor);
@@ -120,7 +120,7 @@ public class Kingdom extends BaseActor {
                                 "flag_green/flag10.png", "flag_green/flag11.png", "flag_green/flag12.png"
                         };
 
-                animation = loadAnimationFromFiles(filenames4, 0.1f, true,  50,  50);
+                animation = loadAnimationFromFiles(filenames4, 0.1f, true,  flagSize,  flagSize);
                 baseActor = new BaseActor((int) getWidth()/2.8f,(int) (getHeight()*0.5f),s,Touchable.enabled);
                 baseActor.setAnimation(animation);
                 addActor(baseActor);
@@ -141,7 +141,7 @@ public class Kingdom extends BaseActor {
                                 "flag_brown/flag10.png", "flag_brown/flag11.png", "flag_brown/flag12.png"
                         };
 
-                animation = loadAnimationFromFiles(filenames5, 0.1f, true,  50,  50);
+                animation = loadAnimationFromFiles(filenames5, 0.1f, true,  flagSize,  flagSize);
                 baseActor = new BaseActor((int) getWidth()/2.8f,(int) (getHeight()*0.5f),s,Touchable.enabled);
                 baseActor.setAnimation(animation);
                 addActor(baseActor);
@@ -162,7 +162,7 @@ public class Kingdom extends BaseActor {
                                 "flag_blue/flag10.png", "flag_blue/flag11.png", "flag_blue/flag12.png"
                         };
 
-                animation = loadAnimationFromFiles(filenames6, 0.1f, true,  50,  50);
+                animation = loadAnimationFromFiles(filenames6, 0.1f, true,  flagSize,  flagSize);
                 baseActor = new BaseActor((int) getWidth()/2.8f,(int) (getHeight()*0.5f),s,Touchable.enabled);
                 baseActor.setAnimation(animation);
                 addActor(baseActor);
