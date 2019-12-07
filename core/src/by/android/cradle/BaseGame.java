@@ -24,10 +24,11 @@ public abstract class BaseGame extends Game
     /**
      *  Stores reference to game; used when calling setActiveScreen method.
      */
-    private static BaseGame game;
+    protected static BaseGame game;
 
     public static LabelStyle labelStyle; // BitmapFont + Color
     public static TextButtonStyle textButtonStyle; // NPD + BitmapFont + Color
+
 
     /**
      *  Called when game is initialized; stores global reference to game object.
@@ -81,4 +82,5 @@ public abstract class BaseGame extends Game
     {
         game.setScreen(s);
     }
+
 }

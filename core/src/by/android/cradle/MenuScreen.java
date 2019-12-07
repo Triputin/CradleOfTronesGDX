@@ -10,11 +10,35 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.audio.Music;
 
 public class MenuScreen extends BaseScreen {
+    private Music instrumental;
+    private float audioVolume;
+    private CradleGame cradleGame;
+
+    public MenuScreen(CradleGame cradleGame) {
+        super();
+        this.cradleGame = cradleGame;
+    }
+
+    public void PlayMusic(){
+        instrumental.play();
+    }
+
+    public void PauseMusic(){
+        instrumental.pause();
+    }
 
     public void initialize()
     {
+
+        instrumental = Gdx.audio.newMusic(Gdx.files.internal("sounds/2_hearts.mp3"));
+        audioVolume = 0.7f;
+        instrumental.setLooping(true);
+        instrumental.setVolume(audioVolume);
+        instrumental.play();
+
 
         int w = Gdx.graphics.getWidth();
         int h = Gdx.graphics.getHeight();
@@ -57,8 +81,9 @@ public class MenuScreen extends BaseScreen {
 
                 if (!((InputEvent) e).getType().equals(InputEvent.Type.touchDown))
                     return false;
-
-                CradleGame.setActiveScreen(new GameMapScreen(new ScreenGamePlay()));
+                instrumental.pause();
+                //CradleGame.setActiveScreen(new GameMapScreen(new ScreenGamePlay()));
+                cradleGame.setActiveGameMapScreen();
                 return true;
             }
         });
@@ -104,7 +129,8 @@ public class MenuScreen extends BaseScreen {
     public boolean keyDown(int keyCode)
     {
         if (Gdx.input.isKeyPressed(Input.Keys.ENTER))
-            CradleGame.setActiveScreen( new GameMapScreen(new ScreenGamePlay()));
+
+        cradleGame.setActiveGameMapScreen();
         if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE))
             Gdx.app.exit();
         return false;

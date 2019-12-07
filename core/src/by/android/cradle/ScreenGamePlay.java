@@ -1,6 +1,7 @@
 package by.android.cradle;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -34,21 +35,35 @@ public class ScreenGamePlay extends BaseScreen {
     private Item lastSelectedItem;
     private Item firstSelectedItem;
     private ItemPos directionToFill;
-    private GameRes gameRes;
+
     private Label goldQuantityLabel;
     private Label woodQuantityLabel;
     private Label breadQuantityLabel;
     private int gameLevel;
     private ScreenGamePlay screenGamePlay;
     private SandGlass sandGlass;
+    private Sound explosionSound;
+    private CradleGame cradleGame;
+    Label messageLabel;
+    private boolean isPaused; //indicates that screen is not active
+
+
+    public ScreenGamePlay(CradleGame cradleGame) {
+        super();
+        this.cradleGame = cradleGame;
+    }
 
     public void initialize()
     {
+        messageLabel = new Label("...", BaseGame.labelStyle);
+        messageLabel.setFontScale(4);
+        messageLabel.setVisible(false);
+        uiTable.add(messageLabel).expandY();
+
+        explosionSound = Gdx.audio.newSound(Gdx.files.internal("sounds/glass_windows_breaking.mp3"));
+
         screenGamePlay = this;
-        gameRes = new GameRes();
-        GameRes.Bread=100;
-        GameRes.Wood=100;
-        GameRes.Gold=50;
+
 
         gameLevel = 1 ;
 
@@ -64,33 +79,17 @@ public class ScreenGamePlay extends BaseScreen {
         BaseActor.setWorldBounds(cellSize*CellCount,cellSize*CellCount);
         gameFieldX=(Gdx.graphics.getWidth()-w)/2;
         gameFieldY=0;
-        gameField = new GameField(gameFieldX,gameFieldY,mainStage,cellSize*CellCount,cellSize*CellCount,CellCount,1);
+        int gameFieldWidth = cellSize*CellCount;
+        gameField = new GameField(gameFieldX,gameFieldY,mainStage,gameFieldWidth,gameFieldWidth,CellCount,1);
 
         new ResultsActor(gameFieldX,h,cellSize*CellCount,70,uiStage,Touchable.disabled);
-        //
-        goldQuantityLabel = new Label(" "+0, BaseGame.labelStyle);
-        goldQuantityLabel.setColor( Color.GOLDENROD );
-        goldQuantityLabel.setPosition( gameFieldX+100,h+5 );
-        goldQuantityLabel.setFontScale(0.9f);
-        uiStage.addActor(goldQuantityLabel);
-
-        woodQuantityLabel = new Label(" "+0, BaseGame.labelStyle);
-        woodQuantityLabel.setColor( Color.GOLDENROD );
-        woodQuantityLabel.setPosition( gameFieldX+350,h+5 );
-        woodQuantityLabel.setFontScale(0.9f);
-        uiStage.addActor(woodQuantityLabel);
-
-        breadQuantityLabel = new Label(" "+0, BaseGame.labelStyle);
-        breadQuantityLabel.setColor( Color.GOLDENROD );
-        breadQuantityLabel.setPosition( gameFieldX+600,h+5 );
-        breadQuantityLabel.setFontScale(0.9f);
-        uiStage.addActor(breadQuantityLabel);
+        DrawResults(h, gameFieldWidth);
 
         //SandGlass placement
         float x = gameFieldX+cellSize*CellCount+10;
-        float y =gameFieldY+200;
+        float y = gameFieldY+gameFieldWidth*0.15f;
         int sw = (int)(Gdx.graphics.getWidth()-x);
-        sandGlass = new SandGlass(x,y,uiStage,sw,sw*2, 20);
+        sandGlass = new SandGlass(x,y,uiStage,sw, Math.round( gameFieldWidth*0.7f), 20);
 
         //Gamemap Button
         TextButton mapButton = new TextButton( "GameMap", BaseGame.textButtonStyle );
@@ -102,7 +101,8 @@ public class ScreenGamePlay extends BaseScreen {
                 if (!((InputEvent) e).getType().equals(InputEvent.Type.touchDown))
                     return false;
 
-                CradleGame.setActiveScreen(new GameMapScreen(screenGamePlay));
+                //CradleGame.setActiveScreen(new GameMapScreen(screenGamePlay));
+                cradleGame.setActiveGameMapScreen();
                 return true;
             }
         });
@@ -305,6 +305,37 @@ public class ScreenGamePlay extends BaseScreen {
 
     }
 
+    public void DrawResults(int h, int gameFieldWidth){
+        goldQuantityLabel = new Label(" "+0, BaseGame.labelStyle);
+        goldQuantityLabel.setColor( Color.GOLDENROD );
+        goldQuantityLabel.setPosition( gameFieldX+gameFieldWidth*0.16f,h+10 );
+        goldQuantityLabel.setFontScale(2f);
+        uiStage.addActor(goldQuantityLabel);
+
+        woodQuantityLabel = new Label(" "+0, BaseGame.labelStyle);
+        woodQuantityLabel.setColor( Color.GOLDENROD );
+        woodQuantityLabel.setPosition( gameFieldX+gameFieldWidth*0.47f,h+10 );
+        woodQuantityLabel.setFontScale(2f);
+        uiStage.addActor(woodQuantityLabel);
+
+        breadQuantityLabel = new Label(" "+0, BaseGame.labelStyle);
+        breadQuantityLabel.setColor( Color.GOLDENROD );
+        breadQuantityLabel.setPosition( gameFieldX+gameFieldWidth*0.85f,h+10 );
+        breadQuantityLabel.setFontScale(2f);
+        uiStage.addActor(breadQuantityLabel);
+
+    }
+
+    public boolean isPaused() {
+        return isPaused;
+    }
+
+    public void setPaused(boolean paused) {
+        isPaused = paused;
+    }
+
+
+
     public void SelectSolution(ArrayList<ArrayList<Item>> arrayLists){
         if (flag){return;}
 
@@ -333,7 +364,8 @@ public class ScreenGamePlay extends BaseScreen {
 
     public void update(float dt)
     {
-        if (sandGlass.isAnimationFinished()) {
+
+        if (sandGlass.isAnimationFinished()&&!isPaused) {
             LooseLevel();
         }
     }
@@ -354,6 +386,9 @@ public class ScreenGamePlay extends BaseScreen {
             ExplosionEffect boom = new ExplosionEffect();
             boom.centerAtActor( item1 );
             boom.start();
+            //Explosion sound
+            explosionSound.play(1f);
+
             mainStage.addActor(boom);
             gameField.changeGameCell(item1.getCell());
 
@@ -519,7 +554,7 @@ public class ScreenGamePlay extends BaseScreen {
     }
 
     public void IncreaseRes(String className){
-
+        GameRes gameRes= cradleGame.getGameRes();
         switch (className)
         {
             case "by.android.cradle.Coin2": gameRes.Gold++;
@@ -538,7 +573,7 @@ public class ScreenGamePlay extends BaseScreen {
 
 
     public void UpdateRes() {
-
+        GameRes gameRes= cradleGame.getGameRes();
         goldQuantityLabel.setText(" " + gameRes.Gold);
         woodQuantityLabel.setText(" " + gameRes.Wood);
         breadQuantityLabel.setText(" " + gameRes.Bread);
@@ -596,6 +631,7 @@ public class ScreenGamePlay extends BaseScreen {
     }
 
     public void WinMessageAndNewLevelCreate(){
+        isPaused=true; // block timer in update
         //Fon
         BaseActor fon = new BaseActor(0,0,uiStage,Touchable.disabled);
         fon.loadTexture("fon_orange.png",cellSize*CellCount,cellSize*CellCount);
@@ -616,8 +652,7 @@ public class ScreenGamePlay extends BaseScreen {
         Action completeAction = new Action(){
             public boolean act( float delta ) {
                 // Do your stuff
-
-                StartNewLevel(gameLevel);
+                cradleGame.setActiveGameMapScreen();
                 return true;
             }
         };
@@ -651,13 +686,43 @@ public class ScreenGamePlay extends BaseScreen {
         sandGlass.remove();
         //SandGlass recreation for restarting of animation
         float x = gameFieldX+cellSize*CellCount+10;
-        float y = gameFieldY+200;
+        float y = gameFieldY+100;
         int sw = (int)(Gdx.graphics.getWidth()-x);
         sandGlass = new SandGlass(x,y,uiStage,sw,sw*2, 20);
+        isPaused=false;
     }
 
     public void LooseLevel(){
-        CradleGame.setActiveScreen(new GameMapScreen(screenGamePlay));
+        System.out.println("LooseLevel()");
+        isPaused=true; // block timer in update
+        Action actions;
+        //Fon
+        /*
+        BaseActor fon = new BaseActor(0,0,uiStage,Touchable.disabled);
+        fon.loadTexture("fon_orange.png",cellSize*CellCount,cellSize*CellCount);
+        fon.setX(gameFieldX);
+        fon.setY(gameFieldY);
+        fon.centerAtPosition(gameFieldX+cellSize*CellCount/2,gameFieldY+cellSize*CellCount/2);
+        fon.setOpacity(80);
+        actions = sequence(fadeIn(0.5f), Actions.delay(3) ,fadeOut(1f));
+        fon.addAction(actions);
+        */
+
+        Action completeAction = new Action(){
+            public boolean act( float delta ) {
+                // Do your stuff
+
+                cradleGame.setActiveGameMapScreen();
+                return true;
+            }
+        };
+
+        actions = sequence(fadeIn(0.5f), Actions.delay(3) ,fadeOut(1f), completeAction);
+        messageLabel.setText("You Loose");
+        messageLabel.setColor(Color.RED);
+        messageLabel.setVisible(true);
+        messageLabel.addAction(actions);
+
     }
 
 }

@@ -2,6 +2,7 @@ package by.android.cradle;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
@@ -9,15 +10,34 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 
 public class GameMapScreen extends BaseScreen {
 
-    ScreenGamePlay screenGamePlay;
+    private CradleGame cradleGame;
+    private Music instrumental;
+    private float audioVolume;
 
-    public GameMapScreen(ScreenGamePlay screenGamePlay) {
+    public GameMapScreen(CradleGame cradleGame) {
         super();
-        this.screenGamePlay = screenGamePlay;
+        this.cradleGame = cradleGame;
+
     }
+
+    public void PlayMusic(){
+        instrumental.play();
+    }
+
+    public void PauseMusic(){
+        instrumental.pause();
+    }
+
 
     public void initialize()
     {
+
+        instrumental = Gdx.audio.newMusic(Gdx.files.internal("sounds/new_land.mp3"));
+        audioVolume = 0.7f;
+        instrumental.setLooping(true);
+        instrumental.setVolume(audioVolume);
+
+
         int w = Gdx.graphics.getWidth();
         int h = Gdx.graphics.getHeight();
         BaseActor worldMap = new BaseActor(0,0, mainStage, Touchable.disabled);
@@ -26,7 +46,7 @@ public class GameMapScreen extends BaseScreen {
         // BaseActor title = new BaseActor(0,0, mainStage, Touchable.disabled);
         // title.loadTexture( "assets/starfish-collector.png" );
 
-        TextButton backButton = new TextButton( "Back", BaseGame.textButtonStyle );
+        TextButton backButton = new TextButton( "Menu", BaseGame.textButtonStyle );
         backButton.setPosition(w*0.02f,h*0.05f);
         uiStage.addActor(backButton);
 
@@ -37,8 +57,8 @@ public class GameMapScreen extends BaseScreen {
 
                 if (!((InputEvent) e).getType().equals(InputEvent.Type.touchDown))
                     return false;
-
-                CradleGame.setActiveScreen(screenGamePlay);
+                instrumental.pause();
+                cradleGame.setActiveMenuScreen();
                 return true;
             }
         });
@@ -65,9 +85,10 @@ public class GameMapScreen extends BaseScreen {
                     GameRes.Gold -= kingdomRes.Gold;
                     GameRes.Wood -= kingdomRes.Wood;
                     GameRes.Bread -= kingdomRes.Bread;
-                    CradleGame.setActiveScreen(screenGamePlay);
-                    screenGamePlay.UpdateRes();
-                    screenGamePlay.StartNewLevel(1);
+                    instrumental.pause();
+                    cradleGame.setActivescreenGamePlay();
+                    cradleGame.getScreenGamePlay().UpdateRes();
+                    cradleGame.getScreenGamePlay().StartNewLevel(1);
                 }
                 return false;
             }
@@ -91,8 +112,10 @@ public class GameMapScreen extends BaseScreen {
     public boolean keyDown(int keyCode)
     {
         if (Gdx.input.isKeyPressed(Input.Keys.ENTER))
-            CradleGame.setActiveScreen( new ScreenGamePlay() );
+            instrumental.pause();
+            cradleGame.setActivescreenGamePlay();
         if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE))
+            instrumental.pause();
             Gdx.app.exit();
         return false;
     }
