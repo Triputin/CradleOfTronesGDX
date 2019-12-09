@@ -3,20 +3,27 @@ package by.android.cradle;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 
 public class GameMapScreen extends BaseScreen {
 
-    private CradleGame cradleGame;
+
     private Music instrumental;
     private float audioVolume;
 
+    private Label goldQuantityLabel;
+    private Label woodQuantityLabel;
+    private Label breadQuantityLabel;
+
+
     public GameMapScreen(CradleGame cradleGame) {
-        super();
-        this.cradleGame = cradleGame;
+
+        super(cradleGame);
 
     }
 
@@ -40,11 +47,14 @@ public class GameMapScreen extends BaseScreen {
 
         int w = Gdx.graphics.getWidth();
         int h = Gdx.graphics.getHeight();
+
+
         BaseActor worldMap = new BaseActor(0,0, mainStage, Touchable.disabled);
         worldMap.loadTexture( "worldmap02.png",w,h );
 
-        // BaseActor title = new BaseActor(0,0, mainStage, Touchable.disabled);
-        // title.loadTexture( "assets/starfish-collector.png" );
+        new ResultsActor(w*0.25f,h-70,(int) Math.round(w*0.6),70,mainStage,Touchable.disabled);
+        DrawResults((int) Math.round(w*0.25),h-70, (int) Math.round(w*0.6));
+        UpdateRes();
 
         TextButton backButton = new TextButton( "Menu", BaseGame.textButtonStyle );
         backButton.setPosition(w*0.02f,h*0.05f);
@@ -102,6 +112,42 @@ public class GameMapScreen extends BaseScreen {
         // uiTable.row();
         // uiTable.add(backButton);
         // uiTable.add(quitButton);
+    }
+
+    public void DrawResults(int x, int h, int gameFieldWidth){
+        //Fon
+        BaseActor fon = new BaseActor(0,0,uiStage,Touchable.disabled);
+        fon.loadTexture("fon_orange.png",gameFieldWidth+30,70);
+        fon.setX(x);
+        fon.setY(h);
+        goldQuantityLabel = new Label(" "+0, BaseGame.labelStyle);
+        goldQuantityLabel.setColor( Color.GOLDENROD );
+        goldQuantityLabel.setPosition( x+gameFieldWidth*0.16f,h+10 );
+        goldQuantityLabel.setFontScale(2f);
+        mainStage.addActor(goldQuantityLabel);
+
+        woodQuantityLabel = new Label(" "+0, BaseGame.labelStyle);
+        woodQuantityLabel.setColor( Color.GOLDENROD );
+        woodQuantityLabel.setPosition( x+ gameFieldWidth*0.47f,h+10 );
+        woodQuantityLabel.setFontScale(2f);
+        mainStage.addActor(woodQuantityLabel);
+
+        breadQuantityLabel = new Label(" "+0, BaseGame.labelStyle);
+        breadQuantityLabel.setColor( Color.GOLDENROD );
+        breadQuantityLabel.setPosition( x+gameFieldWidth*0.85f,h+10 );
+        breadQuantityLabel.setFontScale(2f);
+        mainStage.addActor(breadQuantityLabel);
+
+    }
+
+
+    public void UpdateRes() {
+        GameRes gameRes= cradleGame.getGameRes();
+        goldQuantityLabel.setText(" " + gameRes.Gold);
+        woodQuantityLabel.setText(" " + gameRes.Wood);
+        breadQuantityLabel.setText(" " + gameRes.Bread);
+
+
     }
 
     public void update(float dt)

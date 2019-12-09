@@ -73,6 +73,7 @@ public class CradleGame extends BaseGame
     {
         System.out.println("setActiveGameMapScreen");
         game.setScreen(gameMapScreen);
+        gameMapScreen.UpdateRes();
         screenGamePlay.setPaused(true);
         menuScreen.PauseMusic();
         gameMapScreen.PlayMusic();

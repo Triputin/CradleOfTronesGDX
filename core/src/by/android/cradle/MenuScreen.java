@@ -15,11 +15,9 @@ import com.badlogic.gdx.audio.Music;
 public class MenuScreen extends BaseScreen {
     private Music instrumental;
     private float audioVolume;
-    private CradleGame cradleGame;
 
     public MenuScreen(CradleGame cradleGame) {
-        super();
-        this.cradleGame = cradleGame;
+        super(cradleGame);
     }
 
     public void PlayMusic(){

@@ -13,7 +13,9 @@ public abstract class BaseScreen implements Screen, InputProcessor
     protected Stage uiStage;
     protected Table uiTable;
 
-    public BaseScreen()
+    protected CradleGame cradleGame;
+
+    public BaseScreen(CradleGame cradleGame)
     {
         mainStage = new Stage();
         uiStage = new Stage();
@@ -21,6 +23,7 @@ public abstract class BaseScreen implements Screen, InputProcessor
         uiTable = new Table();
         uiTable.setFillParent(true);
         uiStage.addActor(uiTable);
+        this.cradleGame = cradleGame;
 
         initialize();
     }

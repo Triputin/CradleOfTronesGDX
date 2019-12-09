@@ -43,14 +43,13 @@ public class ScreenGamePlay extends BaseScreen {
     private ScreenGamePlay screenGamePlay;
     private SandGlass sandGlass;
     private Sound explosionSound;
-    private CradleGame cradleGame;
+
     Label messageLabel;
     private boolean isPaused; //indicates that screen is not active
 
 
     public ScreenGamePlay(CradleGame cradleGame) {
-        super();
-        this.cradleGame = cradleGame;
+        super(cradleGame);
     }
 
     public void initialize()
