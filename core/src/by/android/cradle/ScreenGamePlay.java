@@ -69,6 +69,12 @@ public class ScreenGamePlay extends BaseScreen {
         // Get screen size
         int w = Gdx.graphics.getWidth();
         int h = Gdx.graphics.getHeight();
+
+
+        BaseActor hall = new BaseActor(0,0, mainStage, Touchable.disabled);
+        hall.loadTexture( "hall01.png",w,h );
+
+
         h=h-70; //place for top menu items
         if (w<h) {
             h=w;

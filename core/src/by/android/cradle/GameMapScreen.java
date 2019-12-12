@@ -73,6 +73,7 @@ public class GameMapScreen extends BaseScreen {
             }
         });
 
+
         //Kingdoms
         w = Gdx.graphics.getWidth();
         h = Gdx.graphics.getHeight();
@@ -96,9 +97,12 @@ public class GameMapScreen extends BaseScreen {
                     GameRes.Wood -= kingdomRes.Wood;
                     GameRes.Bread -= kingdomRes.Bread;
                     instrumental.pause();
-                    cradleGame.setActivescreenGamePlay();
-                    cradleGame.getScreenGamePlay().UpdateRes();
-                    cradleGame.getScreenGamePlay().StartNewLevel(1);
+                   // cradleGame.setActivescreenGamePlay();
+                   // cradleGame.getScreenGamePlay().UpdateRes();
+                   // cradleGame.getScreenGamePlay().StartNewLevel(1);
+
+                    MessageActor01 messageActor01 = new MessageActor01(kingdom.getX(),kingdom.getY()+150,mainStage,500,100,cradleGame);
+
                 }
                 return false;
             }
