@@ -19,12 +19,16 @@ public class GameMapScreen extends BaseScreen {
     private Label goldQuantityLabel;
     private Label woodQuantityLabel;
     private Label breadQuantityLabel;
-
+    private MessageActor01 messageActor01;
 
     public GameMapScreen(CradleGame cradleGame) {
 
         super(cradleGame);
 
+    }
+
+    public void SetMessageActorVisibility(boolean visible){
+        messageActor01.setVisible(visible);
     }
 
     public void PlayMusic(){
@@ -38,6 +42,8 @@ public class GameMapScreen extends BaseScreen {
 
     public void initialize()
     {
+
+
 
         instrumental = Gdx.audio.newMusic(Gdx.files.internal("sounds/new_land.mp3"));
         audioVolume = 0.7f;
@@ -93,15 +99,15 @@ public class GameMapScreen extends BaseScreen {
                 if ( event.getType().equals(InputEvent.Type.touchDown) ) {
                     Kingdom kingdom = (Kingdom) event.getListenerActor();
                     KingdomRes kingdomRes = kingdom.getKingdomResForAttack();
-                    GameRes.Gold -= kingdomRes.Gold;
-                    GameRes.Wood -= kingdomRes.Wood;
-                    GameRes.Bread -= kingdomRes.Bread;
+
                     instrumental.pause();
                    // cradleGame.setActivescreenGamePlay();
                    // cradleGame.getScreenGamePlay().UpdateRes();
                    // cradleGame.getScreenGamePlay().StartNewLevel(1);
-
-                    MessageActor01 messageActor01 = new MessageActor01(kingdom.getX(),kingdom.getY()+150,mainStage,500,100,cradleGame);
+                    messageActor01.setX(kingdom.getX()+50);
+                    messageActor01.setY(kingdom.getY()+50);
+                    messageActor01.SetRes(kingdomRes);
+                    messageActor01.setVisible(true);
 
                 }
                 return false;
@@ -116,6 +122,9 @@ public class GameMapScreen extends BaseScreen {
         // uiTable.row();
         // uiTable.add(backButton);
         // uiTable.add(quitButton);
+
+        messageActor01 = new MessageActor01(0,0,uiStage,500,200,cradleGame);
+        messageActor01.setVisible(false);
     }
 
     public void DrawResults(int x, int h, int gameFieldWidth){

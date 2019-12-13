@@ -20,7 +20,8 @@ public class GameField extends BaseActor {
         gameCells = new ArrayList<>();
         int cellSizeX = (int)width/cellsCount;
         int cellSizeY = (int)height/cellsCount;
-        loadTexture("game_of_thrones_locations4.jpg", (int) width,(int) height);
+        //loadTexture("game_of_thrones_locations4.jpg", (int) width,(int) height);
+        loadTexture("fon_white.png", (int) width,(int) height);
         setHeight(height);
         setWidth(width);
         GameCell gameCell;

@@ -72,9 +72,9 @@ public class ScreenGamePlay extends BaseScreen {
 
 
         BaseActor hall = new BaseActor(0,0, mainStage, Touchable.disabled);
-        hall.loadTexture( "hall01.png",w,h );
+        //hall.loadTexture( "hall01.png",w,h );
 
-
+        hall.loadTexture( "game_of_thrones_locations4.jpg",w,h );
         h=h-70; //place for top menu items
         if (w<h) {
             h=w;

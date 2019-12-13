@@ -77,6 +77,7 @@ public class CradleGame extends BaseGame
         screenGamePlay.setPaused(true);
         menuScreen.PauseMusic();
         gameMapScreen.PlayMusic();
+        gameMapScreen.SetMessageActorVisibility(false);
     }
 
     public  void setActivescreenGamePlay()
@@ -86,5 +87,6 @@ public class CradleGame extends BaseGame
         screenGamePlay.StartNewLevel(1);
         menuScreen.PauseMusic();
         gameMapScreen.PauseMusic();
+
     }
 }
