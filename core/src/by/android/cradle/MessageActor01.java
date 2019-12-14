@@ -1,10 +1,16 @@
 package by.android.cradle;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
 public class MessageActor01 extends BaseActor {
     private KingdomRes kingdomRes;
@@ -16,8 +22,7 @@ public class MessageActor01 extends BaseActor {
 
         // BaseActor frame = new BaseActor(0,0, s, Touchable.disabled);
         loadTexture( "goldenframe.png",width,height );
-        //loadTexture("fon_white.png",  width,height);
-
+        AddImage("fon_white.png",Math.round(width*0.075f),Math.round(height*0.1f),Math.round(width*0.85f), Math.round(height*0.8f));
 
 
         //Attack Button
@@ -38,7 +43,7 @@ public class MessageActor01 extends BaseActor {
                 return true;
             }
         });
-        attackButton.setPosition(50,20);
+        attackButton.setPosition(Math.round(width*0.1f),20);
         addActor(attackButton);
 
         //Cancel Button
@@ -55,15 +60,8 @@ public class MessageActor01 extends BaseActor {
                 return true;
             }
         });
-        cancelButton.setPosition(250,20);
+        cancelButton.setPosition(Math.round(width*0.62f),20);
         addActor(cancelButton);
-
-
-        //Fon
-        //BaseActor fon = new BaseActor(x,y,s,Touchable.disabled);
-        //fon.loadTexture("fon_white.png",width,height);
-        //fon.setOpacity(70);
-
 
     }
 
@@ -71,6 +69,32 @@ public class MessageActor01 extends BaseActor {
         this.kingdomRes.Bread = kingdomRes.Bread;
         this.kingdomRes.Gold = kingdomRes.Gold;
         this.kingdomRes.Wood = kingdomRes.Wood;
+
+    }
+
+    private void AddImage(String name,int x, int y, int width, int height){
+        Pixmap pixmap200;
+        pixmap200 = new Pixmap(Gdx.files.internal("fon_white.png"));
+
+        // Изменяем размер загружаемой картинки из файла на заданный
+        Pixmap pixmap100 = new Pixmap((int) getWidth(), (int) getHeight(), pixmap200.getFormat());
+        pixmap100.drawPixmap(pixmap200,
+                0, 0, pixmap200.getWidth(), pixmap200.getHeight(),
+                0, 0, pixmap100.getWidth(), pixmap100.getHeight()
+        );
+        Texture texture = new Texture(pixmap100);
+        texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+        pixmap200.dispose();
+        pixmap100.dispose();
+        TextureRegion imgTextureRegion = new TextureRegion(texture);
+        //imgTextureRegion.setRegion(0,0,getWidth(),getHeight());
+        imgTextureRegion.setRegion(x,y,width,height);
+        TextureRegionDrawable imgTextureRegionDrawable = new TextureRegionDrawable(imgTextureRegion);
+        Image img = new Image(texture);
+        //img.setDrawable(imgTextureRegionDrawable);
+        img.setSize(width,height);
+        img.setPosition(x, y);
+        addActor(img);
 
     }
 

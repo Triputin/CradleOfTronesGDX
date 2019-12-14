@@ -51,7 +51,7 @@ public class GameMapScreen extends BaseScreen {
         instrumental.setVolume(audioVolume);
 
 
-        int w = Gdx.graphics.getWidth();
+        final int w = Gdx.graphics.getWidth();
         int h = Gdx.graphics.getHeight();
 
 
@@ -81,7 +81,6 @@ public class GameMapScreen extends BaseScreen {
 
 
         //Kingdoms
-        w = Gdx.graphics.getWidth();
         h = Gdx.graphics.getHeight();
         int kingdomsize = h/9;
         Kingdom[] kingdoms = new Kingdom[7];
@@ -104,7 +103,12 @@ public class GameMapScreen extends BaseScreen {
                    // cradleGame.setActivescreenGamePlay();
                    // cradleGame.getScreenGamePlay().UpdateRes();
                    // cradleGame.getScreenGamePlay().StartNewLevel(1);
-                    messageActor01.setX(kingdom.getX()+50);
+                    if ((messageActor01.getWidth()+kingdom.getX())>w){
+                        messageActor01.setX(w-messageActor01.getWidth());
+                    } else{
+                        messageActor01.setX(kingdom.getX()+50);
+                    }
+
                     messageActor01.setY(kingdom.getY()+50);
                     messageActor01.SetRes(kingdomRes);
                     messageActor01.setVisible(true);
