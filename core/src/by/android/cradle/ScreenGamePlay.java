@@ -630,6 +630,11 @@ public class ScreenGamePlay extends BaseScreen {
                 //item.addAction(Actions.scaleTo(-1,-1,1));
                 item.addAction(Actions.moveTo(gameFieldX + j * cellSize, gameFieldY + i * cellSize,1));
                 //item.addAction(Actions.scaleTo(1,1,5));
+                if(Math.random()>0.9){
+                    if (Math.random()>0.5) {item.setLockLevel(2);}
+                    else {item.setLockLevel(1);
+                    }
+                }
 
             }
         }
@@ -723,7 +728,7 @@ public class ScreenGamePlay extends BaseScreen {
         };
 
         actions = sequence(fadeIn(0.5f), Actions.delay(3) ,fadeOut(1f), completeAction);
-        messageLabel.setText("You Loose");
+        messageLabel.setText("You Lose");
         messageLabel.setColor(Color.RED);
         messageLabel.setVisible(true);
         messageLabel.addAction(actions);

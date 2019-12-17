@@ -74,7 +74,7 @@ public class MessageActor01 extends BaseActor {
 
     private void AddImage(String name,int x, int y, int width, int height){
         Pixmap pixmap200;
-        pixmap200 = new Pixmap(Gdx.files.internal("fon_white.png"));
+        pixmap200 = new Pixmap(Gdx.files.internal(name));
 
         // Изменяем размер загружаемой картинки из файла на заданный
         Pixmap pixmap100 = new Pixmap((int) getWidth(), (int) getHeight(), pixmap200.getFormat());

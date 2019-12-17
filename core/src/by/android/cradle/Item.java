@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -16,6 +17,12 @@ public class Item extends BaseActor {
     private Item previous;
     private Item next;
     private Cell cell;
+    private SelDirection selectedDirection;
+    private Image lineImage;
+    private int lockLevel=0;
+    private Actor lockImage01;
+    private Actor lockImage02;
+
 
     public Item(float x, float y, int width, int height, Stage s, Touchable touchable, int row, int col)
     {
@@ -32,9 +39,61 @@ public class Item extends BaseActor {
         return cell;
     }
 
-    private SelDirection selectedDirection;
-    private Image lineImage;
 
+
+    public int getLockLevel() {
+        return lockLevel;
+    }
+
+    public void setLockLevel(int lockLevel) {
+
+        switch (lockLevel){
+
+            case 1:
+                if (lockImage01==null){
+                    lockImage01 = AddImage("lockitem01.png",0,0, (int) getWidth(), (int) getHeight());
+                }
+                if (this.lockLevel ==0){
+                    addActor(lockImage01);
+                }
+                if (this.lockLevel == 2){
+                    lockImage02.remove();
+                }
+                break;
+            case 2:
+                if (lockImage01==null){
+                    lockImage01 = AddImage("lockitem01.png",0,0, (int) getWidth(), (int) getHeight());
+                }
+                if (lockImage02==null){
+                    lockImage02 = AddImage("lockitem02.png",0,0, (int) getWidth(), (int) getHeight());
+                }
+                if (this.lockLevel ==0){
+                    addActor(lockImage01);
+                    addActor(lockImage02);
+                }
+                if (this.lockLevel ==1){
+                    addActor(lockImage02);
+                }
+                if (this.lockLevel == 2){
+                    lockImage02.remove();
+                }
+                break;
+
+            case 0:
+                if (this.lockLevel == 1){
+                    lockImage01.remove();
+                }
+                if (this.lockLevel == 2){
+                    lockImage02.remove();
+                }
+                break;
+
+
+        }
+
+        this.lockLevel = lockLevel;
+
+    }
 
     public boolean isSelectedFirst() {
         return selectedFirst;
@@ -122,6 +181,32 @@ public class Item extends BaseActor {
 
         }
 
+    }
+
+    private Actor AddImage(String name,int x, int y, int width, int height){
+        Pixmap pixmap200;
+        pixmap200 = new Pixmap(Gdx.files.internal(name));
+
+        // Изменяем размер загружаемой картинки из файла на заданный
+        Pixmap pixmap100 = new Pixmap((int) getWidth(), (int) getHeight(), pixmap200.getFormat());
+        pixmap100.drawPixmap(pixmap200,
+                0, 0, pixmap200.getWidth(), pixmap200.getHeight(),
+                0, 0, pixmap100.getWidth(), pixmap100.getHeight()
+        );
+        Texture texture = new Texture(pixmap100);
+        texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+        pixmap200.dispose();
+        pixmap100.dispose();
+        TextureRegion imgTextureRegion = new TextureRegion(texture);
+        //imgTextureRegion.setRegion(0,0,getWidth(),getHeight());
+        imgTextureRegion.setRegion(x,y,width,height);
+        TextureRegionDrawable imgTextureRegionDrawable = new TextureRegionDrawable(imgTextureRegion);
+        Image img = new Image(texture);
+        //img.setDrawable(imgTextureRegionDrawable);
+        img.setSize(width,height);
+        img.setPosition(x, y);
+        addActor(img);
+        return img;
     }
 
     private SelDirection findDirection ( Item firstItem, Item secondItem){
