@@ -80,10 +80,12 @@ public class CradleGame extends BaseGame
         gameMapScreen.SetMessageActorVisibility(false);
     }
 
-    public  void setActivescreenGamePlay()
+    public  void setActivescreenGamePlay(AttackType attackType, Kingdom attackedKingdom)
     {
         System.out.println("setActivescreenGamePlay()");
         game.setScreen(screenGamePlay);
+        screenGamePlay.UpdateRes();
+        screenGamePlay.setAttackedKingdom(attackedKingdom);
         screenGamePlay.StartNewLevel(1);
         menuScreen.PauseMusic();
         gameMapScreen.PauseMusic();

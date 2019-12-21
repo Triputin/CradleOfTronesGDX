@@ -1,186 +1,189 @@
 package by.android.cradle;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 
 public class Kingdom extends BaseActor {
 
     private KingdomNames kingdomNames;
     private KingdomRes kingdomRes;
     private int protectionState;
+    private  Label protectionStateLabel;
+    private Animation<TextureRegion> animation;
+    private int flagSize;
+    private BaseActor baseActor;
+
+    private String[] filenames0 =
+            { "flag_red/flag02.png", "flag_red/flag03.png",
+                    "flag_red/flag04.png", "flag_red/flag05.png", "flag_red/flag06.png",
+                    "flag_red/flag07.png", "flag_red/flag08.png", "flag_red/flag09.png",
+                    "flag_red/flag10.png", "flag_red/flag11.png", "flag_red/flag12.png"
+            };
+    private String[] filenames1 =
+            { "flag_yellow/flag02.png", "flag_yellow/flag03.png",
+                    "flag_yellow/flag04.png", "flag_yellow/flag05.png", "flag_yellow/flag06.png",
+                    "flag_yellow/flag07.png", "flag_yellow/flag08.png", "flag_yellow/flag09.png",
+                    "flag_yellow/flag10.png", "flag_yellow/flag11.png", "flag_yellow/flag12.png"
+            };
+    private String[] filenames2 =
+        { "flag_purple/flag02.png", "flag_purple/flag03.png",
+                "flag_purple/flag04.png", "flag_purple/flag05.png", "flag_purple/flag06.png",
+                "flag_purple/flag07.png", "flag_purple/flag08.png", "flag_purple/flag09.png",
+                "flag_purple/flag10.png", "flag_purple/flag11.png", "flag_purple/flag12.png"
+        };
+    private String[] filenames3 =
+            { "flag_orange/flag02.png", "flag_orange/flag03.png",
+                    "flag_orange/flag04.png", "flag_orange/flag05.png", "flag_orange/flag06.png",
+                    "flag_orange/flag07.png", "flag_orange/flag08.png", "flag_orange/flag09.png",
+                    "flag_orange/flag10.png", "flag_orange/flag11.png", "flag_orange/flag12.png"
+            };
+
+    private String[] filenames4 =
+            { "flag_green/flag02.png", "flag_green/flag03.png",
+                    "flag_green/flag04.png", "flag_green/flag05.png", "flag_green/flag06.png",
+                    "flag_green/flag07.png", "flag_green/flag08.png", "flag_green/flag09.png",
+                    "flag_green/flag10.png", "flag_green/flag11.png", "flag_green/flag12.png"
+            };
+    private   String[] filenames5 =
+            { "flag_brown/flag02.png", "flag_brown/flag03.png",
+                    "flag_brown/flag04.png", "flag_brown/flag05.png", "flag_brown/flag06.png",
+                    "flag_brown/flag07.png", "flag_brown/flag08.png", "flag_brown/flag09.png",
+                    "flag_brown/flag10.png", "flag_brown/flag11.png", "flag_brown/flag12.png"
+            };
+    private String[] filenames6 =
+            { "flag_blue/flag02.png", "flag_blue/flag03.png",
+                    "flag_blue/flag04.png", "flag_blue/flag05.png", "flag_blue/flag06.png",
+                    "flag_blue/flag07.png", "flag_blue/flag08.png", "flag_blue/flag09.png",
+                    "flag_blue/flag10.png", "flag_blue/flag11.png", "flag_blue/flag12.png"
+            };
+    private String[] filenames00 =
+            { "flag_red/flag02.png", "flag_red/flag03.png",
+                    "flag_red/flag04.png", "flag_red/flag05.png", "flag_red/flag06.png",
+                    "flag_red/flag07.png", "flag_red/flag08.png", "flag_red/flag09.png",
+                    "flag_red/flag10.png", "flag_red/flag11.png", "flag_red/flag12.png"
+            };
 
     public Kingdom(float x, float y, int width, int height, Stage s, Touchable touchable,KingdomNames kingdomNames)
     {
         super(x,y,s, touchable);
-        int flagSize = height;
+        flagSize = height;
 
         this.kingdomNames = kingdomNames;
         kingdomRes = new KingdomRes();
-        protectionState = 5;
+        protectionState = 1;
 
+        String[] filenames;
 
-       // Animation<TextureRegion> animation= loadAnimationFromSheet("kingdoms/flaganimation01.png", 2, 3, 0.1f, true,50,50);
+        String flagBasementName;
 
-        Animation<TextureRegion> animation;
-        BaseActor baseActor;
         switch (kingdomNames){
             case Kingdom_of_the_North: kingdomRes.Bread = 10;
                 kingdomRes.Gold = 10;
                 kingdomRes.Wood = 10;
-                String[] filenames =
-                        { "flag_red/flag02.png", "flag_red/flag03.png",
-                                "flag_red/flag04.png", "flag_red/flag05.png", "flag_red/flag06.png",
-                                "flag_red/flag07.png", "flag_red/flag08.png", "flag_red/flag09.png",
-                                "flag_red/flag10.png", "flag_red/flag11.png", "flag_red/flag12.png"
-                        };
-
-                animation = loadAnimationFromFiles(filenames, 0.1f, true,  flagSize,  flagSize);
-                baseActor = new BaseActor((int) width/2.8f,(int) (height*0.5f),s,Touchable.enabled);
-                baseActor.setAnimation(animation);
-                addActor(baseActor);
-                baseActor = new BaseActor((int) width/2.8f,(int) (height*0.5f),s,Touchable.enabled);
-                animation = loadTexture("flag_red/flagbasement.png", (int) getWidth(), (int) getHeight());
-                baseActor.setAnimation(animation);
-                addActor(baseActor);
-
-                loadTexture("kingdoms/winterfell.png", width, height);
+                filenames = filenames0;
+                flagBasementName = "flag_red/flagbasement.png";
                 break;
             case Kingdom_of_the_Isles_and_Rivers: kingdomRes.Bread = 10;
                 kingdomRes.Gold = 10;
                 kingdomRes.Wood = 10;
-                String[] filenames1 =
-                        { "flag_yellow/flag02.png", "flag_yellow/flag03.png",
-                                "flag_yellow/flag04.png", "flag_yellow/flag05.png", "flag_yellow/flag06.png",
-                                "flag_yellow/flag07.png", "flag_yellow/flag08.png", "flag_yellow/flag09.png",
-                                "flag_yellow/flag10.png", "flag_yellow/flag11.png", "flag_yellow/flag12.png"
-                        };
-
-                animation = loadAnimationFromFiles(filenames1, 0.1f, true,  flagSize,  flagSize);
-                baseActor = new BaseActor((int) getWidth()/2.8f,(int) (getHeight()*0.5f),s,Touchable.enabled);
-                baseActor.setAnimation(animation);
-                addActor(baseActor);
-                baseActor = new BaseActor((int) getWidth()/2.8f,(int) (getHeight()*0.5f),s,Touchable.enabled);
-                animation = loadTexture("flag_yellow/flagbasement.png", (int) getWidth(), (int) getHeight());
-                baseActor.setAnimation(animation);
-                addActor(baseActor);
-
-                loadTexture("kingdoms/winterfell.png", (int) getWidth(), (int) getHeight());
+                filenames=filenames1;
+                flagBasementName = "flag_yellow/flagbasement.png";
                 break;
             case Kingdom_of_the_Mountain_and_the_Vale: kingdomRes.Bread = 10;
                 kingdomRes.Gold = 10;
                 kingdomRes.Wood = 10;
-                String[] filenames2 =
-                        { "flag_purple/flag02.png", "flag_purple/flag03.png",
-                                "flag_purple/flag04.png", "flag_purple/flag05.png", "flag_purple/flag06.png",
-                                "flag_purple/flag07.png", "flag_purple/flag08.png", "flag_purple/flag09.png",
-                                "flag_purple/flag10.png", "flag_purple/flag11.png", "flag_purple/flag12.png"
-                        };
-
-                animation = loadAnimationFromFiles(filenames2, 0.1f, true,  flagSize,  flagSize);
-                baseActor = new BaseActor((int) getWidth()/2.8f,(int) (getHeight()*0.5f),s,Touchable.enabled);
-                baseActor.setAnimation(animation);
-                addActor(baseActor);
-                baseActor = new BaseActor((int) getWidth()/2.8f,(int) (getHeight()*0.5f),s,Touchable.enabled);
-                animation = loadTexture("flag_purple/flagbasement.png", (int) getWidth(), (int) getHeight());
-                baseActor.setAnimation(animation);
-                addActor(baseActor);
-
-                loadTexture("kingdoms/winterfell.png", (int) getWidth(), (int) getHeight());
+                filenames = filenames2;
+                flagBasementName = "flag_purple/flagbasement.png";
                 break;
             case Kingdom_of_the_Reach: kingdomRes.Bread = 10;
                 kingdomRes.Gold = 10;
                 kingdomRes.Wood = 10;
-                String[] filenames3 =
-                        { "flag_orange/flag02.png", "flag_orange/flag03.png",
-                                "flag_orange/flag04.png", "flag_orange/flag05.png", "flag_orange/flag06.png",
-                                "flag_orange/flag07.png", "flag_orange/flag08.png", "flag_orange/flag09.png",
-                                "flag_orange/flag10.png", "flag_orange/flag11.png", "flag_orange/flag12.png"
-                        };
-
-                animation = loadAnimationFromFiles(filenames3, 0.1f, true,  flagSize,  flagSize);
-                baseActor = new BaseActor((int) getWidth()/2.8f,(int) (getHeight()*0.5f),s,Touchable.enabled);
-                baseActor.setAnimation(animation);
-                addActor(baseActor);
-                baseActor = new BaseActor((int) getWidth()/2.8f,(int) (getHeight()*0.5f),s,Touchable.enabled);
-                animation = loadTexture("flag_orange/flagbasement.png", (int) getWidth(), (int) getHeight());
-                baseActor.setAnimation(animation);
-                addActor(baseActor);
-
-                loadTexture("kingdoms/winterfell.png", (int) getWidth(), (int) getHeight());
+                filenames = filenames3;
+                flagBasementName = "flag_orange/flagbasement.png";
                 break;
             case Kingdom_of_the_Rock: kingdomRes.Bread = 10;
                 kingdomRes.Gold = 10;
                 kingdomRes.Wood = 10;
-                String[] filenames4 =
-                        { "flag_green/flag02.png", "flag_green/flag03.png",
-                                "flag_green/flag04.png", "flag_green/flag05.png", "flag_green/flag06.png",
-                                "flag_green/flag07.png", "flag_green/flag08.png", "flag_green/flag09.png",
-                                "flag_green/flag10.png", "flag_green/flag11.png", "flag_green/flag12.png"
-                        };
-
-                animation = loadAnimationFromFiles(filenames4, 0.1f, true,  flagSize,  flagSize);
-                baseActor = new BaseActor((int) getWidth()/2.8f,(int) (getHeight()*0.5f),s,Touchable.enabled);
-                baseActor.setAnimation(animation);
-                addActor(baseActor);
-                baseActor = new BaseActor((int) getWidth()/2.8f,(int) (getHeight()*0.5f),s,Touchable.enabled);
-                animation = loadTexture("flag_green/flagbasement.png", (int) getWidth(), (int) getHeight());
-                baseActor.setAnimation(animation);
-                addActor(baseActor);
-
-                loadTexture("kingdoms/winterfell.png", (int) getWidth(), (int) getHeight());
+                filenames=filenames4;
+                flagBasementName = "flag_green/flagbasement.png";
                 break;
             case Kingdom_of_the_Stormlands: kingdomRes.Bread = 10;
                 kingdomRes.Gold = 10;
                 kingdomRes.Wood = 10;
-                String[] filenames5 =
-                        { "flag_brown/flag02.png", "flag_brown/flag03.png",
-                                "flag_brown/flag04.png", "flag_brown/flag05.png", "flag_brown/flag06.png",
-                                "flag_brown/flag07.png", "flag_brown/flag08.png", "flag_brown/flag09.png",
-                                "flag_brown/flag10.png", "flag_brown/flag11.png", "flag_brown/flag12.png"
-                        };
-
-                animation = loadAnimationFromFiles(filenames5, 0.1f, true,  flagSize,  flagSize);
-                baseActor = new BaseActor((int) getWidth()/2.8f,(int) (getHeight()*0.5f),s,Touchable.enabled);
-                baseActor.setAnimation(animation);
-                addActor(baseActor);
-                baseActor = new BaseActor((int) getWidth()/2.8f,(int) (getHeight()*0.5f),s,Touchable.enabled);
-                animation = loadTexture("flag_brown/flagbasement.png", (int) getWidth(), (int) getHeight());
-                baseActor.setAnimation(animation);
-                addActor(baseActor);
-
-                loadTexture("kingdoms/winterfell.png", (int) getWidth(), (int) getHeight());
+                filenames = filenames5;
+                flagBasementName = "flag_brown/flagbasement.png";
                 break;
             case Principality_of_Dorne: kingdomRes.Bread = 10;
                 kingdomRes.Gold = 10;
                 kingdomRes.Wood = 10;
-                String[] filenames6 =
-                        { "flag_blue/flag02.png", "flag_blue/flag03.png",
-                                "flag_blue/flag04.png", "flag_blue/flag05.png", "flag_blue/flag06.png",
-                                "flag_blue/flag07.png", "flag_blue/flag08.png", "flag_blue/flag09.png",
-                                "flag_blue/flag10.png", "flag_blue/flag11.png", "flag_blue/flag12.png"
-                        };
-
-                animation = loadAnimationFromFiles(filenames6, 0.1f, true,  flagSize,  flagSize);
-                baseActor = new BaseActor((int) getWidth()/2.8f,(int) (getHeight()*0.5f),s,Touchable.enabled);
-                baseActor.setAnimation(animation);
-                addActor(baseActor);
-                baseActor = new BaseActor((int) getWidth()/2.8f,(int) (getHeight()*0.5f),s,Touchable.enabled);
-                animation = loadTexture("flag_blue/flagbasement.png", (int) getWidth(), (int) getHeight());
-                baseActor.setAnimation(animation);
-                addActor(baseActor);
-
-                loadTexture("kingdoms/winterfell.png", (int) getWidth(), (int) getHeight());
+                filenames=filenames6;
+                flagBasementName = "flag_blue/flagbasement.png";
                 break;
 
+                default:
+                    kingdomRes.Bread = 10;
+                    kingdomRes.Gold = 10;
+                    kingdomRes.Wood = 10;
+                    filenames = filenames00;
+                    flagBasementName = "flag_red/flagbasement.png";
+
         }
+
+        animation = createAnimationFromFiles(filenames, 0.1f, true, flagSize,  flagSize);
+
+        protectionStateLabel = new Label(""+protectionState, BaseGame.labelStyle);
+        protectionStateLabel.setColor( Color.GOLDENROD );
+        protectionStateLabel.setPosition( (int) 1,(int)(0-(height*0.5f))+8);
+        protectionStateLabel.setFontScale(1f);
+
+
+
+        baseActor = new BaseActor((int) width/2f,(int) (height*0.9f),s,Touchable.enabled);
+        baseActor.setAnimation(animation);
+        addActor(baseActor);
+        baseActor.AddImage(flagBasementName,0,0,flagSize,flagSize);
+        baseActor.AddImage("kingdoms/winterfell.png", (int) (0-(width/2.8f)),(int)(0-(height*0.5f)),(int) width, (int) height);
+        baseActor.AddImage("shield.png",0-10,(int)(0-(height*0.5f))+5,(int) width/2, (int) height/2);
+        baseActor.addActor(protectionStateLabel);
+
     }
 
     public KingdomRes getKingdomResForAttack(){
-
-
         return kingdomRes;
     }
 
+    public void decreaseProtection(){
+        if (protectionState>0){
+            protectionState--;
+            protectionStateLabel.setText(""+protectionState);
+            if (protectionState==0){
+                addRedFlagAnimation();
+                protectionStateLabel.setText("");
+            }
+        }
+
+
+    }
+
+    private void addRedFlagAnimation(){
+        animation = createAnimationFromFiles(filenames0, 0.1f, true, flagSize,  flagSize);
+        baseActor.setAnimation(animation);
+        baseActor.AddImage("flag_red/flagbasement.png",0,0,flagSize,flagSize);
+    }
+
+    public int getProtectionState() {
+        return protectionState;
+    }
+    public void setProtectionState(int protectionState) {
+        this.protectionState = protectionState;
+        protectionStateLabel.setText(""+protectionState);
+        if (protectionState==0){
+            addRedFlagAnimation();
+            protectionStateLabel.setText("");
+        }
+    }
 }

@@ -117,7 +117,7 @@ public ArrayList<Item> GetSoluton (Cell cell, Stage stage, int cellCount){
     if (cell.getCol()>0){
         item2 = GetItemAtCell(new Cell(cell.getRow(),cell.getCol()-1), stage);
         className2 = item2.getClass().getName();
-        if (className1 == className2){
+        if ((className1 == className2) && (!item2.isLocked())){
             root.childs.add(new GameNode(item2.getCell(),item1.getCell()));
         }
     }
@@ -125,7 +125,7 @@ public ArrayList<Item> GetSoluton (Cell cell, Stage stage, int cellCount){
     if (cell.getCol()<(cellCount-2)){
         item2 = GetItemAtCell(new Cell(cell.getRow(),cell.getCol()+1), stage);
         className2 = item2.getClass().getName();
-        if (className1 == className2){
+        if ((className1 == className2) && (!item2.isLocked())){
             root.childs.add(new GameNode(item2.getCell(),item1.getCell()));
         }
     }
@@ -133,7 +133,7 @@ public ArrayList<Item> GetSoluton (Cell cell, Stage stage, int cellCount){
     if (cell.getRow()<(cellCount-2)){
         item2 = GetItemAtCell(new Cell(cell.getRow()+1,cell.getCol()), stage);
         className2 = item2.getClass().getName();
-        if (className1 == className2){
+        if ((className1 == className2) && (!item2.isLocked())){
             root.childs.add(new GameNode(item2.getCell(),item1.getCell()));
         }
     }
@@ -141,7 +141,7 @@ public ArrayList<Item> GetSoluton (Cell cell, Stage stage, int cellCount){
     if (cell.getRow()>0){
         item2 = GetItemAtCell(new Cell(cell.getRow()-1,cell.getCol()), stage);
         className2 = item2.getClass().getName();
-        if (className1 == className2){
+        if ((className1 == className2) && (!item2.isLocked())){
             root.childs.add(new GameNode(item2.getCell(),item1.getCell()));
         }
     }

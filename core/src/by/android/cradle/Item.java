@@ -39,7 +39,14 @@ public class Item extends BaseActor {
         return cell;
     }
 
-
+public boolean isLocked(){
+        if (lockLevel>0) {
+            return true;
+        }
+        else {
+            return false;
+        }
+}
 
     public int getLockLevel() {
         return lockLevel;
@@ -183,31 +190,6 @@ public class Item extends BaseActor {
 
     }
 
-    private Actor AddImage(String name,int x, int y, int width, int height){
-        Pixmap pixmap200;
-        pixmap200 = new Pixmap(Gdx.files.internal(name));
-
-        // Изменяем размер загружаемой картинки из файла на заданный
-        Pixmap pixmap100 = new Pixmap((int) getWidth(), (int) getHeight(), pixmap200.getFormat());
-        pixmap100.drawPixmap(pixmap200,
-                0, 0, pixmap200.getWidth(), pixmap200.getHeight(),
-                0, 0, pixmap100.getWidth(), pixmap100.getHeight()
-        );
-        Texture texture = new Texture(pixmap100);
-        texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-        pixmap200.dispose();
-        pixmap100.dispose();
-        TextureRegion imgTextureRegion = new TextureRegion(texture);
-        //imgTextureRegion.setRegion(0,0,getWidth(),getHeight());
-        imgTextureRegion.setRegion(x,y,width,height);
-        TextureRegionDrawable imgTextureRegionDrawable = new TextureRegionDrawable(imgTextureRegion);
-        Image img = new Image(texture);
-        //img.setDrawable(imgTextureRegionDrawable);
-        img.setSize(width,height);
-        img.setPosition(x, y);
-        addActor(img);
-        return img;
-    }
 
     private SelDirection findDirection ( Item firstItem, Item secondItem){
         SelDirection selDirection = SelDirection.None;

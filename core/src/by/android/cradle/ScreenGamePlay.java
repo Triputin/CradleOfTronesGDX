@@ -35,17 +35,17 @@ public class ScreenGamePlay extends BaseScreen {
     private Item lastSelectedItem;
     private Item firstSelectedItem;
     private ItemPos directionToFill;
-
-    private Label goldQuantityLabel;
-    private Label woodQuantityLabel;
-    private Label breadQuantityLabel;
+    private ResultsActor resultsActor;
     private int gameLevel;
     private ScreenGamePlay screenGamePlay;
     private SandGlass sandGlass;
     private Sound explosionSound;
-
-    Label messageLabel;
+    private Label messageLabel;
     private boolean isPaused; //indicates that screen is not active
+    private AttackType attackType;
+    private KingdomRes kingdomRes; //res to win
+    private Kingdom attackedKingdom;
+
 
 
     public ScreenGamePlay(CradleGame cradleGame) {
@@ -54,6 +54,8 @@ public class ScreenGamePlay extends BaseScreen {
 
     public void initialize()
     {
+        kingdomRes = new KingdomRes();
+        attackType = AttackType.AttackKingdom;
         messageLabel = new Label("...", BaseGame.labelStyle);
         messageLabel.setFontScale(4);
         messageLabel.setVisible(false);
@@ -87,9 +89,12 @@ public class ScreenGamePlay extends BaseScreen {
         int gameFieldWidth = cellSize*CellCount;
         gameField = new GameField(gameFieldX,gameFieldY,mainStage,gameFieldWidth,gameFieldWidth,CellCount,1);
 
-        new ResultsActor(gameFieldX,h,cellSize*CellCount,70,uiStage,Touchable.disabled);
-        DrawResults(h, gameFieldWidth);
-
+        BaseActor baseResultsActor = new BaseActor(gameFieldX,h,uiStage,Touchable.disabled);
+        baseResultsActor.setWidth(cellSize*CellCount);
+        baseResultsActor.setHeight(70);
+        resultsActor = new ResultsActor(0,0,cellSize*CellCount,70,uiStage,Touchable.disabled,baseResultsActor);
+        //DrawResults(h, gameFieldWidth);
+        UpdateRes();
         //SandGlass placement
         float x = gameFieldX+cellSize*CellCount+10;
         float y = gameFieldY+gameFieldWidth*0.15f;
@@ -163,6 +168,8 @@ public class ScreenGamePlay extends BaseScreen {
         gameField.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                if (isPaused) return true;
+
                 flag = true;
 
                 InputEvent ie = (InputEvent)event;
@@ -310,26 +317,6 @@ public class ScreenGamePlay extends BaseScreen {
 
     }
 
-    public void DrawResults(int h, int gameFieldWidth){
-        goldQuantityLabel = new Label(" "+0, BaseGame.labelStyle);
-        goldQuantityLabel.setColor( Color.GOLDENROD );
-        goldQuantityLabel.setPosition( gameFieldX+gameFieldWidth*0.16f,h+10 );
-        goldQuantityLabel.setFontScale(2f);
-        uiStage.addActor(goldQuantityLabel);
-
-        woodQuantityLabel = new Label(" "+0, BaseGame.labelStyle);
-        woodQuantityLabel.setColor( Color.GOLDENROD );
-        woodQuantityLabel.setPosition( gameFieldX+gameFieldWidth*0.47f,h+10 );
-        woodQuantityLabel.setFontScale(2f);
-        uiStage.addActor(woodQuantityLabel);
-
-        breadQuantityLabel = new Label(" "+0, BaseGame.labelStyle);
-        breadQuantityLabel.setColor( Color.GOLDENROD );
-        breadQuantityLabel.setPosition( gameFieldX+gameFieldWidth*0.85f,h+10 );
-        breadQuantityLabel.setFontScale(2f);
-        uiStage.addActor(breadQuantityLabel);
-
-    }
 
     public boolean isPaused() {
         return isPaused;
@@ -563,27 +550,20 @@ public class ScreenGamePlay extends BaseScreen {
         switch (className)
         {
             case "by.android.cradle.Coin2": gameRes.Gold++;
-                goldQuantityLabel.setText(" "+gameRes.Gold);
             break;
             case "by.android.cradle.Wood": gameRes.Wood++;
-                woodQuantityLabel.setText(" "+gameRes.Wood);
                 break;
             case "by.android.cradle.Bread": gameRes.Bread++;
-                breadQuantityLabel.setText(" "+gameRes.Bread);
                 break;
 
         }
-
+        resultsActor.UpdateRes(gameRes);
     }
 
 
     public void UpdateRes() {
         GameRes gameRes= cradleGame.getGameRes();
-        goldQuantityLabel.setText(" " + gameRes.Gold);
-        woodQuantityLabel.setText(" " + gameRes.Wood);
-        breadQuantityLabel.setText(" " + gameRes.Bread);
-
-
+        resultsActor.UpdateRes(gameRes);
     }
 
     public void resize (int width, int height) {
@@ -662,6 +642,14 @@ public class ScreenGamePlay extends BaseScreen {
         Action completeAction = new Action(){
             public boolean act( float delta ) {
                 // Do your stuff
+                if (attackType == AttackType.AttackArena) {
+                    GameRes.Gold -= kingdomRes.Gold;
+                    GameRes.Wood -= kingdomRes.Wood;
+                    GameRes.Bread -= kingdomRes.Bread;
+                }
+                if (attackedKingdom!=null){
+                    attackedKingdom.decreaseProtection();
+                }
                 cradleGame.setActiveGameMapScreen();
                 return true;
             }
@@ -735,4 +723,19 @@ public class ScreenGamePlay extends BaseScreen {
 
     }
 
+
+    // set res for add after winnning on Arena
+    public void SetRes(KingdomRes kingdomRes){
+        this.kingdomRes.Bread = kingdomRes.Bread;
+        this.kingdomRes.Gold = kingdomRes.Gold;
+        this.kingdomRes.Wood = kingdomRes.Wood;
+    }
+
+    public Kingdom getAttackedKingdom() {
+        return attackedKingdom;
+    }
+
+    public void setAttackedKingdom(Kingdom attackedKingdom) {
+        this.attackedKingdom = attackedKingdom;
+    }
 }

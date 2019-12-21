@@ -7,6 +7,8 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Color;
@@ -153,13 +155,13 @@ public class BaseActor extends Group
      * @param loop should the animation loop
      * @return animation created (useful for storing multiple animations)
      */
-    public Animation<TextureRegion> loadAnimationFromFiles(String[] fileNames, float frameDuration, boolean loop, int width, int height)
-    { 
+       public Animation<TextureRegion> loadAnimationFromFiles(String[] fileNames, float frameDuration, boolean loop, int width, int height)
+    {
         int fileCount = fileNames.length;
         Array<TextureRegion> textureArray = new Array<TextureRegion>();
 
         for (int n = 0; n < fileCount; n++)
-        {   
+        {
             String fileName = fileNames[n];
             //Texture texture = new Texture( Gdx.files.internal(fileName) );
             //texture.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);
@@ -190,9 +192,48 @@ public class BaseActor extends Group
         else
             anim.setPlayMode(Animation.PlayMode.NORMAL);
 
-      //if (animation == null)
-            setAnimation(anim);
+        //if (animation == null)
+        setAnimation(anim);
 
+
+        return anim;
+    }
+    public Animation<TextureRegion> createAnimationFromFiles(String[] fileNames, float frameDuration, boolean loop, int width, int height)
+    {
+        int fileCount = fileNames.length;
+        Array<TextureRegion> textureArray = new Array<TextureRegion>();
+
+        for (int n = 0; n < fileCount; n++)
+        {
+            String fileName = fileNames[n];
+            //Texture texture = new Texture( Gdx.files.internal(fileName) );
+            //texture.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);
+
+            // Изменяем размер загружаемой картинки из файла на заданный
+            Pixmap pixmap200 = new Pixmap(Gdx.files.internal(fileName));
+            Pixmap pixmap100 = new Pixmap(width, height, pixmap200.getFormat());
+            pixmap100.drawPixmap(pixmap200,
+                    0, 0, pixmap200.getWidth(), pixmap200.getHeight(),
+                    0, 0, pixmap100.getWidth(), pixmap100.getHeight()
+            );
+            Texture texture = new Texture(pixmap100);
+            texture.setFilter( TextureFilter.Linear, TextureFilter.Linear );
+            pixmap200.dispose();
+            pixmap100.dispose();
+
+            TextureRegion textureRegion=new TextureRegion(texture);
+            textureArray.add(textureRegion);
+        }
+
+        Animation<TextureRegion> anim = new Animation<TextureRegion>(frameDuration, textureArray);
+
+        if (loop)
+            anim.setPlayMode(Animation.PlayMode.LOOP);
+        else
+            anim.setPlayMode(Animation.PlayMode.NORMAL);
+
+        //if (animation == null)
+        //setAnimation(anim);
 
         return anim;
     }
@@ -764,5 +805,32 @@ public class BaseActor extends Group
 
         super.draw( batch, parentAlpha );
     }
+
+    public Actor AddImage(String name,int x, int y, int width, int height){
+        Pixmap pixmap200;
+        pixmap200 = new Pixmap(Gdx.files.internal(name));
+
+        // Изменяем размер загружаемой картинки из файла на заданный
+        Pixmap pixmap100 = new Pixmap((int) getWidth(), (int) getHeight(), pixmap200.getFormat());
+        pixmap100.drawPixmap(pixmap200,
+                0, 0, pixmap200.getWidth(), pixmap200.getHeight(),
+                0, 0, pixmap100.getWidth(), pixmap100.getHeight()
+        );
+        Texture texture = new Texture(pixmap100);
+        texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+        pixmap200.dispose();
+        pixmap100.dispose();
+        TextureRegion imgTextureRegion = new TextureRegion(texture);
+        //imgTextureRegion.setRegion(0,0,getWidth(),getHeight());
+        imgTextureRegion.setRegion(x,y,width,height);
+        TextureRegionDrawable imgTextureRegionDrawable = new TextureRegionDrawable(imgTextureRegion);
+        Image img = new Image(texture);
+        //img.setDrawable(imgTextureRegionDrawable);
+        img.setSize(width,height);
+        img.setPosition(x, y);
+        addActor(img);
+        return img;
+    }
+
 
 }

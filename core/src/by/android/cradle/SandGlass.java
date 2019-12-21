@@ -22,19 +22,6 @@ public class SandGlass extends BaseActor{
             loadAnimationFromFiles(filenames, duration/14, false,  width,  height);
 
         }
-/*
-    void render() {
-
-            stateTime += Gdx.graphics.getDeltaTime();
-
-        getAnimation().getKeyFrame(stateTime, true);
-    }
-    */
-
-        public void Restart(float duration){
-
-
-        }
 
 
 
