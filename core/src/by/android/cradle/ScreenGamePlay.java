@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -13,7 +12,6 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
@@ -178,10 +176,14 @@ public class ScreenGamePlay extends BaseScreen {
                         //Coin
                     for (by.android.cradle.BaseActor CoinActor : by.android.cradle.BaseActor.getList(mainStage, "by.android.cradle.Coin")){
                         if(CoinActor.getBoundaryPolygon().contains(x+gameFieldX,y+gameFieldY)){
+                            if(((Coin)CoinActor).isLocked()){
+                                return true;
+                            }
                             if (lastSelectedItem==null){
                                 lastSelectedItem =(Coin) CoinActor;
                                 firstSelectedItem= lastSelectedItem;
                             }
+
                             ((Coin)CoinActor).setSelected(true, lastSelectedItem);
                             lastSelectedItem =(Coin) CoinActor;
                         }
@@ -189,6 +191,9 @@ public class ScreenGamePlay extends BaseScreen {
                     //Coin2
                     for (by.android.cradle.BaseActor CoinActor : by.android.cradle.BaseActor.getList(mainStage, "by.android.cradle.Coin2")){
                         if(CoinActor.getBoundaryPolygon().contains(x+gameFieldX,y+gameFieldY)){
+                            if(((Coin2)CoinActor).isLocked()){
+                                return true;
+                            }
                             if (lastSelectedItem==null){
                                 lastSelectedItem =(Coin2) CoinActor;
                                 firstSelectedItem= lastSelectedItem;
@@ -201,6 +206,9 @@ public class ScreenGamePlay extends BaseScreen {
                     //Wood
                     for (by.android.cradle.BaseActor CoinActor : by.android.cradle.BaseActor.getList(mainStage, "by.android.cradle.Wood")){
                         if(CoinActor.getBoundaryPolygon().contains(x+gameFieldX,y+gameFieldY)){
+                            if(((Wood)CoinActor).isLocked()){
+                                return true;
+                            }
                             if (lastSelectedItem==null){
                                 lastSelectedItem =(Wood) CoinActor;
                                 firstSelectedItem= lastSelectedItem;
@@ -213,6 +221,9 @@ public class ScreenGamePlay extends BaseScreen {
                     //Bread
                     for (by.android.cradle.BaseActor CoinActor : by.android.cradle.BaseActor.getList(mainStage, "by.android.cradle.Bread")){
                         if(CoinActor.getBoundaryPolygon().contains(x+gameFieldX,y+gameFieldY)){
+                            if(((Bread)CoinActor).isLocked()){
+                                return true;
+                            }
                             if (lastSelectedItem==null){
                                 lastSelectedItem =(Bread) CoinActor;
                                 firstSelectedItem= lastSelectedItem;
@@ -268,7 +279,7 @@ public class ScreenGamePlay extends BaseScreen {
                         for (by.android.cradle.BaseActor CoinActor : by.android.cradle.BaseActor.getList(mainStage, className)) {
                             if (CoinActor.getBoundaryPolygon().contains(x + gameFieldX, y + gameFieldY)) {
                                 if (lastSelectedItem.isNear(((Item) CoinActor).getRow(), ((Item) CoinActor).getCol())) {
-                                    if (!((Item) CoinActor).isSelected()) {
+                                    if ((!((Item) CoinActor).isSelected())&&(!((Item) CoinActor).isLocked())) {
                                         if (lastSelectedItem == null) {
                                             lastSelectedItem = (Item) CoinActor;
                                         }
@@ -287,7 +298,7 @@ public class ScreenGamePlay extends BaseScreen {
                         for (by.android.cradle.BaseActor CoinActor : by.android.cradle.BaseActor.getList(mainStage, "by.android.cradle.Coin")) {
                             if (CoinActor.getBoundaryPolygon().contains(x + gameFieldX, y + gameFieldY)) {
                                 if (lastSelectedItem.isNear(((Item) CoinActor).getRow(), ((Item) CoinActor).getCol())) {
-                                    if (!((Item) CoinActor).isSelected()) {
+                                    if ((!((Item) CoinActor).isSelected())&&(!((Item) CoinActor).isLocked())) {
                                                 if (lastSelectedItem == null) {
                                                     lastSelectedItem = (Item) CoinActor;
                                                 }
@@ -358,7 +369,7 @@ public class ScreenGamePlay extends BaseScreen {
     {
 
         if (sandGlass.isAnimationFinished()&&!isPaused) {
-            LooseLevel();
+            LoseLevel();
         }
     }
 
@@ -690,8 +701,8 @@ public class ScreenGamePlay extends BaseScreen {
         isPaused=false;
     }
 
-    public void LooseLevel(){
-        System.out.println("LooseLevel()");
+    public void LoseLevel(){
+        System.out.println("LoseLevel()");
         isPaused=true; // block timer in update
         Action actions;
         //Fon
