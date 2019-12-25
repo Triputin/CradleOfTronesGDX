@@ -395,7 +395,7 @@ public class ScreenGamePlay extends BaseScreen {
             mainStage.addActor(boom);
             gameField.changeGameCell(item1.getCell());
 
-
+            unlockNearItems(item1);
             item1.remove();
             item1=item2;
         }
@@ -409,6 +409,7 @@ public class ScreenGamePlay extends BaseScreen {
         mainStage.addActor(boom);
 
         gameField.changeGameCell(item1.getCell());
+        unlockNearItems(item1);
         item1.remove();
         lastSelectedItem=null;
         firstSelectedItem=null;
@@ -748,5 +749,55 @@ public class ScreenGamePlay extends BaseScreen {
 
     public void setAttackedKingdom(Kingdom attackedKingdom) {
         this.attackedKingdom = attackedKingdom;
+    }
+
+
+    public void unlockNearItems(Item item){
+        Cell itemCell1 = new Cell(item.getCell());
+        Cell itemCell2 = new Cell(item.getCell());
+        System.out.println("unlockNearItems: row="+itemCell1.getRow() +" col="+itemCell1.getCol());
+        Item item2;
+        //unlock up
+        if (itemCell2.getRow()>0){
+            itemCell2.setRow(itemCell2.getRow()-1);
+            item2=gameField.GetItemAtCell(itemCell2,mainStage);
+            if(item2!=null){
+            item2.UnlockForOneLevel();
+            }
+
+        }
+
+        //unlock right
+        itemCell2.setRow(itemCell1.getRow());
+        itemCell2.setCol(itemCell1.getCol());
+        if (itemCell2.getCol()<(CellCount-2)){
+            itemCell2.setCol(itemCell2.getCol()+1);
+            item2=gameField.GetItemAtCell(itemCell2,mainStage);
+            if(item2!=null){
+                item2.UnlockForOneLevel();
+            }
+        }
+
+        //unlock down
+        itemCell2.setRow(itemCell1.getRow());
+        itemCell2.setCol(itemCell1.getCol());
+        if (itemCell2.getRow()<(CellCount-2)){
+            itemCell2.setRow(itemCell2.getRow()+1);
+            item2=gameField.GetItemAtCell(itemCell2,mainStage);
+            if(item2!=null){
+                item2.UnlockForOneLevel();
+            }
+        }
+        //unlock left
+        itemCell2.setRow(itemCell1.getRow());
+        itemCell2.setCol(itemCell1.getCol());
+        if (itemCell2.getCol()>0){
+            itemCell2.setCol(itemCell2.getCol()-1);
+            item2=gameField.GetItemAtCell(itemCell2,mainStage);
+            if(item2!=null){
+                item2.UnlockForOneLevel();
+            }
+        }
+
     }
 }

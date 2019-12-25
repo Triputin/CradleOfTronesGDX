@@ -326,4 +326,10 @@ public boolean isLocked(){
         }
         return count;
     }
+
+    public void UnlockForOneLevel(){
+        if (lockLevel>0){
+            setLockLevel(lockLevel-1);
+        }
+    }
 }

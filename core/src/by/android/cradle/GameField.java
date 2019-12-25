@@ -101,7 +101,11 @@ public Item GetItemAtCell(Cell cell, Stage stage){
 
         }
     }
+
+    //System.out.println("GetItemAtCell: row="+cell.getRow()+" col="+cell.getCol());
+    //if (item==null) {System.out.println("GetItemAtCell: item=null");}
     return item;
+
 }
 
 
