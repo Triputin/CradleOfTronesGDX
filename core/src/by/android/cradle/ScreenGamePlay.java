@@ -17,6 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
 import java.util.ArrayList;
+import java.util.Set;
 
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.fadeIn;
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.fadeOut;
@@ -97,8 +98,8 @@ public class ScreenGamePlay extends BaseScreen {
         float x = gameFieldX+cellSize*CellCount+10;
         float y = gameFieldY+gameFieldWidth*0.15f;
         int sw = (int)(Gdx.graphics.getWidth()-x);
-        sandGlass = new SandGlass(x,y,uiStage,sw, Math.round( gameFieldWidth*0.7f), 20);
-
+        sandGlass = new SandGlass(x,y,uiStage,sw, Math.round( gameFieldWidth*0.7f), 50);
+/*
         //Gamemap Button
         TextButton mapButton = new TextButton( "GameMap", BaseGame.textButtonStyle );
         mapButton.addListener(new InputListener() {
@@ -155,7 +156,7 @@ public class ScreenGamePlay extends BaseScreen {
                 return false;
             }
         });
-
+*/
 
         //gameField.boundToWorld();
         gameField.setTouchable(Touchable.enabled);
@@ -380,6 +381,36 @@ public class ScreenGamePlay extends BaseScreen {
         String className;
         Item item1= firstSelectedItem;
         Item item2=null;
+
+        //unlock near items for just one level
+        ArrayList<Item> itemArrayList = new ArrayList<>();
+        ArrayList<Item> itemArrayList2;
+        Item it;
+        while (item1.getNext()!=null){
+            itemArrayList2 = GetNearItem(item1);
+            for(int i=0;i<itemArrayList2.size();i++){
+                if(!itemArrayList.contains(itemArrayList2.get(i))){
+                   // System.out.println("NearItems: row="+itemArrayList2.get(i).getRow() +" col="+itemArrayList2.get(i).getCol());
+                    itemArrayList.add(itemArrayList2.get(i));
+                }
+            }
+            item1=item1.getNext();
+        }
+        itemArrayList2 = GetNearItem(item1);
+        for(int i=0;i<itemArrayList2.size();i++){
+            if(!itemArrayList.contains(itemArrayList2.get(i))){
+                // System.out.println("NearItems: row="+itemArrayList2.get(i).getRow() +" col="+itemArrayList2.get(i).getCol());
+                itemArrayList.add(itemArrayList2.get(i));
+            }
+        }
+        for(int i=0;i<itemArrayList.size();i++){
+            itemArrayList.get(i).UnlockForOneLevel();
+        }
+
+
+        //remove items
+        item1= firstSelectedItem;
+        item2=null;
         while (item1.getNext()!=null){
             item2 = item1.getNext();
             arrayList.add(item1.getCell());
@@ -395,7 +426,7 @@ public class ScreenGamePlay extends BaseScreen {
             mainStage.addActor(boom);
             gameField.changeGameCell(item1.getCell());
 
-            unlockNearItems(item1);
+
             item1.remove();
             item1=item2;
         }
@@ -409,7 +440,7 @@ public class ScreenGamePlay extends BaseScreen {
         mainStage.addActor(boom);
 
         gameField.changeGameCell(item1.getCell());
-        unlockNearItems(item1);
+
         item1.remove();
         lastSelectedItem=null;
         firstSelectedItem=null;
@@ -536,7 +567,7 @@ public class ScreenGamePlay extends BaseScreen {
         if (Math.random()<0.25){
             item = new Coin2(gameFieldX + col * cellSize, gameFieldY + row * cellSize, cellSize, cellSize, mainStage, row, col);
         }else {
-            if (Math.random()<0.35) {
+            if (Math.random()<0.3) {
                 item= new Coin(gameFieldX + col * cellSize, gameFieldY + row * cellSize, cellSize, cellSize, mainStage, row, col);
             }else{
                 if (Math.random()<0.6) {
@@ -607,7 +638,7 @@ public class ScreenGamePlay extends BaseScreen {
                 if (Math.random()<0.25){
                     item = new Coin2(gameFieldX - cellSize, gameFieldY -cellSize, cellSize, cellSize, mainStage, i, j);
                 }else {
-                    if (Math.random()<0.5) {
+                    if (Math.random()<0.3) {
                         item = new Coin(gameFieldX - cellSize, gameFieldY - cellSize, cellSize, cellSize, mainStage, i, j);
                     }
                     else{
@@ -698,7 +729,7 @@ public class ScreenGamePlay extends BaseScreen {
         float x = gameFieldX+cellSize*CellCount+10;
         float y = gameFieldY+100;
         int sw = (int)(Gdx.graphics.getWidth()-x);
-        sandGlass = new SandGlass(x,y,uiStage,sw,sw*2, 20);
+        sandGlass = new SandGlass(x,y,uiStage,sw,sw*2, 50);
         isPaused=false;
     }
 
@@ -752,52 +783,57 @@ public class ScreenGamePlay extends BaseScreen {
     }
 
 
-    public void unlockNearItems(Item item){
+    public ArrayList<Item> GetNearItem(Item item){
+        ArrayList<Item> ai = new ArrayList<>();
         Cell itemCell1 = new Cell(item.getCell());
         Cell itemCell2 = new Cell(item.getCell());
-        System.out.println("unlockNearItems: row="+itemCell1.getRow() +" col="+itemCell1.getCol());
+       // System.out.println("GetNearItem: row="+itemCell1.getRow() +" col="+itemCell1.getCol());
         Item item2;
-        //unlock up
+        // up
         if (itemCell2.getRow()>0){
             itemCell2.setRow(itemCell2.getRow()-1);
             item2=gameField.GetItemAtCell(itemCell2,mainStage);
             if(item2!=null){
-            item2.UnlockForOneLevel();
+                ai.add(item2);
             }
 
         }
 
-        //unlock right
+        //right
         itemCell2.setRow(itemCell1.getRow());
         itemCell2.setCol(itemCell1.getCol());
-        if (itemCell2.getCol()<(CellCount-2)){
+        if (itemCell2.getCol()<(CellCount-1)){
             itemCell2.setCol(itemCell2.getCol()+1);
             item2=gameField.GetItemAtCell(itemCell2,mainStage);
             if(item2!=null){
-                item2.UnlockForOneLevel();
+                ai.add(item2);
             }
         }
 
-        //unlock down
+        //down
         itemCell2.setRow(itemCell1.getRow());
         itemCell2.setCol(itemCell1.getCol());
-        if (itemCell2.getRow()<(CellCount-2)){
+        if (itemCell2.getRow()<(CellCount-1)){
             itemCell2.setRow(itemCell2.getRow()+1);
             item2=gameField.GetItemAtCell(itemCell2,mainStage);
             if(item2!=null){
-                item2.UnlockForOneLevel();
+                ai.add(item2);
             }
         }
-        //unlock left
+        //left
         itemCell2.setRow(itemCell1.getRow());
         itemCell2.setCol(itemCell1.getCol());
         if (itemCell2.getCol()>0){
             itemCell2.setCol(itemCell2.getCol()-1);
             item2=gameField.GetItemAtCell(itemCell2,mainStage);
             if(item2!=null){
-                item2.UnlockForOneLevel();
+                ai.add(item2);
             }
         }
 
+
+        return ai;
     }
+
+
 }

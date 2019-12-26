@@ -74,7 +74,7 @@ public class Kingdom extends BaseActor {
 
         this.kingdomNames = kingdomNames;
         kingdomRes = new KingdomRes();
-        protectionState = 1;
+        protectionState = 5;
 
         String[] filenames;
 
