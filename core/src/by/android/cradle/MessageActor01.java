@@ -39,7 +39,7 @@ public class MessageActor01 extends BaseActor {
                 }
                 cradleGame.setActivescreenGamePlay(attackType,attackedKingdom);
                 //cradleGame.getScreenGamePlay().UpdateRes();
-                cradleGame.getScreenGamePlay().StartNewLevel(1);
+                cradleGame.getScreenGamePlay().StartNewLevel();
                 return true;
             }
         });

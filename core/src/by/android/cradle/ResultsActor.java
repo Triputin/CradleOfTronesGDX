@@ -35,10 +35,10 @@ public class ResultsActor extends BaseActor{
         baseActor.addActor(breadQuantityLabel);
     }
 
-    public void UpdateRes(GameRes gameRes) {
-        goldQuantityLabel.setText(" " + gameRes.Gold);
-        woodQuantityLabel.setText(" " + gameRes.Wood);
-        breadQuantityLabel.setText(" " + gameRes.Bread);
+    public void UpdateRes() {
+        goldQuantityLabel.setText(" " + GameRes.Gold);
+        woodQuantityLabel.setText(" " + GameRes.Wood);
+        breadQuantityLabel.setText(" " + GameRes.Bread);
 
 
     }

@@ -73,7 +73,7 @@ public class GameMapScreen extends BaseScreen {
 
        //Menu Button
         TextButton backButton = new TextButton( "Menu", BaseGame.textButtonStyle );
-        backButton.setPosition(w*0.02f,h*0.87f);
+        backButton.setPosition(w*0.00f,h*0.89f);
         uiStage.addActor(backButton);
 
         backButton.addListener(new InputListener() {
@@ -94,15 +94,13 @@ public class GameMapScreen extends BaseScreen {
         int kingdomsize = h/9;
         kingdoms = new Kingdom[7];
         kingdoms[0] = new Kingdom(w*0.17f, h*0.62f,kingdomsize,kingdomsize,uiStage,Touchable.enabled,KingdomNames.Kingdom_of_the_North);
-        kingdoms[0].setProtectionState(0); // starting Kingdom for player
         kingdoms[1] = new Kingdom(w*0.28f, h*0.3f,kingdomsize,kingdomsize,uiStage,Touchable.enabled,KingdomNames.Kingdom_of_the_Isles_and_Rivers);
-        kingdoms[1].setProtectionState(2);
         kingdoms[2] = new Kingdom(w*0.6f, h*0.4f,kingdomsize,kingdomsize,uiStage,Touchable.enabled,KingdomNames.Kingdom_of_the_Mountain_and_the_Vale);
         kingdoms[3] = new Kingdom(w*0.4f, h*0.28f,kingdomsize,kingdomsize,uiStage,Touchable.enabled,KingdomNames.Kingdom_of_the_Reach);
         kingdoms[4] = new Kingdom(w*0.45f, h*0.15f,kingdomsize,kingdomsize,uiStage,Touchable.enabled,KingdomNames.Kingdom_of_the_Rock);
         kingdoms[5] = new Kingdom(w*0.18f, h*0.25f,kingdomsize,kingdomsize,uiStage,Touchable.enabled,KingdomNames.Kingdom_of_the_Stormlands);
         kingdoms[6] = new Kingdom(w*0.78f, h*0.35f,kingdomsize,kingdomsize,uiStage,Touchable.enabled,KingdomNames.Principality_of_Dorne);
-        kingdoms[6].setProtectionState(7);
+
 
         InputListener inputListener = new InputListener() {
             @Override
@@ -181,8 +179,7 @@ public class GameMapScreen extends BaseScreen {
 
 
     public void UpdateRes() {
-        GameRes gameRes= cradleGame.getGameRes();
-        resultsActor.UpdateRes(gameRes);
+        resultsActor.UpdateRes();
         checkWin();
     }
 
@@ -226,7 +223,7 @@ public class GameMapScreen extends BaseScreen {
         Action completeAction = new Action(){
             public boolean act( float delta ) {
                 // Do your stuff
-
+                cradleGame.restartGame();
                 return true;
             }
         };
@@ -245,7 +242,9 @@ public class GameMapScreen extends BaseScreen {
 
     }
 
-
+    public Kingdom[] getKingdoms() {
+        return kingdoms;
+    }
 
 /*
     public boolean keyDown(int keyCode)
@@ -260,5 +259,7 @@ public class GameMapScreen extends BaseScreen {
     }
 
 */
+
+
 
 }

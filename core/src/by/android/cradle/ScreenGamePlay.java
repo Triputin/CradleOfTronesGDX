@@ -36,6 +36,8 @@ public class ScreenGamePlay extends BaseScreen {
     private ItemPos directionToFill;
     private ResultsActor resultsActor;
     private int gameLevel;
+    private Label gameLevelLabel;
+
     private ScreenGamePlay screenGamePlay;
     private SandGlass sandGlass;
     private Sound explosionSound;
@@ -64,12 +66,14 @@ public class ScreenGamePlay extends BaseScreen {
 
         screenGamePlay = this;
 
-
-        gameLevel = 1 ;
-
         // Get screen size
         int w = Gdx.graphics.getWidth();
         int h = Gdx.graphics.getHeight();
+
+
+
+
+
 
 
         BaseActor hall = new BaseActor(0,0, mainStage, Touchable.disabled);
@@ -99,6 +103,15 @@ public class ScreenGamePlay extends BaseScreen {
         float y = gameFieldY+gameFieldWidth*0.15f;
         int sw = (int)(Gdx.graphics.getWidth()-x);
         sandGlass = new SandGlass(x,y,uiStage,sw, Math.round( gameFieldWidth*0.7f), 50);
+        //Game level
+        gameLevel = 1 ;
+        gameLevelLabel = new Label(" "+0, BaseGame.labelStyle);
+        gameLevelLabel.setText(""+gameLevel);
+        gameLevelLabel.setColor( Color.GOLDENROD );
+        gameLevelLabel.setPosition( x+sandGlass.getWidth()/2-10,y );
+        gameLevelLabel.setFontScale(0.5f);
+        uiStage.addActor(gameLevelLabel);
+
 /*
         //Gamemap Button
         TextButton mapButton = new TextButton( "GameMap", BaseGame.textButtonStyle );
@@ -257,7 +270,6 @@ public class ScreenGamePlay extends BaseScreen {
                         firstSelectedItem = null;
                     }
                     if( gameField.CheckWin()){
-                        gameLevel++;
                         //isEndOfLevelAnimation=true;
                         WinMessageAndNewLevelCreate();
 
@@ -589,24 +601,23 @@ public class ScreenGamePlay extends BaseScreen {
     }
 
     public void IncreaseRes(String className){
-        GameRes gameRes= cradleGame.getGameRes();
+
         switch (className)
         {
-            case "by.android.cradle.Coin2": gameRes.Gold++;
+            case "by.android.cradle.Coin2": cradleGame.setGameResGold(GameRes.Gold+1);
             break;
-            case "by.android.cradle.Wood": gameRes.Wood++;
+            case "by.android.cradle.Wood": cradleGame.setGameResWood(GameRes.Wood+1);
                 break;
-            case "by.android.cradle.Bread": gameRes.Bread++;
+            case "by.android.cradle.Bread": cradleGame.setGameResBread(GameRes.Bread+1);
                 break;
 
         }
-        resultsActor.UpdateRes(gameRes);
+        resultsActor.UpdateRes();
     }
 
 
     public void UpdateRes() {
-        GameRes gameRes= cradleGame.getGameRes();
-        resultsActor.UpdateRes(gameRes);
+        resultsActor.UpdateRes();
     }
 
     public void resize (int width, int height) {
@@ -616,7 +627,7 @@ public class ScreenGamePlay extends BaseScreen {
 
 
     public void GenerateLevel(int levelnumber){
-
+        System.out.println("GenerateLevel() = "+levelnumber);
             ArrayList<Item> arrayListItems = new ArrayList<>();
                 for (Actor a : mainStage.getActors())
                 {
@@ -638,7 +649,8 @@ public class ScreenGamePlay extends BaseScreen {
                 if (Math.random()<0.25){
                     item = new Coin2(gameFieldX - cellSize, gameFieldY -cellSize, cellSize, cellSize, mainStage, i, j);
                 }else {
-                    if (Math.random()<0.3) {
+                    //lower coins with rising of level
+                    if (Math.random()<(0.3-levelnumber/100)) {
                         item = new Coin(gameFieldX - cellSize, gameFieldY - cellSize, cellSize, cellSize, mainStage, i, j);
                     }
                     else{
@@ -653,8 +665,9 @@ public class ScreenGamePlay extends BaseScreen {
                 //item.addAction(Actions.scaleTo(-1,-1,1));
                 item.addAction(Actions.moveTo(gameFieldX + j * cellSize, gameFieldY + i * cellSize,1));
                 //item.addAction(Actions.scaleTo(1,1,5));
-                if(Math.random()>0.9){
-                    if (Math.random()>0.5) {item.setLockLevel(2);}
+
+                if(Math.random()>(0.9-levelnumber/100)){
+                    if (Math.random()>(0.5-levelnumber/100)) {item.setLockLevel(2);}
                     else {item.setLockLevel(1);
                     }
                 }
@@ -692,6 +705,7 @@ public class ScreenGamePlay extends BaseScreen {
                 }
                 if (attackedKingdom!=null){
                     attackedKingdom.decreaseProtection();
+                    setGameLevel(gameLevel+1);
                 }
                 cradleGame.setActiveGameMapScreen();
                 return true;
@@ -720,7 +734,7 @@ public class ScreenGamePlay extends BaseScreen {
 
     }
 
-    public void StartNewLevel(int gameLevel){
+    public void StartNewLevel(){
         gameField.GenerateLevel(gameLevel,CellCount);
         GenerateLevel(gameLevel);
         //sandGlass.Restart(180);
@@ -835,5 +849,12 @@ public class ScreenGamePlay extends BaseScreen {
         return ai;
     }
 
+    public int getGameLevel() {
+        return gameLevel;
+    }
 
+    public void setGameLevel(int gameLevel) {
+        this.gameLevel = gameLevel;
+        this.gameLevelLabel.setText(""+gameLevel);
+    }
 }

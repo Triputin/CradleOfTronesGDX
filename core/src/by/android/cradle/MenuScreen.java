@@ -68,7 +68,7 @@ public class MenuScreen extends BaseScreen {
        // BaseActor title = new BaseActor(0,0, mainStage, Touchable.disabled);
        // title.loadTexture( "assets/starfish-collector.png" );
 
-        TextButton startButton = new TextButton( "Start", BaseGame.textButtonStyle );
+        TextButton startButton = new TextButton( "   Start   ", BaseGame.textButtonStyle );
         // startButton.setPosition(150,150);
         // uiStage.addActor(startButton);
 
@@ -86,7 +86,7 @@ public class MenuScreen extends BaseScreen {
         });
 
 
-        TextButton quitButton = new TextButton( "Quit", BaseGame.textButtonStyle );
+        TextButton quitButton = new TextButton( "   Quit    ", BaseGame.textButtonStyle );
         // quitButton.setPosition(500,150);
         // uiStage.addActor(quitButton);
 
@@ -104,17 +104,26 @@ public class MenuScreen extends BaseScreen {
             }
         });
 
+        TextButton restartButton = new TextButton( "Restart", BaseGame.textButtonStyle );
 
+        restartButton.addListener(new InputListener() {
+            public boolean touchDown (InputEvent e, float x, float y, int pointer, int button){
+                if (!(e instanceof InputEvent)) return false;
+
+                if (!((InputEvent) e).getType().equals(InputEvent.Type.touchDown)) return false;
+
+                cradleGame.restartGame();
+                return true;
+            }
+        });
 
         //uiTable.add(title).colspan(2);
         uiTable.row();
         uiTable.add(startButton);
+        uiTable.row();
         uiTable.add(quitButton);
-
-
-
-
-
+        uiTable.row();
+        uiTable.add(restartButton);
 
     }
 
