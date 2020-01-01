@@ -20,7 +20,7 @@ public class MessageActor01 extends BaseActor {
         loadTexture( "goldenframe.png",width,height );
         AddImage("fon_white.png",Math.round(width*0.075f),Math.round(height*0.1f),Math.round(width*0.85f), Math.round(height*0.8f));
 
-        resultsActor = new ResultsActor(x,y+height/2,width,height/2,s,Touchable.disabled,this);
+        resultsActor = new ResultsActor(x+width*0.1f,(int)(y+height/2),(int)(width-width*0.2f),(int)(height/2.5),s,Touchable.disabled,this);
 
         //Attack Button
         TextButton attackButton = new TextButton( "Attack", BaseGame.textButtonStyle );
@@ -43,7 +43,7 @@ public class MessageActor01 extends BaseActor {
                 return true;
             }
         });
-        attackButton.setPosition(Math.round(width*0.1f),20);
+        attackButton.setPosition(Math.round(width*0.08f),20);
         addActor(attackButton);
 
         //Cancel Button
@@ -60,7 +60,7 @@ public class MessageActor01 extends BaseActor {
                 return true;
             }
         });
-        cancelButton.setPosition(Math.round(width*0.62f),20);
+        cancelButton.setPosition(Math.round(width*0.52f),20);
         addActor(cancelButton);
 
     }

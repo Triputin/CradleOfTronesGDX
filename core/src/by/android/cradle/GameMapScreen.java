@@ -73,7 +73,7 @@ public class GameMapScreen extends BaseScreen {
 
        //Menu Button
         TextButton backButton = new TextButton( "Menu", BaseGame.textButtonStyle );
-        backButton.setPosition(w*0.00f,h*0.89f);
+        backButton.setPosition(w*0.00f,h*0.88f);
         uiStage.addActor(backButton);
 
         backButton.addListener(new InputListener() {
@@ -93,7 +93,7 @@ public class GameMapScreen extends BaseScreen {
         h = Gdx.graphics.getHeight();
         int kingdomsize = h/9;
         kingdoms = new Kingdom[7];
-        kingdoms[0] = new Kingdom(w*0.17f, h*0.62f,kingdomsize,kingdomsize,uiStage,Touchable.enabled,KingdomNames.Kingdom_of_the_North);
+        kingdoms[0] = new Kingdom(w*0.16f, h*0.56f,kingdomsize,kingdomsize,uiStage,Touchable.enabled,KingdomNames.Kingdom_of_the_North);
         kingdoms[1] = new Kingdom(w*0.28f, h*0.3f,kingdomsize,kingdomsize,uiStage,Touchable.enabled,KingdomNames.Kingdom_of_the_Isles_and_Rivers);
         kingdoms[2] = new Kingdom(w*0.6f, h*0.4f,kingdomsize,kingdomsize,uiStage,Touchable.enabled,KingdomNames.Kingdom_of_the_Mountain_and_the_Vale);
         kingdoms[3] = new Kingdom(w*0.4f, h*0.28f,kingdomsize,kingdomsize,uiStage,Touchable.enabled,KingdomNames.Kingdom_of_the_Reach);

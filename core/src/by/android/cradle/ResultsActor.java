@@ -18,19 +18,19 @@ public class ResultsActor extends BaseActor{
 
         goldQuantityLabel = new Label(" "+0, BaseGame.labelStyle);
         goldQuantityLabel.setColor( Color.GOLDENROD );
-        goldQuantityLabel.setPosition( x+width*0.16f,y+10 );
+        goldQuantityLabel.setPosition( x+width*0.16f,y+20 );
         goldQuantityLabel.setFontScale(2f);
         baseActor.addActor(goldQuantityLabel);
 
         woodQuantityLabel = new Label(" "+0, BaseGame.labelStyle);
         woodQuantityLabel.setColor( Color.GOLDENROD );
-        woodQuantityLabel.setPosition( x+width*0.47f,y+10 );
+        woodQuantityLabel.setPosition( x+width*0.47f,y+20 );
         woodQuantityLabel.setFontScale(2f);
         baseActor.addActor(woodQuantityLabel);
 
         breadQuantityLabel = new Label(" "+0, BaseGame.labelStyle);
         breadQuantityLabel.setColor( Color.GOLDENROD );
-        breadQuantityLabel.setPosition( x+width*0.85f,y+10 );
+        breadQuantityLabel.setPosition( x+width*0.85f,y+20 );
         breadQuantityLabel.setFontScale(2f);
         baseActor.addActor(breadQuantityLabel);
     }

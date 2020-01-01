@@ -76,8 +76,12 @@ public class Kingdom extends BaseActor {
         kingdomRes = new KingdomRes();
         protectionState = 1;
 
-        String[] filenames;
+        setUpKingdomFlagAndResources(width, height,s,kingdomNames);
 
+    }
+
+    private void setUpKingdomFlagAndResources(int width, int height, Stage s,KingdomNames kingdomNames){
+        String[] filenames;
         String flagBasementName;
 
         switch (kingdomNames){
@@ -124,32 +128,29 @@ public class Kingdom extends BaseActor {
                 flagBasementName = "flag_blue/flagbasement.png";
                 break;
 
-                default:
-                    kingdomRes.Bread = 10;
-                    kingdomRes.Gold = 10;
-                    kingdomRes.Wood = 10;
-                    filenames = filenames00;
-                    flagBasementName = "flag_red/flagbasement.png";
+            default:
+                kingdomRes.Bread = 10;
+                kingdomRes.Gold = 10;
+                kingdomRes.Wood = 10;
+                filenames = filenames00;
+                flagBasementName = "flag_red/flagbasement.png";
 
         }
 
         animation = createAnimationFromFiles(filenames, 0.1f, true, flagSize,  flagSize);
+        baseActor = new BaseActor((int) width/2f,(int) (height*0.9f),s,Touchable.enabled);
+        baseActor.setAnimation(animation);
+        addActor(baseActor);
 
+
+        baseActor.AddImage(flagBasementName,0,0,flagSize,flagSize);
+        baseActor.AddImage("kingdoms/winterfell.png", (int) (0-(width/2.8f)),(int)(0-(height*0.5f)),(int) width, (int) height);
+        baseActor.AddImage("shield.png",0-10,(int)(0-(height*0.5f))+5,(int) width/2, (int) height/2);
         protectionStateLabel = new Label(""+protectionState, BaseGame.labelStyle);
         protectionStateLabel.setColor( Color.GOLDENROD );
         protectionStateLabel.setPosition( (int) 1,(int)(0-(height*0.5f))+8);
         protectionStateLabel.setFontScale(1f);
-
-
-
-        baseActor = new BaseActor((int) width/2f,(int) (height*0.9f),s,Touchable.enabled);
-        baseActor.setAnimation(animation);
-        addActor(baseActor);
-        baseActor.AddImage(flagBasementName,0,0,flagSize,flagSize);
-        baseActor.AddImage("kingdoms/winterfell.png", (int) (0-(width/2.8f)),(int)(0-(height*0.5f)),(int) width, (int) height);
-        baseActor.AddImage("shield.png",0-10,(int)(0-(height*0.5f))+5,(int) width/2, (int) height/2);
         baseActor.addActor(protectionStateLabel);
-
     }
 
     public KingdomRes getKingdomResForAttack(){
@@ -179,11 +180,77 @@ public class Kingdom extends BaseActor {
         return protectionState;
     }
     public void setProtectionState(int protectionState) {
+        if(protectionState>this.protectionState){
+            resetFlag();
+        }
         this.protectionState = protectionState;
         protectionStateLabel.setText(""+protectionState);
         if (protectionState==0){
             addRedFlagAnimation();
             protectionStateLabel.setText("");
         }
+    }
+
+    public void resetFlag(){
+        String[] filenames;
+        String flagBasementName;
+
+        switch (kingdomNames){
+            case Kingdom_of_the_North: kingdomRes.Bread = 10;
+                kingdomRes.Gold = 10;
+                kingdomRes.Wood = 10;
+                filenames = filenames0;
+                flagBasementName = "flag_red/flagbasement.png";
+                break;
+            case Kingdom_of_the_Isles_and_Rivers: kingdomRes.Bread = 10;
+                kingdomRes.Gold = 10;
+                kingdomRes.Wood = 10;
+                filenames=filenames1;
+                flagBasementName = "flag_yellow/flagbasement.png";
+                break;
+            case Kingdom_of_the_Mountain_and_the_Vale: kingdomRes.Bread = 10;
+                kingdomRes.Gold = 10;
+                kingdomRes.Wood = 10;
+                filenames = filenames2;
+                flagBasementName = "flag_purple/flagbasement.png";
+                break;
+            case Kingdom_of_the_Reach: kingdomRes.Bread = 10;
+                kingdomRes.Gold = 10;
+                kingdomRes.Wood = 10;
+                filenames = filenames3;
+                flagBasementName = "flag_orange/flagbasement.png";
+                break;
+            case Kingdom_of_the_Rock: kingdomRes.Bread = 10;
+                kingdomRes.Gold = 10;
+                kingdomRes.Wood = 10;
+                filenames=filenames4;
+                flagBasementName = "flag_green/flagbasement.png";
+                break;
+            case Kingdom_of_the_Stormlands: kingdomRes.Bread = 10;
+                kingdomRes.Gold = 10;
+                kingdomRes.Wood = 10;
+                filenames = filenames5;
+                flagBasementName = "flag_brown/flagbasement.png";
+                break;
+            case Principality_of_Dorne: kingdomRes.Bread = 10;
+                kingdomRes.Gold = 10;
+                kingdomRes.Wood = 10;
+                filenames=filenames6;
+                flagBasementName = "flag_blue/flagbasement.png";
+                break;
+
+            default:
+                kingdomRes.Bread = 10;
+                kingdomRes.Gold = 10;
+                kingdomRes.Wood = 10;
+                filenames = filenames00;
+                flagBasementName = "flag_red/flagbasement.png";
+
+        }
+
+        animation = createAnimationFromFiles(filenames, 0.1f, true, flagSize,  flagSize);
+        baseActor.setAnimation(animation);
+        baseActor.AddImage(flagBasementName,0,0,flagSize,flagSize);
+
     }
 }
