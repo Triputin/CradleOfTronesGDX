@@ -31,7 +31,9 @@ public class MessageActor01 extends BaseActor {
 
                 if (!((InputEvent) e).getType().equals(InputEvent.Type.touchDown))
                     return false;
-                if (!GameRes.isResEnough(kingdomRes)) {return false;}
+                if (!GameRes.isResEnough(kingdomRes)) {
+
+                    return false;}
                 if (attackType == AttackType.AttackKingdom) {
                     GameRes.Gold -= kingdomRes.Gold;
                     GameRes.Wood -= kingdomRes.Wood;
