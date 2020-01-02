@@ -71,7 +71,7 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
 		//MobileAds.initialize(this, "ca-app-pub-3940256099942544/6300978111");
 		//Work settings
 		adView.setAdUnitId("ca-app-pub-6101517213308128/5757251577");
-		MobileAds.initialize(this, "ca-app-pub-6101517213308128/5757251577");
+		MobileAds.initialize(this, "ca-app-pub-6101517213308128~2009578256");
 
 
 		/*MobileAds.initialize(this, new OnInitializationCompleteListener() {
