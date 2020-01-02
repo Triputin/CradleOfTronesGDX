@@ -56,7 +56,7 @@ public class GameMapScreen extends BaseScreen {
 
         final int w = Gdx.graphics.getWidth();
         int h = Gdx.graphics.getHeight();
-
+        //h=h-60; //add place for adMob
 
         BaseActor worldMap = new BaseActor(0,0, mainStage, Touchable.disabled);
         worldMap.loadTexture( "worldmap02.png",w,h );
@@ -138,7 +138,7 @@ public class GameMapScreen extends BaseScreen {
         }
 
 
-        Arena arena = new Arena(w*0.57f, h*0.045f,Math.round(kingdomsize*1.56f), kingdomsize,uiStage,Touchable.enabled);
+        Arena arena = new Arena(w*0.77f, h*0.25f,Math.round(kingdomsize*1.56f), kingdomsize,uiStage,Touchable.enabled);
 
         inputListener = new InputListener() {
             @Override

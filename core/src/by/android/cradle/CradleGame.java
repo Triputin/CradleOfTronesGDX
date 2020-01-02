@@ -10,8 +10,12 @@ public class CradleGame extends BaseGame
     private MenuScreen menuScreen;
     private GameMapScreen gameMapScreen;
     private ScreenGamePlay screenGamePlay;
-    //private GameRes gameRes;
     private Preferences prefs;
+    private IActivityRequestHandler myRequestHandler;
+
+    public CradleGame(IActivityRequestHandler handler) {
+        myRequestHandler = handler;
+    }
 
     public void create()
     {
@@ -36,6 +40,8 @@ public class CradleGame extends BaseGame
         int gameLevel = prefs.getInteger("gameLevel", 1);
         screenGamePlay.setGameLevel(gameLevel);
         setActiveScreen( menuScreen );
+
+        myRequestHandler.showAds(false);
     }
 
 
@@ -78,6 +84,7 @@ public class CradleGame extends BaseGame
         game.setScreen(menuScreen);
         gameMapScreen.PauseMusic();
         menuScreen.PlayMusic();
+        myRequestHandler.showAds(false);
     }
 
     public  void setActiveGameMapScreen()
@@ -90,6 +97,8 @@ public class CradleGame extends BaseGame
         menuScreen.PauseMusic();
         gameMapScreen.PlayMusic();
         gameMapScreen.SetMessageActorVisibility(false);
+        myRequestHandler.showAds(true);
+
         prefs.putInteger("gameLevel", screenGamePlay.getGameLevel());
         prefs.putInteger("Gold", GameRes.Gold);
         prefs.putInteger("Wood", GameRes.Wood);
@@ -101,6 +110,7 @@ public class CradleGame extends BaseGame
             //System.out.println("setActiveGameMapScreen Put:kingdomProtectionState"+i);
         }
         prefs.flush();
+
     }
 
     public  void setActivescreenGamePlay(AttackType attackType, Kingdom attackedKingdom)
@@ -112,7 +122,7 @@ public class CradleGame extends BaseGame
         screenGamePlay.StartNewLevel();
         menuScreen.PauseMusic();
         gameMapScreen.PauseMusic();
-
+        myRequestHandler.showAds(false);
     }
 
     public void restartGame(){

@@ -148,8 +148,8 @@ public class Kingdom extends BaseActor {
         baseActor.AddImage("shield.png",0-10,(int)(0-(height*0.5f))+5,(int) width/2, (int) height/2);
         protectionStateLabel = new Label(""+protectionState, BaseGame.labelStyle);
         protectionStateLabel.setColor( Color.GOLDENROD );
-        protectionStateLabel.setPosition( (int) 1,(int)(0-(height*0.5f))+8);
-        protectionStateLabel.setFontScale(1f);
+        protectionStateLabel.setPosition( (int) (int) ((width*0.05f)),(int)(0-(height*0.4f)));
+        protectionStateLabel.setFontScale(1.2f);
         baseActor.addActor(protectionStateLabel);
     }
 
