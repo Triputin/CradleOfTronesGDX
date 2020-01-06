@@ -13,6 +13,8 @@ public class CradleGame extends BaseGame
     private Preferences prefs;
     private IActivityRequestHandler myRequestHandler;
 
+    private int gameMapLevel;
+
     public CradleGame(IActivityRequestHandler handler) {
         myRequestHandler = handler;
     }
@@ -25,7 +27,8 @@ public class CradleGame extends BaseGame
         GameRes.Bread=prefs.getInteger("Bread", 100);
         GameRes.Wood=prefs.getInteger("Wood", 100);;
         GameRes.Gold=prefs.getInteger("Gold", 50);;
-
+        gameMapLevel = prefs.getInteger("gameMapLevel", 1);
+        //gameMapLevel=1;
         menuScreen = new MenuScreen(this);
         screenGamePlay = new ScreenGamePlay(this);
         gameMapScreen = new GameMapScreen(this);
@@ -39,12 +42,11 @@ public class CradleGame extends BaseGame
 
         int gameLevel = prefs.getInteger("gameLevel", 1);
         screenGamePlay.setGameLevel(gameLevel);
+
         setActiveScreen( menuScreen );
 
         myRequestHandler.showAds(false);
     }
-
-
 
 
     public MenuScreen getMenuScreen() {
@@ -100,6 +102,7 @@ public class CradleGame extends BaseGame
         myRequestHandler.showAds(true);
 
         prefs.putInteger("gameLevel", screenGamePlay.getGameLevel());
+        prefs.putInteger("gameMapLevel", gameMapLevel);
         prefs.putInteger("Gold", GameRes.Gold);
         prefs.putInteger("Wood", GameRes.Wood);
         prefs.putInteger("Bread", GameRes.Bread);
@@ -129,7 +132,8 @@ public class CradleGame extends BaseGame
 
         screenGamePlay.setGameLevel(1);
         prefs.putInteger("gameLevel", screenGamePlay.getGameLevel());
-
+        prefs.putInteger("gameMapLevel", 1);
+        gameMapScreen.initializeMap(1);
         Kingdom[] kingdoms = gameMapScreen.getKingdoms();
         kingdoms[0].setProtectionState(0); // starting Kingdom for player
         for (int i = 1; i < kingdoms.length; i++) {
@@ -143,6 +147,7 @@ public class CradleGame extends BaseGame
         prefs.putInteger("Wood", GameRes.Wood);
         prefs.putInteger("Bread", GameRes.Bread);
         prefs.flush();
+
     }
 
     public void setGameResGold(int gold){
@@ -158,4 +163,20 @@ public class CradleGame extends BaseGame
         //prefs.putInteger("Bread", bread);
     }
 
+    public int getGameMapLevel() {
+        return gameMapLevel;
+    }
+
+    public void setGameMapLevel(int gameMapLevel) {
+        this.gameMapLevel = gameMapLevel;
+        prefs.putInteger("gameMapLevel", gameMapLevel);
+        Kingdom[] kingdoms = gameMapScreen.getKingdoms();
+        kingdoms[0].setProtectionState(0); // starting Kingdom for player
+        for (int i = 1; i < kingdoms.length; i++) {
+            kingdoms[i].setProtectionState(5);
+            prefs.putInteger("kingdomProtectionState"+i, 5);
+        }
+        prefs.flush();
+
+    }
 }

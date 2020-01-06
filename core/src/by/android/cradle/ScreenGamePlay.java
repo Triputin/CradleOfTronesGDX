@@ -24,6 +24,11 @@ import static com.badlogic.gdx.scenes.scene2d.actions.Actions.fadeOut;
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.sequence;
 
 public class ScreenGamePlay extends BaseScreen {
+   // Game properties to save
+   private int gameLevel;
+
+
+    // Game constant params
     private int cellSize;
     private final int CellCount = 7;
     private GameField gameField;
@@ -35,7 +40,6 @@ public class ScreenGamePlay extends BaseScreen {
     private Item firstSelectedItem;
     private ItemPos directionToFill;
     private ResultsActor resultsActor;
-    private int gameLevel;
     private Label gameLevelLabel;
 
     private ScreenGamePlay screenGamePlay;
@@ -69,11 +73,6 @@ public class ScreenGamePlay extends BaseScreen {
         // Get screen size
         int w = Gdx.graphics.getWidth();
         int h = Gdx.graphics.getHeight();
-
-
-
-
-
 
 
         BaseActor hall = new BaseActor(0,0, mainStage, Touchable.disabled);
@@ -111,6 +110,8 @@ public class ScreenGamePlay extends BaseScreen {
         gameLevelLabel.setPosition( x+sandGlass.getWidth()/2-10,y );
         gameLevelLabel.setFontScale(0.5f);
         uiStage.addActor(gameLevelLabel);
+
+
 
 /*
         //Gamemap Button
@@ -556,33 +557,56 @@ public class ScreenGamePlay extends BaseScreen {
             switch (directionToFill){
                 case Up: cell = new Cell(firstCell.getRow()+1+i,firstCell.getCol());
                     arrayListCells.add(cell);
-                   arrayListItems.add( CreateNewItem(cell.getRow(),cell.getCol()));
+                   arrayListItems.add( CreateNewItemToFill(gameLevel,cell.getRow(),cell.getCol()));
                     break;
                 case Down: cell = new Cell(firstCell.getRow()-1-i,firstCell.getCol());
                     arrayListCells.add(cell);
-                    arrayListItems.add( CreateNewItem(cell.getRow(),cell.getCol()));
+                    arrayListItems.add( CreateNewItemToFill(gameLevel,cell.getRow(),cell.getCol()));
                     break;
                 case Right:cell = new Cell(firstCell.getRow(),firstCell.getCol()+1+i);
                     arrayListCells.add(cell);
-                    arrayListItems.add( CreateNewItem(cell.getRow(),cell.getCol()));
+                    arrayListItems.add( CreateNewItemToFill(gameLevel,cell.getRow(),cell.getCol()));
                     break;
                 case Left: cell = new Cell(firstCell.getRow(),firstCell.getCol()-1-i);
                     arrayListCells.add(cell);
-                    arrayListItems.add( CreateNewItem(cell.getRow(),cell.getCol()));
+                    arrayListItems.add( CreateNewItemToFill(gameLevel,cell.getRow(),cell.getCol()));
                     break;
             }
 
         }
     }
-    private Item CreateNewItem (int row,int col){
+
+    private Item CreateNewItem (int levelnumber,int row,int col){
+        Item item;
+        if (Math.random()<0.25){
+            item = new Coin2(gameFieldX - cellSize, gameFieldY -cellSize, cellSize, cellSize, mainStage, row, col);
+        }else {
+            //lower coins with rising of level
+            if (Math.random()<(0.3-levelnumber/100)) {
+                item = new Coin(gameFieldX - cellSize, gameFieldY - cellSize, cellSize, cellSize, mainStage, row, col);
+            }
+            else{
+                if(Math.random()<0.75){
+                    item = new Wood(gameFieldX - cellSize, gameFieldY - cellSize, cellSize, cellSize, mainStage, row, col);
+                }else{
+                    item = new Bread(gameFieldX - cellSize, gameFieldY - cellSize, cellSize, cellSize, mainStage, row, col);
+                }
+
+            }
+        }
+        return item;
+    }
+
+    private Item CreateNewItemToFill(int levelnumber, int row,int col){
         Item item ;
         if (Math.random()<0.25){
             item = new Coin2(gameFieldX + col * cellSize, gameFieldY + row * cellSize, cellSize, cellSize, mainStage, row, col);
         }else {
-            if (Math.random()<0.3) {
+            //lower coins with rising of level
+            if (Math.random()<(0.3-levelnumber/100)) {
                 item= new Coin(gameFieldX + col * cellSize, gameFieldY + row * cellSize, cellSize, cellSize, mainStage, row, col);
             }else{
-                if (Math.random()<0.6) {
+                if (Math.random()<0.75) {
                     item= new Bread(gameFieldX + col * cellSize, gameFieldY + row * cellSize, cellSize, cellSize, mainStage, row, col);
                 }else{
                     item= new Wood(gameFieldX + col * cellSize, gameFieldY + row * cellSize, cellSize, cellSize, mainStage, row, col);
@@ -646,22 +670,7 @@ public class ScreenGamePlay extends BaseScreen {
         for(int i = 0;i<CellCount;i++){
             for(int j = 0;j<CellCount;j++){
 
-                if (Math.random()<0.25){
-                    item = new Coin2(gameFieldX - cellSize, gameFieldY -cellSize, cellSize, cellSize, mainStage, i, j);
-                }else {
-                    //lower coins with rising of level
-                    if (Math.random()<(0.3-levelnumber/100)) {
-                        item = new Coin(gameFieldX - cellSize, gameFieldY - cellSize, cellSize, cellSize, mainStage, i, j);
-                    }
-                    else{
-                        if(Math.random()<0.75){
-                            item = new Wood(gameFieldX - cellSize, gameFieldY - cellSize, cellSize, cellSize, mainStage, i, j);
-                        }else{
-                            item = new Bread(gameFieldX - cellSize, gameFieldY - cellSize, cellSize, cellSize, mainStage, i, j);
-                        }
-
-                    }
-                }
+                item = CreateNewItem (gameLevel, i,j);
                 //item.addAction(Actions.scaleTo(-1,-1,1));
                 item.addAction(Actions.moveTo(gameFieldX + j * cellSize, gameFieldY + i * cellSize,1));
                 //item.addAction(Actions.scaleTo(1,1,5));
@@ -743,7 +752,7 @@ public class ScreenGamePlay extends BaseScreen {
         float x = gameFieldX+cellSize*CellCount+10;
         float y = gameFieldY+100;
         int sw = (int)(Gdx.graphics.getWidth()-x);
-        sandGlass = new SandGlass(x,y,uiStage,sw,sw*2, 50);
+        sandGlass = new SandGlass(x,y,uiStage,sw,sw*2, 60);
         isPaused=false;
     }
 
@@ -857,4 +866,8 @@ public class ScreenGamePlay extends BaseScreen {
         this.gameLevel = gameLevel;
         this.gameLevelLabel.setText(""+gameLevel);
     }
+
+
+
+
 }
