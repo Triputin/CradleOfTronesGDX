@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 
@@ -28,6 +29,8 @@ public class GameMapScreen extends BaseScreen {
     private Arena arena;
     private BaseActor throne;
     private Label messageLabel;
+    private BaseActor worldMap;
+    private TextButton continueButton;
     private boolean isUpdateMapNeeded;
 
     public GameMapScreen(CradleGame cradleGame) {
@@ -89,6 +92,7 @@ public class GameMapScreen extends BaseScreen {
                 if (!((InputEvent) e).getType().equals(InputEvent.Type.touchDown))
                     return false;
                 instrumental.pause();
+                UpdateRes();
                 cradleGame.setActiveMenuScreen();
                 return true;
             }
@@ -104,27 +108,6 @@ public class GameMapScreen extends BaseScreen {
         UpdateRes();
     }
 
-    public void changeMapTexture(int mapLevel) {
-        final int w = Gdx.graphics.getWidth();
-        int h = Gdx.graphics.getHeight();
-        BaseActor worldMap = new BaseActor(0, 0, mainStage, Touchable.disabled);
-        switch (mapLevel) {
-            case 1:
-                worldMap.loadTexture( "maps/worldmap02.png",w,h );
-                break;
-            case 2:
-                worldMap.loadTexture("maps/worldmap03.png", w, h);
-                break;
-        }
-
-        if (throne!=null){
-            throne.remove();
-        }
-        if (messageLabel!=null){
-            messageLabel.remove();
-        }
-    }
-
     public void initializeMap(int mapLevel){
 
         final int w = Gdx.graphics.getWidth();
@@ -135,31 +118,45 @@ public class GameMapScreen extends BaseScreen {
                 kingdoms[i].remove();
             }
         }
+        if (arena!=null) {
+            arena.remove();
+        }
+
+        if (continueButton!=null){
+            continueButton.remove();
+        }
+
         kingdoms = new Kingdom[7];
-        BaseActor worldMap = new BaseActor(0,0, mainStage, Touchable.disabled);
+        if( worldMap==null) {
+            worldMap = new BaseActor(0, 0, mainStage, Touchable.disabled);
+        }
         switch(mapLevel){
 
             case 2:
-                worldMap.loadTexture( "maps/worldmap03.png",w,h );
-                kingdoms[0] = new Kingdom(w*0.3f, h*0.56f,kingdomsize,kingdomsize,uiStage,Touchable.enabled,KingdomNames.Kingdom_of_the_North);
-                kingdoms[1] = new Kingdom(w*0.26f, h*0.3f,kingdomsize,kingdomsize,uiStage,Touchable.enabled,KingdomNames.Kingdom_of_the_Isles_and_Rivers);
-                kingdoms[2] = new Kingdom(w*0.6f, h*0.55f,kingdomsize,kingdomsize,uiStage,Touchable.enabled,KingdomNames.Kingdom_of_the_Mountain_and_the_Vale);
-                kingdoms[3] = new Kingdom(w*0.4f, h*0.45f,kingdomsize,kingdomsize,uiStage,Touchable.enabled,KingdomNames.Kingdom_of_the_Reach);
-                kingdoms[4] = new Kingdom(w*0.45f, h*0.15f,kingdomsize,kingdomsize,uiStage,Touchable.enabled,KingdomNames.Kingdom_of_the_Rock);
-                kingdoms[5] = new Kingdom(w*0.75f, h*0.25f,kingdomsize,kingdomsize,uiStage,Touchable.enabled,KingdomNames.Kingdom_of_the_Stormlands);
-                kingdoms[6] = new Kingdom(w*0.85f, h*0.6f,kingdomsize,kingdomsize,uiStage,Touchable.enabled,KingdomNames.Principality_of_Dorne);
-                arena = new Arena(w*0.3f, h*0.18f,Math.round(kingdomsize*1.56f), kingdomsize,uiStage,Touchable.enabled);
+
+                    worldMap.loadTexture("maps/worldmap03.png", w, h);
+
+                    kingdoms[0] = new Kingdom(w * 0.3f, h * 0.56f, kingdomsize, kingdomsize, uiStage, Touchable.enabled, KingdomNames.Kingdom_of_the_North);
+                    kingdoms[1] = new Kingdom(w * 0.26f, h * 0.3f, kingdomsize, kingdomsize, uiStage, Touchable.enabled, KingdomNames.Kingdom_of_the_Isles_and_Rivers);
+                    kingdoms[2] = new Kingdom(w*0.6f, h*0.55f,kingdomsize,kingdomsize,uiStage,Touchable.enabled,KingdomNames.Kingdom_of_the_Mountain_and_the_Vale);
+                    kingdoms[3] = new Kingdom(w*0.4f, h*0.45f,kingdomsize,kingdomsize,uiStage,Touchable.enabled,KingdomNames.Kingdom_of_the_Reach);
+                    kingdoms[4] = new Kingdom(w*0.45f, h*0.15f,kingdomsize,kingdomsize,uiStage,Touchable.enabled,KingdomNames.Kingdom_of_the_Rock);
+                    kingdoms[5] = new Kingdom(w*0.75f, h*0.25f,kingdomsize,kingdomsize,uiStage,Touchable.enabled,KingdomNames.Kingdom_of_the_Stormlands);
+                    kingdoms[6] = new Kingdom(w*0.85f, h*0.6f,kingdomsize,kingdomsize,uiStage,Touchable.enabled,KingdomNames.Principality_of_Dorne);
+                    arena = new Arena(w * 0.3f, h * 0.18f, Math.round(kingdomsize * 1.56f), kingdomsize, uiStage, Touchable.enabled);
+
                 break;
             case 1:
                 worldMap.loadTexture( "maps/worldmap02.png",w,h );
-                kingdoms[0] = new Kingdom(w*0.16f, h*0.56f,kingdomsize,kingdomsize,uiStage,Touchable.enabled,KingdomNames.Kingdom_of_the_North);
-                kingdoms[1] = new Kingdom(w*0.28f, h*0.3f,kingdomsize,kingdomsize,uiStage,Touchable.enabled,KingdomNames.Kingdom_of_the_Isles_and_Rivers);
-                kingdoms[2] = new Kingdom(w*0.6f, h*0.4f,kingdomsize,kingdomsize,uiStage,Touchable.enabled,KingdomNames.Kingdom_of_the_Mountain_and_the_Vale);
-                kingdoms[3] = new Kingdom(w*0.4f, h*0.28f,kingdomsize,kingdomsize,uiStage,Touchable.enabled,KingdomNames.Kingdom_of_the_Reach);
-                kingdoms[4] = new Kingdom(w*0.45f, h*0.15f,kingdomsize,kingdomsize,uiStage,Touchable.enabled,KingdomNames.Kingdom_of_the_Rock);
-                kingdoms[5] = new Kingdom(w*0.18f, h*0.25f,kingdomsize,kingdomsize,uiStage,Touchable.enabled,KingdomNames.Kingdom_of_the_Stormlands);
-                kingdoms[6] = new Kingdom(w*0.78f, h*0.35f,kingdomsize,kingdomsize,uiStage,Touchable.enabled,KingdomNames.Principality_of_Dorne);
-                arena = new Arena(w*0.77f, h*0.25f,Math.round(kingdomsize*1.56f), kingdomsize,uiStage,Touchable.enabled);
+
+                    kingdoms[0] = new Kingdom(w * 0.16f, h * 0.56f, kingdomsize, kingdomsize, uiStage, Touchable.enabled, KingdomNames.Kingdom_of_the_North);
+                    kingdoms[1] = new Kingdom(w * 0.28f, h * 0.3f, kingdomsize, kingdomsize, uiStage, Touchable.enabled, KingdomNames.Kingdom_of_the_Isles_and_Rivers);
+                    kingdoms[2] = new Kingdom(w*0.6f, h*0.4f,kingdomsize,kingdomsize,uiStage,Touchable.enabled,KingdomNames.Kingdom_of_the_Mountain_and_the_Vale);
+                    kingdoms[3] = new Kingdom(w*0.4f, h*0.28f,kingdomsize,kingdomsize,uiStage,Touchable.enabled,KingdomNames.Kingdom_of_the_Reach);
+                    kingdoms[4] = new Kingdom(w*0.45f, h*0.15f,kingdomsize,kingdomsize,uiStage,Touchable.enabled,KingdomNames.Kingdom_of_the_Rock);
+                    kingdoms[5] = new Kingdom(w*0.18f, h*0.25f,kingdomsize,kingdomsize,uiStage,Touchable.enabled,KingdomNames.Kingdom_of_the_Stormlands);
+                    kingdoms[6] = new Kingdom(w*0.78f, h*0.35f,kingdomsize,kingdomsize,uiStage,Touchable.enabled,KingdomNames.Principality_of_Dorne);
+                    arena = new Arena(w * 0.77f, h * 0.25f, Math.round(kingdomsize * 1.56f), kingdomsize, uiStage, Touchable.enabled);
                 break;
 
         }
@@ -199,6 +196,7 @@ public class GameMapScreen extends BaseScreen {
 
         for (int i = 0; i < kingdoms.length; i++) {
             kingdoms[i].addListener(inputListener);
+            kingdoms[i].resetProtectionState(mapLevel);
         }
 
 
@@ -227,6 +225,17 @@ public class GameMapScreen extends BaseScreen {
         };
 
         arena.addListener(inputListener);
+        if (messageActor01!=null) {
+         messageActor01.setZIndex(arena.getZIndex() + 1);
+        }
+
+        if (throne!=null){
+            throne.remove();
+        }
+        if (messageLabel!=null){
+            messageLabel.remove();
+        }
+
 
     }
 
@@ -234,7 +243,8 @@ public class GameMapScreen extends BaseScreen {
     public void UpdateRes() {
         resultsActor.UpdateRes();
         if (isUpdateMapNeeded){
-            changeMapTexture(cradleGame.getGameMapLevel());
+            //changeMapTexture(cradleGame.getGameMapLevel());
+            initializeMap(cradleGame.getGameMapLevel());
             isUpdateMapNeeded=false;
         }
 
@@ -270,6 +280,14 @@ public class GameMapScreen extends BaseScreen {
             h=w;
         } else w=h;
 
+
+        if (throne!=null){
+            throne.remove();
+        }
+        if (messageLabel!=null){
+            messageLabel.remove();
+        }
+
         throne = new BaseActor(0,-h,uiStage,Touchable.disabled);
         throne.loadTexture("ironthrone.png",w,h);
         throne.setX((ww-w)/2);
@@ -278,17 +296,36 @@ public class GameMapScreen extends BaseScreen {
         Action actions = sequence(moveTo((ww-w)/2,0,2f));
         throne.addAction(actions);
 
+
         Action completeAction = new Action(){
             public boolean act( float delta ) {
                 // Do your stuff
-                //cradleGame.restartGame();
-                if (cradleGame.getGameMapLevel()<2) {
-                    cradleGame.setGameMapLevel(cradleGame.getGameMapLevel() + 1);
-                    isUpdateMapNeeded=true;
-                }
+
+                if (isUpdateMapNeeded) {
+                    continueButton = new TextButton("   Continue to the next level   ", BaseGame.textButtonStyle);
+                    uiStage.addActor(continueButton);
+                    continueButton.addListener(new InputListener() {
+                    public boolean touchDown(InputEvent e, float x, float y, int pointer, int button) {
+                        if (!(e instanceof InputEvent))
+                            return false;
+
+                        if (!((InputEvent) e).getType().equals(InputEvent.Type.touchDown))
+                            return false;
+                        UpdateRes();
+                        return true;
+                    }
+                });
+
+            }
                 return true;
             }
         };
+
+
+        if (cradleGame.getGameMapLevel()<cradleGame.MaxGameMapLevel) {
+            cradleGame.setGameMapLevel(cradleGame.getGameMapLevel() + 1);
+            isUpdateMapNeeded=true;
+        }
 
         actions = sequence(fadeOut(0.01f), Actions.delay(3),fadeIn(1f) , completeAction);
 

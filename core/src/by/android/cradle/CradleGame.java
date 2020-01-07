@@ -7,6 +7,7 @@ import by.android.cradle.BaseGame;
 
 public class CradleGame extends BaseGame
 {
+    public final int MaxGameMapLevel=2;
     private MenuScreen menuScreen;
     private GameMapScreen gameMapScreen;
     private ScreenGamePlay screenGamePlay;
@@ -132,14 +133,16 @@ public class CradleGame extends BaseGame
 
         screenGamePlay.setGameLevel(1);
         prefs.putInteger("gameLevel", screenGamePlay.getGameLevel());
-        prefs.putInteger("gameMapLevel", 1);
-        gameMapScreen.initializeMap(1);
+
+        gameMapLevel = 1;
+        prefs.putInteger("gameMapLevel", gameMapLevel);
+        gameMapScreen.initializeMap(gameMapLevel);
         Kingdom[] kingdoms = gameMapScreen.getKingdoms();
-        kingdoms[0].setProtectionState(0); // starting Kingdom for player
+        //kingdoms[0].setProtectionState(0); // starting Kingdom for player
         for (int i = 1; i < kingdoms.length; i++) {
-            kingdoms[i].setProtectionState(5);
-            prefs.putInteger("kingdomProtectionState"+i, 5);
+            prefs.putInteger("kingdomProtectionState"+i, kingdoms[i].getProtectionState());
         }
+
         GameRes.Bread=100;
         GameRes.Wood=100;
         GameRes.Gold=50;
@@ -173,8 +176,8 @@ public class CradleGame extends BaseGame
         Kingdom[] kingdoms = gameMapScreen.getKingdoms();
         kingdoms[0].setProtectionState(0); // starting Kingdom for player
         for (int i = 1; i < kingdoms.length; i++) {
-            kingdoms[i].setProtectionState(5);
-            prefs.putInteger("kingdomProtectionState"+i, 5);
+            kingdoms[i].resetProtectionState(gameMapLevel);
+            prefs.putInteger("kingdomProtectionState"+i, kingdoms[i].getProtectionState());
         }
         prefs.flush();
 

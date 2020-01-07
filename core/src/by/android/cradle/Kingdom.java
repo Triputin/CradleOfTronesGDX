@@ -90,42 +90,49 @@ public class Kingdom extends BaseActor {
                 kingdomRes.Wood = 10;
                 filenames = filenames0;
                 flagBasementName = "flag_red/flagbasement.png";
+                protectionState=0;
                 break;
             case Kingdom_of_the_Isles_and_Rivers: kingdomRes.Bread = 10;
                 kingdomRes.Gold = 10;
                 kingdomRes.Wood = 10;
                 filenames=filenames1;
                 flagBasementName = "flag_yellow/flagbasement.png";
+                protectionState=5;
                 break;
             case Kingdom_of_the_Mountain_and_the_Vale: kingdomRes.Bread = 10;
                 kingdomRes.Gold = 10;
                 kingdomRes.Wood = 10;
                 filenames = filenames2;
                 flagBasementName = "flag_purple/flagbasement.png";
+                protectionState=7;
                 break;
             case Kingdom_of_the_Reach: kingdomRes.Bread = 10;
                 kingdomRes.Gold = 10;
                 kingdomRes.Wood = 10;
                 filenames = filenames3;
                 flagBasementName = "flag_orange/flagbasement.png";
+                protectionState=5;
                 break;
             case Kingdom_of_the_Rock: kingdomRes.Bread = 10;
                 kingdomRes.Gold = 10;
                 kingdomRes.Wood = 10;
                 filenames=filenames4;
                 flagBasementName = "flag_green/flagbasement.png";
+                protectionState=7;
                 break;
             case Kingdom_of_the_Stormlands: kingdomRes.Bread = 10;
                 kingdomRes.Gold = 10;
                 kingdomRes.Wood = 10;
                 filenames = filenames5;
                 flagBasementName = "flag_brown/flagbasement.png";
+                protectionState=7;
                 break;
             case Principality_of_Dorne: kingdomRes.Bread = 10;
                 kingdomRes.Gold = 10;
                 kingdomRes.Wood = 10;
                 filenames=filenames6;
                 flagBasementName = "flag_blue/flagbasement.png";
+                protectionState=5;
                 break;
 
             default:
@@ -134,6 +141,7 @@ public class Kingdom extends BaseActor {
                 kingdomRes.Wood = 10;
                 filenames = filenames00;
                 flagBasementName = "flag_red/flagbasement.png";
+                protectionState=1;
 
         }
 
@@ -147,6 +155,9 @@ public class Kingdom extends BaseActor {
         baseActor.AddImage("kingdoms/winterfell.png", (int) (0-(width/2.8f)),(int)(0-(height*0.5f)),(int) width, (int) height);
         baseActor.AddImage("shield.png",0-10,(int)(0-(height*0.5f))+5,(int) width/2, (int) height/2);
         protectionStateLabel = new Label(""+protectionState, BaseGame.labelStyle);
+        if (protectionState==0){
+            protectionStateLabel.setText("");
+        }
         protectionStateLabel.setColor( Color.GOLDENROD );
         protectionStateLabel.setPosition( (int) (int) ((width*0.05f)),(int)(0-(height*0.4f)));
         protectionStateLabel.setFontScale(1.2f);
@@ -179,6 +190,61 @@ public class Kingdom extends BaseActor {
     public int getProtectionState() {
         return protectionState;
     }
+
+public void resetProtectionState(int gameMapLevel) {
+    switch (kingdomNames) {
+        case Kingdom_of_the_North:
+            kingdomRes.Bread = 10 * gameMapLevel;
+            kingdomRes.Gold = 10 * gameMapLevel;
+            kingdomRes.Wood = 10 * gameMapLevel;
+            protectionState = 0;
+            break;
+        case Kingdom_of_the_Isles_and_Rivers:
+            kingdomRes.Bread = 10 * gameMapLevel;
+            kingdomRes.Gold = 10 * gameMapLevel;
+            kingdomRes.Wood = 10 * gameMapLevel;
+            protectionState = 5;
+            break;
+        case Kingdom_of_the_Mountain_and_the_Vale:
+            kingdomRes.Bread = 10 * gameMapLevel;
+            kingdomRes.Gold = 10 * gameMapLevel;
+            kingdomRes.Wood = 10 * gameMapLevel;
+            protectionState = 7;
+            break;
+        case Kingdom_of_the_Reach:
+            kingdomRes.Bread = 10 * gameMapLevel;
+            kingdomRes.Gold = 10 * gameMapLevel;
+            kingdomRes.Wood = 10 * gameMapLevel;
+            protectionState = 5;
+            break;
+        case Kingdom_of_the_Rock:
+            kingdomRes.Bread = 10 * gameMapLevel;
+            kingdomRes.Gold = 10 * gameMapLevel;
+            kingdomRes.Wood = 10 * gameMapLevel;
+            protectionState = 7;
+            break;
+        case Kingdom_of_the_Stormlands:
+            kingdomRes.Bread = 10 * gameMapLevel;
+            kingdomRes.Gold = 10 * gameMapLevel;
+            kingdomRes.Wood = 10 * gameMapLevel;
+            protectionState = 7;
+            break;
+        case Principality_of_Dorne:
+            kingdomRes.Bread = 10 * gameMapLevel;
+            kingdomRes.Gold = 10 * gameMapLevel;
+            kingdomRes.Wood = 10 * gameMapLevel;
+            protectionState = 5;
+            break;
+
+        default:
+            kingdomRes.Bread = 10 * gameMapLevel;
+            kingdomRes.Gold = 10 * gameMapLevel;
+            kingdomRes.Wood = 10 * gameMapLevel;
+            protectionState = 1;
+
+    }
+}
+
     public void setProtectionState(int protectionState) {
         if(protectionState>this.protectionState){
             resetFlag();
