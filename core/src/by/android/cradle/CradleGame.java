@@ -30,7 +30,7 @@ public class CradleGame extends BaseGame
         GameRes.Wood=prefs.getInteger("Wood", 100);;
         GameRes.Gold=prefs.getInteger("Gold", 50);;
         gameMapLevel = prefs.getInteger("gameMapLevel", 1);
-        gameMapLevel=3;
+        //gameMapLevel=3;// for test purpose
         menuScreen = new MenuScreen(this);
         screenGamePlay = new ScreenGamePlay(this);
         gameMapScreen = new GameMapScreen(this);

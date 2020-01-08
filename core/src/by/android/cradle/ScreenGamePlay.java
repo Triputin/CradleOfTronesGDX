@@ -29,6 +29,7 @@ public class ScreenGamePlay extends BaseScreen {
 
 
     // Game constant params
+    private int LevelDuration = 120; // Time of every level (HourGlass)
     private int cellSize;
     private final int CellCount = 7;
     private GameField gameField;
@@ -101,7 +102,7 @@ public class ScreenGamePlay extends BaseScreen {
         float x = gameFieldX+cellSize*CellCount+10;
         float y = gameFieldY+gameFieldWidth*0.15f;
         int sw = (int)(Gdx.graphics.getWidth()-x);
-        sandGlass = new SandGlass(x,y,uiStage,sw, Math.round( gameFieldWidth*0.7f), 50);
+        sandGlass = new SandGlass(x,y,uiStage,sw, Math.round( gameFieldWidth*0.7f), LevelDuration);
         //Game level
         gameLevel = 1 ;
         gameLevelLabel = new Label(" "+0, BaseGame.labelStyle);
@@ -247,7 +248,20 @@ public class ScreenGamePlay extends BaseScreen {
                             lastSelectedItem =(Bread) CoinActor;
                         }
                     }
-
+                    //Jem01
+                    for (by.android.cradle.BaseActor CoinActor : by.android.cradle.BaseActor.getList(mainStage, "by.android.cradle.Jem01")){
+                        if(CoinActor.getBoundaryPolygon().contains(x+gameFieldX,y+gameFieldY)){
+                            if(((Jem01)CoinActor).isLocked()){
+                                return true;
+                            }
+                            if (lastSelectedItem==null){
+                                lastSelectedItem =(Jem01) CoinActor;
+                                firstSelectedItem= lastSelectedItem;
+                            }
+                            ((Jem01)CoinActor).setSelected(true, lastSelectedItem);
+                            lastSelectedItem =(Jem01) CoinActor;
+                        }
+                    }
                 }
 
                 return true;
@@ -582,14 +596,18 @@ public class ScreenGamePlay extends BaseScreen {
             item = new Coin2(gameFieldX - cellSize, gameFieldY -cellSize, cellSize, cellSize, mainStage, row, col);
         }else {
             //lower coins with rising of level
-            if (Math.random()<(0.3-levelnumber/100)) {
+            if (Math.random()<(0.15-levelnumber/200)) {
                 item = new Coin(gameFieldX - cellSize, gameFieldY - cellSize, cellSize, cellSize, mainStage, row, col);
             }
             else{
-                if(Math.random()<0.75){
+                if(Math.random()<0.3){
                     item = new Wood(gameFieldX - cellSize, gameFieldY - cellSize, cellSize, cellSize, mainStage, row, col);
                 }else{
-                    item = new Bread(gameFieldX - cellSize, gameFieldY - cellSize, cellSize, cellSize, mainStage, row, col);
+                    if (Math.random()<0.9-levelnumber/100) {
+                        item = new Bread(gameFieldX - cellSize, gameFieldY - cellSize, cellSize, cellSize, mainStage, row, col);
+                    }else{
+                        item= new Jem01(gameFieldX + col * cellSize, gameFieldY + row * cellSize, cellSize, cellSize, mainStage, row, col);
+                    }
                 }
 
             }
@@ -603,13 +621,16 @@ public class ScreenGamePlay extends BaseScreen {
             item = new Coin2(gameFieldX + col * cellSize, gameFieldY + row * cellSize, cellSize, cellSize, mainStage, row, col);
         }else {
             //lower coins with rising of level
-            if (Math.random()<(0.3-levelnumber/100)) {
+            if (Math.random()<(0.15-levelnumber/200)) {
                 item= new Coin(gameFieldX + col * cellSize, gameFieldY + row * cellSize, cellSize, cellSize, mainStage, row, col);
             }else{
-                if (Math.random()<0.75) {
+                if (Math.random()<0.3) {
                     item= new Bread(gameFieldX + col * cellSize, gameFieldY + row * cellSize, cellSize, cellSize, mainStage, row, col);
                 }else{
-                    item= new Wood(gameFieldX + col * cellSize, gameFieldY + row * cellSize, cellSize, cellSize, mainStage, row, col);
+                    if (Math.random()<0.9-levelnumber/100) {item= new Wood(gameFieldX + col * cellSize, gameFieldY + row * cellSize, cellSize, cellSize, mainStage, row, col);
+                    }else{
+                        item= new Jem01(gameFieldX + col * cellSize, gameFieldY + row * cellSize, cellSize, cellSize, mainStage, row, col);
+                    }
                 }
             }
 
@@ -746,13 +767,12 @@ public class ScreenGamePlay extends BaseScreen {
     public void StartNewLevel(){
         gameField.GenerateLevel(gameLevel,CellCount);
         GenerateLevel(gameLevel);
-        //sandGlass.Restart(180);
         sandGlass.remove();
         //SandGlass recreation for restarting of animation
         float x = gameFieldX+cellSize*CellCount+10;
         float y = gameFieldY+100;
         int sw = (int)(Gdx.graphics.getWidth()-x);
-        sandGlass = new SandGlass(x,y,uiStage,sw,sw*2, 60);
+        sandGlass = new SandGlass(x,y,uiStage,sw,sw*2, LevelDuration);
         isPaused=false;
     }
 
