@@ -7,10 +7,11 @@ import by.android.cradle.BaseGame;
 
 public class CradleGame extends BaseGame
 {
-    public final int MaxGameMapLevel=2;
+    public final int MaxGameMapLevel=3;
     private MenuScreen menuScreen;
     private GameMapScreen gameMapScreen;
     private ScreenGamePlay screenGamePlay;
+    private HelpScreen helpScreen;
     private Preferences prefs;
     private IActivityRequestHandler myRequestHandler;
 
@@ -29,10 +30,11 @@ public class CradleGame extends BaseGame
         GameRes.Wood=prefs.getInteger("Wood", 100);;
         GameRes.Gold=prefs.getInteger("Gold", 50);;
         gameMapLevel = prefs.getInteger("gameMapLevel", 1);
-        //gameMapLevel=1;
+        gameMapLevel=3;
         menuScreen = new MenuScreen(this);
         screenGamePlay = new ScreenGamePlay(this);
         gameMapScreen = new GameMapScreen(this);
+        helpScreen = new HelpScreen(this);
 
         Kingdom[] kingdoms = gameMapScreen.getKingdoms();
         kingdoms[0].setProtectionState(0); // starting Kingdom for player
@@ -87,6 +89,15 @@ public class CradleGame extends BaseGame
         game.setScreen(menuScreen);
         gameMapScreen.PauseMusic();
         menuScreen.PlayMusic();
+        myRequestHandler.showAds(false);
+    }
+
+    public  void setActiveHelpScreen()
+    {
+        System.out.println("setActiveHelpScreen()");
+        game.setScreen(helpScreen);
+        menuScreen.PauseMusic();
+        helpScreen.PlayMusic();
         myRequestHandler.showAds(false);
     }
 
