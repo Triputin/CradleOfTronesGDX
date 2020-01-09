@@ -125,6 +125,8 @@ public class CradleGame extends BaseGame
             //System.out.println("setActiveGameMapScreen Put:kingdomProtectionState"+i);
         }
         prefs.flush();
+        //For Debug
+        //screenGamePlay.printNumberOfActors();
 
     }
 

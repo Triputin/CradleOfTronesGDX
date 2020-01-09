@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
@@ -592,50 +593,71 @@ public class ScreenGamePlay extends BaseScreen {
 
     private Item CreateNewItem (int levelnumber,int row,int col){
         Item item;
-        if (Math.random()<0.25){
-            item = new Coin2(gameFieldX - cellSize, gameFieldY -cellSize, cellSize, cellSize, mainStage, row, col);
-        }else {
-            //lower coins with rising of level
-            if (Math.random()<(0.15-levelnumber/200)) {
-                item = new Coin(gameFieldX - cellSize, gameFieldY - cellSize, cellSize, cellSize, mainStage, row, col);
-            }
-            else{
-                if(Math.random()<0.3){
-                    item = new Wood(gameFieldX - cellSize, gameFieldY - cellSize, cellSize, cellSize, mainStage, row, col);
-                }else{
-                    if (Math.random()<0.9-levelnumber/100) {
-                        item = new Bread(gameFieldX - cellSize, gameFieldY - cellSize, cellSize, cellSize, mainStage, row, col);
-                    }else{
-                        item= new Jem01(gameFieldX + col * cellSize, gameFieldY + row * cellSize, cellSize, cellSize, mainStage, row, col);
-                    }
-                }
+        float x = gameFieldX - cellSize;
+        float y = gameFieldY - cellSize;
 
-            }
-        }
+        item = getRandomItem(x,y,row,col,levelnumber);
         return item;
     }
 
     private Item CreateNewItemToFill(int levelnumber, int row,int col){
         Item item ;
+        float x = gameFieldX + col * cellSize;
+        float y = gameFieldY + row * cellSize;
+
+        item = getRandomItem(x,y,row,col,levelnumber);
+        return item;
+    }
+
+    public Item getRandomItem(float x, float y, int row,int col, int levelnumber){
+        Item item;
+        double rnd = Math.random();
+
+        if (rnd<0.25){
+            return new Coin2(x, y, cellSize, cellSize, mainStage, row, col);
+        }
+        if ((rnd>=0.25) && (rnd<0.5)){
+            return new Wood(x, y, cellSize, cellSize, mainStage, row, col);
+        }
+        if ((rnd>=0.5) && (rnd<0.75)){
+            return new Bread(x, y, cellSize, cellSize, mainStage, row, col);
+        }
+
+        int lvl = levelnumber;
+        if (lvl>100){lvl=100;}
+
+        rnd = Math.random();
+
+        if ((rnd-lvl/200)>0.5){
+            return new Coin(x, y, cellSize, cellSize, mainStage, row, col);
+        }
+
+        return new Jem01(x, y, cellSize, cellSize, mainStage, row, col);
+
+
+        /*
         if (Math.random()<0.25){
-            item = new Coin2(gameFieldX + col * cellSize, gameFieldY + row * cellSize, cellSize, cellSize, mainStage, row, col);
+            item = new Coin2(x, y, cellSize, cellSize, mainStage, row, col);
         }else {
             //lower coins with rising of level
             if (Math.random()<(0.15-levelnumber/200)) {
-                item= new Coin(gameFieldX + col * cellSize, gameFieldY + row * cellSize, cellSize, cellSize, mainStage, row, col);
-            }else{
-                if (Math.random()<0.3) {
-                    item= new Bread(gameFieldX + col * cellSize, gameFieldY + row * cellSize, cellSize, cellSize, mainStage, row, col);
+                item = new Coin(x, y, cellSize, cellSize, mainStage, row, col);
+            }
+            else{
+                if(Math.random()<0.3){
+                    item = new Wood(x, y, cellSize, cellSize, mainStage, row, col);
                 }else{
-                    if (Math.random()<0.9-levelnumber/100) {item= new Wood(gameFieldX + col * cellSize, gameFieldY + row * cellSize, cellSize, cellSize, mainStage, row, col);
+                    if (Math.random()<0.9-levelnumber/100) {
+                        item = new Bread(x, y, cellSize, cellSize, mainStage, row, col);
                     }else{
-                        item= new Jem01(gameFieldX + col * cellSize, gameFieldY + row * cellSize, cellSize, cellSize, mainStage, row, col);
+                        item = new Jem01(x, y, cellSize, cellSize, mainStage, row, col);
                     }
                 }
-            }
 
+            }
         }
-        return item;
+        */
+
     }
 
     private void RestartLevel() {
@@ -887,7 +909,28 @@ public class ScreenGamePlay extends BaseScreen {
         this.gameLevelLabel.setText(""+gameLevel);
     }
 
+    //For Debug purposes
+    public void printNumberOfActors()
+    {
+        ArrayList<Actor> list = new ArrayList<Actor>();
+        Stage stage= mainStage;
 
+        for (Actor a : stage.getActors())
+        {
+                list.add( a );
+        }
+        System.out.println("MainStage: Actors="+list.size());
+
+        list = new ArrayList<Actor>();
+        stage= uiStage;
+
+        for (Actor a : stage.getActors())
+        {
+            list.add( a );
+        }
+        System.out.println("uiStage: Actors="+list.size());
+
+    }
 
 
 }
