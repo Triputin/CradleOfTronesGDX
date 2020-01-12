@@ -83,6 +83,7 @@ public class MenuScreen extends BaseScreen {
             }
         });
 
+
         TextButton helpButton = new TextButton( "   Help   ", BaseGame.textButtonStyle );
         // startButton.setPosition(150,150);
         // uiStage.addActor(startButton);

@@ -207,12 +207,12 @@ public void resetProtectionState(int gameMapLevel) {
             break;
         case Kingdom_of_the_Mountain_and_the_Vale:
             kingdomRes.Bread = 10 * gameMapLevel;
-            kingdomRes.Gold = 10 * gameMapLevel;
+            kingdomRes.Gold = 25 * gameMapLevel;
             kingdomRes.Wood = 10 * gameMapLevel;
             protectionState = 7+gameMapLevel;
             break;
         case Kingdom_of_the_Reach:
-            kingdomRes.Bread = 10 * gameMapLevel;
+            kingdomRes.Bread = 25 * gameMapLevel;
             kingdomRes.Gold = 10 * gameMapLevel;
             kingdomRes.Wood = 10 * gameMapLevel;
             protectionState = 5+gameMapLevel;
@@ -220,19 +220,19 @@ public void resetProtectionState(int gameMapLevel) {
         case Kingdom_of_the_Rock:
             kingdomRes.Bread = 10 * gameMapLevel;
             kingdomRes.Gold = 10 * gameMapLevel;
-            kingdomRes.Wood = 10 * gameMapLevel;
+            kingdomRes.Wood = 25 * gameMapLevel;
             protectionState = 7+gameMapLevel;
             break;
         case Kingdom_of_the_Stormlands:
-            kingdomRes.Bread = 10 * gameMapLevel;
-            kingdomRes.Gold = 10 * gameMapLevel;
-            kingdomRes.Wood = 10 * gameMapLevel;
+            kingdomRes.Bread = 20 * gameMapLevel;
+            kingdomRes.Gold = 20 * gameMapLevel;
+            kingdomRes.Wood = 20 * gameMapLevel;
             protectionState = 7+gameMapLevel;
             break;
         case Principality_of_Dorne:
-            kingdomRes.Bread = 10 * gameMapLevel;
-            kingdomRes.Gold = 10 * gameMapLevel;
-            kingdomRes.Wood = 10 * gameMapLevel;
+            kingdomRes.Bread = 5 * gameMapLevel;
+            kingdomRes.Gold = 5 * gameMapLevel;
+            kingdomRes.Wood = 5 * gameMapLevel;
             protectionState = 5+gameMapLevel;
             break;
 

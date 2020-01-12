@@ -22,20 +22,28 @@ public class GameCell extends BaseActor {
 
     public void setLockLevel(int lockLevel) {
         this.lockLevel = lockLevel;
-        if(lockLevel>0) {
-
-
-            loadTexture("gamecellock01.png", (int) getWidth(), (int) getHeight());
-        }else {
+        if(lockLevel == 0) {
             loadTexture("gamecell.png", (int) getWidth(), (int) getHeight());
+
+        }else {
+            if (lockLevel == 1){
+                loadTexture("gamecellock01.png", (int) getWidth(), (int) getHeight());
+            } else {
+                loadTexture("gamecellock02.png", (int) getWidth(), (int) getHeight());
+            }
+
         }
     }
 
-    public void changeLockLevel(int lockLevel){
-        this.lockLevel-= lockLevel;
+    public void lowerLockLevel(){
+        this.lockLevel--;
         if(this.lockLevel<0){
             this.lockLevel =0;
+        } else
+        {
+            setLockLevel(this.lockLevel);
         }
+
     }
 
     public Cell getCell() {
@@ -44,8 +52,8 @@ public class GameCell extends BaseActor {
 
     public void unLock(Cell cell){
         if(cell.isEqual(this.cell)){
-            this.lockLevel =0;
-            loadTexture("gamecell.png", (int) getWidth(), (int) getHeight());
+            this.lowerLockLevel();
+            //loadTexture("gamecell.png", (int) getWidth(), (int) getHeight());
         }
 
     }

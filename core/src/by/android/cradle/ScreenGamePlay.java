@@ -30,7 +30,7 @@ public class ScreenGamePlay extends BaseScreen {
 
 
     // Game constant params
-    private int LevelDuration = 120; // Time of every level (HourGlass)
+    private int LevelDuration = 60; // Time of every level (HourGlass)
     private int cellSize;
     private final int CellCount = 7;
     private GameField gameField;
@@ -52,7 +52,7 @@ public class ScreenGamePlay extends BaseScreen {
     private AttackType attackType;
     private KingdomRes kingdomRes; //res to win
     private Kingdom attackedKingdom;
-
+    private BaseActor hall;
 
 
     public ScreenGamePlay(CradleGame cradleGame) {
@@ -77,10 +77,19 @@ public class ScreenGamePlay extends BaseScreen {
         int h = Gdx.graphics.getHeight();
 
 
-        BaseActor hall = new BaseActor(0,0, mainStage, Touchable.disabled);
+        hall = new BaseActor(0,0, mainStage, Touchable.disabled);
         //hall.loadTexture( "hall01.png",w,h );
+        if(cradleGame.getGameMapLevel()==1){
+        hall.loadTexture( "game_of_thrones_locations4.jpg",w,h );}
+        else{
+            if(cradleGame.getGameMapLevel()==2) {
+                hall.loadTexture("castle/castlelevel02.png", w, h);
+            }else {
+                hall.loadTexture("castle/castlelevel03.png", w, h);
+            }
+        }
 
-        hall.loadTexture( "game_of_thrones_locations4.jpg",w,h );
+
         h=h-70; //place for top menu items
         if (w<h) {
             h=w;
@@ -91,7 +100,7 @@ public class ScreenGamePlay extends BaseScreen {
         gameFieldX=(Gdx.graphics.getWidth()-w)/2;
         gameFieldY=0;
         int gameFieldWidth = cellSize*CellCount;
-        gameField = new GameField(gameFieldX,gameFieldY,mainStage,gameFieldWidth,gameFieldWidth,CellCount,1);
+        gameField = new GameField(gameFieldX,gameFieldY,mainStage,gameFieldWidth,gameFieldWidth,CellCount,1,cradleGame);
 
         BaseActor baseResultsActor = new BaseActor(gameFieldX,h,uiStage,Touchable.disabled);
         baseResultsActor.setWidth(cellSize*CellCount);
@@ -103,14 +112,20 @@ public class ScreenGamePlay extends BaseScreen {
         float x = gameFieldX+cellSize*CellCount+10;
         float y = gameFieldY+gameFieldWidth*0.15f;
         int sw = (int)(Gdx.graphics.getWidth()-x);
-        sandGlass = new SandGlass(x,y,uiStage,sw, Math.round( gameFieldWidth*0.7f), LevelDuration);
+        int sandglassduration = 60;
+        if (gameLevel>60) {
+            sandglassduration = LevelDuration + gameLevel - 30;
+            if (sandglassduration > 250) sandglassduration = 250;
+        }
+
+        sandGlass = new SandGlass(x,y,uiStage,sw, Math.round( gameFieldWidth*0.7f), sandglassduration);
         //Game level
         gameLevel = 1 ;
         gameLevelLabel = new Label(" "+0, BaseGame.labelStyle);
         gameLevelLabel.setText(""+gameLevel);
         gameLevelLabel.setColor( Color.GOLDENROD );
         gameLevelLabel.setPosition( x+sandGlass.getWidth()/2-10,y );
-        gameLevelLabel.setFontScale(0.5f);
+        gameLevelLabel.setFontScale(1.5f);
         uiStage.addActor(gameLevelLabel);
 
 
@@ -366,6 +381,9 @@ public class ScreenGamePlay extends BaseScreen {
         isPaused = paused;
     }
 
+    public BaseActor getHall() {
+        return hall;
+    }
 
 
     public void SelectSolution(ArrayList<ArrayList<Item>> arrayLists){
@@ -623,12 +641,12 @@ public class ScreenGamePlay extends BaseScreen {
             return new Bread(x, y, cellSize, cellSize, mainStage, row, col);
         }
 
-        int lvl = levelnumber;
+        float lvl = levelnumber;
         if (lvl>100){lvl=100;}
 
         rnd = Math.random();
 
-        if ((rnd-lvl/200)>0.5){
+        if ((rnd-lvl/200)>0.3){
             return new Coin(x, y, cellSize, cellSize, mainStage, row, col);
         }
 
@@ -709,6 +727,9 @@ public class ScreenGamePlay extends BaseScreen {
                 }
 
 
+        float lvl = levelnumber;
+        if (lvl>80){lvl=80;}
+
         Item item;
         for(int i = 0;i<CellCount;i++){
             for(int j = 0;j<CellCount;j++){
@@ -718,8 +739,8 @@ public class ScreenGamePlay extends BaseScreen {
                 item.addAction(Actions.moveTo(gameFieldX + j * cellSize, gameFieldY + i * cellSize,1));
                 //item.addAction(Actions.scaleTo(1,1,5));
 
-                if(Math.random()>(0.9-levelnumber/100)){
-                    if (Math.random()>(0.5-levelnumber/100)) {item.setLockLevel(2);}
+                if(Math.random()>(1.0-lvl/320)){
+                    if (Math.random()>(0.5-lvl/200)) {item.setLockLevel(2);}
                     else {item.setLockLevel(1);
                     }
                 }
@@ -794,7 +815,12 @@ public class ScreenGamePlay extends BaseScreen {
         float x = gameFieldX+cellSize*CellCount+10;
         float y = gameFieldY+100;
         int sw = (int)(Gdx.graphics.getWidth()-x);
-        sandGlass = new SandGlass(x,y,uiStage,sw,sw*2, LevelDuration);
+        int sandglassduration = 60;
+        if (gameLevel>60) {
+            sandglassduration = LevelDuration + gameLevel - 30;
+            if (sandglassduration > 250) sandglassduration = 250;
+        }
+        sandGlass = new SandGlass(x,y,uiStage,sw,sw*2, sandglassduration);
         isPaused=false;
     }
 

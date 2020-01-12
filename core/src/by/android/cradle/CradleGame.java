@@ -44,6 +44,7 @@ public class CradleGame extends BaseGame
         }
 
         int gameLevel = prefs.getInteger("gameLevel", 1);
+        //gameLevel = 120; // for debug purpose
         screenGamePlay.setGameLevel(gameLevel);
 
         setActiveScreen( menuScreen );
@@ -143,8 +144,11 @@ public class CradleGame extends BaseGame
     }
 
     public void restartGame(){
-
+        // Get screen size
+        int w = Gdx.graphics.getWidth();
+        int h = Gdx.graphics.getHeight();
         screenGamePlay.setGameLevel(1);
+        screenGamePlay.getHall().loadTexture("game_of_thrones_locations4.jpg",w,h);
         prefs.putInteger("gameLevel", screenGamePlay.getGameLevel());
 
         gameMapLevel = 1;
@@ -184,6 +188,9 @@ public class CradleGame extends BaseGame
     }
 
     public void setGameMapLevel(int gameMapLevel) {
+        // Get screen size
+        int w = Gdx.graphics.getWidth();
+        int h = Gdx.graphics.getHeight();
         this.gameMapLevel = gameMapLevel;
         prefs.putInteger("gameMapLevel", gameMapLevel);
         Kingdom[] kingdoms = gameMapScreen.getKingdoms();
@@ -193,6 +200,16 @@ public class CradleGame extends BaseGame
             prefs.putInteger("kingdomProtectionState"+i, kingdoms[i].getProtectionState());
         }
         prefs.flush();
+
+        if(gameMapLevel==1){
+            screenGamePlay.getHall().loadTexture( "game_of_thrones_locations4.jpg",w,h );}
+        else{
+            if(gameMapLevel==2) {
+                screenGamePlay.getHall().loadTexture("castle/castlelevel02.png", w, h);
+            }else {
+                screenGamePlay.getHall().loadTexture("castle/castlelevel03.png", w, h);
+            }
+        }
 
     }
 }

@@ -13,10 +13,12 @@ import java.util.ArrayList;
 
 public class GameField extends BaseActor {
     private ArrayList<GameCell> gameCells ;
+    protected CradleGame cradleGame;
 
-    public GameField(float x, float y, Stage s,float width,float height,int cellsCount, int gameLevel)
+    public GameField(float x, float y, Stage s,float width,float height,int cellsCount, int gameLevel,CradleGame cradleGame)
     {
         super(x,y,s,Touchable.enabled);
+        this.cradleGame = cradleGame;
         gameCells = new ArrayList<>();
         int cellSizeX = (int)width/cellsCount;
         int cellSizeY = (int)height/cellsCount;
@@ -222,21 +224,50 @@ public void changeGameCell(Cell cell){
     for(int i = 0;i<gameCells.size();i++){
         if(gameCells.get(i).getCell().isEqual(cell)){
             gameCells.get(i).unLock(cell);
-
         }
     }
 }
 
     public void GenerateLevel(int levelnumber,  int CellCount) {
         //Generate cells
-        for (int i = 0; i < CellCount; i++) {
-            for (int j = 0; j < CellCount; j++) {
-                if (Math.random() < 0.5 && (j > CellCount / 4) && (j < CellCount / 1.5) && (i > CellCount / 4) && (i < CellCount / 1.5)) {
-                    gameCells.get(i*CellCount + j).setLockLevel(1);
-                }
 
+        int  gmplvl = cradleGame.getGameMapLevel();
+
+            for (int i = 0; i < CellCount; i++) {
+                for (int j = 0; j < CellCount; j++) {
+
+                    switch (gmplvl){
+                        case 1:
+                            if (Math.random() < 0.5 && (j > CellCount / 4) && (j < CellCount / 1.5) && (i > CellCount / 4) && (i < CellCount / 1.5)) {
+                                gameCells.get(i * CellCount + j).setLockLevel(1);
+                            }
+                            break;
+                        case 2:
+                            if (Math.random() < 0.1) {
+                                if (Math.random() < 0.7){
+                                gameCells.get(i * CellCount + j).setLockLevel(1);
+                                } else {
+                                    gameCells.get(i * CellCount + j).setLockLevel(2);
+                                }
+
+                            }
+                            break;
+
+                            default:
+                                if (Math.random() < 0.3) {
+                                    if (Math.random() < 0.5){
+                                        gameCells.get(i * CellCount + j).setLockLevel(1);
+                                    } else {
+                                        gameCells.get(i * CellCount + j).setLockLevel(2);
+                                    }
+
+                                }
+                    }
+
+
+                }
             }
-        }
+
     }
 
     public  boolean CheckWin(){
