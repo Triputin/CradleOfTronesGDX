@@ -31,6 +31,7 @@ public class GameMapScreen extends BaseScreen {
     private Label messageLabel;
     private BaseActor worldMap;
     private TextButton continueButton;
+    private TextButton shopButton;
     private boolean isUpdateMapNeeded;
 
     public GameMapScreen(CradleGame cradleGame) {
@@ -98,6 +99,24 @@ public class GameMapScreen extends BaseScreen {
             }
         });
 
+
+        //Shop Button
+        shopButton = new TextButton( "Exchange", BaseGame.textButtonStyle );
+        shopButton.setPosition(w*0.00f,h*0.03f);
+        uiStage.addActor(shopButton);
+
+        shopButton.addListener(new InputListener() {
+            public boolean touchDown (InputEvent e, float x, float y, int pointer, int button){
+                if (!(e instanceof InputEvent))
+                    return false;
+
+                if (!((InputEvent) e).getType().equals(InputEvent.Type.touchDown))
+                    return false;
+                instrumental.pause();
+                cradleGame.setActiveShopScreen();
+                return true;
+            }
+        });
         // uiTable.add(title).colspan(2);
         // uiTable.row();
         // uiTable.add(backButton);
@@ -124,6 +143,9 @@ public class GameMapScreen extends BaseScreen {
 
         if (continueButton!=null){
             continueButton.remove();
+        }
+        if (shopButton!=null){
+            shopButton.remove();
         }
 
         kingdoms = new Kingdom[7];

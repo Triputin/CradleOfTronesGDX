@@ -244,11 +244,8 @@ public void changeGameCell(Cell cell){
                             break;
                         case 2:
                             if (Math.random() < 0.1) {
-                                if (Math.random() < 0.7){
+
                                 gameCells.get(i * CellCount + j).setLockLevel(1);
-                                } else {
-                                    gameCells.get(i * CellCount + j).setLockLevel(2);
-                                }
 
                             }
                             break;

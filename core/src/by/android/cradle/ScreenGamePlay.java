@@ -113,8 +113,8 @@ public class ScreenGamePlay extends BaseScreen {
         float y = gameFieldY+gameFieldWidth*0.15f;
         int sw = (int)(Gdx.graphics.getWidth()-x);
         int sandglassduration = 60;
-        if (gameLevel>60) {
-            sandglassduration = LevelDuration + gameLevel - 30;
+        if (gameLevel>20) {
+            sandglassduration = LevelDuration + gameLevel - 20;
             if (sandglassduration > 250) sandglassduration = 250;
         }
 
@@ -816,8 +816,8 @@ public class ScreenGamePlay extends BaseScreen {
         float y = gameFieldY+100;
         int sw = (int)(Gdx.graphics.getWidth()-x);
         int sandglassduration = 60;
-        if (gameLevel>60) {
-            sandglassduration = LevelDuration + gameLevel - 30;
+        if (gameLevel>20) {
+            sandglassduration = LevelDuration + gameLevel - 20;
             if (sandglassduration > 250) sandglassduration = 250;
         }
         sandGlass = new SandGlass(x,y,uiStage,sw,sw*2, sandglassduration);

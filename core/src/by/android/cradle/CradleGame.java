@@ -12,6 +12,7 @@ public class CradleGame extends BaseGame
     private GameMapScreen gameMapScreen;
     private ScreenGamePlay screenGamePlay;
     private HelpScreen helpScreen;
+    private ShopScreen shopScreen;
     private Preferences prefs;
     private IActivityRequestHandler myRequestHandler;
 
@@ -35,6 +36,7 @@ public class CradleGame extends BaseGame
         screenGamePlay = new ScreenGamePlay(this);
         gameMapScreen = new GameMapScreen(this);
         helpScreen = new HelpScreen(this);
+        shopScreen = new ShopScreen(this);
 
         Kingdom[] kingdoms = gameMapScreen.getKingdoms();
         kingdoms[0].setProtectionState(0); // starting Kingdom for player
@@ -99,6 +101,14 @@ public class CradleGame extends BaseGame
         game.setScreen(helpScreen);
         menuScreen.PauseMusic();
         helpScreen.PlayMusic();
+        myRequestHandler.showAds(false);
+    }
+
+    public  void setActiveShopScreen()
+    {
+        System.out.println("setActiveShopScreen()");
+        game.setScreen(shopScreen);
+        gameMapScreen.PauseMusic();
         myRequestHandler.showAds(false);
     }
 
