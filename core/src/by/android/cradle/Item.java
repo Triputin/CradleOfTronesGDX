@@ -1,6 +1,7 @@
 package by.android.cradle;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -8,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
 public class Item extends BaseActor {
@@ -22,6 +24,8 @@ public class Item extends BaseActor {
     private int lockLevel=0;
     private Actor lockImage01;
     private Actor lockImage02;
+    private int qtty; //field for shop
+    private Label labelqtty;
 
 
     public Item(float x, float y, int width, int height, Stage s, Touchable touchable, int row, int col)
@@ -33,6 +37,16 @@ public class Item extends BaseActor {
         setWidth(width);
         selectedDirection = SelDirection.None;
         selectedFirst=false;
+
+
+        labelqtty = new Label("", BaseGame.labelStyle);
+        //labelqtty.setText(""+qtty);
+        labelqtty.setColor( Color.GOLDENROD );
+        labelqtty.setPosition( 5,5);
+        labelqtty.setFontScale(1.0f);
+        this.addActor(labelqtty);
+
+
     }
 
     public Cell getCell() {
@@ -332,4 +346,16 @@ public boolean isLocked(){
             setLockLevel(lockLevel-1);
         }
     }
+
+
+    public int getQtty() {
+        return qtty;
+    }
+
+    public void setQtty(int qtty) {
+        this.qtty = qtty;
+        labelqtty.setText(""+qtty);
+    }
+
+
 }

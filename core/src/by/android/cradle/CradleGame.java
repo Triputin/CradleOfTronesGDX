@@ -46,7 +46,7 @@ public class CradleGame extends BaseGame
         }
 
         int gameLevel = prefs.getInteger("gameLevel", 1);
-        //gameLevel = 120; // for debug purpose
+        //gameLevel = 80; // for debug purpose
         screenGamePlay.setGameLevel(gameLevel);
 
         setActiveScreen( menuScreen );

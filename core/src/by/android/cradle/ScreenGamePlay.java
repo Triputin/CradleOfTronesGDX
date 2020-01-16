@@ -114,8 +114,8 @@ public class ScreenGamePlay extends BaseScreen {
         int sw = (int)(Gdx.graphics.getWidth()-x);
         int sandglassduration = 60;
         if (gameLevel>20) {
-            sandglassduration = LevelDuration + gameLevel - 20;
-            if (sandglassduration > 250) sandglassduration = 250;
+            sandglassduration = LevelDuration + gameLevel*2 - 20;
+            if (sandglassduration > 400) sandglassduration = 400;
         }
 
         sandGlass = new SandGlass(x,y,uiStage,sw, Math.round( gameFieldWidth*0.7f), sandglassduration);
@@ -739,8 +739,8 @@ public class ScreenGamePlay extends BaseScreen {
                 item.addAction(Actions.moveTo(gameFieldX + j * cellSize, gameFieldY + i * cellSize,1));
                 //item.addAction(Actions.scaleTo(1,1,5));
 
-                if(Math.random()>(1.0-lvl/320)){
-                    if (Math.random()>(0.5-lvl/200)) {item.setLockLevel(2);}
+                if(Math.random()>(1.0-lvl/500)){
+                    if (Math.random()>(0.5-lvl/300)) {item.setLockLevel(2);}
                     else {item.setLockLevel(1);
                     }
                 }
@@ -808,6 +808,9 @@ public class ScreenGamePlay extends BaseScreen {
     }
 
     public void StartNewLevel(){
+
+        int w = Gdx.graphics.getWidth();
+        int h = Gdx.graphics.getHeight();
         gameField.GenerateLevel(gameLevel,CellCount);
         GenerateLevel(gameLevel);
         sandGlass.remove();
@@ -817,11 +820,16 @@ public class ScreenGamePlay extends BaseScreen {
         int sw = (int)(Gdx.graphics.getWidth()-x);
         int sandglassduration = 60;
         if (gameLevel>20) {
-            sandglassduration = LevelDuration + gameLevel - 20;
-            if (sandglassduration > 250) sandglassduration = 250;
+            sandglassduration = LevelDuration + gameLevel*2 - 20;
+            if (sandglassduration > 400) sandglassduration = 400;
         }
+
         sandGlass = new SandGlass(x,y,uiStage,sw,sw*2, sandglassduration);
         isPaused=false;
+
+        TimeBomb timeBomb = new TimeBomb(10,h*0.7f,h/6,h/6,uiStage,Touchable.enabled);
+
+
     }
 
     public void LoseLevel(){
