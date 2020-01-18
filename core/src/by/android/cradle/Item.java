@@ -12,7 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
-public class Item extends BaseActor {
+public class Item extends DropTargetActor {
 
     private boolean selected;
     private boolean selectedFirst; // indicates that item was the first selected
@@ -30,7 +30,7 @@ public class Item extends BaseActor {
 
     public Item(float x, float y, int width, int height, Stage s, Touchable touchable, int row, int col)
     {
-        super(x,y,s, touchable);
+        super(x,y,s);
         cell = new Cell(row,col);
         this.selected = false;
         setHeight(height);

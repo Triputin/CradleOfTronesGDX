@@ -827,7 +827,7 @@ public class ScreenGamePlay extends BaseScreen {
         sandGlass = new SandGlass(x,y,uiStage,sw,sw*2, sandglassduration);
         isPaused=false;
 
-        TimeBomb timeBomb = new TimeBomb(10,h*0.7f,h/6,h/6,uiStage,Touchable.enabled);
+       TimeBomb timeBomb = new TimeBomb(10,h*0.7f,h/6,h/6,uiStage,Touchable.enabled);
 
 
     }

@@ -8,7 +8,7 @@ public class DropTargetActor extends BaseActor
     private boolean targetable;
     public DropTargetActor(float x, float y, Stage s)
     {
-        super(x,y,s, Touchable.enabled);
+        super(x,y,s, Touchable.disabled);
         targetable = true;
     }
 
