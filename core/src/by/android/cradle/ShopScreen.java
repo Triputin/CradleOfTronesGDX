@@ -23,10 +23,15 @@ public class ShopScreen extends BaseScreen {
 
 private final int RowColCount=4;
 private int padding=5;
-private final int exchangeRate=2;
+private int exchangeRate=2;
 private ArrayList<Item> leftArray;
 private ArrayList<Item> rightArray;
 
+private ArrayList<ShopItem> leftArraySh;
+private ArrayList<ShopItem> rightArraySh;
+
+private ShopItem leftSelectedItem=null;
+private ShopItem rightSelectedItem=null;
 
     public ShopScreen(CradleGame cradleGame) {
 
@@ -43,7 +48,7 @@ private ArrayList<Item> rightArray;
         }else{
             wh=w;
         }
-
+        exchangeRate=1;
         //Tiled texture
         Texture texture = new Texture(Gdx.files.internal("fon/tiled01.png"), true);
         texture.setWrap(Texture.TextureWrap.MirroredRepeat, Texture.TextureWrap.MirroredRepeat);
@@ -163,74 +168,61 @@ private ArrayList<Item> rightArray;
 
         uiStage.addActor(sellButton);
 
-        //ShopItem sp = new ShopItem(0,0, uiStage,new Coin2(leftSqX, leftSqY, itemSize, itemSize, uiStage, 0, 0),30 );
-        leftArray = new ArrayList<>();
-        Item item = new Coin2(leftSqX, leftSqY, itemSize, itemSize, uiStage, 0, 0);
-        item.setQtty(GameRes.Gold);
-        item.setSelected(true,null);
-        slider.setRange(0,(float)Math.floor((item.getQtty()*1.0f/exchangeRate))*exchangeRate);
-        leftArray.add(item);
-        item = new Wood(leftSqX+itemSize+padding, leftSqY, itemSize, itemSize, uiStage, 0, 1);
-        item.setQtty(GameRes.Wood);
-        leftArray.add(item);
-        item = new Bread(leftSqX+itemSize+padding+itemSize+padding, leftSqY, itemSize, itemSize, uiStage, 0, 2);
-        item.setQtty(GameRes.Bread);
-        leftArray.add(item);
+        leftArraySh = new ArrayList<>();
+        ShopItem shopItem = new ShopItem(leftSqX, leftSqY, itemSize, Math.round(itemSize*1.2f), uiStage, GameRes.Gold,"coin2.png", "coin2pressed.png","Coin2",2);
+        shopItem.setShowQtty(true);
+        leftArraySh.add(shopItem);
+        shopItem = new ShopItem(leftSqX+itemSize+padding, leftSqY, itemSize, Math.round(itemSize*1.2f), uiStage, GameRes.Wood,"wood.png", "woodpressed.png","Wood",2);
+        shopItem.setShowQtty(true);
+        leftArraySh.add(shopItem);
+        shopItem = new ShopItem(leftSqX+itemSize+padding+itemSize+padding, leftSqY, itemSize, Math.round(itemSize*1.2f), uiStage, GameRes.Bread,"bread.png", "breadpressed.png","Bread",2);
+        shopItem.setShowQtty(true);
+        leftArraySh.add(shopItem);
 
-        rightArray = new ArrayList<>();
-        rightArray.add(new Coin2(rightSqX, leftSqY, itemSize, itemSize, mainStage, 0, 0));
-        item = new Wood(rightSqX+itemSize+padding, leftSqY, itemSize, itemSize, mainStage, 0, 1);
-        rightArray.add(item);
-        item.setSelected(true,null);
-        rightArray.add(new Bread(rightSqX+itemSize+padding+itemSize+padding, leftSqY, itemSize, itemSize, mainStage, 0, 2));
+
+        rightArraySh = new ArrayList<>();
+        shopItem = new ShopItem(rightSqX, leftSqY, itemSize, Math.round(itemSize*1.2f), mainStage, 0,"coin2.png", "coin2pressed.png","Coin2",2);
+        rightArraySh.add(shopItem);
+        shopItem = new ShopItem(rightSqX+itemSize+padding, leftSqY, itemSize, Math.round(itemSize*1.2f), mainStage, 0,"wood.png", "woodpressed.png","Wood",2);
+        rightArraySh.add(shopItem);
+        shopItem = new ShopItem(rightSqX+itemSize+padding+itemSize+padding, leftSqY, itemSize, Math.round(itemSize*1.2f), mainStage, 0,"bread.png", "breadpressed.png","Bread",2);
+        rightArraySh.add(shopItem);
+        shopItem = new ShopItem(rightSqX, leftSqY-itemSize+padding, itemSize, Math.round(itemSize*1.2f), mainStage, 0,"timebomb.png", "timebombpressed.png","TimeBomb",30);
+        rightArraySh.add(shopItem);
+        shopItem = new ShopItem(rightSqX+itemSize+padding, leftSqY-itemSize+padding, itemSize, Math.round(itemSize*1.2f), mainStage, 0,"squarebomb01.png", "squarebomb01pressed.png","SquareBomb1",30);
+        rightArraySh.add(shopItem);
+        shopItem = new ShopItem(rightSqX+itemSize+padding+itemSize+padding, leftSqY-itemSize+padding, itemSize, Math.round(itemSize*1.2f), mainStage, 0,"squarebomb02.png", "squarebomb02pressed.png","SquareBomb2",60);
+        rightArraySh.add(shopItem);
+
+
+
 
         uiStage.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 InputEvent ie = (InputEvent) event;
                 if (ie.getType().equals(InputEvent.Type.touchDown)) {
-
-                    //Coin2
-                    for (by.android.cradle.BaseActor CoinActor : by.android.cradle.BaseActor.getList(uiStage, "by.android.cradle.Coin2")) {
+                    //ShopItems
+                    for (by.android.cradle.BaseActor CoinActor : by.android.cradle.BaseActor.getList(uiStage, "by.android.cradle.ShopItem")) {
                         if (CoinActor.getBoundaryPolygon().contains(x, y)) {
-                            ((Coin2) CoinActor).setSelected(true, null);
-                            slider.setRange(0, (float)Math.floor(((Coin2) CoinActor).getQtty()*1.0f/exchangeRate)*exchangeRate);
+                            ShopItem shopItem1=(ShopItem) CoinActor;
+                            shopItem1.setSelected(true);
+                            leftSelectedItem=shopItem1;
+                            if ((leftSelectedItem!=null)&&(rightSelectedItem!=null)) {
+                                float rMax = (float) Math.floor(leftSelectedItem.getQtty() * 1.0f / rightSelectedItem.getItemCost()) * rightSelectedItem.getItemCost();
+                                slider.setRange(0, rMax);
+                                slider.setStepSize(rightSelectedItem.getItemCost());
+                            }
                             slider.setValue(0);
-                            for (Item a:leftArray){
+                            for (ShopItem a:leftArraySh){
                                 if(!a.equals(CoinActor)){
-                                    a.setSelected(false,null);
+                                    a.setSelected(false);
                                 }
                             }
                         }
                     }
 
-                    //Wood
-                    for (by.android.cradle.BaseActor CoinActor : by.android.cradle.BaseActor.getList(uiStage, "by.android.cradle.Wood")) {
-                        if (CoinActor.getBoundaryPolygon().contains(x, y)) {
-                            ((Wood) CoinActor).setSelected(true, null);
-                            slider.setRange(0,(float)Math.floor(((Wood) CoinActor).getQtty()*1.0f/exchangeRate)*exchangeRate);
-                            slider.setValue(0);
-                            for (Item a:leftArray){
-                                if(!a.equals(CoinActor)){
-                                    a.setSelected(false,null);
-                                }
-                            }
-                        }
-                    }
 
-                    //Bread
-                    for (by.android.cradle.BaseActor CoinActor : by.android.cradle.BaseActor.getList(uiStage, "by.android.cradle.Bread")) {
-                        if (CoinActor.getBoundaryPolygon().contains(x, y)) {
-                            ((Bread) CoinActor).setSelected(true, null);
-                            slider.setRange(0,(float)Math.floor(((Bread) CoinActor).getQtty()*1.0f/exchangeRate)*exchangeRate);
-                            slider.setValue(0);
-                            for (Item a:leftArray){
-                                if(!a.equals(CoinActor)){
-                                    a.setSelected(false,null);
-                                }
-                            }
-                        }
-                    }
 
                 }
 
@@ -247,46 +239,31 @@ private ArrayList<Item> rightArray;
                 InputEvent ie = (InputEvent) event;
                 if (ie.getType().equals(InputEvent.Type.touchDown)) {
 
-                    //Coin2
-                    for (by.android.cradle.BaseActor CoinActor : by.android.cradle.BaseActor.getList(mainStage, "by.android.cradle.Coin2")) {
+                    //ShopItems
+                    for (by.android.cradle.BaseActor CoinActor : by.android.cradle.BaseActor.getList(mainStage, "by.android.cradle.ShopItem")) {
                         if (CoinActor.getBoundaryPolygon().contains(x, y)) {
-                            ((Coin2) CoinActor).setSelected(true, null);
+                            ShopItem shopItem1=(ShopItem) CoinActor;
+                            shopItem1.setSelected(true);
+                            rightSelectedItem=shopItem1;
+                            if ((leftSelectedItem!=null)&&(rightSelectedItem!=null)) {
+                                float rMax = (float) Math.floor(leftSelectedItem.getQtty() * 1.0f / rightSelectedItem.getItemCost()) * rightSelectedItem.getItemCost();
+                                slider.setStepSize(rightSelectedItem.getItemCost());
+                                exchangeRate = (int)rightSelectedItem.getItemCost();
+                                slider.setRange(0, rMax);
+                            }
+
                             slider.setValue(0);
-                            for (Item a:rightArray){
+                            for (ShopItem a:rightArraySh){
                                 if(!a.equals(CoinActor)){
-                                    a.setSelected(false,null);
+                                    a.setSelected(false);
                                 }
                             }
                         }
                     }
 
-                    //Wood
-                    for (by.android.cradle.BaseActor CoinActor : by.android.cradle.BaseActor.getList(mainStage, "by.android.cradle.Wood")) {
-                        if (CoinActor.getBoundaryPolygon().contains(x, y)) {
-                            ((Wood) CoinActor).setSelected(true, null);
-                            slider.setValue(0);
-                            for (Item a:rightArray){
-                                if(!a.equals(CoinActor)){
-                                    a.setSelected(false,null);
-                                }
-                            }
-                        }
-                    }
-
-                    //Bread
-                    for (by.android.cradle.BaseActor CoinActor : by.android.cradle.BaseActor.getList(mainStage, "by.android.cradle.Bread")) {
-                        if (CoinActor.getBoundaryPolygon().contains(x, y)) {
-                            ((Bread) CoinActor).setSelected(true, null);
-                            slider.setValue(0);
-                            for (Item a:rightArray){
-                                if(!a.equals(CoinActor)){
-                                    a.setSelected(false,null);
-                                }
-                            }
-                        }
-                    }
 
                 }
+
 
                 return true;
             }
@@ -299,68 +276,77 @@ private ArrayList<Item> rightArray;
 
     }
 
-    private void makeExchange(int sellQtty){
-        String src="";
-        String dest="";
-        Item srcItem = leftArray.get(0);
-        Item destItem = leftArray.get(0);
-        for (Item a:leftArray){
+    private void makeExchange(int sellQtty) {
+        ShopItem srcItem = leftArraySh.get(0);
+        ShopItem destItem = leftArraySh.get(0);
+        for (ShopItem a:leftArraySh){
             if (a.isSelected()){
-                src=a.getClass().toString();
                 srcItem = a;
             }
         }
-        for (Item a:rightArray){
+        for (ShopItem a:rightArraySh){
             if (a.isSelected()){
-                dest=a.getClass().toString();
                 destItem =a;
             }
         }
-
-        for (Item a:leftArray){
-            if( a.getClass().toString().equals(destItem.getClass().toString())){
+        //find the same item in right array because its qtty should be changed
+        for (ShopItem a:leftArraySh){
+            if( a.getItemType()==destItem.getItemType()){
                 destItem=a;
             }
         }
 
-
-        switch (src){
-            case "class by.android.cradle.Coin2":
+        switch (srcItem.getItemType()){
+            case "Coin2":
                 GameRes.Gold -=sellQtty;
                 srcItem.setQtty(GameRes.Gold);
                 break;
 
-            case "class by.android.cradle.Wood":
+            case "Wood":
                 GameRes.Wood -=sellQtty;
                 srcItem.setQtty(GameRes.Wood);
                 break;
 
-            case "class by.android.cradle.Bread":
+            case "Bread":
                 GameRes.Bread -=sellQtty;
                 srcItem.setQtty(GameRes.Bread);
                 break;
         }
 
 
-        switch (dest){
-            case "class by.android.cradle.Coin2":
-                GameRes.Gold +=sellQtty/exchangeRate;
+        switch (destItem.getItemType()){
+            case "Coin2":
+                GameRes.Gold +=sellQtty/destItem.getItemCost();
                 destItem.setQtty(GameRes.Gold);
 
                 break;
 
-            case "class by.android.cradle.Wood":
-                GameRes.Wood +=sellQtty/exchangeRate;
+            case "Wood":
+                GameRes.Wood +=sellQtty/destItem.getItemCost();
                 destItem.setQtty(GameRes.Wood);
                 break;
 
-            case "class by.android.cradle.Bread":
-                GameRes.Bread +=sellQtty/exchangeRate;
+            case "Bread":
+                GameRes.Bread +=sellQtty/destItem.getItemCost();
                 destItem.setQtty(GameRes.Bread);
+                break;
+
+            case "TimeBomb":
+                GameRes.TimeBomb +=sellQtty/destItem.getItemCost();
+                //destItem.setQtty(GameRes.Bread);
+                break;
+            case "SquareBomb1":
+                GameRes.SquareBomb1 +=sellQtty/destItem.getItemCost();
+                //destItem.setQtty(GameRes.Bread);
+                break;
+            case "SquareBomb2":
+                GameRes.SquareBomb2 +=sellQtty/destItem.getItemCost();
+                //destItem.setQtty(GameRes.Bread);
                 break;
         }
 
     }
+
 
 
 }

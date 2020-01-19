@@ -832,5 +832,11 @@ public class BaseActor extends Group
         return img;
     }
 
+    public float getElapsedTime() {
+        return elapsedTime;
+    }
 
+    public void setElapsedTime(float elapsedTime) {
+        this.elapsedTime = elapsedTime;
+    }
 }

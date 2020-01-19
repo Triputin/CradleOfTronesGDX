@@ -28,8 +28,12 @@ public class CradleGame extends BaseGame
         prefs = Gdx.app.getPreferences("settings.prefs");
 
         GameRes.Bread=prefs.getInteger("Bread", 100);
-        GameRes.Wood=prefs.getInteger("Wood", 100);;
-        GameRes.Gold=prefs.getInteger("Gold", 50);;
+        GameRes.Wood=prefs.getInteger("Wood", 100);
+        GameRes.Gold=prefs.getInteger("Gold", 50);
+        GameRes.Gold=prefs.getInteger("TimeBomb", 2);
+        GameRes.Gold=prefs.getInteger("SquareBomb1", 2);
+        GameRes.Gold=prefs.getInteger("SquareBomb2", 2);
+
         gameMapLevel = prefs.getInteger("gameMapLevel", 1);
         //gameMapLevel=3;// for test purpose
         menuScreen = new MenuScreen(this);
@@ -129,6 +133,10 @@ public class CradleGame extends BaseGame
         prefs.putInteger("Gold", GameRes.Gold);
         prefs.putInteger("Wood", GameRes.Wood);
         prefs.putInteger("Bread", GameRes.Bread);
+        prefs.putInteger("TimeBomb", GameRes.TimeBomb);
+        prefs.putInteger("SquareBomb1", GameRes.SquareBomb1);
+        prefs.putInteger("SquareBomb2", GameRes.SquareBomb2);
+
         Kingdom[] kingdoms = gameMapScreen.getKingdoms();
 
         for (int i = 1; i < kingdoms.length; i++) {
@@ -173,6 +181,10 @@ public class CradleGame extends BaseGame
         GameRes.Bread=100;
         GameRes.Wood=100;
         GameRes.Gold=50;
+        GameRes.TimeBomb=2;
+        GameRes.SquareBomb1=2;
+        GameRes.SquareBomb2=2;
+
         prefs.putInteger("Gold", GameRes.Gold);
         prefs.putInteger("Wood", GameRes.Wood);
         prefs.putInteger("Bread", GameRes.Bread);

@@ -372,6 +372,43 @@ public class ScreenGamePlay extends BaseScreen {
 
     }
 
+public void RemoveAndFillSquare(int centreRow, int centreCol, int squareSize){
+
+    //Find leftdown cell coordinates and actual size of square
+    Cell leftDownCell = new Cell(0,0);
+    int sqVerticalSize;
+    int sqHorizontalSize;
+    if ((centreRow-squareSize)>=0) {leftDownCell.setRow(centreRow-squareSize);} else {leftDownCell.setRow(0);}
+    if ((centreCol-squareSize)>=0) {leftDownCell.setCol(centreCol-squareSize);} else {leftDownCell.setCol(0);}
+    if((centreRow+squareSize)<CellCount){sqVerticalSize=centreRow+squareSize+1-leftDownCell.getRow();}else{sqVerticalSize=CellCount-leftDownCell.getRow();}
+    if((centreCol+squareSize)<CellCount){sqHorizontalSize=centreCol+squareSize+1-leftDownCell.getCol();}else{sqHorizontalSize=CellCount-leftDownCell.getCol();}
+
+// Select items inside of square
+    Cell cell = new Cell(0,0);
+    Item prevItem = null;
+    Item curItem = null;
+    firstSelectedItem = gameField.GetItemAtCell(leftDownCell, mainStage);
+    prevItem = firstSelectedItem;
+    for (int i=0;i<sqHorizontalSize;i++){
+        for(int j=0;j<sqVerticalSize;j++){
+            cell.setRow(leftDownCell.getRow()+j);
+            cell.setCol(leftDownCell.getCol()+i);
+                curItem = gameField.GetItemAtCell(cell, mainStage);
+                curItem.setSelected(true, prevItem);
+                prevItem.setSelectedNext(curItem);
+                prevItem = curItem;
+
+        }
+    }
+
+    FillRemovedCells(removeSelectedItems());
+
+           // ((Item)CoinActor).setSelected(false,null);
+
+    lastSelectedItem = null;
+    firstSelectedItem = null;
+
+}
 
     public boolean isPaused() {
         return isPaused;
@@ -646,7 +683,7 @@ public class ScreenGamePlay extends BaseScreen {
 
         rnd = Math.random();
 
-        if ((rnd-lvl/200)>0.3){
+        if ((rnd-lvl/200)>0.2){
             return new Coin(x, y, cellSize, cellSize, mainStage, row, col);
         }
 
@@ -740,7 +777,7 @@ public class ScreenGamePlay extends BaseScreen {
                 //item.addAction(Actions.scaleTo(1,1,5));
 
                 if(Math.random()>(1.0-lvl/500)){
-                    if (Math.random()>(0.5-lvl/300)) {item.setLockLevel(2);}
+                    if (Math.random()>(0.8-lvl/300)) {item.setLockLevel(2);}
                     else {item.setLockLevel(1);
                     }
                 }
@@ -826,8 +863,15 @@ public class ScreenGamePlay extends BaseScreen {
 
         sandGlass = new SandGlass(x,y,uiStage,sw,sw*2, sandglassduration);
         isPaused=false;
-
-       TimeBomb timeBomb = new TimeBomb(10,h*0.7f,h/6,h/6,uiStage,Touchable.enabled);
+        for (int i = 0; i < GameRes.TimeBomb; i++) {
+            new TimeBomb(10, h * 0.7f, h / 6, h / 6, mainStage, Touchable.enabled, sandGlass, 60);
+        }
+        for (int i=0;i<GameRes.SquareBomb1;i++) {
+            new SquareBomb(10,h*0.5f,h/6,h/6,mainStage,Touchable.enabled,1,this);
+        }
+        for (int i=0;i<GameRes.SquareBomb2;i++) {
+            new SquareBomb(10,h*0.3f,h/6,h/6,mainStage,Touchable.enabled,2,this);
+        }
 
 
     }

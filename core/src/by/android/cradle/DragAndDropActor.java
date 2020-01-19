@@ -16,10 +16,10 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 
 public class DragAndDropActor extends BaseActor
 {
-    private DragAndDropActor self;
+    protected DragAndDropActor self;
     private float grabOffsetX;
     private float grabOffsetY;
-    private DropTargetActor dropTarget;
+    protected DropTargetActor dropTarget;
     private boolean draggable;
     private float startPositionX;
     private float startPositionY;
@@ -57,7 +57,8 @@ public class DragAndDropActor extends BaseActor
                     {
                         self.setDropTarget(null);
                         // keep track of distance to closest object
-                        float closestDistance = Float.MAX_VALUE;
+                        //float closestDistance = Float.MAX_VALUE;
+                        float closestDistance =50;
                         for ( BaseActor actor : BaseActor.getList(self.getStage(), "by.android.cradle.DropTargetActor") ) {
                             DropTargetActor target = (DropTargetActor)actor;
                             if ( target.isTargetable() && self.overlaps(target) ) {
@@ -104,5 +105,7 @@ public class DragAndDropActor extends BaseActor
     }
 
     public void onDragStart() {}
-    public void onDrop() {}
+    public void onDrop() {
+
+    }
 }
