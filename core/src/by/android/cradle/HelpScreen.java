@@ -23,7 +23,7 @@ public class HelpScreen extends BaseScreen {
     private Label infoLabel;
     private DialogBox dialogBox;
     private float padding = 16;
-    private int numberOfSlides = 6;
+    private int numberOfSlides = 10;
 
     public HelpScreen(CradleGame cradleGame) {
         super(cradleGame);
@@ -58,7 +58,8 @@ public class HelpScreen extends BaseScreen {
 
 
         //Menu Button
-        TextButton menuButton = new TextButton( "Menu", BaseGame.textButtonStyle );
+        String s = cradleGame.getLanguageStrings().get("menu");
+        TextButton menuButton = new TextButton( s, BaseGame.textButtonStyle );
         menuButton.setPosition(w*0.00f,h*0.88f);
         uiStage.addActor(menuButton);
 
@@ -76,7 +77,8 @@ public class HelpScreen extends BaseScreen {
         });
 
         //Next Button
-        TextButton nextButton = new TextButton( "Next", BaseGame.textButtonStyle );
+        s = cradleGame.getLanguageStrings().get("next");
+        TextButton nextButton = new TextButton( s, BaseGame.textButtonStyle );
         nextButton.setPosition(w*0.8f,h*0.2f);
         uiStage.addActor(nextButton);
 
@@ -96,7 +98,8 @@ public class HelpScreen extends BaseScreen {
         });
 
         //Prev Button
-        TextButton prevButton = new TextButton( "Previous", BaseGame.textButtonStyle );
+        s = cradleGame.getLanguageStrings().get("previous");
+        TextButton prevButton = new TextButton( s, BaseGame.textButtonStyle );
         prevButton.setPosition(w*0.5f,h*0.2f);
         uiStage.addActor(prevButton);
 
@@ -138,43 +141,78 @@ public class HelpScreen extends BaseScreen {
 
         int x = (int) w/2;
         int y= (int) Math.round(h*0.4);
+        String s;
        switch(slideNumber){
 
            case 1:
                slide1 = new BaseActor(x,y,uiStage,Touchable.disabled);
                slide1.loadTexture("helpimages/im01.png",(int) Math.round(w*0.5),(int) Math.round(h*0.6));
                uiStage.addActor(slide1);
-               dialogBox.setText("Choose a castle to attack. If you have enough resources you will be able to attack by pressing the Attack button.");
+               s = cradleGame.getLanguageStrings().get("help01_text");
+               dialogBox.setText(s);
                break;
            case 2:
                slide1 = new BaseActor(x,y,uiStage,Touchable.disabled);
                slide1.loadTexture("helpimages/im02.png",(int) Math.round(w*0.5),(int) Math.round(h*0.6));
                uiStage.addActor(slide1);
-               dialogBox.setText("If you don't have enough resources you can attack an Arena by pressing the Attack button.");
+               s = cradleGame.getLanguageStrings().get("help02_text");
+               dialogBox.setText(s);
                break;
            case 3:
                slide1 = new BaseActor(x,y,uiStage,Touchable.disabled);
                slide1.loadTexture("helpimages/im03.png",(int) Math.round(w*0.5),(int) Math.round(h*0.6));
                uiStage.addActor(slide1);
-               dialogBox.setText("Match 3 or more tiles of same kind by clicking on adjacent pieces and drag the selection.");
+               s = cradleGame.getLanguageStrings().get("help03_text");
+               dialogBox.setText(s);
                break;
            case 4:
                slide1 = new BaseActor(x,y,uiStage,Touchable.disabled);
                slide1.loadTexture("helpimages/im04.png",(int) Math.round(w*0.5),(int) Math.round(h*0.6));
                uiStage.addActor(slide1);
-               dialogBox.setText("Orange plaques are below some of the tiles. Make chains over them to destroy them and finish the attack.");
+               s = cradleGame.getLanguageStrings().get("help04_text");
+               dialogBox.setText(s);
                break;
            case 5:
                slide1 = new BaseActor(x,y,uiStage,Touchable.disabled);
                slide1.loadTexture("helpimages/im04.png",(int) Math.round(w*0.5),(int) Math.round(h*0.6));
                uiStage.addActor(slide1);
-               dialogBox.setText("Some of tiles are hidden in wooden cases. Collect tiles near them to destroy them.");
+               s = cradleGame.getLanguageStrings().get("help05_text");
+               dialogBox.setText(s);
                break;
            case 6:
                slide1 = new BaseActor(x,y,uiStage,Touchable.disabled);
                slide1.loadTexture("helpimages/im05.png",(int) Math.round(w*0.5),(int) Math.round(h*0.6));
                uiStage.addActor(slide1);
-               dialogBox.setText("Please note, there are special silver coins all around. You can use them to make chains with items of any kind.");
+               s = cradleGame.getLanguageStrings().get("help06_text");
+               dialogBox.setText(s);
+               break;
+           case 7:
+               slide1 = new BaseActor(x,y,uiStage,Touchable.disabled);
+               slide1.loadTexture("helpimages/im06.png",(int) Math.round(w*0.5),(int) Math.round(h*0.6));
+               uiStage.addActor(slide1);
+               s = cradleGame.getLanguageStrings().get("help07_text");
+               dialogBox.setText(s);
+               break;
+           case 8:
+               slide1 = new BaseActor(x,y,uiStage,Touchable.disabled);
+               slide1.loadTexture("helpimages/im06.png",(int) Math.round(w*0.5),(int) Math.round(h*0.6));
+               uiStage.addActor(slide1);
+               s = cradleGame.getLanguageStrings().get("help08_text");
+               dialogBox.setText(s);
+               break;
+           case 9:
+               slide1 = new BaseActor(x,y,uiStage,Touchable.disabled);
+               slide1.loadTexture("helpimages/im06.png",(int) Math.round(w*0.5),(int) Math.round(h*0.6));
+               uiStage.addActor(slide1);
+               s = cradleGame.getLanguageStrings().get("help09_text");
+               dialogBox.setText(s);
+               break;
+           case 10:
+               slide1 = new BaseActor(x,y,uiStage,Touchable.disabled);
+               slide1.loadTexture("helpimages/im06.png",(int) Math.round(w*0.5),(int) Math.round(h*0.6));
+               uiStage.addActor(slide1);
+               s = cradleGame.getLanguageStrings().get("help10_text");
+               dialogBox.setText(s);
                break;
        }
     }

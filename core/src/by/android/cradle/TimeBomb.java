@@ -27,7 +27,7 @@ public class TimeBomb extends DragAndDropActor {
                 sandGlass.setElapsedTime(0);
             }
             self.remove();
-            //this.remove();
+            GameRes.TimeBomb--;
         }
     }
 

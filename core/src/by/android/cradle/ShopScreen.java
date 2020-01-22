@@ -24,14 +24,19 @@ public class ShopScreen extends BaseScreen {
 private final int RowColCount=4;
 private int padding=5;
 private int exchangeRate=2;
-private ArrayList<Item> leftArray;
-private ArrayList<Item> rightArray;
 
 private ArrayList<ShopItem> leftArraySh;
 private ArrayList<ShopItem> rightArraySh;
 
 private ShopItem leftSelectedItem=null;
 private ShopItem rightSelectedItem=null;
+
+private ShopItem goldItem;
+private ShopItem woodItem;
+private ShopItem breadItem;
+private ShopItem timeBomb;
+private ShopItem squareBomb1;
+private ShopItem squareBomb2;
 
     public ShopScreen(CradleGame cradleGame) {
 
@@ -75,34 +80,39 @@ private ShopItem rightSelectedItem=null;
         int rightSqX = leftSqX + sizeSquare ;
 
         Label leftLabel = new Label(" ", BaseGame.labelStyle);
-        leftLabel.setText("Resources available");
+        String s = cradleGame.getLanguageStrings().get("resources_available");
+        leftLabel.setText(s);
         leftLabel.setColor( Color.GOLDENROD );
         leftLabel.setPosition(leftSqX,wh*0.8f);
-        leftLabel.setFontScale(1.0f);
+        leftLabel.setFontScale(1.1f);
         uiStage.addActor(leftLabel);
 
         Label rightLabel = new Label(" ", BaseGame.labelStyle);
-        rightLabel.setText("Resources available for trade");
+        s = cradleGame.getLanguageStrings().get("items_for_trade");
+        rightLabel.setText(s);
         rightLabel.setColor( Color.GOLDENROD );
         rightLabel.setPosition( leftSqX+sizeSquare,wh*0.8f);
-        rightLabel.setFontScale(1.0f);
+        rightLabel.setFontScale(1.1f);
         uiStage.addActor(rightLabel);
 
         Label sLabel = new Label(" ", BaseGame.labelStyle);
-        sLabel.setText("You will sell");
+        s = cradleGame.getLanguageStrings().get("you_will_sell");
+        sLabel.setText(s);
         sLabel.setColor( Color.GOLDENROD );
         sLabel.setPosition( leftSqX*0.8f,wh/3);
         sLabel.setFontScale(1.0f);
         uiStage.addActor(sLabel);
 
         Label gLabel = new Label(" ", BaseGame.labelStyle);
-        gLabel.setText("You will get");
+        s = cradleGame.getLanguageStrings().get("you_will_get");
+        gLabel.setText(s);
         gLabel.setColor( Color.GOLDENROD );
         gLabel.setPosition( leftSqX*2+sizeSquare,wh/3);
         gLabel.setFontScale(1.0f);
         uiStage.addActor(gLabel);
 
-        TextButton backButton = new TextButton( "   Back   ", BaseGame.textButtonStyle );
+        s = cradleGame.getLanguageStrings().get("back");
+        TextButton backButton = new TextButton( "   "+s+"   ", BaseGame.textButtonStyle );
         backButton.setPosition(w*0.00f,h*0.88f);
         backButton.addListener(new InputListener() {
             public boolean touchDown (InputEvent e, float x, float y, int pointer, int button){
@@ -133,11 +143,11 @@ private ShopItem rightSelectedItem=null;
         uiStage.addActor(buyLabel);
 
         final Slider slider = new Slider(0,0,exchangeRate,false, BaseGame.skin);
-        slider.setSize(wh/2,20);
+        slider.setSize(wh/2,wh*0.15f);
         slider.setPosition(w/2 - slider.getWidth()/2,wh/5);
         slider.setValue(0);
-        slider.getStyle().knob.setMinHeight(wh*0.1f);
-        slider.getStyle().knob.setMinWidth(wh*0.08f);
+        slider.getStyle().knob.setMinHeight(wh*0.2f);
+        slider.getStyle().knob.setMinWidth(wh*0.15f);
         sellLabel.setX(slider.getX()*0.9f);
         buyLabel.setX(slider.getX()+slider.getWidth());
         gLabel.setX(buyLabel.getX()*1.05f+buyLabel.getWidth()+50);
@@ -150,7 +160,8 @@ private ShopItem rightSelectedItem=null;
         });
         uiStage.addActor(slider);
 
-        TextButton sellButton = new TextButton( "   Sell   ", BaseGame.textButtonStyle );
+        s = cradleGame.getLanguageStrings().get("sell");
+        TextButton sellButton = new TextButton( "   "+s+"   ", BaseGame.textButtonStyle );
         sellButton.setPosition(w/2-sellButton.getWidth()/2,h*0.02f);
         sellButton.addListener(new InputListener() {
             public boolean touchDown (InputEvent e, float x, float y, int pointer, int button){
@@ -160,6 +171,12 @@ private ShopItem rightSelectedItem=null;
                 if (!((InputEvent) e).getType().equals(InputEvent.Type.touchDown))
                     return false;
                 makeExchange((int)slider.getValue());
+                if ((leftSelectedItem!=null)&&(rightSelectedItem!=null)) {
+                    float rMax = (float) Math.floor(leftSelectedItem.getQtty() * 1.0f / rightSelectedItem.getItemCost()) * rightSelectedItem.getItemCost();
+                    slider.setStepSize(rightSelectedItem.getItemCost());
+                    exchangeRate = (int)rightSelectedItem.getItemCost();
+                    slider.setRange(0, rMax);
+                }
                 slider.setValue(0);
 
                 return true;
@@ -167,19 +184,33 @@ private ShopItem rightSelectedItem=null;
         });
 
         uiStage.addActor(sellButton);
+        ShopItem shopItem;
 
+        //Items of player
         leftArraySh = new ArrayList<>();
-        ShopItem shopItem = new ShopItem(leftSqX, leftSqY, itemSize, Math.round(itemSize*1.2f), uiStage, GameRes.Gold,"coin2.png", "coin2pressed.png","Coin2",2);
-        shopItem.setShowQtty(true);
-        leftArraySh.add(shopItem);
-        shopItem = new ShopItem(leftSqX+itemSize+padding, leftSqY, itemSize, Math.round(itemSize*1.2f), uiStage, GameRes.Wood,"wood.png", "woodpressed.png","Wood",2);
-        shopItem.setShowQtty(true);
-        leftArraySh.add(shopItem);
-        shopItem = new ShopItem(leftSqX+itemSize+padding+itemSize+padding, leftSqY, itemSize, Math.round(itemSize*1.2f), uiStage, GameRes.Bread,"bread.png", "breadpressed.png","Bread",2);
-        shopItem.setShowQtty(true);
-        leftArraySh.add(shopItem);
+        goldItem = new ShopItem(leftSqX, leftSqY, itemSize, Math.round(itemSize*1.2f), uiStage, GameRes.Gold,"coin2.png", "coin2pressed.png","Coin2",2);
+        goldItem.setShowQtty(true);
+        leftArraySh.add(goldItem);
+        woodItem = new ShopItem(leftSqX+itemSize+padding, leftSqY, itemSize, Math.round(itemSize*1.2f), uiStage, GameRes.Wood,"wood.png", "woodpressed.png","Wood",2);
+        woodItem.setShowQtty(true);
+        leftArraySh.add(woodItem);
+        breadItem = new ShopItem(leftSqX+itemSize+padding+itemSize+padding, leftSqY, itemSize, Math.round(itemSize*1.2f), uiStage, GameRes.Bread,"bread.png", "breadpressed.png","Bread",2);
+        breadItem.setShowQtty(true);
+        leftArraySh.add(breadItem);
+        timeBomb = new ShopItem(leftSqX, leftSqY-itemSize+padding, itemSize, Math.round(itemSize*1.2f), uiStage, GameRes.TimeBomb,"timebomb.png", "timebombpressed.png","TimeBomb",30);
+        timeBomb.setShowQtty(true);
+        timeBomb.setTouchable(Touchable.disabled);
+        leftArraySh.add(timeBomb);
+        squareBomb1 = new ShopItem(leftSqX+itemSize+padding, leftSqY-itemSize+padding, itemSize, Math.round(itemSize*1.2f), uiStage, GameRes.SquareBomb1,"squarebomb01.png", "squarebomb01pressed.png","SquareBomb1",30);
+        squareBomb1.setShowQtty(true);
+        squareBomb1.setTouchable(Touchable.disabled);
+        leftArraySh.add(squareBomb1);
+        squareBomb2 = new ShopItem(leftSqX+itemSize+padding+itemSize+padding, leftSqY-itemSize+padding, itemSize, Math.round(itemSize*1.2f), uiStage, GameRes.SquareBomb2,"squarebomb02.png", "squarebomb02pressed.png","SquareBomb2",60);
+        squareBomb2.setShowQtty(true);
+        squareBomb2.setTouchable(Touchable.disabled);
+        leftArraySh.add(squareBomb2);
 
-
+        //Items to buy
         rightArraySh = new ArrayList<>();
         shopItem = new ShopItem(rightSqX, leftSqY, itemSize, Math.round(itemSize*1.2f), mainStage, 0,"coin2.png", "coin2pressed.png","Coin2",2);
         rightArraySh.add(shopItem);
@@ -206,6 +237,7 @@ private ShopItem rightSelectedItem=null;
                     for (by.android.cradle.BaseActor CoinActor : by.android.cradle.BaseActor.getList(uiStage, "by.android.cradle.ShopItem")) {
                         if (CoinActor.getBoundaryPolygon().contains(x, y)) {
                             ShopItem shopItem1=(ShopItem) CoinActor;
+                            if (shopItem1.getTouchable()==Touchable.disabled){return false;} // if bomb then shouldn't select it
                             shopItem1.setSelected(true);
                             leftSelectedItem=shopItem1;
                             if ((leftSelectedItem!=null)&&(rightSelectedItem!=null)) {
@@ -333,20 +365,27 @@ private ShopItem rightSelectedItem=null;
 
             case "TimeBomb":
                 GameRes.TimeBomb +=sellQtty/destItem.getItemCost();
-                //destItem.setQtty(GameRes.Bread);
+                destItem.setQtty(GameRes.TimeBomb);
                 break;
             case "SquareBomb1":
                 GameRes.SquareBomb1 +=sellQtty/destItem.getItemCost();
-                //destItem.setQtty(GameRes.Bread);
+                destItem.setQtty(GameRes.SquareBomb1);
                 break;
             case "SquareBomb2":
                 GameRes.SquareBomb2 +=sellQtty/destItem.getItemCost();
-                //destItem.setQtty(GameRes.Bread);
+                destItem.setQtty(GameRes.SquareBomb2);
                 break;
         }
 
     }
 
-
+public void setupResources(){
+    goldItem.setQtty(GameRes.Gold);
+    woodItem.setQtty(GameRes.Wood);
+    breadItem.setQtty(GameRes.Bread);
+    timeBomb.setQtty(GameRes.TimeBomb);
+    squareBomb1.setQtty(GameRes.SquareBomb1);
+    squareBomb2.setQtty(GameRes.SquareBomb2);
+}
 
 }

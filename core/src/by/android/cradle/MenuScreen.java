@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.audio.Music;
 
+
 public class MenuScreen extends BaseScreen {
     private Music instrumental;
     private float audioVolume;
@@ -68,7 +69,10 @@ public class MenuScreen extends BaseScreen {
        // BaseActor title = new BaseActor(0,0, mainStage, Touchable.disabled);
        // title.loadTexture( "assets/starfish-collector.png" );
 
-        TextButton startButton = new TextButton( "   Start   ", BaseGame.textButtonStyle );
+
+        String s = cradleGame.getLanguageStrings().get("start");
+        TextButton startButton = new TextButton( "   "+s+"   " , BaseGame.textButtonStyle );
+
 
         startButton.addListener(new InputListener() {
             public boolean touchDown (InputEvent e, float x, float y, int pointer, int button){
@@ -83,8 +87,8 @@ public class MenuScreen extends BaseScreen {
             }
         });
 
-
-        TextButton helpButton = new TextButton( "   Help   ", BaseGame.textButtonStyle );
+        s = cradleGame.getLanguageStrings().get("help");
+        TextButton helpButton = new TextButton( "   "+s+"   ", BaseGame.textButtonStyle );
         // startButton.setPosition(150,150);
         // uiStage.addActor(startButton);
 
@@ -101,8 +105,8 @@ public class MenuScreen extends BaseScreen {
             }
         });
 
-
-        TextButton quitButton = new TextButton( "   Quit    ", BaseGame.textButtonStyle );
+        s = cradleGame.getLanguageStrings().get("quit");
+        TextButton quitButton = new TextButton( "   "+s+"   ", BaseGame.textButtonStyle );
         // quitButton.setPosition(500,150);
         // uiStage.addActor(quitButton);
 
@@ -120,7 +124,8 @@ public class MenuScreen extends BaseScreen {
             }
         });
 
-        TextButton restartButton = new TextButton( "Restart", BaseGame.textButtonStyle );
+        s = cradleGame.getLanguageStrings().get("restart");
+        TextButton restartButton = new TextButton( "   "+s+"   ", BaseGame.textButtonStyle );
 
         restartButton.addListener(new InputListener() {
             public boolean touchDown (InputEvent e, float x, float y, int pointer, int button){

@@ -81,7 +81,8 @@ public class GameMapScreen extends BaseScreen {
         fon.setY(h-70);
 
        //Menu Button
-        TextButton backButton = new TextButton( "Menu", BaseGame.textButtonStyle );
+        String s = cradleGame.getLanguageStrings().get("menu");
+        TextButton backButton = new TextButton( s, BaseGame.textButtonStyle );
         backButton.setPosition(w*0.00f,h*0.88f);
         uiStage.addActor(backButton);
 
@@ -101,7 +102,8 @@ public class GameMapScreen extends BaseScreen {
 
 
         //Shop Button
-        shopButton = new TextButton( "Exchange", BaseGame.textButtonStyle );
+        s = cradleGame.getLanguageStrings().get("exchange");
+        shopButton = new TextButton( s, BaseGame.textButtonStyle );
         shopButton.setPosition(w*0.00f,h*0.03f);
         uiStage.addActor(shopButton);
 
@@ -338,7 +340,8 @@ public class GameMapScreen extends BaseScreen {
                 // Do your stuff
 
                 if (isUpdateMapNeeded) {
-                    continueButton = new TextButton("   Continue to the next level   ", BaseGame.textButtonStyle);
+                    String s = cradleGame.getLanguageStrings().get("continue_to_next_level");
+                    continueButton = new TextButton("   "+s+"   ", BaseGame.textButtonStyle);
                     uiStage.addActor(continueButton);
                     continueButton.addListener(new InputListener() {
                     public boolean touchDown(InputEvent e, float x, float y, int pointer, int button) {
@@ -366,7 +369,8 @@ public class GameMapScreen extends BaseScreen {
         actions = sequence(fadeOut(0.01f), Actions.delay(3),fadeIn(1f) , completeAction);
 
         messageLabel = new Label("...", BaseGame.labelStyle);
-        messageLabel.setText("Throne is yours!");
+        String s = cradleGame.getLanguageStrings().get("throne_is_yours");
+        messageLabel.setText(s);
         messageLabel.setX((ww-w)/2f);
         messageLabel.setY(h*0.3f);
         messageLabel.setFontScale(3);

@@ -749,7 +749,7 @@ public void RemoveAndFillSquare(int centreRow, int centreCol, int squareSize){
 
 
     public void GenerateLevel(int levelnumber){
-        System.out.println("GenerateLevel() = "+levelnumber);
+        //System.out.println("GenerateLevel() = "+levelnumber);
             ArrayList<Item> arrayListItems = new ArrayList<>();
                 for (Actor a : mainStage.getActors())
                 {
@@ -762,6 +762,22 @@ public void RemoveAndFillSquare(int centreRow, int centreCol, int squareSize){
                 for(int i =0;i<arrayListItems.size();i++){
                     arrayListItems.get(i).remove();
                 }
+
+                //clear Bombs
+
+
+        ArrayList<DragAndDropActor> arrayListBombs = new ArrayList<>();
+        for (Actor a : mainStage.getActors())
+        {
+            if ( DragAndDropActor.class.isAssignableFrom(a.getClass()) ){
+                arrayListBombs.add((DragAndDropActor)a);
+            }
+
+        }
+
+        for(int i =0;i<arrayListBombs.size();i++){
+            arrayListBombs.get(i).remove();
+        }
 
 
         float lvl = levelnumber;
@@ -799,11 +815,18 @@ public void RemoveAndFillSquare(int centreRow, int centreCol, int squareSize){
         fon.addAction(actions);
 
         //Win message
+       /*
         BaseActor youWinMessage = new BaseActor(0,0,uiStage,Touchable.disabled);
-        youWinMessage.loadTexture("you-win.png",424,114);
+        String localeString= java.util.Locale.getDefault().getLanguage().toString();
+        if (localeString=="ru"){
+            youWinMessage.loadTexture("you-win_ru.png", 424, 114);
+        }else {
+            youWinMessage.loadTexture("you-win.png", 424, 114);
+        }
         youWinMessage.centerAtPosition(gameFieldX+cellSize*CellCount/2,gameFieldY+cellSize*CellCount/2);
         youWinMessage.setOpacity(0);
         //youWinMessage.addAction( Actions.delay(1) );
+*/
 
         Action completeAction = new Action(){
             public boolean act( float delta ) {
@@ -823,24 +846,31 @@ public void RemoveAndFillSquare(int centreRow, int centreCol, int squareSize){
         };
 
         actions = sequence(fadeIn(0.5f), Actions.delay(3) ,fadeOut(1f), completeAction);
-        youWinMessage.addAction( actions );
+        //youWinMessage.addAction( actions );
+
+        String s = cradleGame.getLanguageStrings().get("you_win");
+        messageLabel.setText(s);
+        messageLabel.setColor(Color.GOLD);
+        messageLabel.setVisible(true);
+        messageLabel.addAction(actions);
+
+
+
         //Explosion
         ExplosionEffect2 boom1 = new ExplosionEffect2();
-        boom1.setX(youWinMessage.getX());
-        boom1.setY(youWinMessage.getY());
+        boom1.setX(messageLabel.getX());
+        boom1.setY(messageLabel.getY());
         boom1.start();
         mainStage.addActor(boom1);
         ExplosionEffect2 boom2 = new ExplosionEffect2();
-        boom2.centerAtActor( youWinMessage );
+        boom2.centerAtActor( messageLabel );
         boom2.start();
         mainStage.addActor(boom2);
         ExplosionEffect2 boom3 = new ExplosionEffect2();
-        boom3.setX(youWinMessage.getX()+youWinMessage.getWidth());
-        boom3.setY(youWinMessage.getY());
+        boom3.setX(messageLabel.getX()+messageLabel.getWidth());
+        boom3.setY(messageLabel.getY());
         boom3.start();
         mainStage.addActor(boom3);
-
-
 
     }
 
@@ -877,7 +907,8 @@ public void RemoveAndFillSquare(int centreRow, int centreCol, int squareSize){
     }
 
     public void LoseLevel(){
-        System.out.println("LoseLevel()");
+        //System.out.println("LoseLevel()");
+        GdxLog.print("LoseLevel():","Called");
         isPaused=true; // block timer in update
         Action actions;
         //Fon
@@ -902,7 +933,8 @@ public void RemoveAndFillSquare(int centreRow, int centreCol, int squareSize){
         };
 
         actions = sequence(fadeIn(0.5f), Actions.delay(3) ,fadeOut(1f), completeAction);
-        messageLabel.setText("You Lose");
+        String s = cradleGame.getLanguageStrings().get("you_lose");
+        messageLabel.setText(s);
         messageLabel.setColor(Color.RED);
         messageLabel.setVisible(true);
         messageLabel.addAction(actions);
@@ -997,8 +1029,8 @@ public void RemoveAndFillSquare(int centreRow, int centreCol, int squareSize){
         {
                 list.add( a );
         }
-        System.out.println("MainStage: Actors="+list.size());
-
+        //System.out.println("MainStage: Actors="+list.size());
+        GdxLog.d("printNumberOfActors():","MainStage: Actors=%d",list.size());
         list = new ArrayList<Actor>();
         stage= uiStage;
 
@@ -1006,7 +1038,8 @@ public void RemoveAndFillSquare(int centreRow, int centreCol, int squareSize){
         {
             list.add( a );
         }
-        System.out.println("uiStage: Actors="+list.size());
+        //System.out.println("uiStage: Actors="+list.size());
+        GdxLog.d("printNumberOfActors():","uiStage: Actors=%d",list.size());
 
     }
 

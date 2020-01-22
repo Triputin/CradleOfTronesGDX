@@ -213,7 +213,7 @@ public void PrintSolutions(ArrayList<ArrayList<Item>> arrayLists){
     ArrayList<Item> arrayList;
     for(int i=0; i<arrayLists.size();i++){
         arrayList = arrayLists.get(i);
-        System.out.println("Solution "+i+":");
+        //System.out.println("Solution "+i+":");
         for (int j=0; j<arrayList.size();j++){
             //System.out.println(j+":  Col: "+arrayList.get(j).getCell().getCol()+" Row: "+arrayList.get(j).getCell().getRow());
         }

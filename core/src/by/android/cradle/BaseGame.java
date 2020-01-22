@@ -31,6 +31,7 @@ public abstract class BaseGame extends Game
     public static TextButtonStyle textButtonStyle; // NPD + BitmapFont + Color
     public static  Skin skin;
 
+    private static final String FONT_CHARACTERS = "абвгдеёжзийклмнопрстуфхцчшщъыьэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯabcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789][_!$%#@|\\/?-+=()*&.;,{}\"´`'<>";
 
     /**
      *  Called when game is initialized; stores global reference to game object.
@@ -55,6 +56,7 @@ public abstract class BaseGame extends Game
             new FreeTypeFontGenerator(Gdx.files.internal("opensans.ttf"));
         FreeTypeFontParameter fontParameters = new FreeTypeFontParameter();
         fontParameters.size = 24;
+        fontParameters.characters = FONT_CHARACTERS;
         fontParameters.color = Color.WHITE;
         fontParameters.borderWidth = 2;
         fontParameters.borderColor = Color.BLACK;
@@ -70,8 +72,12 @@ public abstract class BaseGame extends Game
         textButtonStyle = new TextButtonStyle();
 
         Texture   buttonTex   = new Texture( Gdx.files.internal("goldbutton.png") );
-        NinePatch buttonPatch = new NinePatch(buttonTex, 24,24,24,24);
+        NinePatch buttonPatch = new NinePatch(buttonTex, 14,14,24,24);
         textButtonStyle.up    = new NinePatchDrawable( buttonPatch );
+        Texture   buttonTex2   = new Texture( Gdx.files.internal("goldbutton_pressed.png") );
+        NinePatch buttonPatch2 = new NinePatch(buttonTex2, 14,14,24,24);
+        textButtonStyle.down    = new NinePatchDrawable( buttonPatch2 );
+
         textButtonStyle.font      = customFont;
         textButtonStyle.fontColor = Color.GRAY;
 

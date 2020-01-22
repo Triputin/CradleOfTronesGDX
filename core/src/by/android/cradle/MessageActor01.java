@@ -23,7 +23,8 @@ public class MessageActor01 extends BaseActor {
         resultsActor = new ResultsActor(x+width*0.1f,(int)(y+height/2),(int)(width-width*0.2f),(int)(height/2.5),s,Touchable.disabled,this);
 
         //Attack Button
-        TextButton attackButton = new TextButton( "Attack", BaseGame.textButtonStyle );
+        String ms = cradleGame.getLanguageStrings().get("attack");
+        TextButton attackButton = new TextButton( ms, BaseGame.textButtonStyle );
         attackButton.addListener(new InputListener() {
             public boolean touchDown (InputEvent e, float x, float y, int pointer, int button){
                 if (!(e instanceof InputEvent))
@@ -49,7 +50,8 @@ public class MessageActor01 extends BaseActor {
         addActor(attackButton);
 
         //Cancel Button
-        TextButton cancelButton = new TextButton( "Cancel", BaseGame.textButtonStyle );
+        ms = cradleGame.getLanguageStrings().get("cancel");
+        TextButton cancelButton = new TextButton( ms, BaseGame.textButtonStyle );
         cancelButton.addListener(new InputListener() {
             public boolean touchDown (InputEvent e, float x, float y, int pointer, int button){
                 if (!(e instanceof InputEvent))

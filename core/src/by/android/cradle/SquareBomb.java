@@ -31,6 +31,11 @@ public class SquareBomb extends DragAndDropActor {
             System.out.println("Drop target item row "+ item.getRow()+" col "+item.getCol());
             self.remove();
             screenGamePlay.RemoveAndFillSquare(item.getRow(),item.getCol(),squareSize);
+            if (squareSize==1) {
+                GameRes.SquareBomb1--;
+            }else{
+                GameRes.SquareBomb2--;
+            }
 
         }
     }

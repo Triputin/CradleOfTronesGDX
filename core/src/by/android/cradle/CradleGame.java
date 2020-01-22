@@ -2,6 +2,9 @@ package by.android.cradle;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
+import com.badlogic.gdx.utils.I18NBundle;
+
+import java.util.Locale;
 
 import by.android.cradle.BaseGame;
 
@@ -15,8 +18,8 @@ public class CradleGame extends BaseGame
     private ShopScreen shopScreen;
     private Preferences prefs;
     private IActivityRequestHandler myRequestHandler;
-
     private int gameMapLevel;
+    private I18NBundle languageStrings;
 
     public CradleGame(IActivityRequestHandler handler) {
         myRequestHandler = handler;
@@ -26,16 +29,23 @@ public class CradleGame extends BaseGame
     {
         super.create();
         prefs = Gdx.app.getPreferences("settings.prefs");
+        // For debug ru locale
+        //Locale locale = new Locale("ru");
+        //languageStrings = I18NBundle.createBundle(Gdx.files.internal("strings/strings"),locale);
+
+        //Default locale for realise
+        languageStrings = I18NBundle.createBundle(Gdx.files.internal("strings/strings"));
 
         GameRes.Bread=prefs.getInteger("Bread", 100);
         GameRes.Wood=prefs.getInteger("Wood", 100);
         GameRes.Gold=prefs.getInteger("Gold", 50);
-        GameRes.Gold=prefs.getInteger("TimeBomb", 2);
-        GameRes.Gold=prefs.getInteger("SquareBomb1", 2);
-        GameRes.Gold=prefs.getInteger("SquareBomb2", 2);
+        GameRes.TimeBomb=prefs.getInteger("TimeBomb", 2);
+        GameRes.SquareBomb1=prefs.getInteger("SquareBomb1", 2);
+        GameRes.SquareBomb2=prefs.getInteger("SquareBomb2", 2);
 
         gameMapLevel = prefs.getInteger("gameMapLevel", 1);
         //gameMapLevel=3;// for test purpose
+
         menuScreen = new MenuScreen(this);
         screenGamePlay = new ScreenGamePlay(this);
         gameMapScreen = new GameMapScreen(this);
@@ -56,7 +66,8 @@ public class CradleGame extends BaseGame
         setActiveScreen( menuScreen );
 
         myRequestHandler.showAds(false);
-    }
+
+     }
 
 
     public MenuScreen getMenuScreen() {
@@ -92,7 +103,8 @@ public class CradleGame extends BaseGame
 
     public  void setActiveMenuScreen()
     {
-        System.out.println("setActiveMenuScreen()");
+        //System.out.println("setActiveMenuScreen()");
+        GdxLog.print("setActiveMenuScreen():","Called");
         game.setScreen(menuScreen);
         gameMapScreen.PauseMusic();
         menuScreen.PlayMusic();
@@ -101,7 +113,8 @@ public class CradleGame extends BaseGame
 
     public  void setActiveHelpScreen()
     {
-        System.out.println("setActiveHelpScreen()");
+        //System.out.println("setActiveHelpScreen()");
+        GdxLog.print("setActiveHelpScreen():","Called");
         game.setScreen(helpScreen);
         menuScreen.PauseMusic();
         helpScreen.PlayMusic();
@@ -110,15 +123,18 @@ public class CradleGame extends BaseGame
 
     public  void setActiveShopScreen()
     {
-        System.out.println("setActiveShopScreen()");
+        //System.out.println("setActiveShopScreen()");
+        GdxLog.print("setActiveShopScreen():","Called");
         game.setScreen(shopScreen);
         gameMapScreen.PauseMusic();
         myRequestHandler.showAds(false);
+        shopScreen.setupResources();
     }
 
     public  void setActiveGameMapScreen()
     {
-        System.out.println("setActiveGameMapScreen");
+        //System.out.println("setActiveGameMapScreen");
+        GdxLog.print("setActiveGameMapScreen():","Called");
         game.setScreen(gameMapScreen);
         gameMapScreen.UpdateRes();
 
@@ -151,7 +167,8 @@ public class CradleGame extends BaseGame
 
     public  void setActivescreenGamePlay(AttackType attackType, Kingdom attackedKingdom)
     {
-        System.out.println("setActivescreenGamePlay()");
+        //System.out.println("setActivescreenGamePlay()");
+        GdxLog.print("setActivescreenGamePlay():","Called");
         game.setScreen(screenGamePlay);
         screenGamePlay.UpdateRes();
         screenGamePlay.setAttackedKingdom(attackedKingdom);
@@ -188,6 +205,10 @@ public class CradleGame extends BaseGame
         prefs.putInteger("Gold", GameRes.Gold);
         prefs.putInteger("Wood", GameRes.Wood);
         prefs.putInteger("Bread", GameRes.Bread);
+        prefs.putInteger("TimeBomb", GameRes.TimeBomb);
+        prefs.putInteger("SquareBomb1", GameRes.SquareBomb1);
+        prefs.putInteger("SquareBomb2", GameRes.SquareBomb2);
+
         prefs.flush();
 
     }
@@ -233,5 +254,9 @@ public class CradleGame extends BaseGame
             }
         }
 
+    }
+
+    public I18NBundle getLanguageStrings() {
+        return languageStrings;
     }
 }
