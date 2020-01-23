@@ -1,13 +1,19 @@
 package by.android.cradle;
 
+import android.app.AlertDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+//import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
@@ -23,8 +29,28 @@ import com.google.android.gms.ads.initialization.OnInitializationCompleteListene
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Map;
-//import com.mobclix.android.sdk.MobclixMMABannerXLAdView;
+
+//GPS
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.games.AchievementsClient;
+import com.google.android.gms.games.AnnotatedData;
+import com.google.android.gms.games.EventsClient;
+import com.google.android.gms.games.Games;
+import com.google.android.gms.games.LeaderboardsClient;
+import com.google.android.gms.games.Player;
+import com.google.android.gms.games.PlayersClient;
+import com.google.android.gms.games.event.Event;
+import com.google.android.gms.games.event.EventBuffer;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 
 
 public class AndroidLauncher extends AndroidApplication implements IActivityRequestHandler  {
@@ -33,6 +59,23 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
 
 	private final int SHOW_ADS = 1;
 	private final int HIDE_ADS = 0;
+
+	// Client used to sign in with Google APIs
+	private GoogleSignInClient mGoogleSignInClient;
+
+	// Client variables
+	private AchievementsClient mAchievementsClient;
+	private LeaderboardsClient mLeaderboardsClient;
+	private EventsClient mEventsClient;
+	private PlayersClient mPlayersClient;
+
+	// request codes we use when invoking an external activity
+	private static final int RC_UNUSED = 5001;
+	private static final int RC_SIGN_IN = 9001;
+
+	// tag for debug logging
+	private static final String TAG = "CradleOfThrones";
+
 
 	protected Handler handler = new Handler()
 	{
@@ -119,6 +162,13 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
 		layout.addView(view, params);
 */
 
+
+// Create the client used to sign in to Google services.
+		mGoogleSignInClient = GoogleSignIn.getClient(this,
+				new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_GAMES_SIGN_IN).build());
+
+		signInSilently2();
+
 		// Hook it all up
 		setContentView(layout);
 	}
@@ -127,5 +177,141 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
 	@Override
 	public void showAds(boolean show) {
 		handler.sendEmptyMessage(show ? SHOW_ADS : HIDE_ADS);
+	}
+
+
+	private boolean isSignedIn() {
+		return GoogleSignIn.getLastSignedInAccount(this) != null;
+	}
+
+	private void signInSilently() {
+		Log.d(TAG, "signInSilently()");
+
+		mGoogleSignInClient.silentSignIn().addOnCompleteListener(this,
+				new OnCompleteListener<GoogleSignInAccount>() {
+					@Override
+					public void onComplete(@NonNull Task<GoogleSignInAccount> task) {
+						if (task.isSuccessful()) {
+							Log.d(TAG, "signInSilently(): success");
+							onConnected(task.getResult());
+						} else {
+							Log.d(TAG, "signInSilently(): failure", task.getException());
+							onDisconnected();
+						}
+					}
+				});
+	}
+
+	private void signInSilently2() {
+		GoogleSignInOptions signInOptions = GoogleSignInOptions.DEFAULT_GAMES_SIGN_IN;
+		GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
+		if (GoogleSignIn.hasPermissions(account, signInOptions.getScopeArray())) {
+			// Already signed in.
+			// The signed in account is stored in the 'account' variable.
+			GoogleSignInAccount signedInAccount = account;
+		} else {
+			// Haven't been signed-in before. Try the silent sign-in first.
+			GoogleSignInClient signInClient = GoogleSignIn.getClient(this, signInOptions);
+			signInClient
+					.silentSignIn()
+					.addOnCompleteListener(
+							this,
+							new OnCompleteListener<GoogleSignInAccount>() {
+								@Override
+								public void onComplete(@NonNull Task<GoogleSignInAccount> task) {
+									if (task.isSuccessful()) {
+										// The signed in account is stored in the task's result.
+										GoogleSignInAccount signedInAccount = task.getResult();
+									} else {
+										// Player will need to sign-in explicitly using via UI.
+										// See [sign-in best practices](http://developers.google.com/games/services/checklist) for guidance on how and when to implement Interactive Sign-in,
+										// and [Performing Interactive Sign-in](http://developers.google.com/games/services/android/signin#performing_interactive_sign-in) for details on how to implement
+										// Interactive Sign-in.
+										startSignInIntent();
+									}
+								}
+							});
+		}
+	}
+	private void startSignInIntent() {
+		startActivityForResult(mGoogleSignInClient.getSignInIntent(), RC_SIGN_IN);
+	}
+
+
+	private void startSignInIntent2() {
+		GoogleSignInClient signInClient = GoogleSignIn.getClient(this,
+				GoogleSignInOptions.DEFAULT_GAMES_SIGN_IN);
+		Intent intent = signInClient.getSignInIntent();
+		startActivityForResult(intent, RC_SIGN_IN);
+	}
+	private void onConnected(GoogleSignInAccount googleSignInAccount) {
+		Log.d(TAG, "onConnected(): connected to Google APIs");
+
+		mAchievementsClient = Games.getAchievementsClient(this, googleSignInAccount);
+		mLeaderboardsClient = Games.getLeaderboardsClient(this, googleSignInAccount);
+		mEventsClient = Games.getEventsClient(this, googleSignInAccount);
+		mPlayersClient = Games.getPlayersClient(this, googleSignInAccount);
+
+
+		//loadAndPrintEvents();
+	}
+
+	private void onDisconnected() {
+		Log.d(TAG, "onDisconnected()");
+
+		mAchievementsClient = null;
+		mLeaderboardsClient = null;
+		mPlayersClient = null;
+
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		Log.d(TAG, "onResume()");
+
+		// Since the state of the signed in user can change when the activity is not active
+		// it is recommended to try and sign in silently from when the app resumes.
+		signInSilently();
+	}
+
+	private void signOut() {
+		Log.d(TAG, "signOut()");
+
+		if (!isSignedIn()) {
+			Log.w(TAG, "signOut() called, but was not signed in!");
+			return;
+		}
+
+		mGoogleSignInClient.signOut().addOnCompleteListener(this,
+				new OnCompleteListener<Void>() {
+					@Override
+					public void onComplete(@NonNull Task<Void> task) {
+						boolean successful = task.isSuccessful();
+						Log.d(TAG, "signOut(): " + (successful ? "success" : "failed"));
+
+						onDisconnected();
+					}
+				});
+	}
+
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		if (requestCode == RC_SIGN_IN) {
+			GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
+			if (result.isSuccess()) {
+				// The signed in account is stored in the result.
+				GoogleSignInAccount signedInAccount = result.getSignInAccount();
+			} else {
+				String message = result.getStatus().getStatusMessage();
+				if (message == null || message.isEmpty()) {
+					message = "Другая ошибка при Sign in";
+				}
+				new AlertDialog.Builder(this).setMessage(message)
+						.setNeutralButton(android.R.string.ok, null).show();
+			}
+		}
 	}
 }
