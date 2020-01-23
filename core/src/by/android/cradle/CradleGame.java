@@ -20,9 +20,12 @@ public class CradleGame extends BaseGame
     private IActivityRequestHandler myRequestHandler;
     private int gameMapLevel;
     private I18NBundle languageStrings;
+    private IPlayServices ply;
+    public  final String leaderboard = "CgkIiby2l-0EEAIQAQ";
 
-    public CradleGame(IActivityRequestHandler handler) {
-        myRequestHandler = handler;
+    public CradleGame(IActivityRequestHandler handler,IPlayServices ply) {
+        this.myRequestHandler = handler;
+        this.ply=ply;
     }
 
     public void create()
@@ -46,11 +49,11 @@ public class CradleGame extends BaseGame
         gameMapLevel = prefs.getInteger("gameMapLevel", 1);
         //gameMapLevel=3;// for test purpose
 
-        menuScreen = new MenuScreen(this);
-        screenGamePlay = new ScreenGamePlay(this);
-        gameMapScreen = new GameMapScreen(this);
-        helpScreen = new HelpScreen(this);
-        shopScreen = new ShopScreen(this);
+        menuScreen = new MenuScreen(this,ply);
+        screenGamePlay = new ScreenGamePlay(this,ply);
+        gameMapScreen = new GameMapScreen(this,ply);
+        helpScreen = new HelpScreen(this,ply);
+        shopScreen = new ShopScreen(this,ply);
 
         Kingdom[] kingdoms = gameMapScreen.getKingdoms();
         kingdoms[0].setProtectionState(0); // starting Kingdom for player
@@ -66,6 +69,8 @@ public class CradleGame extends BaseGame
         setActiveScreen( menuScreen );
 
         myRequestHandler.showAds(false);
+
+
 
      }
 

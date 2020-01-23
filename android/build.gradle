@@ -106,3 +106,7 @@ task run(type: Exec) {
     def adb = path + "/platform-tools/adb"
     commandLine "$adb", 'shell', 'am', 'start', '-n', 'by.android.cradle/by.android.cradle.AndroidLauncher'
 }
+
+dependencies {
+    compile project(path: ':BaseGameUtils')
+}

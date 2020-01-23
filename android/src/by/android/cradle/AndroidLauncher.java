@@ -51,19 +51,24 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.example.games.basegameutils.GameHelper;
 
 
-public class AndroidLauncher extends AndroidApplication implements IActivityRequestHandler  {
+public class AndroidLauncher extends AndroidApplication implements IActivityRequestHandler,IPlayServices  {
 
 	protected AdView adView;
-
 	private final int SHOW_ADS = 1;
 	private final int HIDE_ADS = 0;
+	//GPS second try
+	private GameHelper gameHelper;
 
+
+	//GPS First try
 	// Client used to sign in with Google APIs
-	private GoogleSignInClient mGoogleSignInClient;
+	//private GoogleSignInClient mGoogleSignInClient;
 
 	// Client variables
+/*
 	private AchievementsClient mAchievementsClient;
 	private LeaderboardsClient mLeaderboardsClient;
 	private EventsClient mEventsClient;
@@ -72,7 +77,7 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
 	// request codes we use when invoking an external activity
 	private static final int RC_UNUSED = 5001;
 	private static final int RC_SIGN_IN = 9001;
-
+*/
 	// tag for debug logging
 	private static final String TAG = "CradleOfThrones";
 
@@ -98,6 +103,26 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
 
 	@Override public void onCreate (Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		//GPS second try start
+		gameHelper = new GameHelper(this, GameHelper.CLIENT_GAMES);
+		gameHelper.enableDebugLog(true);
+
+
+		GameHelper.GameHelperListener gameHelperListener = new GameHelper.GameHelperListener() {
+			@Override
+			public void onSignInFailed() {
+				GdxLog.print("onSignInFailed","gameHelperListener");
+			}
+
+			@Override
+			public void onSignInSucceeded() {
+				GdxLog.print("onSignInSucceeded","gameHelperListener");
+
+			}
+		};
+		//GPS Second try
+		gameHelper.setup(gameHelperListener);
+		//GPS second try finish
 
 		// Create the layout
 		RelativeLayout layout = new RelativeLayout(this);
@@ -110,7 +135,7 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
 
 		AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
 		// Create the libgdx View
-		View gameView = initializeForView(new CradleGame(this), config);
+		View gameView = initializeForView(new CradleGame(this,this), config);
 
 		// Create and setup the AdMob view
 		adView = new AdView(this);
@@ -164,13 +189,18 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
 
 
 // Create the client used to sign in to Google services.
+/*
 		mGoogleSignInClient = GoogleSignIn.getClient(this,
 				new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_GAMES_SIGN_IN).build());
 
 		signInSilently2();
+*/
 
 		// Hook it all up
 		setContentView(layout);
+
+
+
 	}
 
 	// This is the callback that posts a message for the handler
@@ -180,10 +210,12 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
 	}
 
 
-	private boolean isSignedIn() {
-		return GoogleSignIn.getLastSignedInAccount(this) != null;
+	public boolean isSignedIn() {
+		//return GoogleSignIn.getLastSignedInAccount(this) != null;
+		return gameHelper.isSignedIn();
 	}
 
+	/*
 	private void signInSilently() {
 		Log.d(TAG, "signInSilently()");
 
@@ -233,6 +265,7 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
 							});
 		}
 	}
+
 	private void startSignInIntent() {
 		startActivityForResult(mGoogleSignInClient.getSignInIntent(), RC_SIGN_IN);
 	}
@@ -264,7 +297,8 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
 		mPlayersClient = null;
 
 	}
-
+*/
+	/*
 	@Override
 	protected void onResume() {
 		super.onResume();
@@ -275,7 +309,8 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
 		signInSilently();
 	}
 
-	private void signOut() {
+
+	public void signOut() {
 		Log.d(TAG, "signOut()");
 
 		if (!isSignedIn()) {
@@ -296,8 +331,8 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
 	}
 
 
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+	protected void onActivityResult2(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 		if (requestCode == RC_SIGN_IN) {
 			GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
@@ -314,4 +349,112 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
 			}
 		}
 	}
+
+*/
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		gameHelper.onActivityResult(requestCode, resultCode, data);
+	}
+
+
+	@Override
+	protected void onStop() {
+		super.onStop();
+		gameHelper.onStop();
+	}
+
+	@Override
+	protected void onStart() {
+		super.onStart();
+		gameHelper.onStart(this); // You will be logged in to google play services as soon as you open app , i,e on start
+	}
+
+	@Override
+	public void onStartMethod() {
+		super.onStart();
+		gameHelper.onStart(this); // This is similar method but I am using this if i wish to login to google play services
+		// from any other screen and not from splash screen of my code
+
+	}
+
+
+
+	@Override
+	public void signIn() {
+		try {
+			runOnUiThread(new Runnable() {
+				@Override
+				public void run() {
+
+					gameHelper.beginUserInitiatedSignIn();
+
+				}
+			});
+		} catch (Exception e) {
+
+		}
+	}
+
+	@Override
+	public void signOut() {
+		try {
+			runOnUiThread(new Runnable() {
+				@Override
+				public void run() {
+
+					gameHelper.signOut();
+				}
+			});
+		} catch (Exception e) {
+
+		}
+	}
+
+	@Override
+	public void rateGame() {
+
+	}
+
+	@Override
+	public void unlockAchievement(String str) {
+
+	}
+
+	@Override
+	public void submitScore(String LeaderBoard, int highScore) {
+		if (isSignedIn()) {
+
+			Games.Leaderboards.submitScore(gameHelper.getApiClient(), LeaderBoard, highScore);
+		}
+		else{
+			System.out.println(" Not signin Yet ");
+		}
+	}
+
+	@Override
+	public void submitLevel(int highLevel) {
+
+	}
+
+	@Override
+	public void showAchievement() {
+
+	}
+
+	@Override
+	public void showScore(String LeaderBoard) {
+// вызвать Activity для всех зарегистрированных таблиц рекордов. Так же
+		// можно вызывать Activity под конкретную таблицу
+		startActivityForResult(
+				Games.Leaderboards.getAllLeaderboardsIntent(gameHelper
+						.getApiClient()), 100);
+	}
+
+	@Override
+	public void showLevel() {
+
+	}
+
 }

@@ -38,9 +38,9 @@ private ShopItem timeBomb;
 private ShopItem squareBomb1;
 private ShopItem squareBomb2;
 
-    public ShopScreen(CradleGame cradleGame) {
+    public ShopScreen(CradleGame cradleGame,IPlayServices ply) {
 
-        super(cradleGame);
+        super(cradleGame,ply);
     }
 
     public void initialize()

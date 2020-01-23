@@ -17,8 +17,11 @@ public class MenuScreen extends BaseScreen {
     private Music instrumental;
     private float audioVolume;
 
-    public MenuScreen(CradleGame cradleGame) {
-        super(cradleGame);
+
+    static final String TAG = "MenuScreen";
+
+    public MenuScreen(CradleGame cradleGame,IPlayServices ply) {
+        super(cradleGame,ply);
     }
 
     public void PlayMusic(){
@@ -81,6 +84,7 @@ public class MenuScreen extends BaseScreen {
 
                 if (!((InputEvent) e).getType().equals(InputEvent.Type.touchDown))
                     return false;
+                //ply.submitScore(cradleGame.leaderboard,100);
                 instrumental.pause();
                 cradleGame.setActiveGameMapScreen();
                 return true;
@@ -138,15 +142,71 @@ public class MenuScreen extends BaseScreen {
             }
         });
 
+        s = cradleGame.getLanguageStrings().get("signin");
+        final TextButton signInButton = new TextButton( "   "+s+"   ", BaseGame.textButtonStyle );
+        s = cradleGame.getLanguageStrings().get("scores_table");
+        final TextButton scoreButton = new TextButton( "   "+s+"   ", BaseGame.textButtonStyle );
+
+        signInButton.addListener(new InputListener() {
+            public boolean touchDown (InputEvent e, float x, float y, int pointer, int button){
+                if (!(e instanceof InputEvent)) return false;
+
+                if (!((InputEvent) e).getType().equals(InputEvent.Type.touchDown)) return false;
+
+                //GPS second try
+                if(ply.isSignedIn()) {
+                    GdxLog.d(TAG,"Already SignedIn Google PlayServices");
+                }
+                else {
+                    ply.onStartMethod();
+                    ply.signIn();
+                    GdxLog.d(TAG,"SignedIn Google PlayServices");
+                    signInButton.setVisible(false);
+                    scoreButton.setVisible(true);
+                }
+
+                return true;
+            }
+        });
+
+
+        scoreButton.addListener(new InputListener() {
+            public boolean touchDown (InputEvent e, float x, float y, int pointer, int button){
+                if (!(e instanceof InputEvent)) return false;
+
+                if (!((InputEvent) e).getType().equals(InputEvent.Type.touchDown)) return false;
+
+                if(ply.isSignedIn()) {
+                    ply.showScore(cradleGame.leaderboard);
+                    //GdxLog.d(TAG,"SignedIn Google PlayServices");
+                }
+
+                return true;
+            }
+        });
+
         //uiTable.add(title).colspan(2);
         uiTable.row();
         uiTable.add(startButton);
+        uiTable.row();
+        uiTable.add(signInButton);
+        //uiTable.row();
+        uiTable.add(scoreButton);
+        if(ply.isSignedIn()) {
+            signInButton.setVisible(false);
+            scoreButton.setVisible(true);
+
+        }else{
+            signInButton.setVisible(true);
+            scoreButton.setVisible(false);
+        }
         uiTable.row();
         uiTable.add(helpButton);
         uiTable.row();
         uiTable.add(quitButton);
         uiTable.row();
         uiTable.add(restartButton);
+
 
     }
 

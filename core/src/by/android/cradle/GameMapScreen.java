@@ -34,9 +34,9 @@ public class GameMapScreen extends BaseScreen {
     private TextButton shopButton;
     private boolean isUpdateMapNeeded;
 
-    public GameMapScreen(CradleGame cradleGame) {
+    public GameMapScreen(CradleGame cradleGame,IPlayServices ply) {
 
-        super(cradleGame);
+        super(cradleGame,ply);
         isUpdateMapNeeded = false;
     }
 

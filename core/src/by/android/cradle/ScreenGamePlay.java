@@ -55,8 +55,8 @@ public class ScreenGamePlay extends BaseScreen {
     private BaseActor hall;
 
 
-    public ScreenGamePlay(CradleGame cradleGame) {
-        super(cradleGame);
+    public ScreenGamePlay(CradleGame cradleGame,IPlayServices ply) {
+        super(cradleGame,ply);
     }
 
     public void initialize()

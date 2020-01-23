@@ -25,8 +25,8 @@ public class HelpScreen extends BaseScreen {
     private float padding = 16;
     private int numberOfSlides = 10;
 
-    public HelpScreen(CradleGame cradleGame) {
-        super(cradleGame);
+    public HelpScreen(CradleGame cradleGame,IPlayServices ply) {
+        super(cradleGame,ply);
     }
 
     public void PlayMusic(){
