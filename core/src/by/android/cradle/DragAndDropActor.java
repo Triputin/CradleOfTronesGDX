@@ -58,7 +58,7 @@ public class DragAndDropActor extends BaseActor
                         self.setDropTarget(null);
                         // keep track of distance to closest object
                         //float closestDistance = Float.MAX_VALUE;
-                        float closestDistance =50;
+                        float closestDistance =100;
                         for ( BaseActor actor : BaseActor.getList(self.getStage(), "by.android.cradle.DropTargetActor") ) {
                             DropTargetActor target = (DropTargetActor)actor;
                             if ( target.isTargetable() && self.overlaps(target) ) {

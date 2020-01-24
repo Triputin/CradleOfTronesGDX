@@ -70,13 +70,13 @@ public class GameMapScreen extends BaseScreen {
 
 
         BaseActor baseResultsActor = new BaseActor(w*0.25f,h-70,mainStage,Touchable.disabled);
-        baseResultsActor.setWidth((int) Math.round(w*0.6));
+        baseResultsActor.setWidth((int) Math.round(w*0.8));
         baseResultsActor.setHeight(70);
-        resultsActor = new ResultsActor(0,0,(int) Math.round(w*0.6),70,mainStage,Touchable.disabled,baseResultsActor);
+        resultsActor = new ResultsActor(0,0,(int) Math.round(w*0.8),70,mainStage,Touchable.disabled,baseResultsActor);
 
         //Fon for results
         BaseActor fon = new BaseActor(0,0,uiStage,Touchable.disabled);
-        fon.loadTexture("fon_orange.png",(int) Math.round(w*0.6)+30,70);
+        fon.loadTexture("fon_orange.png",(int) Math.round(w*0.8)+30,70);
         fon.setX((int) Math.round(w*0.25));
         fon.setY(h-70);
 

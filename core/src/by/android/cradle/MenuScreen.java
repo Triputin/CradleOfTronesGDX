@@ -143,9 +143,9 @@ public class MenuScreen extends BaseScreen {
         });
 
         s = cradleGame.getLanguageStrings().get("signin");
-        final TextButton signInButton = new TextButton( "   "+s+"   ", BaseGame.textButtonStyle );
+        final TextButton signInButton = new TextButton( ""+s+"", BaseGame.textButtonStyle );
         s = cradleGame.getLanguageStrings().get("scores_table");
-        final TextButton scoreButton = new TextButton( "   "+s+"   ", BaseGame.textButtonStyle );
+        final TextButton scoreButton = new TextButton( ""+s+"", BaseGame.textButtonStyle );
 
         signInButton.addListener(new InputListener() {
             public boolean touchDown (InputEvent e, float x, float y, int pointer, int button){
@@ -189,16 +189,15 @@ public class MenuScreen extends BaseScreen {
         uiTable.row();
         uiTable.add(startButton);
         uiTable.row();
-        uiTable.add(signInButton);
-        //uiTable.row();
+        uiStage.addActor(signInButton);
+        signInButton.setX(0);
+        signInButton.setY(h-signInButton.getHeight());
+        uiTable.row();
         uiTable.add(scoreButton);
         if(ply.isSignedIn()) {
             signInButton.setVisible(false);
-            scoreButton.setVisible(true);
+            //scoreButton.setVisible(true);
 
-        }else{
-            signInButton.setVisible(true);
-            scoreButton.setVisible(false);
         }
         uiTable.row();
         uiTable.add(helpButton);

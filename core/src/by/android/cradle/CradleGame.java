@@ -10,28 +10,37 @@ import by.android.cradle.BaseGame;
 
 public class CradleGame extends BaseGame
 {
+    //settings
+    public  final String leaderboard = "CgkIiby2l-0EEAIQAQ";
     public final int MaxGameMapLevel=3;
+    private int gameMapLevel;
+
+    //game screens
     private MenuScreen menuScreen;
     private GameMapScreen gameMapScreen;
     private ScreenGamePlay screenGamePlay;
     private HelpScreen helpScreen;
     private ShopScreen shopScreen;
+    //
     private Preferences prefs;
-    private IActivityRequestHandler myRequestHandler;
-    private int gameMapLevel;
-    private I18NBundle languageStrings;
-    private IPlayServices ply;
-    public  final String leaderboard = "CgkIiby2l-0EEAIQAQ";
+    private IActivityRequestHandler myRequestHandler; //interface for AdMob
+    private I18NBundle languageStrings; //loader for multilanguage strings
+    private IPlayServices ply; //interface to connect core with android google play services
 
-    public CradleGame(IActivityRequestHandler handler,IPlayServices ply) {
+
+    public CradleGame(IActivityRequestHandler handler, IPlayServices ply) {
+        //connect core code with platform objects from launchers which implemented interfaces
         this.myRequestHandler = handler;
         this.ply=ply;
+
     }
 
     public void create()
     {
         super.create();
+        //Setup settings provider
         prefs = Gdx.app.getPreferences("settings.prefs");
+
         // For debug ru locale
         //Locale locale = new Locale("ru");
         //languageStrings = I18NBundle.createBundle(Gdx.files.internal("strings/strings"),locale);
@@ -39,15 +48,7 @@ public class CradleGame extends BaseGame
         //Default locale for realise
         languageStrings = I18NBundle.createBundle(Gdx.files.internal("strings/strings"));
 
-        GameRes.Bread=prefs.getInteger("Bread", 100);
-        GameRes.Wood=prefs.getInteger("Wood", 100);
-        GameRes.Gold=prefs.getInteger("Gold", 50);
-        GameRes.TimeBomb=prefs.getInteger("TimeBomb", 2);
-        GameRes.SquareBomb1=prefs.getInteger("SquareBomb1", 2);
-        GameRes.SquareBomb2=prefs.getInteger("SquareBomb2", 2);
-
-        gameMapLevel = prefs.getInteger("gameMapLevel", 1);
-        //gameMapLevel=3;// for test purpose
+        getResFromStorage();
 
         menuScreen = new MenuScreen(this,ply);
         screenGamePlay = new ScreenGamePlay(this,ply);
@@ -74,6 +75,40 @@ public class CradleGame extends BaseGame
 
      }
 
+
+    public void getResFromStorage(){
+        GameRes.Bread=prefs.getInteger("Bread", 100);
+        GameRes.Wood=prefs.getInteger("Wood", 100);
+        GameRes.Gold=prefs.getInteger("Gold", 50);
+        GameRes.TimeBomb=prefs.getInteger("TimeBomb", 2);
+        GameRes.SquareBomb1=prefs.getInteger("SquareBomb1", 2);
+        GameRes.SquareBomb2=prefs.getInteger("SquareBomb2", 2);
+        GameRes.Score=prefs.getInteger("Score", 0);
+        gameMapLevel = prefs.getInteger("gameMapLevel", 1);
+        //gameMapLevel=3;// for test purpose
+
+    }
+
+    public void saveGameRes(){
+
+        prefs.putInteger("gameLevel", screenGamePlay.getGameLevel());
+        prefs.putInteger("gameMapLevel", gameMapLevel);
+        prefs.putInteger("Gold", GameRes.Gold);
+        prefs.putInteger("Wood", GameRes.Wood);
+        prefs.putInteger("Bread", GameRes.Bread);
+        prefs.putInteger("TimeBomb", GameRes.TimeBomb);
+        prefs.putInteger("SquareBomb1", GameRes.SquareBomb1);
+        prefs.putInteger("SquareBomb2", GameRes.SquareBomb2);
+        prefs.putInteger("Score", GameRes.Score);
+
+        Kingdom[] kingdoms = gameMapScreen.getKingdoms();
+
+        for (int i = 1; i < kingdoms.length; i++) {
+            prefs.putInteger("kingdomProtectionState"+i, kingdoms[i].getProtectionState());
+            //System.out.println("setActiveGameMapScreen Put:kingdomProtectionState"+i);
+        }
+        prefs.flush();
+    }
 
     public MenuScreen getMenuScreen() {
         return menuScreen;
@@ -149,22 +184,8 @@ public class CradleGame extends BaseGame
         gameMapScreen.SetMessageActorVisibility(false);
         myRequestHandler.showAds(true);
 
-        prefs.putInteger("gameLevel", screenGamePlay.getGameLevel());
-        prefs.putInteger("gameMapLevel", gameMapLevel);
-        prefs.putInteger("Gold", GameRes.Gold);
-        prefs.putInteger("Wood", GameRes.Wood);
-        prefs.putInteger("Bread", GameRes.Bread);
-        prefs.putInteger("TimeBomb", GameRes.TimeBomb);
-        prefs.putInteger("SquareBomb1", GameRes.SquareBomb1);
-        prefs.putInteger("SquareBomb2", GameRes.SquareBomb2);
+        saveGameRes();
 
-        Kingdom[] kingdoms = gameMapScreen.getKingdoms();
-
-        for (int i = 1; i < kingdoms.length; i++) {
-            prefs.putInteger("kingdomProtectionState"+i, kingdoms[i].getProtectionState());
-            //System.out.println("setActiveGameMapScreen Put:kingdomProtectionState"+i);
-        }
-        prefs.flush();
         //For Debug
         //screenGamePlay.printNumberOfActors();
 
@@ -206,6 +227,7 @@ public class CradleGame extends BaseGame
         GameRes.TimeBomb=2;
         GameRes.SquareBomb1=2;
         GameRes.SquareBomb2=2;
+        GameRes.Score=0;
 
         prefs.putInteger("Gold", GameRes.Gold);
         prefs.putInteger("Wood", GameRes.Wood);
@@ -213,6 +235,7 @@ public class CradleGame extends BaseGame
         prefs.putInteger("TimeBomb", GameRes.TimeBomb);
         prefs.putInteger("SquareBomb1", GameRes.SquareBomb1);
         prefs.putInteger("SquareBomb2", GameRes.SquareBomb2);
+        prefs.putInteger("Score", GameRes.Score);
 
         prefs.flush();
 

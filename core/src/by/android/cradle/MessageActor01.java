@@ -8,7 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 
 public class MessageActor01 extends BaseActor {
     private final KingdomRes kingdomRes;
-    private ResultsActor resultsActor;
+    private ResultsActorForAttack resultsActorForAttack;
     private AttackType attackType;
     Kingdom attackedKingdom;
 
@@ -20,7 +20,7 @@ public class MessageActor01 extends BaseActor {
         loadTexture( "goldenframe.png",width,height );
         AddImage("fon_white.png",Math.round(width*0.075f),Math.round(height*0.1f),Math.round(width*0.85f), Math.round(height*0.8f));
 
-        resultsActor = new ResultsActor(x+width*0.1f,(int)(y+height/2),(int)(width-width*0.2f),(int)(height/2.5),s,Touchable.disabled,this);
+        resultsActorForAttack = new ResultsActorForAttack(x+width*0.1f,(int)(y+height/2),(int)(width-width*0.2f),(int)(height/2.5),s,Touchable.disabled,this);
 
         //Attack Button
         String ms = cradleGame.getLanguageStrings().get("attack");
@@ -73,7 +73,7 @@ public class MessageActor01 extends BaseActor {
         this.kingdomRes.Bread = kingdomRes.Bread;
         this.kingdomRes.Gold = kingdomRes.Gold;
         this.kingdomRes.Wood = kingdomRes.Wood;
-        resultsActor.UpdateRes(kingdomRes);
+        resultsActorForAttack.UpdateRes(kingdomRes);
     }
 
     public AttackType getAttackType() {

@@ -2,6 +2,7 @@ package by.android.cradle;
 
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -414,12 +415,14 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
 
 	@Override
 	public void rateGame() {
-
+		String str = "https://play.google.com/store/apps/details?id=by.android.cradle";
+		startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(str)));
 	}
 
 	@Override
 	public void unlockAchievement(String str) {
-
+// открыть достижение с  achievementId = str
+		Games.Achievements.unlock(gameHelper.getApiClient(), str);
 	}
 
 	@Override
@@ -440,7 +443,10 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
 
 	@Override
 	public void showAchievement() {
-
+// вызвать Activity с достижениями
+		startActivityForResult(
+				Games.Achievements.getAchievementsIntent(gameHelper
+						.getApiClient()), 101);
 	}
 
 	@Override

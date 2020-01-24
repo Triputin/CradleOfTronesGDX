@@ -53,7 +53,7 @@ public class ScreenGamePlay extends BaseScreen {
     private KingdomRes kingdomRes; //res to win
     private Kingdom attackedKingdom;
     private BaseActor hall;
-
+    private int score_during_attack;
 
     public ScreenGamePlay(CradleGame cradleGame,IPlayServices ply) {
         super(cradleGame,ply);
@@ -67,7 +67,7 @@ public class ScreenGamePlay extends BaseScreen {
         messageLabel.setFontScale(4);
         messageLabel.setVisible(false);
         uiTable.add(messageLabel).expandY();
-
+        score_during_attack=0;
         explosionSound = Gdx.audio.newSound(Gdx.files.internal("sounds/glass_windows_breaking.mp3"));
 
         screenGamePlay = this;
@@ -96,16 +96,28 @@ public class ScreenGamePlay extends BaseScreen {
         } else w=h;
         cellSize = w/CellCount;
 
+
+
         BaseActor.setWorldBounds(cellSize*CellCount,cellSize*CellCount);
         gameFieldX=(Gdx.graphics.getWidth()-w)/2;
         gameFieldY=0;
         int gameFieldWidth = cellSize*CellCount;
         gameField = new GameField(gameFieldX,gameFieldY,mainStage,gameFieldWidth,gameFieldWidth,CellCount,1,cradleGame);
 
-        BaseActor baseResultsActor = new BaseActor(gameFieldX,h,uiStage,Touchable.disabled);
-        baseResultsActor.setWidth(cellSize*CellCount);
+
+        w = Gdx.graphics.getWidth();
+        BaseActor baseResultsActor = new BaseActor(w*0.15f,h,mainStage,Touchable.disabled);
+        baseResultsActor.setWidth((int) Math.round(w*0.8));
+        baseResultsActor.setHeight(70);
+        resultsActor = new ResultsActor(0,0,(int) Math.round(w*0.8),70,mainStage,Touchable.disabled,baseResultsActor);
+
+        /*
+        BaseActor baseResultsActor = new BaseActor(gameFieldX*0.9f,h,uiStage,Touchable.disabled);
+        baseResultsActor.setWidth(cellSize*CellCount*1.2f); // don't work
         baseResultsActor.setHeight(70);
         resultsActor = new ResultsActor(0,0,cellSize*CellCount,70,uiStage,Touchable.disabled,baseResultsActor);
+   */
+
         //DrawResults(h, gameFieldWidth);
         UpdateRes();
         //SandGlass placement
@@ -727,13 +739,18 @@ public void RemoveAndFillSquare(int centreRow, int centreCol, int squareSize){
         switch (className)
         {
             case "by.android.cradle.Coin2": cradleGame.setGameResGold(GameRes.Gold+1);
+                score_during_attack++; //temporarely increase score. Finally aplied after win game
             break;
             case "by.android.cradle.Wood": cradleGame.setGameResWood(GameRes.Wood+1);
+                score_during_attack++; //temporarely increase score. Finally aplied after win game
                 break;
             case "by.android.cradle.Bread": cradleGame.setGameResBread(GameRes.Bread+1);
+                score_during_attack++; //temporarely increase score. Finally aplied after win game
                 break;
 
         }
+
+
         resultsActor.UpdateRes();
     }
 
@@ -781,7 +798,7 @@ public void RemoveAndFillSquare(int centreRow, int centreCol, int squareSize){
 
 
         float lvl = levelnumber;
-        if (lvl>80){lvl=80;}
+        if (lvl>300){lvl=300;}
 
         Item item;
         for(int i = 0;i<CellCount;i++){
@@ -793,13 +810,15 @@ public void RemoveAndFillSquare(int centreRow, int centreCol, int squareSize){
                 //item.addAction(Actions.scaleTo(1,1,5));
 
                 if(Math.random()>(1.0-lvl/500)){
-                    if (Math.random()>(0.8-lvl/300)) {item.setLockLevel(2);}
+                    if (Math.random()>(1.0-lvl/500)) {item.setLockLevel(2);}
                     else {item.setLockLevel(1);
                     }
                 }
 
             }
         }
+
+        score_during_attack=0;
     }
 
     public void WinMessageAndNewLevelCreate(){
@@ -840,6 +859,7 @@ public void RemoveAndFillSquare(int centreRow, int centreCol, int squareSize){
                     attackedKingdom.decreaseProtection();
                     setGameLevel(gameLevel+1);
                 }
+                GameRes.Score=GameRes.Score+score_during_attack; // increase score if win
                 cradleGame.setActiveGameMapScreen();
                 return true;
             }
