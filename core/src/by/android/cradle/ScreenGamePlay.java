@@ -54,6 +54,8 @@ public class ScreenGamePlay extends BaseScreen {
     private Kingdom attackedKingdom;
     private BaseActor hall;
     private int score_during_attack;
+    private DialogBox_EndLevel dialogBox_endLevel;
+    private KingdomRes resultAttack;
 
     public ScreenGamePlay(CradleGame cradleGame,IPlayServices ply) {
         super(cradleGame,ply);
@@ -62,6 +64,7 @@ public class ScreenGamePlay extends BaseScreen {
     public void initialize()
     {
         kingdomRes = new KingdomRes();
+        resultAttack = new KingdomRes();
         attackType = AttackType.AttackKingdom;
         messageLabel = new Label("...", BaseGame.labelStyle);
         messageLabel.setFontScale(4);
@@ -88,6 +91,10 @@ public class ScreenGamePlay extends BaseScreen {
                 hall.loadTexture("castle/castlelevel03.png", w, h);
             }
         }
+
+        int dialogSize = Math.round(h*0.8f);
+        dialogBox_endLevel = new DialogBox_EndLevel(w/2-dialogSize/2,h/2-dialogSize/2,uiStage,dialogSize,dialogSize,cradleGame);
+        dialogBox_endLevel.setVisible(false);
 
 
         h=h-70; //place for top menu items
@@ -122,7 +129,7 @@ public class ScreenGamePlay extends BaseScreen {
         UpdateRes();
         //SandGlass placement
         float x = gameFieldX+cellSize*CellCount+10;
-        float y = gameFieldY+gameFieldWidth*0.15f;
+        float y = gameFieldY+gameFieldWidth*0.05f;
         int sw = (int)(Gdx.graphics.getWidth()-x);
         int sandglassduration = 60;
         if (gameLevel>20) {
@@ -132,12 +139,12 @@ public class ScreenGamePlay extends BaseScreen {
 
         sandGlass = new SandGlass(x,y,uiStage,sw, Math.round( gameFieldWidth*0.7f), sandglassduration);
         //Game level
-        gameLevel = 1 ;
-        gameLevelLabel = new Label(" "+0, BaseGame.labelStyle);
+        //gameLevel = 1 ;
+        gameLevelLabel = new Label("  "+0, BaseGame.labelStyle);
         gameLevelLabel.setText(""+gameLevel);
         gameLevelLabel.setColor( Color.GOLDENROD );
-        gameLevelLabel.setPosition( x+sandGlass.getWidth()/2-10,y );
-        gameLevelLabel.setFontScale(1.5f);
+        gameLevelLabel.setPosition( sandGlass.getX()+sandGlass.getWidth()/3,y-5 );
+        gameLevelLabel.setFontScale(2.0f);
         uiStage.addActor(gameLevelLabel);
 
 
@@ -738,13 +745,19 @@ public void RemoveAndFillSquare(int centreRow, int centreCol, int squareSize){
 
         switch (className)
         {
-            case "by.android.cradle.Coin2": cradleGame.setGameResGold(GameRes.Gold+1);
+            case "by.android.cradle.Coin2":
+                cradleGame.setGameResGold(GameRes.Gold+1);
+                resultAttack.Gold++;
                 score_during_attack++; //temporarely increase score. Finally aplied after win game
             break;
-            case "by.android.cradle.Wood": cradleGame.setGameResWood(GameRes.Wood+1);
+            case "by.android.cradle.Wood":
+                cradleGame.setGameResWood(GameRes.Wood+1);
+                resultAttack.Wood++;
                 score_during_attack++; //temporarely increase score. Finally aplied after win game
                 break;
-            case "by.android.cradle.Bread": cradleGame.setGameResBread(GameRes.Bread+1);
+            case "by.android.cradle.Bread":
+                cradleGame.setGameResBread(GameRes.Bread+1);
+                resultAttack.Bread++;
                 score_during_attack++; //temporarely increase score. Finally aplied after win game
                 break;
 
@@ -809,8 +822,8 @@ public void RemoveAndFillSquare(int centreRow, int centreCol, int squareSize){
                 item.addAction(Actions.moveTo(gameFieldX + j * cellSize, gameFieldY + i * cellSize,1));
                 //item.addAction(Actions.scaleTo(1,1,5));
 
-                if(Math.random()>(1.0-lvl/500)){
-                    if (Math.random()>(1.0-lvl/500)) {item.setLockLevel(2);}
+                if(Math.random()>(1.0-lvl/450)){
+                    if (Math.random()>(1.0-lvl/250)) {item.setLockLevel(2);}
                     else {item.setLockLevel(1);
                     }
                 }
@@ -860,7 +873,28 @@ public void RemoveAndFillSquare(int centreRow, int centreCol, int squareSize){
                     setGameLevel(gameLevel+1);
                 }
                 GameRes.Score=GameRes.Score+score_during_attack; // increase score if win
-                cradleGame.setActiveGameMapScreen();
+                //cradleGame.setActiveGameMapScreen();
+
+                //Show dialog
+
+                dialogBox_endLevel.setResults(score_during_attack,resultAttack.Gold,resultAttack.Wood,resultAttack.Bread);
+
+                final InputListener inputListener2 =new InputListener() {
+                    public boolean touchDown (InputEvent e, float x, float y, int pointer, int button){
+                        if (!(e instanceof InputEvent))
+                            return false;
+
+                        if (!((InputEvent) e).getType().equals(InputEvent.Type.touchDown))
+                            return false;
+
+                        cradleGame.setActiveGameMapScreen();
+
+                        return true;
+                    }
+                };
+
+                dialogBox_endLevel.showWithOkButton(inputListener2);
+
                 return true;
             }
         };
@@ -903,7 +937,7 @@ public void RemoveAndFillSquare(int centreRow, int centreCol, int squareSize){
         sandGlass.remove();
         //SandGlass recreation for restarting of animation
         float x = gameFieldX+cellSize*CellCount+10;
-        float y = gameFieldY+100;
+        float y = gameFieldY+cellSize*CellCount*0.05f;;
         int sw = (int)(Gdx.graphics.getWidth()-x);
         int sandglassduration = 60;
         if (gameLevel>20) {
@@ -947,7 +981,26 @@ public void RemoveAndFillSquare(int centreRow, int centreCol, int squareSize){
             public boolean act( float delta ) {
                 // Do your stuff
 
-                cradleGame.setActiveGameMapScreen();
+                //cradleGame.setActiveGameMapScreen();
+
+                //Show dialog
+                dialogBox_endLevel.setResults(0,resultAttack.Gold,resultAttack.Wood,resultAttack.Bread);
+
+                final InputListener inputListener2 =new InputListener() {
+                    public boolean touchDown (InputEvent e, float x, float y, int pointer, int button){
+                        if (!(e instanceof InputEvent))
+                            return false;
+
+                        if (!((InputEvent) e).getType().equals(InputEvent.Type.touchDown))
+                            return false;
+
+                        cradleGame.setActiveGameMapScreen();
+
+                        return true;
+                    }
+                };
+
+                dialogBox_endLevel.showWithOkButton(inputListener2);
                 return true;
             }
         };
@@ -1061,6 +1114,10 @@ public void RemoveAndFillSquare(int centreRow, int centreCol, int squareSize){
         //System.out.println("uiStage: Actors="+list.size());
         GdxLog.d("printNumberOfActors():","uiStage: Actors=%d",list.size());
 
+    }
+
+    public void HideDialog (){
+        dialogBox_endLevel.setVisible(false);
     }
 
 

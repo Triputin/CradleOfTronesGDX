@@ -64,7 +64,7 @@ public class CradleGame extends BaseGame
         }
 
         int gameLevel = prefs.getInteger("gameLevel", 1);
-        //gameLevel = 80; // for debug purpose
+        //gameLevel = 120; // for debug purpose
         screenGamePlay.setGameLevel(gameLevel);
 
         setActiveScreen( menuScreen );
@@ -185,7 +185,7 @@ public class CradleGame extends BaseGame
         myRequestHandler.showAds(true);
 
         saveGameRes();
-
+        ply.submitScore(leaderboard,GameRes.Score);
         //For Debug
         //screenGamePlay.printNumberOfActors();
 
@@ -198,6 +198,7 @@ public class CradleGame extends BaseGame
         game.setScreen(screenGamePlay);
         screenGamePlay.UpdateRes();
         screenGamePlay.setAttackedKingdom(attackedKingdom);
+        screenGamePlay.HideDialog();
         screenGamePlay.StartNewLevel();
         menuScreen.PauseMusic();
         gameMapScreen.PauseMusic();

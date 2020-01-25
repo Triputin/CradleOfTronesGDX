@@ -127,6 +127,58 @@ public class GameMapScreen extends BaseScreen {
         messageActor01 = new MessageActor01(0,0,uiStage,500,200,cradleGame);
         messageActor01.setVisible(false);
         UpdateRes();
+
+
+        // Test ---------------------
+        /*
+        int dialogSize = Math.round(h*0.8f);
+        final DialogBox_EndLevel dialogBox = new DialogBox_EndLevel(w/2-dialogSize/2,h/2-dialogSize/2,uiStage,dialogSize,dialogSize,cradleGame);
+        //dialogBox.setText("Test dialog");
+        //dialogBox.setDialogSize(400,400);
+        //dialogBox.alignCenter();
+        dialogBox.setVisible(false);
+        //Test Dialog Button
+        final Action  completeAction = new Action(){
+            public boolean act( float delta ) {
+                // Do your stuff
+                return true;
+            }
+        };
+
+        final InputListener inputListener2 =new InputListener() {
+            public boolean touchDown (InputEvent e, float x, float y, int pointer, int button){
+                if (!(e instanceof InputEvent))
+                    return false;
+
+                if (!((InputEvent) e).getType().equals(InputEvent.Type.touchDown))
+                    return false;
+
+                cradleGame.setActiveMenuScreen();
+
+                return true;
+            }
+        };
+        TextButton testButton = new TextButton( "Test dialog", BaseGame.textButtonStyle );
+        testButton.setPosition(w*0.1f,h*0.2f);
+        uiStage.addActor(testButton);
+        testButton.addListener(new InputListener() {
+            public boolean touchDown (InputEvent e, float x, float y, int pointer, int button){
+                if (!(e instanceof InputEvent))
+                    return false;
+
+                if (!((InputEvent) e).getType().equals(InputEvent.Type.touchDown))
+                    return false;
+
+                //dialogBox.showForTime(5,completeAction);
+                dialogBox.showWithOkButton(inputListener2);
+                return true;
+            }
+        });
+
+        //End of test -------------------
+*/
+
+
     }
 
     public void initializeMap(int mapLevel){

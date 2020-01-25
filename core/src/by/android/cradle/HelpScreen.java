@@ -125,9 +125,10 @@ public class HelpScreen extends BaseScreen {
         infoLabel.setPosition( padding, (int) Math.round(h*0.4));
         uiStage.addActor(infoLabel);
 */
-        dialogBox = new DialogBox(padding, 0,uiStage);
-        dialogBox.setDialogSize(w/2,(int) Math.round(h*0.7));
+        dialogBox = new DialogBox(padding, 0,uiStage,w/2,(int) Math.round(h*0.8f),cradleGame);
+        //dialogBox.setDialogSize(w/2,(int) Math.round(h*0.8));
         dialogBox.setFontScale(1.8f);
+        dialogBox.alignTopLeft();
         //dialogBox.setBackgroundColor(Color.ORANGE);
         SetUpSlide(1,w,h);
 

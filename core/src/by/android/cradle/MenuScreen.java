@@ -161,8 +161,8 @@ public class MenuScreen extends BaseScreen {
                     ply.onStartMethod();
                     ply.signIn();
                     GdxLog.d(TAG,"SignedIn Google PlayServices");
-                    signInButton.setVisible(false);
-                    scoreButton.setVisible(true);
+                   // signInButton.setVisible(false);
+                   // scoreButton.setVisible(true);
                 }
 
                 return true;

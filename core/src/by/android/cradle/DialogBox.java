@@ -1,45 +1,50 @@
 package by.android.cradle;
 
+import com.badlogic.gdx.scenes.scene2d.Action;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.Align;
+
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.fadeIn;
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.fadeOut;
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.sequence;
 
 public class DialogBox extends BaseActor
 {
     private Label dialogLabel;
-    private float padding = 16;
-    private BaseActor fon;
+    private float padding = 42;
+    private final CradleGame  cradleGame;
+    TextButton okButton;
 
-    public DialogBox(float x, float y, Stage s)
+    public DialogBox(float x, float y, Stage s, int width, int height,CradleGame cradleGame1)
     {
-        super(x,y,s, Touchable.disabled);
+        super(x,y,s, Touchable.enabled);
+        this.cradleGame = cradleGame1;
+        loadTexture( "goldenframe.png",width,height );
+        AddImage("fon_white.png",Math.round(width*0.075f),Math.round(height*0.1f),Math.round(width*0.85f), Math.round(height*0.8f));
 
         dialogLabel = new Label(" ", BaseGame.labelStyle);
         dialogLabel.setWrap(true);
         dialogLabel.setAlignment( Align.topLeft );
-        dialogLabel.setPosition( padding, padding );
-        /*
-        fon = new BaseActor(0,0,s,Touchable.disabled);
-        fon.setX(0);
-        fon.setY(0);
-        this.addActor(fon);
-        */
-
-        this.setDialogSize( getWidth(), getHeight() );
-        //loadTexture("fon_orange.png",(int) getWidth(),(int) getHeight());
+        dialogLabel.setPosition( Math.round(width*0.075f), Math.round(height*0.1f) );
+        this.setSize(width, height);
+        dialogLabel.setWidth( Math.round(width*0.85f) );
+        dialogLabel.setHeight( Math.round(height*0.8f));
 
         this.addActor(dialogLabel);
 
-    }
+        //Ok Button
+        String ms = cradleGame.getLanguageStrings().get("ok");
+        okButton = new TextButton( ms, BaseGame.textButtonStyle );
+        okButton.setPosition(Math.round(getWidth()/2-okButton.getWidth()/2),padding);
 
-    public void setDialogSize(float width, float height)
-    {
-        this.setSize(width, height);
-        dialogLabel.setWidth( width - 2 * padding );
-        dialogLabel.setHeight( height - 2 * padding );
-        //fon.loadTexture("fon_orange.png",(int) width,(int) height);
+
     }
 
     public void setText(String text)
@@ -59,4 +64,24 @@ public class DialogBox extends BaseActor
 
     public void alignCenter()
     {  dialogLabel.setAlignment( Align.center );  }
+
+    public void showForTime(int seconds,Action completeAction ){
+        Action actions = sequence(Actions.scaleTo(0,0,0.01f),fadeIn(0.01f),Actions.scaleTo(1,1,2.0f), Actions.delay(seconds) ,fadeOut(1f), completeAction);
+
+        this.setVisible(true);
+        this.addAction( actions );
+
+    }
+
+    public void showWithOkButton(InputListener inputListener){
+        addActor(okButton);
+        okButton.addListener(inputListener);
+
+        Action actions = sequence(Actions.scaleTo(0,0,0.01f),fadeIn(0.01f),Actions.scaleTo(1,1,2.0f));
+
+        this.setVisible(true);
+        this.addAction( actions );
+
+
+    }
 }
