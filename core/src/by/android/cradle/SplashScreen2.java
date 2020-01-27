@@ -6,6 +6,8 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+
+// Minimal dependencies alows to start asap.
 public class SplashScreen2 implements Screen {
     private SpriteBatch batch;
     private Texture ttrSplash;

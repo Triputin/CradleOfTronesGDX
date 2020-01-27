@@ -10,7 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
-
+// That shows very late after launch of application. Don't used.
 public class SplashScreen implements Screen {
 
     private Texture splashtexture;
@@ -48,7 +48,7 @@ public class SplashScreen implements Screen {
             }
         };
 
-        splashimage.addAction(Actions.sequence(Actions.alpha(0.0F), Actions.fadeIn(1.25F),Actions.delay(1F), Actions.fadeOut(1.0F), completeAction));
+        splashimage.addAction(Actions.sequence(Actions.alpha(0.0F), Actions.fadeIn(1.0F),Actions.delay(1F), Actions.fadeOut(1.0F), completeAction));
     }
 
     @Override

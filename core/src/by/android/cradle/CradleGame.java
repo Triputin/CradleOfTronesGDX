@@ -4,6 +4,7 @@ import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.utils.I18NBundle;
+import com.badlogic.gdx.utils.Timer;
 
 import java.util.Locale;
 
@@ -22,6 +23,7 @@ public class CradleGame extends BaseGame
     private ScreenGamePlay screenGamePlay;
     private HelpScreen helpScreen;
     private ShopScreen shopScreen;
+    private static long SPLASH_MINIMUM_MILLIS = 3000L;
     //private SplashScreen splashScreen;
     //
     private Preferences prefs;
@@ -39,42 +41,43 @@ public class CradleGame extends BaseGame
 
     public void create()
     {
+        setScreen(new SplashScreen2());
+        myRequestHandler.showAds(false);
         super.create();
 
-       // Gdx.app.setLogLevel(Application.LOG_DEBUG);
-        //Setup settings provider
-        prefs = Gdx.app.getPreferences("settings.prefs");
+        final long splash_start_time = System.currentTimeMillis();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
 
-        // For debug ru locale
-        //Locale locale = new Locale("ru");
-        //languageStrings = I18NBundle.createBundle(Gdx.files.internal("strings/strings"),locale);
+                Gdx.app.postRunnable(new Runnable() {
+                    @Override
+                    public void run() {
+                        // ... carga de datos
+                        // ... carga de fuentes tipograficas
+                        // ... carga de sonidos
+                        // ... carga de imagenes
+                        // ... carga de recursos de internacionalizacion
+                        // ... otros
 
-        //Default locale for realise
-        languageStrings = I18NBundle.createBundle(Gdx.files.internal("strings/strings"));
-
-        getResFromStorage();
-        //gameMapLevel=1; // for debug
-        menuScreen = new MenuScreen(this,ply);
-        screenGamePlay = new ScreenGamePlay(this,ply);
-        gameMapScreen = new GameMapScreen(this,ply);
-        helpScreen = new HelpScreen(this,ply);
-        shopScreen = new ShopScreen(this,ply);
-
-        Kingdom[] kingdoms = gameMapScreen.getKingdoms();
-        kingdoms[0].setProtectionState(0); // starting Kingdom for player
-        for (int i = 1; i < kingdoms.length; i++) {
-            kingdoms[i].setProtectionState(prefs.getInteger("kingdomProtectionState"+i, 5));
-
-            //System.out.println("CradleGame.create Get:kingdomProtectionState"+i+);
-        }
-
-        int gameLevel = prefs.getInteger("gameLevel", 1);
-        //gameLevel = 120; // for debug purpose
-        screenGamePlay.setGameLevel(gameLevel);
-        myRequestHandler.showAds(false);
-
-        setScreen(new SplashScreen(this,menuScreen));
-        //setActiveScreen( menuScreen );
+                        Init();
+                        // Se muestra el menu principal tras la SpashScreen
+                        long splash_elapsed_time = System.currentTimeMillis() - splash_start_time;
+                        if (splash_elapsed_time < SPLASH_MINIMUM_MILLIS) {
+                            Timer.schedule(
+                                    new Timer.Task() {
+                                        @Override
+                                        public void run() {
+                                            setScreen(menuScreen);
+                                        }
+                                    }, (float)(SPLASH_MINIMUM_MILLIS - splash_elapsed_time) / 1000f);
+                        } else {
+                            setScreen(menuScreen);
+                        }
+                    }
+                });
+            }
+        }).start();
 
 
 
@@ -82,6 +85,42 @@ public class CradleGame extends BaseGame
 
      }
 
+     public void Init(){
+         // Gdx.app.setLogLevel(Application.LOG_DEBUG);
+         //Setup settings provider
+         prefs = Gdx.app.getPreferences("settings.prefs");
+
+         // For debug ru locale
+         //Locale locale = new Locale("ru");
+         //languageStrings = I18NBundle.createBundle(Gdx.files.internal("strings/strings"),locale);
+
+         //Default locale for realise
+         languageStrings = I18NBundle.createBundle(Gdx.files.internal("strings/strings"));
+
+         getResFromStorage();
+         //gameMapLevel=1; // for debug
+         menuScreen = new MenuScreen(this,ply);
+         screenGamePlay = new ScreenGamePlay(this,ply);
+         gameMapScreen = new GameMapScreen(this,ply);
+         helpScreen = new HelpScreen(this,ply);
+         shopScreen = new ShopScreen(this,ply);
+
+         Kingdom[] kingdoms = gameMapScreen.getKingdoms();
+         kingdoms[0].setProtectionState(0); // starting Kingdom for player
+         for (int i = 1; i < kingdoms.length; i++) {
+             kingdoms[i].setProtectionState(prefs.getInteger("kingdomProtectionState"+i, 5));
+
+             //System.out.println("CradleGame.create Get:kingdomProtectionState"+i+);
+         }
+
+         int gameLevel = prefs.getInteger("gameLevel", 1);
+         //gameLevel = 120; // for debug purpose
+         screenGamePlay.setGameLevel(gameLevel);
+
+
+         //setScreen(new SplashScreen(this,menuScreen)); //first version
+         //setActiveScreen( menuScreen );
+     }
 
     public void getResFromStorage(){
         GameRes.Bread=prefs.getInteger("Bread", 100);
@@ -295,4 +334,6 @@ public class CradleGame extends BaseGame
     public I18NBundle getLanguageStrings() {
         return languageStrings;
     }
+
+
 }
