@@ -5,6 +5,7 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import by.android.cradle.CradleGame;
 import by.android.cradle.IActivityRequestHandler;
 import by.android.cradle.IPlayServices;
+import by.android.cradle.SplashScreen;
 
 
 public class DesktopLauncher implements IActivityRequestHandler, IPlayServices {
@@ -14,9 +15,10 @@ public class DesktopLauncher implements IActivityRequestHandler, IPlayServices {
 			application = new DesktopLauncher();
 		}
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-		config.width = 1000;
+		config.width = 1422;
 		config.height = 800;
-		new LwjglApplication(new CradleGame(application,application), config);
+		CradleGame cradleGame = new CradleGame(application,application);
+		new LwjglApplication(cradleGame, config);
 
 	}
 

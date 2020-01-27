@@ -102,7 +102,8 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
 		}
 	};
 
-	@Override public void onCreate (Bundle savedInstanceState) {
+	@Override
+	public void onCreate (Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		//GPS second try start
 		gameHelper = new GameHelper(this, GameHelper.CLIENT_GAMES);
@@ -430,6 +431,12 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
 		if (isSignedIn()) {
 
 			Games.Leaderboards.submitScore(gameHelper.getApiClient(), LeaderBoard, highScore);
+			//LeaderboardsClient.LeaderboardScores.submitScore
+/*
+			Games.getLeaderboardsClient(this, GoogleSignIn.getLastSignedInAccount(this))
+					.submitScore(LeaderBoard, highScore);
+*/
+
 		}
 		else{
 			System.out.println(" Not signin Yet ");

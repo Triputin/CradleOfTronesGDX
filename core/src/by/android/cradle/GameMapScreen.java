@@ -69,16 +69,18 @@ public class GameMapScreen extends BaseScreen {
         initializeMap(cradleGame.getGameMapLevel());
 
 
+        //Fon for results
+        BaseActor fon = new BaseActor(0,0,mainStage,Touchable.disabled);
+        fon.loadTexture("fon_orange.png",(int) Math.round(w*0.8)+30,70);
+        fon.setX((int) Math.round(w*0.25));
+        fon.setY(h-70);
+
         BaseActor baseResultsActor = new BaseActor(w*0.25f,h-70,mainStage,Touchable.disabled);
         baseResultsActor.setWidth((int) Math.round(w*0.8));
         baseResultsActor.setHeight(70);
         resultsActor = new ResultsActor(0,0,(int) Math.round(w*0.8),70,mainStage,Touchable.disabled,baseResultsActor);
 
-        //Fon for results
-        BaseActor fon = new BaseActor(0,0,uiStage,Touchable.disabled);
-        fon.loadTexture("fon_orange.png",(int) Math.round(w*0.8)+30,70);
-        fon.setX((int) Math.round(w*0.25));
-        fon.setY(h-70);
+
 
        //Menu Button
         String s = cradleGame.getLanguageStrings().get("menu");
@@ -198,9 +200,12 @@ public class GameMapScreen extends BaseScreen {
         if (continueButton!=null){
             continueButton.remove();
         }
+
+        /*
         if (shopButton!=null){
             shopButton.remove();
         }
+*/
 
         kingdoms = new Kingdom[7];
         if( worldMap==null) {
@@ -340,6 +345,7 @@ public class GameMapScreen extends BaseScreen {
 
         checkWin();
     }
+
 
     public void update(float dt)
     {

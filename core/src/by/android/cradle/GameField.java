@@ -228,52 +228,112 @@ public void changeGameCell(Cell cell){
     }
 }
 
-    public void GenerateLevel(int levelnumber,  int CellCount) {
+    public void GenerateLevel(int levelnumber, int CellCount) {
         //Generate cells
 
-        int  gmplvl = cradleGame.getGameMapLevel();
+        int countOfOrangeCells = 0;
+        int gmplvl = cradleGame.getGameMapLevel();
+        int minCountOfOrangeCells;
+        int maxCountOfOrangeCells;
+        // minimum and maximum amounts of orange sells
+        switch (gmplvl) {
+            case 1:
+                minCountOfOrangeCells = 4;
+                maxCountOfOrangeCells = 6;
+                break;
+            case 2:
+                minCountOfOrangeCells = 5;
+                maxCountOfOrangeCells = 8;
+                break;
+            case 3:
+                minCountOfOrangeCells = 7;
+                maxCountOfOrangeCells = 10;
+                break;
+            default:
+                minCountOfOrangeCells = 8;
+                maxCountOfOrangeCells = 12;
+        }
 
+        //Unlock all cells
+        for (int i = 0; i < CellCount; i++) {
+            for (int j = 0; j < CellCount; j++) {
+                gameCells.get(i * CellCount + j).setLockLevel(0);
+            }
+        }
+
+        // Lock cells
+        // repeat until mimimum orange cells is reached
+        GameCell gameCell;
+        while (countOfOrangeCells < minCountOfOrangeCells) {
             for (int i = 0; i < CellCount; i++) {
                 for (int j = 0; j < CellCount; j++) {
 
-                    switch (gmplvl){
+                    switch (gmplvl) {
                         case 1:
-                            if (Math.random() < 0.5 && (j > CellCount / 4) && (j < CellCount / 1.5) && (i > CellCount / 4) && (i < CellCount / 1.5)) {
-                                gameCells.get(i * CellCount + j).setLockLevel(1);
+                            if (Math.random() < 0.12 && (j > 0) && (j < 6) && (i > 0) && (i < 6)) {
+                                if (countOfOrangeCells <= maxCountOfOrangeCells) {
+                                    gameCell = gameCells.get(i * CellCount + j);
+                                    if (gameCell.getLockLevel()==0) {
+                                        countOfOrangeCells++;
+                                        gameCell.setLockLevel(1);
+                                    }
+                                }
                             }
                             break;
                         case 2:
-                            if (Math.random() < 0.08) {
 
-                                gameCells.get(i * CellCount + j).setLockLevel(1);
-
+                            if (Math.random() < 0.12) {
+                                if (countOfOrangeCells <= maxCountOfOrangeCells) {
+                                    gameCell = gameCells.get(i * CellCount + j);
+                                    if (gameCell.getLockLevel()==0) {
+                                        countOfOrangeCells++;
+                                        if (Math.random() < 0.8) {
+                                            gameCell.setLockLevel(1);
+                                        } else {
+                                            gameCell.setLockLevel(2);
+                                        }
+                                    }
+                                }
                             }
                             break;
                         case 3:
-                            if (Math.random() < 0.15) {
-                                if (Math.random() < 0.7){
-                                    gameCells.get(i * CellCount + j).setLockLevel(1);
-                                } else {
-                                    gameCells.get(i * CellCount + j).setLockLevel(2);
+                            if (Math.random() < 0.2) {
+                                if (countOfOrangeCells <= maxCountOfOrangeCells) {
+                                    gameCell = gameCells.get(i * CellCount + j);
+                                    if (gameCell.getLockLevel()==0) {
+                                        countOfOrangeCells++;
+                                        if (Math.random() < 0.7) {
+                                            gameCell.setLockLevel(1);
+                                        } else {
+                                            gameCell.setLockLevel(2);
+                                        }
+                                    }
                                 }
-
                             }
                             break;
 
-                            default:
-                                if (Math.random() < 0.15) {
-                                    if (Math.random() < 0.5){
-                                        gameCells.get(i * CellCount + j).setLockLevel(1);
-                                    } else {
-                                        gameCells.get(i * CellCount + j).setLockLevel(2);
+                        default:
+                            if (Math.random() < 0.15) {
+                                if (countOfOrangeCells <= maxCountOfOrangeCells) {
+                                    gameCell = gameCells.get(i * CellCount + j);
+                                    if (gameCell.getLockLevel() == 0) {
+                                        countOfOrangeCells++;
+                                        if (Math.random() < 0.5) {
+                                            gameCell.setLockLevel(1);
+                                        } else {
+                                            gameCell.setLockLevel(2);
+                                        }
                                     }
-
                                 }
+                            }
                     }
 
 
                 }
             }
+        }
+
+       // System.out.println("GameField.GenerateLevel: countOfOrangeCells= "+countOfOrangeCells);
 
     }
 

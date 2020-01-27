@@ -1,5 +1,6 @@
 package by.android.cradle;
 
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.utils.I18NBundle;
@@ -21,6 +22,7 @@ public class CradleGame extends BaseGame
     private ScreenGamePlay screenGamePlay;
     private HelpScreen helpScreen;
     private ShopScreen shopScreen;
+    //private SplashScreen splashScreen;
     //
     private Preferences prefs;
     private IActivityRequestHandler myRequestHandler; //interface for AdMob
@@ -38,6 +40,8 @@ public class CradleGame extends BaseGame
     public void create()
     {
         super.create();
+
+       // Gdx.app.setLogLevel(Application.LOG_DEBUG);
         //Setup settings provider
         prefs = Gdx.app.getPreferences("settings.prefs");
 
@@ -49,7 +53,7 @@ public class CradleGame extends BaseGame
         languageStrings = I18NBundle.createBundle(Gdx.files.internal("strings/strings"));
 
         getResFromStorage();
-
+        //gameMapLevel=1; // for debug
         menuScreen = new MenuScreen(this,ply);
         screenGamePlay = new ScreenGamePlay(this,ply);
         gameMapScreen = new GameMapScreen(this,ply);
@@ -60,16 +64,19 @@ public class CradleGame extends BaseGame
         kingdoms[0].setProtectionState(0); // starting Kingdom for player
         for (int i = 1; i < kingdoms.length; i++) {
             kingdoms[i].setProtectionState(prefs.getInteger("kingdomProtectionState"+i, 5));
+
             //System.out.println("CradleGame.create Get:kingdomProtectionState"+i+);
         }
 
         int gameLevel = prefs.getInteger("gameLevel", 1);
         //gameLevel = 120; // for debug purpose
         screenGamePlay.setGameLevel(gameLevel);
-
-        setActiveScreen( menuScreen );
-
         myRequestHandler.showAds(false);
+
+        setScreen(new SplashScreen(this,menuScreen));
+        //setActiveScreen( menuScreen );
+
+
 
 
 
@@ -80,9 +87,9 @@ public class CradleGame extends BaseGame
         GameRes.Bread=prefs.getInteger("Bread", 100);
         GameRes.Wood=prefs.getInteger("Wood", 100);
         GameRes.Gold=prefs.getInteger("Gold", 50);
-        GameRes.TimeBomb=prefs.getInteger("TimeBomb", 2);
-        GameRes.SquareBomb1=prefs.getInteger("SquareBomb1", 2);
-        GameRes.SquareBomb2=prefs.getInteger("SquareBomb2", 2);
+        GameRes.TimeBomb=prefs.getInteger("TimeBomb", 0);
+        GameRes.SquareBomb1=prefs.getInteger("SquareBomb1", 0);
+        GameRes.SquareBomb2=prefs.getInteger("SquareBomb2", 0);
         GameRes.Score=prefs.getInteger("Score", 0);
         gameMapLevel = prefs.getInteger("gameMapLevel", 1);
         //gameMapLevel=3;// for test purpose
@@ -176,7 +183,7 @@ public class CradleGame extends BaseGame
         //System.out.println("setActiveGameMapScreen");
         GdxLog.print("setActiveGameMapScreen():","Called");
         game.setScreen(gameMapScreen);
-        gameMapScreen.UpdateRes();
+        gameMapScreen.UpdateRes(); //Shows Thron if maplevel ended
 
         screenGamePlay.setPaused(true);
         menuScreen.PauseMusic();
@@ -187,7 +194,7 @@ public class CradleGame extends BaseGame
         saveGameRes();
         ply.submitScore(leaderboard,GameRes.Score);
         //For Debug
-        //screenGamePlay.printNumberOfActors();
+        screenGamePlay.printNumberOfActors();
 
     }
 
@@ -225,9 +232,9 @@ public class CradleGame extends BaseGame
         GameRes.Bread=100;
         GameRes.Wood=100;
         GameRes.Gold=50;
-        GameRes.TimeBomb=2;
-        GameRes.SquareBomb1=2;
-        GameRes.SquareBomb2=2;
+        GameRes.TimeBomb=0;
+        GameRes.SquareBomb1=0;
+        GameRes.SquareBomb2=0;
         GameRes.Score=0;
 
         prefs.putInteger("Gold", GameRes.Gold);

@@ -56,6 +56,7 @@ public class ScreenGamePlay extends BaseScreen {
     private int score_during_attack;
     private DialogBox_EndLevel dialogBox_endLevel;
     private KingdomRes resultAttack;
+    private DialogBox mapLevelInfoDialog;
 
     public ScreenGamePlay(CradleGame cradleGame,IPlayServices ply) {
         super(cradleGame,ply);
@@ -96,6 +97,8 @@ public class ScreenGamePlay extends BaseScreen {
         dialogBox_endLevel = new DialogBox_EndLevel(w/2-dialogSize/2,h/2-dialogSize/2,uiStage,dialogSize,dialogSize,cradleGame);
         dialogBox_endLevel.setVisible(false);
 
+        mapLevelInfoDialog = new DialogBox(w/2-dialogSize/2,h/2-dialogSize/2,uiStage,dialogSize,dialogSize,cradleGame);
+        mapLevelInfoDialog.setVisible(false);
 
         h=h-70; //place for top menu items
         if (w<h) {
@@ -137,7 +140,7 @@ public class ScreenGamePlay extends BaseScreen {
             if (sandglassduration > 400) sandglassduration = 400;
         }
 
-        sandGlass = new SandGlass(x,y,uiStage,sw, Math.round( gameFieldWidth*0.7f), sandglassduration);
+        sandGlass = new SandGlass(x,y,uiStage,sw, Math.round( gameFieldWidth*0.8f), sandglassduration);
         //Game level
         //gameLevel = 1 ;
         gameLevelLabel = new Label("  "+0, BaseGame.labelStyle);
@@ -150,23 +153,7 @@ public class ScreenGamePlay extends BaseScreen {
 
 
 /*
-        //Gamemap Button
-        TextButton mapButton = new TextButton( "GameMap", BaseGame.textButtonStyle );
-        mapButton.addListener(new InputListener() {
-            public boolean touchDown (InputEvent e, float x, float y, int pointer, int button){
-                if (!(e instanceof InputEvent))
-                    return false;
 
-                if (!((InputEvent) e).getType().equals(InputEvent.Type.touchDown))
-                    return false;
-
-                //CradleGame.setActiveScreen(new GameMapScreen(screenGamePlay));
-                cradleGame.setActiveGameMapScreen();
-                return true;
-            }
-        });
-        mapButton.setPosition(0,200);
-        uiStage.addActor(mapButton);
 
         //Restart button
         Button.ButtonStyle buttonStyle = new Button.ButtonStyle();
@@ -702,7 +689,7 @@ public void RemoveAndFillSquare(int centreRow, int centreCol, int squareSize){
 
         rnd = Math.random();
 
-        if ((rnd-lvl/200)>0.2){
+        if ((rnd-lvl/400)>0.7){
             return new Coin(x, y, cellSize, cellSize, mainStage, row, col);
         }
 
@@ -780,7 +767,9 @@ public void RemoveAndFillSquare(int centreRow, int centreCol, int squareSize){
 
     public void GenerateLevel(int levelnumber){
         //System.out.println("GenerateLevel() = "+levelnumber);
-            ArrayList<Item> arrayListItems = new ArrayList<>();
+        int countOfLockedItems=0;
+        int gameMapLevel = cradleGame.getGameMapLevel();
+        ArrayList<Item> arrayListItems = new ArrayList<>();
                 for (Actor a : mainStage.getActors())
                 {
                     if ( Item.class.isAssignableFrom(a.getClass()) ){
@@ -822,16 +811,24 @@ public void RemoveAndFillSquare(int centreRow, int centreCol, int squareSize){
                 item.addAction(Actions.moveTo(gameFieldX + j * cellSize, gameFieldY + i * cellSize,1));
                 //item.addAction(Actions.scaleTo(1,1,5));
 
-                if(Math.random()>(1.0-lvl/450)){
-                    if (Math.random()>(1.0-lvl/250)) {item.setLockLevel(2);}
-                    else {item.setLockLevel(1);
+                if(Math.random()>(0.9-lvl/450)){
+                    if ((countOfLockedItems<(3*gameMapLevel+1)) && (countOfLockedItems<12)) {
+                        countOfLockedItems++;
+                        if (Math.random() > (1.0 - lvl / 350)) {
+                            item.setLockLevel(2);
+                        } else {
+                            item.setLockLevel(1);
+                        }
                     }
                 }
 
             }
         }
 
+        //Clear counters results of attack
         score_during_attack=0;
+        resultAttack.Clear();
+
     }
 
     public void WinMessageAndNewLevelCreate(){
@@ -945,7 +942,7 @@ public void RemoveAndFillSquare(int centreRow, int centreCol, int squareSize){
             if (sandglassduration > 400) sandglassduration = 400;
         }
 
-        sandGlass = new SandGlass(x,y,uiStage,sw,sw*2, sandglassduration);
+        sandGlass = new SandGlass(x,y,uiStage,sw,Math.round( cellSize*CellCount*0.8f), sandglassduration);
         isPaused=false;
         for (int i = 0; i < GameRes.TimeBomb; i++) {
             new TimeBomb(10, h * 0.7f, h / 6, h / 6, mainStage, Touchable.enabled, sandGlass, 60);
@@ -1118,6 +1115,7 @@ public void RemoveAndFillSquare(int centreRow, int centreCol, int squareSize){
 
     public void HideDialog (){
         dialogBox_endLevel.setVisible(false);
+        mapLevelInfoDialog.setVisible(false);
     }
 
 

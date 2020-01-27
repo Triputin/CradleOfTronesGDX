@@ -60,7 +60,7 @@ public class HelpScreen extends BaseScreen {
         //Menu Button
         String s = cradleGame.getLanguageStrings().get("menu");
         TextButton menuButton = new TextButton( s, BaseGame.textButtonStyle );
-        menuButton.setPosition(w*0.00f,h*0.88f);
+        menuButton.setPosition(w*0.00f,h*0.02f);
         uiStage.addActor(menuButton);
 
         menuButton.addListener(new InputListener() {
@@ -79,7 +79,7 @@ public class HelpScreen extends BaseScreen {
         //Next Button
         s = cradleGame.getLanguageStrings().get("next");
         TextButton nextButton = new TextButton( s, BaseGame.textButtonStyle );
-        nextButton.setPosition(w*0.8f,h*0.2f);
+        nextButton.setPosition(w*0.77f,h*0.2f);
         uiStage.addActor(nextButton);
 
         nextButton.addListener(new InputListener() {
@@ -100,7 +100,7 @@ public class HelpScreen extends BaseScreen {
         //Prev Button
         s = cradleGame.getLanguageStrings().get("previous");
         TextButton prevButton = new TextButton( s, BaseGame.textButtonStyle );
-        prevButton.setPosition(w*0.5f,h*0.2f);
+        prevButton.setPosition(w*0.51f,h*0.2f);
         uiStage.addActor(prevButton);
 
         prevButton.addListener(new InputListener() {
@@ -125,7 +125,7 @@ public class HelpScreen extends BaseScreen {
         infoLabel.setPosition( padding, (int) Math.round(h*0.4));
         uiStage.addActor(infoLabel);
 */
-        dialogBox = new DialogBox(padding, 0,uiStage,w/2,(int) Math.round(h*0.8f),cradleGame);
+        dialogBox = new DialogBox(padding, h*0.2f,uiStage,w/2,(int) Math.round(h*0.8f),cradleGame);
         //dialogBox.setDialogSize(w/2,(int) Math.round(h*0.8));
         dialogBox.setFontScale(1.8f);
         dialogBox.alignTopLeft();

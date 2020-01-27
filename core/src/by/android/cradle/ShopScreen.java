@@ -31,12 +31,21 @@ private ArrayList<ShopItem> rightArraySh;
 private ShopItem leftSelectedItem=null;
 private ShopItem rightSelectedItem=null;
 
+//user items
 private ShopItem goldItem;
 private ShopItem woodItem;
 private ShopItem breadItem;
 private ShopItem timeBomb;
 private ShopItem squareBomb1;
 private ShopItem squareBomb2;
+
+    //shop Items
+    private ShopItem goldItemR;
+    private ShopItem woodItemR;
+    private ShopItem breadItemR;
+    private ShopItem timeBombR;
+    private ShopItem squareBomb1R;
+    private ShopItem squareBomb2R;
 
     public ShopScreen(CradleGame cradleGame,IPlayServices ply) {
 
@@ -212,18 +221,18 @@ private ShopItem squareBomb2;
 
         //Items to buy
         rightArraySh = new ArrayList<>();
-        shopItem = new ShopItem(rightSqX, leftSqY, itemSize, Math.round(itemSize*1.2f), mainStage, 0,"coin2.png", "coin2pressed.png","Coin2",2);
-        rightArraySh.add(shopItem);
-        shopItem = new ShopItem(rightSqX+itemSize+padding, leftSqY, itemSize, Math.round(itemSize*1.2f), mainStage, 0,"wood.png", "woodpressed.png","Wood",2);
-        rightArraySh.add(shopItem);
-        shopItem = new ShopItem(rightSqX+itemSize+padding+itemSize+padding, leftSqY, itemSize, Math.round(itemSize*1.2f), mainStage, 0,"bread.png", "breadpressed.png","Bread",2);
-        rightArraySh.add(shopItem);
-        shopItem = new ShopItem(rightSqX, leftSqY-itemSize+padding, itemSize, Math.round(itemSize*1.2f), mainStage, 0,"timebomb.png", "timebombpressed.png","TimeBomb",30);
-        rightArraySh.add(shopItem);
-        shopItem = new ShopItem(rightSqX+itemSize+padding, leftSqY-itemSize+padding, itemSize, Math.round(itemSize*1.2f), mainStage, 0,"squarebomb01.png", "squarebomb01pressed.png","SquareBomb1",30);
-        rightArraySh.add(shopItem);
-        shopItem = new ShopItem(rightSqX+itemSize+padding+itemSize+padding, leftSqY-itemSize+padding, itemSize, Math.round(itemSize*1.2f), mainStage, 0,"squarebomb02.png", "squarebomb02pressed.png","SquareBomb2",60);
-        rightArraySh.add(shopItem);
+        goldItemR = new ShopItem(rightSqX, leftSqY, itemSize, Math.round(itemSize*1.2f), mainStage, 0,"coin2.png", "coin2pressed.png","Coin2",2);
+        rightArraySh.add(goldItemR);
+        woodItemR = new ShopItem(rightSqX+itemSize+padding, leftSqY, itemSize, Math.round(itemSize*1.2f), mainStage, 0,"wood.png", "woodpressed.png","Wood",2);
+        rightArraySh.add(woodItemR);
+        breadItemR = new ShopItem(rightSqX+itemSize+padding+itemSize+padding, leftSqY, itemSize, Math.round(itemSize*1.2f), mainStage, 0,"bread.png", "breadpressed.png","Bread",2);
+        rightArraySh.add(breadItemR);
+        timeBombR = new ShopItem(rightSqX, leftSqY-itemSize+padding, itemSize, Math.round(itemSize*1.2f), mainStage, 0,"timebomb.png", "timebombpressed.png","TimeBomb",30);
+        rightArraySh.add(timeBombR);
+        squareBomb1R = new ShopItem(rightSqX+itemSize+padding, leftSqY-itemSize+padding, itemSize, Math.round(itemSize*1.2f), mainStage, 0,"squarebomb01.png", "squarebomb01pressed.png","SquareBomb1",30);
+        rightArraySh.add(squareBomb1R);
+        squareBomb2R = new ShopItem(rightSqX+itemSize+padding+itemSize+padding, leftSqY-itemSize+padding, itemSize, Math.round(itemSize*1.2f), mainStage, 0,"squarebomb02.png", "squarebomb02pressed.png","SquareBomb2",60);
+        rightArraySh.add(squareBomb2R);
 
 
 
@@ -275,6 +284,7 @@ private ShopItem squareBomb2;
                     for (by.android.cradle.BaseActor CoinActor : by.android.cradle.BaseActor.getList(mainStage, "by.android.cradle.ShopItem")) {
                         if (CoinActor.getBoundaryPolygon().contains(x, y)) {
                             ShopItem shopItem1=(ShopItem) CoinActor;
+                            if(!canBeSelected(shopItem1)){return true;}
                             shopItem1.setSelected(true);
                             rightSelectedItem=shopItem1;
                             if ((leftSelectedItem!=null)&&(rightSelectedItem!=null)) {
@@ -301,6 +311,9 @@ private ShopItem squareBomb2;
             }
 
         });
+
+
+        setItemsVisibility();
     }
 
     public void update(float dt)
@@ -386,6 +399,76 @@ public void setupResources(){
     timeBomb.setQtty(GameRes.TimeBomb);
     squareBomb1.setQtty(GameRes.SquareBomb1);
     squareBomb2.setQtty(GameRes.SquareBomb2);
+    setItemsVisibility();
 }
 
+private void setItemsVisibility(){
+
+        switch (cradleGame.getGameMapLevel()){
+
+            case 1:
+                timeBomb.setVisible(false);
+                timeBombR.setVisible(false);
+                squareBomb1.setVisible(false);
+                squareBomb1R.setVisible(false);
+                squareBomb2.setVisible(false);
+                squareBomb2R.setVisible(false);
+                break;
+            case 2:
+                timeBomb.setVisible(true);
+                timeBombR.setVisible(true);
+                squareBomb1.setVisible(false);
+                squareBomb1R.setVisible(false);
+                squareBomb2.setVisible(false);
+                squareBomb2R.setVisible(false);
+                break;
+            case 3:
+                timeBomb.setVisible(true);
+                timeBombR.setVisible(true);
+                squareBomb1.setVisible(true);
+                squareBomb1R.setVisible(true);
+                squareBomb2.setVisible(false);
+                squareBomb2R.setVisible(false);
+                break;
+            case 4:
+                timeBomb.setVisible(true);
+                timeBombR.setVisible(true);
+                squareBomb1.setVisible(true);
+                squareBomb1R.setVisible(true);
+                squareBomb2.setVisible(true);
+                squareBomb2R.setVisible(true);
+                break;
+
+                default:
+                    timeBomb.setVisible(true);
+                    timeBombR.setVisible(true);
+                    squareBomb1.setVisible(true);
+                    squareBomb1R.setVisible(true);
+                    squareBomb2.setVisible(true);
+                    squareBomb2R.setVisible(true);
+
+        }
+
+}
+
+
+    private boolean canBeSelected(ShopItem shopItem){
+        String typeString = shopItem.getItemType();
+        int mapLevel = cradleGame.getGameMapLevel();
+        switch(typeString){
+            case "SquareBomb2":
+                if (mapLevel>3){return true;}
+                break;
+            case "SquareBomb1":
+                if (mapLevel>2){return true;}
+                break;
+            case "TimeBomb":
+                if (mapLevel>1){return true;}
+                break;
+                default:
+                    return true;
+
+        }
+        return false;
+    }
 }
