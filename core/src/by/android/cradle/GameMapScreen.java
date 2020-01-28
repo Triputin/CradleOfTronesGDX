@@ -33,6 +33,9 @@ public class GameMapScreen extends BaseScreen {
     private TextButton continueButton;
     private TextButton shopButton;
     private boolean isUpdateMapNeeded;
+    private boolean isWinMapLevel; //set when map level completed
+    private DialogBox mapLevelInfoDialog;
+    private boolean isFirstMapLevelRun;
 
     public GameMapScreen(CradleGame cradleGame,IPlayServices ply) {
 
@@ -53,6 +56,14 @@ public class GameMapScreen extends BaseScreen {
     }
 
 
+    public boolean isFirstMapLevelRun() {
+        return isFirstMapLevelRun;
+    }
+
+    public void setFirstMapLevelRun(boolean firstMapLevelRun) {
+        isFirstMapLevelRun = firstMapLevelRun;
+    }
+
     public void initialize()
     {
 
@@ -60,7 +71,8 @@ public class GameMapScreen extends BaseScreen {
         audioVolume = 0.7f;
         instrumental.setLooping(true);
         instrumental.setVolume(audioVolume);
-
+        isWinMapLevel = false;
+        isFirstMapLevelRun=false;
 
         final int w = Gdx.graphics.getWidth();
         int h = Gdx.graphics.getHeight();
@@ -68,6 +80,11 @@ public class GameMapScreen extends BaseScreen {
 
         initializeMap(cradleGame.getGameMapLevel());
 
+        // Level info
+        int dialogYSize = Math.round(h*0.8f);
+        int dialogXSize = Math.round(w*0.7f);
+        mapLevelInfoDialog = new DialogBox(w/2-dialogXSize/2,h/2-dialogYSize/2,uiStage,dialogXSize,dialogYSize,cradleGame);
+        mapLevelInfoDialog.setVisible(false);
 
         //Fon for results
         BaseActor fon = new BaseActor(0,0,mainStage,Touchable.disabled);
@@ -81,8 +98,7 @@ public class GameMapScreen extends BaseScreen {
         resultsActor = new ResultsActor(0,0,(int) Math.round(w*0.8),70,mainStage,Touchable.disabled,baseResultsActor);
 
 
-
-       //Menu Button
+        //Menu Button
         String s = cradleGame.getLanguageStrings().get("menu");
         TextButton backButton = new TextButton( s, BaseGame.textButtonStyle );
         backButton.setPosition(w*0.00f,h*0.88f);
@@ -332,18 +348,39 @@ public class GameMapScreen extends BaseScreen {
         }
 
 
+        if (isFirstMapLevelRun){
+            final InputListener inputListener2 = new InputListener() {
+                public boolean touchDown (InputEvent e, float x, float y, int pointer, int button){
+                    if (!(e instanceof InputEvent))
+                        return false;
+
+                    if (!((InputEvent) e).getType().equals(InputEvent.Type.touchDown))
+                        return false;
+
+                    mapLevelInfoDialog.setVisible(false);
+                    setFirstMapLevelRun(false);
+                    return true;
+                }
+            };
+
+            mapLevelInfoDialog.setText(getTextForMapLevel(mapLevel));
+            mapLevelInfoDialog.setZIndex(101);
+            mapLevelInfoDialog.showWithOkButton(inputListener2);
+        }
     }
 
 
     public void UpdateRes() {
         resultsActor.UpdateRes();
-        if (isUpdateMapNeeded){
+        checkWin();
+        if (isUpdateMapNeeded && (!isWinMapLevel)){
             //changeMapTexture(cradleGame.getGameMapLevel());
+            System.out.println("initializeMap called");
             initializeMap(cradleGame.getGameMapLevel());
             isUpdateMapNeeded=false;
         }
 
-        checkWin();
+
     }
 
 
@@ -360,6 +397,8 @@ public class GameMapScreen extends BaseScreen {
         }
 
         // win game reached!!!
+        isWinMapLevel=true;
+        System.out.println("CheckWin called");
         WinGame();
         return;
 
@@ -392,7 +431,7 @@ public class GameMapScreen extends BaseScreen {
         Action actions = sequence(moveTo((ww-w)/2,0,2f));
         throne.addAction(actions);
 
-
+        //System.out.println("Throne anim started!!!");
         Action completeAction = new Action(){
             public boolean act( float delta ) {
                 // Do your stuff
@@ -401,6 +440,8 @@ public class GameMapScreen extends BaseScreen {
                     String s = cradleGame.getLanguageStrings().get("continue_to_next_level");
                     continueButton = new TextButton("   "+s+"   ", BaseGame.textButtonStyle);
                     uiStage.addActor(continueButton);
+                    int h = Gdx.graphics.getHeight();
+                    continueButton.setPosition(5, h*0.03f);
                     continueButton.addListener(new InputListener() {
                     public boolean touchDown(InputEvent e, float x, float y, int pointer, int button) {
                         if (!(e instanceof InputEvent))
@@ -408,6 +449,7 @@ public class GameMapScreen extends BaseScreen {
 
                         if (!((InputEvent) e).getType().equals(InputEvent.Type.touchDown))
                             return false;
+                        isWinMapLevel=false;
                         UpdateRes();
                         return true;
                     }
@@ -444,7 +486,25 @@ public class GameMapScreen extends BaseScreen {
     }
 
 
+public String getTextForMapLevel(int maplevel){
+     String s;
+        switch (maplevel){
+         case 1:
+             s = cradleGame.getLanguageStrings().get("maplevel1text");
+             break;
+             case 2:
+                s = cradleGame.getLanguageStrings().get("maplevel2text");
+                break;
+            case 3:
+                s = cradleGame.getLanguageStrings().get("maplevel3text");
+                break;
+             default:
+                 s="";
 
+     }
+     return s;
+
+}
 
 
 }

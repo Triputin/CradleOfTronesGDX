@@ -56,7 +56,7 @@ public class ScreenGamePlay extends BaseScreen {
     private int score_during_attack;
     private DialogBox_EndLevel dialogBox_endLevel;
     private KingdomRes resultAttack;
-    private DialogBox mapLevelInfoDialog;
+
 
     public ScreenGamePlay(CradleGame cradleGame,IPlayServices ply) {
         super(cradleGame,ply);
@@ -97,8 +97,6 @@ public class ScreenGamePlay extends BaseScreen {
         dialogBox_endLevel = new DialogBox_EndLevel(w/2-dialogSize/2,h/2-dialogSize/2,uiStage,dialogSize,dialogSize,cradleGame);
         dialogBox_endLevel.setVisible(false);
 
-        mapLevelInfoDialog = new DialogBox(w/2-dialogSize/2,h/2-dialogSize/2,uiStage,dialogSize,dialogSize,cradleGame);
-        mapLevelInfoDialog.setVisible(false);
 
         h=h-70; //place for top menu items
         if (w<h) {
@@ -1115,7 +1113,7 @@ public void RemoveAndFillSquare(int centreRow, int centreCol, int squareSize){
 
     public void HideDialog (){
         dialogBox_endLevel.setVisible(false);
-        mapLevelInfoDialog.setVisible(false);
+
     }
 
 

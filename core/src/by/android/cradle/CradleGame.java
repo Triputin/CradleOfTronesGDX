@@ -106,10 +106,18 @@ public class CradleGame extends BaseGame
          shopScreen = new ShopScreen(this,ply);
 
          Kingdom[] kingdoms = gameMapScreen.getKingdoms();
-         kingdoms[0].setProtectionState(0); // starting Kingdom for player
+         if (gameMapLevel==0) {
+             kingdoms[0].setProtectionState(0); // starting Kingdom for player
+         } else {
+             kingdoms[0].setProtectionState(5+gameMapLevel);
+         }
+         //For Debug
+         //kingdoms[0].setProtectionState(1);
          for (int i = 1; i < kingdoms.length; i++) {
              kingdoms[i].setProtectionState(prefs.getInteger("kingdomProtectionState"+i, 5));
 
+             //For Debug
+             //kingdoms[i].setProtectionState(0);
              //System.out.println("CradleGame.create Get:kingdomProtectionState"+i+);
          }
 
@@ -260,6 +268,7 @@ public class CradleGame extends BaseGame
         prefs.putInteger("gameLevel", screenGamePlay.getGameLevel());
 
         gameMapLevel = 1;
+        gameMapScreen.setFirstMapLevelRun(true);
         prefs.putInteger("gameMapLevel", gameMapLevel);
         gameMapScreen.initializeMap(gameMapLevel);
         Kingdom[] kingdoms = gameMapScreen.getKingdoms();
@@ -318,7 +327,7 @@ public class CradleGame extends BaseGame
             prefs.putInteger("kingdomProtectionState"+i, kingdoms[i].getProtectionState());
         }
         prefs.flush();
-
+        gameMapScreen.setFirstMapLevelRun(true);
         if(gameMapLevel==1){
             screenGamePlay.getHall().loadTexture( "game_of_thrones_locations4.jpg",w,h );}
         else{

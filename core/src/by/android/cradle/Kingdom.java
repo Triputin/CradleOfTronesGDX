@@ -197,7 +197,11 @@ public void resetProtectionState(int gameMapLevel) {
             kingdomRes.Bread = 10 * gameMapLevel;
             kingdomRes.Gold = 10 * gameMapLevel;
             kingdomRes.Wood = 10 * gameMapLevel;
-            protectionState = 0;
+            if(gameMapLevel==0){
+            protectionState = 0;}
+            else {
+                protectionState = 5 + gameMapLevel;
+            }
             break;
         case Kingdom_of_the_Isles_and_Rivers:
             kingdomRes.Bread = 10 * gameMapLevel;
