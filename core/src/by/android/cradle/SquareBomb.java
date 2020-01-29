@@ -33,8 +33,10 @@ public class SquareBomb extends DragAndDropActor {
             screenGamePlay.RemoveAndFillSquare(item.getRow(),item.getCol(),squareSize);
             if (squareSize==1) {
                 GameRes.SquareBomb1--;
+                screenGamePlay.setSquareBomb1QttyLabelText(String.valueOf(GameRes.SquareBomb1));
             }else{
                 GameRes.SquareBomb2--;
+                screenGamePlay.setSquareBomb2QttyLabelText(String.valueOf(GameRes.SquareBomb2));
             }
 
         }

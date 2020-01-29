@@ -74,9 +74,14 @@ public abstract class BaseGame extends Game
         Texture   buttonTex   = new Texture( Gdx.files.internal("goldbutton.png") );
         NinePatch buttonPatch = new NinePatch(buttonTex, 14,14,24,24);
         textButtonStyle.up    = new NinePatchDrawable( buttonPatch );
+
         Texture   buttonTex2   = new Texture( Gdx.files.internal("goldbutton_pressed.png") );
         NinePatch buttonPatch2 = new NinePatch(buttonTex2, 14,14,24,24);
         textButtonStyle.down    = new NinePatchDrawable( buttonPatch2 );
+
+        Texture   buttonTex3= new Texture( Gdx.files.internal("goldbutton_checked.png") );
+        NinePatch buttonPatch3 = new NinePatch(buttonTex3, 14,14,24,24);
+        textButtonStyle.checked = new NinePatchDrawable( buttonPatch3 );
 
         textButtonStyle.font      = customFont;
         textButtonStyle.fontColor = Color.GRAY;

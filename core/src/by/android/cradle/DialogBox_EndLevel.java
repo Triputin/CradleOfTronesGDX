@@ -87,7 +87,7 @@ public class DialogBox_EndLevel  extends BaseActor{
         //Ok Button
         ms = cradleGame.getLanguageStrings().get("ok");
         okButton = new TextButton( ms, BaseGame.textButtonStyle );
-        okButton.setPosition(Math.round(getWidth()/2-okButton.getWidth()/2),padding);
+        okButton.setPosition(Math.round(getWidth()/2-okButton.getWidth()/2),padding*1.5f);
 
 
     }

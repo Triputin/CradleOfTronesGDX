@@ -35,6 +35,10 @@ public class MessageActor01 extends BaseActor {
                 if (!GameRes.isResEnough(kingdomRes)) {
 
                     return false;}
+                if (cradleGame.getDifficultyLevel()==0){
+                    return false;
+                }
+
                 if (attackType == AttackType.AttackKingdom) {
                     GameRes.Gold -= kingdomRes.Gold;
                     GameRes.Wood -= kingdomRes.Wood;

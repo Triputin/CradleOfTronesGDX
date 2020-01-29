@@ -1,13 +1,8 @@
 package by.android.cradle;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
 import java.util.ArrayList;
 
@@ -235,23 +230,32 @@ public void changeGameCell(Cell cell){
         int gmplvl = cradleGame.getGameMapLevel();
         int minCountOfOrangeCells;
         int maxCountOfOrangeCells;
+        int diflvl = cradleGame.getDifficultyLevel();
+        int diflvldecr=0;
+        if (diflvl==1){
+            diflvldecr=2;
+        }
+        if (diflvl==2){
+            diflvldecr=1;
+        }
+
         // minimum and maximum amounts of orange sells
         switch (gmplvl) {
             case 1:
-                minCountOfOrangeCells = 4;
-                maxCountOfOrangeCells = 6;
+                minCountOfOrangeCells = 4-diflvldecr;
+                maxCountOfOrangeCells = 6-diflvldecr;
                 break;
             case 2:
-                minCountOfOrangeCells = 5;
-                maxCountOfOrangeCells = 8;
+                minCountOfOrangeCells = 5-diflvldecr;
+                maxCountOfOrangeCells = 8-diflvldecr;
                 break;
             case 3:
-                minCountOfOrangeCells = 7;
-                maxCountOfOrangeCells = 10;
+                minCountOfOrangeCells = 7-diflvldecr;
+                maxCountOfOrangeCells = 10-diflvldecr;
                 break;
             default:
-                minCountOfOrangeCells = 8;
-                maxCountOfOrangeCells = 12;
+                minCountOfOrangeCells = 8-diflvldecr;
+                maxCountOfOrangeCells = 12-diflvldecr;
         }
 
         //Unlock all cells

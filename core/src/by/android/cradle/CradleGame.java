@@ -1,14 +1,9 @@
 package by.android.cradle;
 
-import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.utils.I18NBundle;
 import com.badlogic.gdx.utils.Timer;
-
-import java.util.Locale;
-
-import by.android.cradle.BaseGame;
 
 public class CradleGame extends BaseGame
 {
@@ -16,6 +11,7 @@ public class CradleGame extends BaseGame
     public  final String leaderboard = "CgkIiby2l-0EEAIQAQ";
     public final int MaxGameMapLevel=3;
     private int gameMapLevel;
+    private int difficultyLevel;
 
     //game screens
     private MenuScreen menuScreen;
@@ -98,15 +94,21 @@ public class CradleGame extends BaseGame
          languageStrings = I18NBundle.createBundle(Gdx.files.internal("strings/strings"));
 
          getResFromStorage();
-         //gameMapLevel=1; // for debug
+         //gameMapLevel=3; // for debug
          menuScreen = new MenuScreen(this,ply);
          screenGamePlay = new ScreenGamePlay(this,ply);
+
+         int gameLevel = prefs.getInteger("gameLevel", 1);
+         //gameLevel = 1; // for debug purpose
+         screenGamePlay.setGameLevel(gameLevel);
+         difficultyLevel = prefs.getInteger("levelofhardness", 0);
+         //difficultyLevel = 0; // for debug purpose
          gameMapScreen = new GameMapScreen(this,ply);
          helpScreen = new HelpScreen(this,ply);
          shopScreen = new ShopScreen(this,ply);
 
          Kingdom[] kingdoms = gameMapScreen.getKingdoms();
-         if (gameMapLevel==0) {
+         if (gameMapLevel==1) {
              kingdoms[0].setProtectionState(0); // starting Kingdom for player
          } else {
              kingdoms[0].setProtectionState(5+gameMapLevel);
@@ -121,13 +123,8 @@ public class CradleGame extends BaseGame
              //System.out.println("CradleGame.create Get:kingdomProtectionState"+i+);
          }
 
-         int gameLevel = prefs.getInteger("gameLevel", 1);
-         //gameLevel = 120; // for debug purpose
-         screenGamePlay.setGameLevel(gameLevel);
 
 
-         //setScreen(new SplashScreen(this,menuScreen)); //first version
-         //setActiveScreen( menuScreen );
      }
 
     public void getResFromStorage(){
@@ -147,6 +144,7 @@ public class CradleGame extends BaseGame
 
         prefs.putInteger("gameLevel", screenGamePlay.getGameLevel());
         prefs.putInteger("gameMapLevel", gameMapLevel);
+        prefs.putInteger("levelofhardness", difficultyLevel);
         prefs.putInteger("Gold", GameRes.Gold);
         prefs.putInteger("Wood", GameRes.Wood);
         prefs.putInteger("Bread", GameRes.Bread);
@@ -270,6 +268,9 @@ public class CradleGame extends BaseGame
         gameMapLevel = 1;
         gameMapScreen.setFirstMapLevelRun(true);
         prefs.putInteger("gameMapLevel", gameMapLevel);
+        // reset levelofhardness
+        difficultyLevel = 0;
+        prefs.putInteger("levelofhardness", difficultyLevel);
         gameMapScreen.initializeMap(gameMapLevel);
         Kingdom[] kingdoms = gameMapScreen.getKingdoms();
         //kingdoms[0].setProtectionState(0); // starting Kingdom for player
@@ -292,6 +293,8 @@ public class CradleGame extends BaseGame
         prefs.putInteger("SquareBomb1", GameRes.SquareBomb1);
         prefs.putInteger("SquareBomb2", GameRes.SquareBomb2);
         prefs.putInteger("Score", GameRes.Score);
+
+
 
         prefs.flush();
 
@@ -344,5 +347,11 @@ public class CradleGame extends BaseGame
         return languageStrings;
     }
 
+    public int getDifficultyLevel() {
+        return difficultyLevel;
+    }
 
+    public void setDifficultyLevel(int difficultyLevel) {
+        this.difficultyLevel = difficultyLevel;
+    }
 }

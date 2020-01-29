@@ -65,6 +65,9 @@ public class DialogBox extends BaseActor
     public void alignCenter()
     {  dialogLabel.setAlignment( Align.center );  }
 
+    public void alignTop()
+    {  dialogLabel.setAlignment( Align.top );  }
+
     public void showForTime(int seconds,Action completeAction ){
         Action actions = sequence(Actions.scaleTo(0,0,0.01f),fadeIn(0.01f),Actions.scaleTo(1,1,2.0f), Actions.delay(seconds) ,fadeOut(1f), completeAction);
 

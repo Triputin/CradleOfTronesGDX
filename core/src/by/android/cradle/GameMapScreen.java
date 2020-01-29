@@ -1,7 +1,6 @@
 package by.android.cradle;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Action;
@@ -9,7 +8,6 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 
@@ -36,11 +34,13 @@ public class GameMapScreen extends BaseScreen {
     private boolean isWinMapLevel; //set when map level completed
     private DialogBox mapLevelInfoDialog;
     private boolean isFirstMapLevelRun;
+    private LevelOfHardnessDialogBox levelOfHardnessDialog;
 
     public GameMapScreen(CradleGame cradleGame,IPlayServices ply) {
 
         super(cradleGame,ply);
         isUpdateMapNeeded = false;
+
     }
 
     public void SetMessageActorVisibility(boolean visible){
@@ -72,19 +72,21 @@ public class GameMapScreen extends BaseScreen {
         instrumental.setLooping(true);
         instrumental.setVolume(audioVolume);
         isWinMapLevel = false;
-        isFirstMapLevelRun=false;
 
+        if ((cradleGame.getGameMapLevel()==1)&&(cradleGame.getScreenGamePlay().getGameLevel()==1)){
+            isFirstMapLevelRun=true;
+        }else {
+            isFirstMapLevelRun=false;
+        }
         final int w = Gdx.graphics.getWidth();
         int h = Gdx.graphics.getHeight();
         //h=h-60; //add place for adMob
 
+
+
         initializeMap(cradleGame.getGameMapLevel());
 
-        // Level info
-        int dialogYSize = Math.round(h*0.8f);
-        int dialogXSize = Math.round(w*0.7f);
-        mapLevelInfoDialog = new DialogBox(w/2-dialogXSize/2,h/2-dialogYSize/2,uiStage,dialogXSize,dialogYSize,cradleGame);
-        mapLevelInfoDialog.setVisible(false);
+
 
         //Fon for results
         BaseActor fon = new BaseActor(0,0,mainStage,Touchable.disabled);
@@ -199,7 +201,7 @@ public class GameMapScreen extends BaseScreen {
 
     }
 
-    public void initializeMap(int mapLevel){
+    public void initializeMap(final int mapLevel){
 
         final int w = Gdx.graphics.getWidth();
         int h = Gdx.graphics.getHeight();
@@ -309,6 +311,7 @@ public class GameMapScreen extends BaseScreen {
             kingdoms[i].addListener(inputListener);
             kingdoms[i].resetProtectionState(mapLevel);
         }
+        kingdoms[0].resetFlag();// if protection state>0 then setup gray flag
 
 
         inputListener = new InputListener() {
@@ -347,9 +350,43 @@ public class GameMapScreen extends BaseScreen {
             messageLabel.remove();
         }
 
+        // Level info
+        int dialogYSize = Math.round(h*0.8f);
+        int dialogXSize = Math.round(w*0.7f);
+        if (mapLevelInfoDialog==null) {
+            mapLevelInfoDialog = new DialogBox(w / 2 - dialogXSize / 2, h / 2 - dialogYSize / 2, uiStage, dialogXSize, dialogYSize, cradleGame);
+        }
+        else
+        {
+            mapLevelInfoDialog.remove();
+            mapLevelInfoDialog = new DialogBox(w / 2 - dialogXSize / 2, h / 2 - dialogYSize / 2, uiStage, dialogXSize, dialogYSize, cradleGame);
 
-        if (isFirstMapLevelRun){
-            final InputListener inputListener2 = new InputListener() {
+        }
+        mapLevelInfoDialog.setVisible(false);
+        //mapLevelInfoDialog.setZIndex(100);
+
+
+        // Choose level of hardness
+        dialogYSize = Math.round(h*0.6f);
+        dialogXSize = Math.round(w*0.7f);
+        if (levelOfHardnessDialog==null) {
+            levelOfHardnessDialog = new LevelOfHardnessDialogBox(w / 2 - dialogXSize / 2, h / 2 - dialogYSize / 2, uiStage, dialogXSize, dialogYSize, cradleGame);
+        } else{
+            levelOfHardnessDialog.remove();
+            levelOfHardnessDialog = new LevelOfHardnessDialogBox(w / 2 - dialogXSize / 2, h / 2 - dialogYSize / 2, uiStage, dialogXSize, dialogYSize, cradleGame);
+
+        }
+        levelOfHardnessDialog.setVisible(false);
+        levelOfHardnessDialog.setFontScale(1.6f);
+        //levelOfHardnessDialog.setZIndex(200);
+
+
+
+
+        // Choose level of hardness
+        if(cradleGame.getDifficultyLevel()==0){
+
+            final InputListener inputListener3 = new InputListener() {
                 public boolean touchDown (InputEvent e, float x, float y, int pointer, int button){
                     if (!(e instanceof InputEvent))
                         return false;
@@ -357,18 +394,45 @@ public class GameMapScreen extends BaseScreen {
                     if (!((InputEvent) e).getType().equals(InputEvent.Type.touchDown))
                         return false;
 
-                    mapLevelInfoDialog.setVisible(false);
-                    setFirstMapLevelRun(false);
+                    levelOfHardnessDialog.setVisible(false);
+                    int lvlH=levelOfHardnessDialog.getSelectedDifficultyLevel();
+                    System.out.println("Levl of hardness ="+ lvlH);
+                    cradleGame.setDifficultyLevel(lvlH);
+                    if (isFirstMapLevelRun){
+                        startInfoDialog(mapLevel);
+                    }
                     return true;
                 }
             };
 
-            mapLevelInfoDialog.setText(getTextForMapLevel(mapLevel));
-            mapLevelInfoDialog.setZIndex(101);
-            mapLevelInfoDialog.showWithOkButton(inputListener2);
+            levelOfHardnessDialog.showWithOkButton(inputListener3);
+        }
+
+        if (isFirstMapLevelRun && (!levelOfHardnessDialog.isVisible())){
+            startInfoDialog(mapLevel);
         }
     }
 
+    private void startInfoDialog(int mapLevel){
+        final InputListener inputListener2 = new InputListener() {
+            public boolean touchDown (InputEvent e, float x, float y, int pointer, int button){
+                if (!(e instanceof InputEvent))
+                    return false;
+
+                if (!((InputEvent) e).getType().equals(InputEvent.Type.touchDown))
+                    return false;
+
+                mapLevelInfoDialog.setVisible(false);
+                setFirstMapLevelRun(false);
+                return true;
+            }
+        };
+
+        mapLevelInfoDialog.setText(getTextForMapLevel(mapLevel));
+        mapLevelInfoDialog.setFontScale(1.6f);
+        mapLevelInfoDialog.setZIndex(101);
+        mapLevelInfoDialog.showWithOkButton(inputListener2);
+    }
 
     public void UpdateRes() {
         resultsActor.UpdateRes();

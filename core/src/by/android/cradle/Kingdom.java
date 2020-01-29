@@ -66,6 +66,12 @@ public class Kingdom extends BaseActor {
                     "flag_red/flag07.png", "flag_red/flag08.png", "flag_red/flag09.png",
                     "flag_red/flag10.png", "flag_red/flag11.png", "flag_red/flag12.png"
             };
+    private String[] filenames7 =
+            { "flag_gray/flag02.png", "flag_gray/flag03.png",
+                    "flag_gray/flag04.png", "flag_gray/flag05.png", "flag_gray/flag06.png",
+                    "flag_gray/flag07.png", "flag_gray/flag08.png", "flag_gray/flag09.png",
+                    "flag_gray/flag10.png", "flag_gray/flag11.png", "flag_gray/flag12.png"
+            };
 
     public Kingdom(float x, float y, int width, int height, Stage s, Touchable touchable,KingdomNames kingdomNames)
     {
@@ -197,7 +203,7 @@ public void resetProtectionState(int gameMapLevel) {
             kingdomRes.Bread = 10 * gameMapLevel;
             kingdomRes.Gold = 10 * gameMapLevel;
             kingdomRes.Wood = 10 * gameMapLevel;
-            if(gameMapLevel==0){
+            if(gameMapLevel==1){
             protectionState = 0;}
             else {
                 protectionState = 5 + gameMapLevel;
@@ -269,8 +275,13 @@ public void resetProtectionState(int gameMapLevel) {
             case Kingdom_of_the_North: kingdomRes.Bread = 10;
                 kingdomRes.Gold = 10;
                 kingdomRes.Wood = 10;
-                filenames = filenames0;
-                flagBasementName = "flag_red/flagbasement.png";
+                if(protectionState==0){
+                    filenames = filenames0;
+                    flagBasementName = "flag_red/flagbasement.png";
+                }else{
+                    filenames = filenames7;
+                    flagBasementName = "flag_gray/flagbasement.png";
+                }
                 break;
             case Kingdom_of_the_Isles_and_Rivers: kingdomRes.Bread = 10;
                 kingdomRes.Gold = 10;

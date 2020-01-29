@@ -11,7 +11,8 @@ private float totalDuration;
 public SandGlass(float x, float y, Stage s, int width, int height ,float duration)
         {
             super(x,y,s, Touchable.disabled);
-this.totalDuration = duration;
+            this.totalDuration = duration;
+            System.out.println("SandGlass Duration = "+duration);
             String[] filenames =
                     {"sandglass/sandglass01.png", "sandglass/sandglass02.png", "sandglass/sandglass03.png",
                             "sandglass/sandglass04.png", "sandglass/sandglass05.png", "sandglass/sandglass06.png",

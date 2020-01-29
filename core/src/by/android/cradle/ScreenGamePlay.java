@@ -3,8 +3,6 @@ package by.android.cradle;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -12,13 +10,9 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
 import java.util.ArrayList;
-import java.util.Set;
 
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.fadeIn;
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.fadeOut;
@@ -53,10 +47,13 @@ public class ScreenGamePlay extends BaseScreen {
     private KingdomRes kingdomRes; //res to win
     private Kingdom attackedKingdom;
     private BaseActor hall;
-    private int score_during_attack;
+    private float score_during_attack;
     private DialogBox_EndLevel dialogBox_endLevel;
     private KingdomRes resultAttack;
 
+    private Label timeBombQttyLabel;
+    private Label squareBomb1QttyLabel;
+    private Label squareBomb2QttyLabel;
 
     public ScreenGamePlay(CradleGame cradleGame,IPlayServices ply) {
         super(cradleGame,ply);
@@ -80,6 +77,24 @@ public class ScreenGamePlay extends BaseScreen {
         int w = Gdx.graphics.getWidth();
         int h = Gdx.graphics.getHeight();
 
+
+        timeBombQttyLabel = new Label(" ", BaseGame.labelStyle);
+        timeBombQttyLabel.setColor( Color.GOLDENROD );
+        timeBombQttyLabel.setPosition( 15, h * 0.7f+(h*1.0f)/20f);
+        timeBombQttyLabel.setFontScale(1.5f);
+        uiStage.addActor(timeBombQttyLabel);
+
+        squareBomb1QttyLabel = new Label(" ", BaseGame.labelStyle);
+        squareBomb1QttyLabel.setColor( Color.GOLDENROD );
+        squareBomb1QttyLabel.setPosition( 15, h * 0.5f+(h*1.0f)/20f);
+        squareBomb1QttyLabel.setFontScale(1.5f);
+        uiStage.addActor(squareBomb1QttyLabel);
+
+        squareBomb2QttyLabel = new Label(" ", BaseGame.labelStyle);
+        squareBomb2QttyLabel.setColor( Color.GOLDENROD );
+        squareBomb2QttyLabel.setPosition( 15, h * 0.3f+(h*1.0f)/20f);
+        squareBomb2QttyLabel.setFontScale(1.5f);
+        uiStage.addActor(squareBomb2QttyLabel);
 
         hall = new BaseActor(0,0, mainStage, Touchable.disabled);
         //hall.loadTexture( "hall01.png",w,h );
@@ -132,9 +147,9 @@ public class ScreenGamePlay extends BaseScreen {
         float x = gameFieldX+cellSize*CellCount+10;
         float y = gameFieldY+gameFieldWidth*0.05f;
         int sw = (int)(Gdx.graphics.getWidth()-x);
-        int sandglassduration = 60;
+        int sandglassduration = getLevelDuration();
         if (gameLevel>20) {
-            sandglassduration = LevelDuration + gameLevel*2 - 20;
+            sandglassduration = getLevelDuration() + gameLevel*2 - 20;
             if (sandglassduration > 400) sandglassduration = 400;
         }
 
@@ -195,9 +210,6 @@ public class ScreenGamePlay extends BaseScreen {
 
         //gameField.boundToWorld();
         gameField.setTouchable(Touchable.enabled);
-
-
-
 
         gameField.addListener(new InputListener() {
             @Override
@@ -670,6 +682,7 @@ public void RemoveAndFillSquare(int centreRow, int centreCol, int squareSize){
 
     public Item getRandomItem(float x, float y, int row,int col, int levelnumber){
         Item item;
+
         double rnd = Math.random();
 
         if (rnd<0.25){
@@ -687,12 +700,27 @@ public void RemoveAndFillSquare(int centreRow, int centreCol, int squareSize){
 
         rnd = Math.random();
 
-        if ((rnd-lvl/400)>0.7){
-            return new Coin(x, y, cellSize, cellSize, mainStage, row, col);
+        int lvlH =cradleGame.getDifficultyLevel();
+        switch (lvlH) {
+            case 1:
+                if ((rnd - lvl / 400) > 0.3) {
+                    return new Coin(x, y, cellSize, cellSize, mainStage, row, col);
+                }
+                return new Jem01(x, y, cellSize, cellSize, mainStage, row, col);
+
+            case 2:
+                if ((rnd - lvl / 400) > 0.5) {
+                    return new Coin(x, y, cellSize, cellSize, mainStage, row, col);
+                }
+                return new Jem01(x, y, cellSize, cellSize, mainStage, row, col);
+
+            default:
+            if ((rnd - lvl / 400) > 0.7) {
+                return new Coin(x, y, cellSize, cellSize, mainStage, row, col);
+            }
+            return new Jem01(x, y, cellSize, cellSize, mainStage, row, col);
+
         }
-
-        return new Jem01(x, y, cellSize, cellSize, mainStage, row, col);
-
 
         /*
         if (Math.random()<0.25){
@@ -733,17 +761,17 @@ public void RemoveAndFillSquare(int centreRow, int centreCol, int squareSize){
             case "by.android.cradle.Coin2":
                 cradleGame.setGameResGold(GameRes.Gold+1);
                 resultAttack.Gold++;
-                score_during_attack++; //temporarely increase score. Finally aplied after win game
+                IncrementScoreDuringAttack(); //temporarely increase score. Finally aplied after win game
             break;
             case "by.android.cradle.Wood":
                 cradleGame.setGameResWood(GameRes.Wood+1);
                 resultAttack.Wood++;
-                score_during_attack++; //temporarely increase score. Finally aplied after win game
+                IncrementScoreDuringAttack(); //temporarely increase score. Finally aplied after win game
                 break;
             case "by.android.cradle.Bread":
                 cradleGame.setGameResBread(GameRes.Bread+1);
                 resultAttack.Bread++;
-                score_during_attack++; //temporarely increase score. Finally aplied after win game
+                IncrementScoreDuringAttack(); //temporarely increase score. Finally aplied after win game
                 break;
 
         }
@@ -752,6 +780,20 @@ public void RemoveAndFillSquare(int centreRow, int centreCol, int squareSize){
         resultsActor.UpdateRes();
     }
 
+    private void IncrementScoreDuringAttack(){
+        switch (cradleGame.getDifficultyLevel()){
+            case 1:
+                score_during_attack = score_during_attack +0.25f;
+                break;
+            case 2:
+                score_during_attack = score_during_attack +0.5f;
+                break;
+            case 3:
+                score_during_attack = score_during_attack + 1.0f;
+                break;
+
+        }
+    }
 
     public void UpdateRes() {
         resultsActor.UpdateRes();
@@ -801,6 +843,15 @@ public void RemoveAndFillSquare(int centreRow, int centreCol, int squareSize){
         if (lvl>300){lvl=300;}
 
         Item item;
+
+        int maxLockCount=12;
+        if(cradleGame.getDifficultyLevel()==1){
+            maxLockCount=7;
+        }
+        if(cradleGame.getDifficultyLevel()==2){
+            maxLockCount=9;
+        }
+
         for(int i = 0;i<CellCount;i++){
             for(int j = 0;j<CellCount;j++){
 
@@ -810,7 +861,7 @@ public void RemoveAndFillSquare(int centreRow, int centreCol, int squareSize){
                 //item.addAction(Actions.scaleTo(1,1,5));
 
                 if(Math.random()>(0.9-lvl/450)){
-                    if ((countOfLockedItems<(3*gameMapLevel+1)) && (countOfLockedItems<12)) {
+                    if ((countOfLockedItems<(3*gameMapLevel+1)) && (countOfLockedItems<maxLockCount)) {
                         countOfLockedItems++;
                         if (Math.random() > (1.0 - lvl / 350)) {
                             item.setLockLevel(2);
@@ -867,12 +918,12 @@ public void RemoveAndFillSquare(int centreRow, int centreCol, int squareSize){
                     attackedKingdom.decreaseProtection();
                     setGameLevel(gameLevel+1);
                 }
-                GameRes.Score=GameRes.Score+score_during_attack; // increase score if win
+                GameRes.Score=GameRes.Score+Math.round(score_during_attack); // increase score if win
                 //cradleGame.setActiveGameMapScreen();
 
                 //Show dialog
 
-                dialogBox_endLevel.setResults(score_during_attack,resultAttack.Gold,resultAttack.Wood,resultAttack.Bread);
+                dialogBox_endLevel.setResults(Math.round(score_during_attack),resultAttack.Gold,resultAttack.Wood,resultAttack.Bread);
 
                 final InputListener inputListener2 =new InputListener() {
                     public boolean touchDown (InputEvent e, float x, float y, int pointer, int button){
@@ -934,24 +985,41 @@ public void RemoveAndFillSquare(int centreRow, int centreCol, int squareSize){
         float x = gameFieldX+cellSize*CellCount+10;
         float y = gameFieldY+cellSize*CellCount*0.05f;;
         int sw = (int)(Gdx.graphics.getWidth()-x);
-        int sandglassduration = 60;
+        int sandglassduration = getLevelDuration();
         if (gameLevel>20) {
-            sandglassduration = LevelDuration + gameLevel*2 - 20;
+            sandglassduration = getLevelDuration() + gameLevel*2 - 20;
             if (sandglassduration > 400) sandglassduration = 400;
         }
 
         sandGlass = new SandGlass(x,y,uiStage,sw,Math.round( cellSize*CellCount*0.8f), sandglassduration);
         isPaused=false;
         for (int i = 0; i < GameRes.TimeBomb; i++) {
-            new TimeBomb(10, h * 0.7f, h / 6, h / 6, mainStage, Touchable.enabled, sandGlass, 60);
+            new TimeBomb(50, h * 0.7f, h / 6, h / 6, mainStage, Touchable.enabled, sandGlass, 60, cradleGame);
         }
         for (int i=0;i<GameRes.SquareBomb1;i++) {
-            new SquareBomb(10,h*0.5f,h/6,h/6,mainStage,Touchable.enabled,1,this);
+            new SquareBomb(50,h*0.5f,h/6,h/6,mainStage,Touchable.enabled,1,this);
         }
         for (int i=0;i<GameRes.SquareBomb2;i++) {
-            new SquareBomb(10,h*0.3f,h/6,h/6,mainStage,Touchable.enabled,2,this);
+            new SquareBomb(50,h*0.3f,h/6,h/6,mainStage,Touchable.enabled,2,this);
         }
 
+        if (GameRes.TimeBomb>0) {
+            timeBombQttyLabel.setText("" + GameRes.TimeBomb);
+        } else {
+            timeBombQttyLabel.setText("");
+        }
+
+        if (GameRes.SquareBomb1>0) {
+            squareBomb1QttyLabel.setText("" + GameRes.SquareBomb1);
+        } else {
+            squareBomb1QttyLabel.setText("");
+        }
+
+        if (GameRes.SquareBomb2>0) {
+            squareBomb2QttyLabel.setText("" + GameRes.SquareBomb2);
+        } else {
+            squareBomb2QttyLabel.setText("");
+        }
 
     }
 
@@ -1116,5 +1184,29 @@ public void RemoveAndFillSquare(int centreRow, int centreCol, int squareSize){
 
     }
 
+    private int getLevelDuration() {
+        int ld = LevelDuration;
+        switch (cradleGame.getDifficultyLevel()) {
+            case 1:
+                ld += 20;
+                break;
+            case 2:
+                ld += 10;
+                break;
+            case 3:
+                break;
 
+        }
+        return ld;
+    }
+
+    public void setTimeBombQttyLabelText(String text){
+        timeBombQttyLabel.setText(text);
+    }
+    public void setSquareBomb1QttyLabelText(String text){
+        squareBomb1QttyLabel.setText(text);
+    }
+    public void setSquareBomb2QttyLabelText(String text){
+        squareBomb2QttyLabel.setText(text);
+    }
 }
