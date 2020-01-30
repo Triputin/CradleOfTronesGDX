@@ -80,7 +80,7 @@ public class DialogBox extends BaseActor
         addActor(okButton);
         okButton.addListener(inputListener);
 
-        Action actions = sequence(Actions.scaleTo(0,0,0.01f),fadeIn(0.01f),Actions.scaleTo(1,1,2.0f));
+        Action actions = sequence(Actions.scaleTo(0,0,0.01f),fadeIn(0.01f),Actions.scaleTo(1,1,1.0f));
 
         this.setVisible(true);
         this.addAction( actions );

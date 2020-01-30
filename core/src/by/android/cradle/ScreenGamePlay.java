@@ -55,6 +55,9 @@ public class ScreenGamePlay extends BaseScreen {
     private Label squareBomb1QttyLabel;
     private Label squareBomb2QttyLabel;
 
+    Knight knight;
+    Weapon weapon;
+
     public ScreenGamePlay(CradleGame cradleGame,IPlayServices ply) {
         super(cradleGame,ply);
     }
@@ -80,21 +83,23 @@ public class ScreenGamePlay extends BaseScreen {
 
         timeBombQttyLabel = new Label(" ", BaseGame.labelStyle);
         timeBombQttyLabel.setColor( Color.GOLDENROD );
-        timeBombQttyLabel.setPosition( 15, h * 0.7f+(h*1.0f)/20f);
+        timeBombQttyLabel.setPosition( 15, h * 0.5f+(h*1.0f)/20f);
         timeBombQttyLabel.setFontScale(1.5f);
         uiStage.addActor(timeBombQttyLabel);
 
         squareBomb1QttyLabel = new Label(" ", BaseGame.labelStyle);
         squareBomb1QttyLabel.setColor( Color.GOLDENROD );
-        squareBomb1QttyLabel.setPosition( 15, h * 0.5f+(h*1.0f)/20f);
+        squareBomb1QttyLabel.setPosition( 15, h * 0.3f+(h*1.0f)/20f);
         squareBomb1QttyLabel.setFontScale(1.5f);
         uiStage.addActor(squareBomb1QttyLabel);
 
         squareBomb2QttyLabel = new Label(" ", BaseGame.labelStyle);
         squareBomb2QttyLabel.setColor( Color.GOLDENROD );
-        squareBomb2QttyLabel.setPosition( 15, h * 0.3f+(h*1.0f)/20f);
+        squareBomb2QttyLabel.setPosition( 15, h * 0.1f+(h*1.0f)/20f);
         squareBomb2QttyLabel.setFontScale(1.5f);
         uiStage.addActor(squareBomb2QttyLabel);
+
+
 
         hall = new BaseActor(0,0, mainStage, Touchable.disabled);
         //hall.loadTexture( "hall01.png",w,h );
@@ -403,20 +408,27 @@ public void RemoveAndFillSquare(int centreRow, int centreCol, int squareSize){
     Cell cell = new Cell(0,0);
     Item prevItem = null;
     Item curItem = null;
-    firstSelectedItem = gameField.GetItemAtCell(leftDownCell, mainStage);
-    prevItem = firstSelectedItem;
-    for (int i=0;i<sqHorizontalSize;i++){
-        for(int j=0;j<sqVerticalSize;j++){
-            cell.setRow(leftDownCell.getRow()+j);
-            cell.setCol(leftDownCell.getCol()+i);
+    if (squareSize==0){
+        cell.setRow(centreRow);
+        cell.setCol(centreCol);
+        firstSelectedItem = gameField.GetItemAtCell(cell, mainStage);
+        firstSelectedItem.setSelected(true,null);
+        firstSelectedItem.setSelectedDirection(SelDirection.ArrowToSouth);
+    } else {
+        firstSelectedItem = gameField.GetItemAtCell(leftDownCell, mainStage);
+        prevItem = firstSelectedItem;
+        for (int i = 0; i < sqHorizontalSize; i++) {
+            for (int j = 0; j < sqVerticalSize; j++) {
+                cell.setRow(leftDownCell.getRow() + j);
+                cell.setCol(leftDownCell.getCol() + i);
                 curItem = gameField.GetItemAtCell(cell, mainStage);
                 curItem.setSelected(true, prevItem);
                 prevItem.setSelectedNext(curItem);
                 prevItem = curItem;
 
+            }
         }
     }
-
     FillRemovedCells(removeSelectedItems());
 
            // ((Item)CoinActor).setSelected(false,null);
@@ -475,37 +487,41 @@ public void RemoveAndFillSquare(int centreRow, int centreCol, int squareSize){
 
     public ArrayList<Cell> removeSelectedItems(){
         ArrayList<Cell> arrayList = new ArrayList<>();
-        if (firstSelectedItem==null)return arrayList;
-        directionToFill = firstSelectedItem.getNext().findItemPos(firstSelectedItem);
+        Item item1;
+        Item item2;
         String className;
-        Item item1= firstSelectedItem;
-        Item item2=null;
+        if (firstSelectedItem==null)return arrayList;
+        if (firstSelectedItem.getNext()!=null) {
+            directionToFill = firstSelectedItem.getNext().findItemPos(firstSelectedItem);
 
-        //unlock near items for just one level
-        ArrayList<Item> itemArrayList = new ArrayList<>();
-        ArrayList<Item> itemArrayList2;
-        Item it;
-        while (item1.getNext()!=null){
+            item1 = firstSelectedItem;
+            item2 = null;
+
+            //unlock near items for just one level
+            ArrayList<Item> itemArrayList = new ArrayList<>();
+            ArrayList<Item> itemArrayList2;
+            Item it;
+            while (item1.getNext() != null) {
+                itemArrayList2 = GetNearItem(item1);
+                for (int i = 0; i < itemArrayList2.size(); i++) {
+                    if (!itemArrayList.contains(itemArrayList2.get(i))) {
+                        // System.out.println("NearItems: row="+itemArrayList2.get(i).getRow() +" col="+itemArrayList2.get(i).getCol());
+                        itemArrayList.add(itemArrayList2.get(i));
+                    }
+                }
+                item1 = item1.getNext();
+            }
             itemArrayList2 = GetNearItem(item1);
-            for(int i=0;i<itemArrayList2.size();i++){
-                if(!itemArrayList.contains(itemArrayList2.get(i))){
-                   // System.out.println("NearItems: row="+itemArrayList2.get(i).getRow() +" col="+itemArrayList2.get(i).getCol());
+            for (int i = 0; i < itemArrayList2.size(); i++) {
+                if (!itemArrayList.contains(itemArrayList2.get(i))) {
+                    // System.out.println("NearItems: row="+itemArrayList2.get(i).getRow() +" col="+itemArrayList2.get(i).getCol());
                     itemArrayList.add(itemArrayList2.get(i));
                 }
             }
-            item1=item1.getNext();
-        }
-        itemArrayList2 = GetNearItem(item1);
-        for(int i=0;i<itemArrayList2.size();i++){
-            if(!itemArrayList.contains(itemArrayList2.get(i))){
-                // System.out.println("NearItems: row="+itemArrayList2.get(i).getRow() +" col="+itemArrayList2.get(i).getCol());
-                itemArrayList.add(itemArrayList2.get(i));
+            for (int i = 0; i < itemArrayList.size(); i++) {
+                itemArrayList.get(i).UnlockForOneLevel();
             }
         }
-        for(int i=0;i<itemArrayList.size();i++){
-            itemArrayList.get(i).UnlockForOneLevel();
-        }
-
 
         //remove items
         item1= firstSelectedItem;
@@ -990,17 +1006,27 @@ public void RemoveAndFillSquare(int centreRow, int centreCol, int squareSize){
             sandglassduration = getLevelDuration() + gameLevel*2 - 20;
             if (sandglassduration > 400) sandglassduration = 400;
         }
-
         sandGlass = new SandGlass(x,y,uiStage,sw,Math.round( cellSize*CellCount*0.8f), sandglassduration);
         isPaused=false;
+
+
+        int knSize = Math.round(h*0.4f);
+        int wpSize = Math.round(h*0.1f);
+        if (knight!=null){knight.remove();}
+        if(weapon!=null){weapon.remove();}
+        knight = new Knight(-knSize*0.2f,h-knSize+knSize*0.2f,knSize,knSize,mainStage,KnightType.Lancaster);
+        weapon = new Weapon(knSize*0.53f,h-knSize*0.51f,wpSize,wpSize,mainStage,cradleGame,knight);
+
+
+
         for (int i = 0; i < GameRes.TimeBomb; i++) {
-            new TimeBomb(50, h * 0.7f, h / 6, h / 6, mainStage, Touchable.enabled, sandGlass, 60, cradleGame);
+            new TimeBomb(50, h * 0.5f, h / 6, h / 6, mainStage, Touchable.enabled, sandGlass, 60, cradleGame);
         }
         for (int i=0;i<GameRes.SquareBomb1;i++) {
-            new SquareBomb(50,h*0.5f,h/6,h/6,mainStage,Touchable.enabled,1,this);
+            new SquareBomb(50,h*0.3f,h/6,h/6,mainStage,Touchable.enabled,1,this);
         }
         for (int i=0;i<GameRes.SquareBomb2;i++) {
-            new SquareBomb(50,h*0.3f,h/6,h/6,mainStage,Touchable.enabled,2,this);
+            new SquareBomb(50,h*0.1f,h/6,h/6,mainStage,Touchable.enabled,2,this);
         }
 
         if (GameRes.TimeBomb>0) {

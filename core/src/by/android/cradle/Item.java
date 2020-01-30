@@ -129,6 +129,10 @@ public boolean isLocked(){
         return selectedDirection;
     }
 
+    public void setSelectedDirection(SelDirection selectedDirection) {
+        this.selectedDirection = selectedDirection;
+    }
+
     private void AddImageDirection()
     {
         Pixmap pixmap200;
