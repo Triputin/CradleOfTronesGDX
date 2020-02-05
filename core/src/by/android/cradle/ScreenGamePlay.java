@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 
 import java.util.ArrayList;
@@ -55,8 +56,8 @@ public class ScreenGamePlay extends BaseScreen {
     private Label squareBomb1QttyLabel;
     private Label squareBomb2QttyLabel;
 
-    Knight knight;
-    Weapon weapon;
+    public Knight knight;
+    public Weapon weapon;
 
     public ScreenGamePlay(CradleGame cradleGame,IPlayServices ply) {
         super(cradleGame,ply);
@@ -393,6 +394,280 @@ public class ScreenGamePlay extends BaseScreen {
 
     }
 
+
+    // used for weapon
+    public void RemoveAndFillCells(int centreRow, int centreCol, int cellQttyToRemove){
+        Cell startCell = new Cell(centreRow,centreCol);
+        Item startItem = gameField.GetItemAtCell(startCell, mainStage);
+        firstSelectedItem = startItem;
+        Item prevItem = null;
+        Item curItem = null;
+        int cellToRemoveRemainded = cellQttyToRemove;
+        Cell cell = new Cell(0,0);
+/*
+        //Find leftdown cell
+        int leftdownitempos = 1; // 1- start item, 2 - down item, 3 - leftdown item, 4 - left item
+        Cell leftDownCell = new Cell(startCell.getRow(), startCell.getCol());
+        switch(cellQttyToRemove) {
+            case 1:
+                break;
+            case 2:
+                if(startCell.getRow()>0){
+                    leftDownCell.setRow(startCell.getRow()-1);
+                    leftDownCell.setCol(startCell.getCol());
+                    leftdownitempos=2;
+                }
+                break;
+            case 3:
+                if(startCell.getRow()>0) {
+                    leftDownCell.setRow(startCell.getRow() - 1);
+                    leftdownitempos=2;
+                    if (startCell.getCol() > 0) {
+                        leftDownCell.setCol(startCell.getCol() - 1);
+                        leftdownitempos=3;
+                    }
+                }
+               break;
+
+            default: // 4 и более
+                if(startCell.getRow()>0) {
+                    leftDownCell.setRow(startCell.getRow() - 1);
+                    leftdownitempos=2;
+                }
+                if (startCell.getCol() > 0) {
+                    leftDownCell.setCol(startCell.getCol() - 1);
+                    if (leftdownitempos==2) {
+                        leftdownitempos = 3;
+                    } else {
+                        leftdownitempos = 4;
+                    }
+                }
+                break;
+
+        }
+
+
+        switch (leftdownitempos){
+            case 1: // start item
+                cellToRemoveRemainded-=4;
+
+        }
+
+*/
+
+        //Select all possible items -------------
+        while (true) {
+            //Select starting item
+            curItem = startItem;
+            curItem.setSelected(true, prevItem);
+            cellToRemoveRemainded--;
+            if (cellToRemoveRemainded == 0) {
+                break;
+            }
+/*
+            // check cell down
+            prevItem = curItem;
+            if (startItem.getRow()>0) {
+                cell.setRow(startItem.getRow()-1);
+                cell.setCol(startItem.getCol());
+                curItem = gameField.GetItemAtCell(cell, mainStage);
+                curItem.setSelected(true,prevItem);
+                prevItem.setSelectedNext(curItem);
+            }
+            cellToRemoveRemainded--; // at any case count even if cell unreachable
+            if (cellToRemoveRemainded == 0) {
+                break;
+            }
+
+            //check cell downleft
+            prevItem = curItem;
+            if ((startItem.getRow()>0) && (startItem.getCol()>0)) {
+                cell.setRow(startItem.getRow()-1);
+                cell.setCol(startItem.getCol()-1);
+                curItem = gameField.GetItemAtCell(cell, mainStage);
+                curItem.setSelected(true,prevItem);
+                prevItem.setSelectedNext(curItem);
+            }
+            cellToRemoveRemainded--; // at any case count even if cell unreachable
+            if (cellToRemoveRemainded == 0) {
+                break;
+            }
+
+            //check cell at left
+            prevItem = curItem;
+            if ((startItem.getCol()>0)) {
+                cell.setRow(startItem.getRow());
+                cell.setCol(startItem.getCol()-1);
+                curItem = gameField.GetItemAtCell(cell, mainStage);
+                curItem.setSelected(true,prevItem);
+                prevItem.setSelectedNext(curItem);
+            }
+            cellToRemoveRemainded--; // at any case count even if cell unreachable
+            if (cellToRemoveRemainded == 0) {
+                break;
+            }
+
+            //check cell upleft
+            prevItem = curItem;
+            if ((startItem.getRow()<(CellCount-1)) && (startItem.getCol()>0)) {
+                cell.setRow(startItem.getRow()+1);
+                cell.setCol(startItem.getCol()-1);
+                curItem = gameField.GetItemAtCell(cell, mainStage);
+                curItem.setSelected(true,prevItem);
+                prevItem.setSelectedNext(curItem);
+            }
+            cellToRemoveRemainded--; // at any case count even if cell unreachable
+            if (cellToRemoveRemainded == 0) {
+                break;
+            }
+
+
+            //check cell up
+            prevItem = curItem;
+            if (startItem.getRow()<(CellCount-1)) {
+                cell.setRow(startItem.getRow()+1);
+                cell.setCol(startItem.getCol());
+                curItem = gameField.GetItemAtCell(cell, mainStage);
+                curItem.setSelected(true,prevItem);
+                prevItem.setSelectedNext(curItem);
+            }
+            cellToRemoveRemainded--; // at any case count even if cell unreachable
+            if (cellToRemoveRemainded == 0) {
+                break;
+            }
+
+        //check cell upright
+        prevItem = curItem;
+        if ((startItem.getRow()<(CellCount-1)) && (startItem.getCol()<(CellCount-1))) {
+            cell.setRow(startItem.getRow()+1);
+            cell.setCol(startItem.getCol()+1);
+            curItem = gameField.GetItemAtCell(cell, mainStage);
+            curItem.setSelected(true,prevItem);
+            prevItem.setSelectedNext(curItem);
+        }
+        cellToRemoveRemainded--; // at any case count even if cell unreachable
+        if (cellToRemoveRemainded == 0) {
+            break;
+        }
+*/
+            //check cell right
+            prevItem = curItem;
+            if (startItem.getCol()<(CellCount-1)) {
+                cell.setRow(startItem.getRow());
+                cell.setCol(startItem.getCol()+1);
+                curItem = gameField.GetItemAtCell(cell, mainStage);
+                curItem.setSelected(true,prevItem);
+                prevItem.setSelectedNext(curItem);
+            }
+            cellToRemoveRemainded--; // at any case count even if cell unreachable
+            if (cellToRemoveRemainded == 0) {
+                break;
+            }
+
+            //check cell 2xright
+            prevItem = curItem;
+            if (startItem.getCol()<(CellCount-2)) {
+                cell.setRow(startItem.getRow());
+                cell.setCol(startItem.getCol()+2);
+                curItem = gameField.GetItemAtCell(cell, mainStage);
+                curItem.setSelected(true,prevItem);
+                prevItem.setSelectedNext(curItem);
+            }
+            cellToRemoveRemainded--; // at any case count even if cell unreachable
+            if (cellToRemoveRemainded == 0) {
+                break;
+            }
+
+            //check cell up
+            prevItem = curItem;
+            if (startItem.getRow()<(CellCount-1)) {
+                cell.setRow(startItem.getRow()+1);
+                cell.setCol(startItem.getCol());
+                curItem = gameField.GetItemAtCell(cell, mainStage);
+                curItem.setSelected(true,prevItem);
+                prevItem.setSelectedNext(curItem);
+            }
+            cellToRemoveRemainded--; // at any case count even if cell unreachable
+            if (cellToRemoveRemainded == 0) {
+                break;
+            }
+            //check cell upright
+            prevItem = curItem;
+            if ((startItem.getRow()<(CellCount-1)) && (startItem.getCol()<(CellCount-1))) {
+                cell.setRow(startItem.getRow()+1);
+                cell.setCol(startItem.getCol()+1);
+                curItem = gameField.GetItemAtCell(cell, mainStage);
+                curItem.setSelected(true,prevItem);
+                prevItem.setSelectedNext(curItem);
+            }
+            cellToRemoveRemainded--; // at any case count even if cell unreachable
+            if (cellToRemoveRemainded == 0) {
+                break;
+            }
+            //check cell up 2xright
+            prevItem = curItem;
+            if ((startItem.getRow()<(CellCount-1)) && (startItem.getCol()<(CellCount-2))) {
+                cell.setRow(startItem.getRow()+1);
+                cell.setCol(startItem.getCol()+2);
+                curItem = gameField.GetItemAtCell(cell, mainStage);
+                curItem.setSelected(true,prevItem);
+                prevItem.setSelectedNext(curItem);
+            }
+            cellToRemoveRemainded--; // at any case count even if cell unreachable
+            if (cellToRemoveRemainded == 0) {
+                break;
+            }
+
+            //check cell 2xUp
+            prevItem = curItem;
+            if (startItem.getRow()<(CellCount-2)) {
+                cell.setRow(startItem.getRow()+2);
+                cell.setCol(startItem.getCol());
+                curItem = gameField.GetItemAtCell(cell, mainStage);
+                curItem.setSelected(true,prevItem);
+                prevItem.setSelectedNext(curItem);
+            }
+            cellToRemoveRemainded--; // at any case count even if cell unreachable
+            if (cellToRemoveRemainded == 0) {
+                break;
+            }
+
+            //check cell 2xup right
+            prevItem = curItem;
+            if ((startItem.getRow()<(CellCount-2)) && (startItem.getCol()<(CellCount-1))) {
+                cell.setRow(startItem.getRow()+2);
+                cell.setCol(startItem.getCol()+1);
+                curItem = gameField.GetItemAtCell(cell, mainStage);
+                curItem.setSelected(true,prevItem);
+                prevItem.setSelectedNext(curItem);
+            }
+            cellToRemoveRemainded--; // at any case count even if cell unreachable
+            if (cellToRemoveRemainded == 0) {
+                break;
+            }
+
+            //check cell 2xup 2xright
+            prevItem = curItem;
+            if ((startItem.getRow()<(CellCount-2)) && (startItem.getCol()<(CellCount-2))) {
+                cell.setRow(startItem.getRow()+2);
+                cell.setCol(startItem.getCol()+2);
+                curItem = gameField.GetItemAtCell(cell, mainStage);
+                curItem.setSelected(true,prevItem);
+                prevItem.setSelectedNext(curItem);
+            }
+            cellToRemoveRemainded--; // at any case count even if cell unreachable
+            if (cellToRemoveRemainded == 0) {
+                break;
+            }
+
+        } // end of switch which selected all items to remove
+
+        FillRemovedCells(removeSelectedItems());
+        lastSelectedItem = null;
+        firstSelectedItem = null;
+
+    }
+
 public void RemoveAndFillSquare(int centreRow, int centreCol, int squareSize){
 
     //Find leftdown cell coordinates and actual size of square
@@ -408,13 +683,6 @@ public void RemoveAndFillSquare(int centreRow, int centreCol, int squareSize){
     Cell cell = new Cell(0,0);
     Item prevItem = null;
     Item curItem = null;
-    if (squareSize==0){
-        cell.setRow(centreRow);
-        cell.setCol(centreCol);
-        firstSelectedItem = gameField.GetItemAtCell(cell, mainStage);
-        firstSelectedItem.setSelected(true,null);
-        firstSelectedItem.setSelectedDirection(SelDirection.ArrowToSouth);
-    } else {
         firstSelectedItem = gameField.GetItemAtCell(leftDownCell, mainStage);
         prevItem = firstSelectedItem;
         for (int i = 0; i < sqHorizontalSize; i++) {
@@ -428,7 +696,7 @@ public void RemoveAndFillSquare(int centreRow, int centreCol, int squareSize){
 
             }
         }
-    }
+
     FillRemovedCells(removeSelectedItems());
 
            // ((Item)CoinActor).setSelected(false,null);
@@ -493,14 +761,16 @@ public void RemoveAndFillSquare(int centreRow, int centreCol, int squareSize){
         if (firstSelectedItem==null)return arrayList;
         if (firstSelectedItem.getNext()!=null) {
             directionToFill = firstSelectedItem.getNext().findItemPos(firstSelectedItem);
-
+        }else{
+            directionToFill = ItemPos.Down;
+        }
             item1 = firstSelectedItem;
             item2 = null;
 
             //unlock near items for just one level
             ArrayList<Item> itemArrayList = new ArrayList<>();
             ArrayList<Item> itemArrayList2;
-            Item it;
+            // fill array with all items around all item without duplicates
             while (item1.getNext() != null) {
                 itemArrayList2 = GetNearItem(item1);
                 for (int i = 0; i < itemArrayList2.size(); i++) {
@@ -511,6 +781,8 @@ public void RemoveAndFillSquare(int centreRow, int centreCol, int squareSize){
                 }
                 item1 = item1.getNext();
             }
+
+            // add near items of last cell without duplicates
             itemArrayList2 = GetNearItem(item1);
             for (int i = 0; i < itemArrayList2.size(); i++) {
                 if (!itemArrayList.contains(itemArrayList2.get(i))) {
@@ -518,10 +790,12 @@ public void RemoveAndFillSquare(int centreRow, int centreCol, int squareSize){
                     itemArrayList.add(itemArrayList2.get(i));
                 }
             }
+
+            // unlock items on fo one level
             for (int i = 0; i < itemArrayList.size(); i++) {
                 itemArrayList.get(i).UnlockForOneLevel();
             }
-        }
+
 
         //remove items
         item1= firstSelectedItem;
@@ -579,6 +853,8 @@ public void RemoveAndFillSquare(int centreRow, int centreCol, int squareSize){
         newCells = FindCellsToMove(cell,directionToFill);
         newItems = FindItemsToMove(newCells);
         AddNewItems(newCells,newItems,arrayList.size(),cell);
+        //System.out.println("FillRemovedCells: newCells = "+newCells.size());
+        //System.out.println("FillRemovedCells: newItems = "+newItems.size());
 
         for (int i=0; i<arrayList.size();i++){
             newItems.get(0).setCell(arrayList.get(i));
@@ -599,6 +875,8 @@ public void RemoveAndFillSquare(int centreRow, int centreCol, int squareSize){
 
 
     }
+
+    // Ошибка в расчете (лишняя ячейка добавляется, если крюк сделан, т.к. расчет количества ячеек к сдвигу идет от стартовой без учета крюка
     private ArrayList<Cell> FindCellsToMove(Cell firstCell,ItemPos itemPos){
         int count = 0;
         ArrayList<Cell> arrayList = new ArrayList<>();
@@ -639,6 +917,7 @@ public void RemoveAndFillSquare(int centreRow, int centreCol, int squareSize){
                 if ( Item.class.isAssignableFrom(a.getClass()) ){
                     if( (arrayList.get(i).getCol()==((Item)a).getCol())&&(arrayList.get(i).getRow()==((Item)a).getRow())){
                         arrayListItems.add( (Item) a );
+                        //System.out.println("Item added: Col="+((Item)a).getCol() +" Row="+ ((Item)a).getRow());
                     }
 
                 }
@@ -647,6 +926,7 @@ public void RemoveAndFillSquare(int centreRow, int centreCol, int squareSize){
         }
         return arrayListItems;
     }
+
     public void AddNewItems(ArrayList<Cell> arrayListCells,ArrayList<Item> arrayListItems,int count,Cell fCell){
         Cell cell;
         Cell firstCell;
@@ -930,18 +1210,19 @@ public void RemoveAndFillSquare(int centreRow, int centreCol, int squareSize){
                     GameRes.Wood -= kingdomRes.Wood;
                     GameRes.Bread -= kingdomRes.Bread;
                 }
+
+                knight.addHealth();
+                System.out.println("knight health"+knight.getHealth());
                 if (attackedKingdom!=null){
                     attackedKingdom.decreaseProtection();
                     setGameLevel(gameLevel+1);
                 }
-                GameRes.Score=GameRes.Score+Math.round(score_during_attack); // increase score if win
-                //cradleGame.setActiveGameMapScreen();
 
-                //Show dialog
+
 
                 dialogBox_endLevel.setResults(Math.round(score_during_attack),resultAttack.Gold,resultAttack.Wood,resultAttack.Bread);
 
-                final InputListener inputListener2 =new InputListener() {
+                 InputListener inputListener2 =new InputListener() {
                     public boolean touchDown (InputEvent e, float x, float y, int pointer, int button){
                         if (!(e instanceof InputEvent))
                             return false;
@@ -949,7 +1230,18 @@ public void RemoveAndFillSquare(int centreRow, int centreCol, int squareSize){
                         if (!((InputEvent) e).getType().equals(InputEvent.Type.touchDown))
                             return false;
 
-                        cradleGame.setActiveGameMapScreen();
+                        //Check if level rising is needed fo hero.
+                        boolean isHeroLevelNeedsShow;
+                        if ( Math.floor(GameRes.Score/1000f)<Math.floor((GameRes.Score+Math.round(score_during_attack))/1000f)){
+                            knight.incLevel();
+                            isHeroLevelNeedsShow = true;
+                        } else {
+                            isHeroLevelNeedsShow = false;
+                        }
+
+                        GameRes.Score=GameRes.Score+Math.round(score_during_attack); // increase score if win
+                        cradleGame.setActiveGameMapScreen(isHeroLevelNeedsShow);
+
 
                         return true;
                     }
@@ -1014,7 +1306,7 @@ public void RemoveAndFillSquare(int centreRow, int centreCol, int squareSize){
         int wpSize = Math.round(h*0.1f);
         if (knight!=null){knight.remove();}
         if(weapon!=null){weapon.remove();}
-        knight = new Knight(-knSize*0.2f,h-knSize+knSize*0.2f,knSize,knSize,mainStage,KnightType.Lancaster);
+        knight = new Knight(-knSize*0.2f,h-knSize+knSize*0.2f,knSize,knSize,mainStage,cradleGame.getKnightParams());
         weapon = new Weapon(knSize*0.53f,h-knSize*0.51f,wpSize,wpSize,mainStage,cradleGame,knight);
 
 
@@ -1075,21 +1367,21 @@ public void RemoveAndFillSquare(int centreRow, int centreCol, int squareSize){
                 //Show dialog
                 dialogBox_endLevel.setResults(0,resultAttack.Gold,resultAttack.Wood,resultAttack.Bread);
 
-                final InputListener inputListener2 =new InputListener() {
+                 InputListener inputListener3 =new InputListener() {
                     public boolean touchDown (InputEvent e, float x, float y, int pointer, int button){
                         if (!(e instanceof InputEvent))
                             return false;
 
                         if (!((InputEvent) e).getType().equals(InputEvent.Type.touchDown))
                             return false;
-
-                        cradleGame.setActiveGameMapScreen();
+                        knight.doDamage();
+                        cradleGame.setActiveGameMapScreen(false);
 
                         return true;
                     }
                 };
 
-                dialogBox_endLevel.showWithOkButton(inputListener2);
+                dialogBox_endLevel.showWithOkButton(inputListener3);
                 return true;
             }
         };

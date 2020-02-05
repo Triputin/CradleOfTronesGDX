@@ -18,9 +18,6 @@ import static com.badlogic.gdx.scenes.scene2d.actions.Actions.sequence;
 
 public class GameMapScreen extends BaseScreen {
 
-
-    private Music instrumental;
-    private float audioVolume;
     private MessageActor01 messageActor01;
     private ResultsActor resultsActor;
     private Kingdom[] kingdoms;
@@ -47,13 +44,6 @@ public class GameMapScreen extends BaseScreen {
         messageActor01.setVisible(visible);
     }
 
-    public void PlayMusic(){
-        instrumental.play();
-    }
-
-    public void PauseMusic(){
-        instrumental.pause();
-    }
 
 
     public boolean isFirstMapLevelRun() {
@@ -66,11 +56,19 @@ public class GameMapScreen extends BaseScreen {
 
     public void initialize()
     {
-
-        instrumental = Gdx.audio.newMusic(Gdx.files.internal("sounds/new_land.mp3"));
         audioVolume = 0.7f;
-        instrumental.setLooping(true);
-        instrumental.setVolume(audioVolume);
+        musicArray[0] = Gdx.audio.newMusic(Gdx.files.internal("sounds/new_land.mp3"));
+        musicArray[0].setLooping(true);
+        musicArray[0].setVolume(audioVolume);
+        musicArray[0].pause();
+        musicArray[1] = Gdx.audio.newMusic(Gdx.files.internal("sounds/soundmap02.mp3"));
+        musicArray[1].setLooping(true);
+        musicArray[1].setVolume(audioVolume);
+        musicArray[1].pause();
+        instrumental=musicArray[0];
+        //instrumental = Gdx.audio.newMusic(Gdx.files.internal("sounds/new_land.mp3"));
+
+
         isWinMapLevel = false;
 
         if ((cradleGame.getGameMapLevel()==1)&&(cradleGame.getScreenGamePlay().getGameLevel()==1)){
@@ -85,7 +83,7 @@ public class GameMapScreen extends BaseScreen {
 
 
         initializeMap(cradleGame.getGameMapLevel());
-
+        instrumental.pause();
 
 
         //Fon for results
@@ -229,6 +227,8 @@ public class GameMapScreen extends BaseScreen {
         if( worldMap==null) {
             worldMap = new BaseActor(0, 0, mainStage, Touchable.disabled);
         }
+        instrumental.pause();
+        instrumental = musicArray[0];
         switch(mapLevel){
 
             case 2:
@@ -243,7 +243,7 @@ public class GameMapScreen extends BaseScreen {
                     kingdoms[5] = new Kingdom(w*0.75f, h*0.25f,kingdomsize,kingdomsize,uiStage,Touchable.enabled,KingdomNames.Kingdom_of_the_Stormlands);
                     kingdoms[6] = new Kingdom(w*0.85f, h*0.6f,kingdomsize,kingdomsize,uiStage,Touchable.enabled,KingdomNames.Principality_of_Dorne);
                     arena = new Arena(w * 0.3f, h * 0.18f, Math.round(kingdomsize * 1.56f), kingdomsize, uiStage, Touchable.enabled);
-
+                    instrumental = musicArray[1];
                 break;
             case 1:
                 worldMap.loadTexture( "maps/worldmap02.png",w,h );
@@ -274,7 +274,7 @@ public class GameMapScreen extends BaseScreen {
 
         }
 
-
+        PauseMusic();
 
         InputListener inputListener = new InputListener() {
             @Override

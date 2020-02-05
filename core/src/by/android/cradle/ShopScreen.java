@@ -130,7 +130,7 @@ private ShopItem squareBomb2;
 
                 if (!((InputEvent) e).getType().equals(InputEvent.Type.touchDown))
                     return false;
-                cradleGame.setActiveGameMapScreen();
+                cradleGame.setActiveGameMapScreen(false);
                 return true;
             }
         });

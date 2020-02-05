@@ -3,20 +3,22 @@ package by.android.cradle;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
 
 public class MenuScreen extends BaseScreen {
-    private Music instrumental;
-    private float audioVolume;
-
 
     static final String TAG = "MenuScreen";
 
@@ -24,13 +26,6 @@ public class MenuScreen extends BaseScreen {
         super(cradleGame,ply);
     }
 
-    public void PlayMusic(){
-        instrumental.play();
-    }
-
-    public void PauseMusic(){
-        instrumental.pause();
-    }
 
     public void initialize()
     {
@@ -39,7 +34,7 @@ public class MenuScreen extends BaseScreen {
         audioVolume = 0.7f;
         instrumental.setLooping(true);
         instrumental.setVolume(audioVolume);
-        instrumental.play();
+        PlayMusic();
 
 
         int w = Gdx.graphics.getWidth();
@@ -68,14 +63,9 @@ public class MenuScreen extends BaseScreen {
         uiTable.addActor(castle);
 
 
-
-       // BaseActor title = new BaseActor(0,0, mainStage, Touchable.disabled);
-       // title.loadTexture( "assets/starfish-collector.png" );
-
-
         String s = cradleGame.getLanguageStrings().get("start");
         TextButton startButton = new TextButton( "   "+s+"   " , BaseGame.textButtonStyle );
-
+        startButton.setScale(2,2);
 
         startButton.addListener(new InputListener() {
             public boolean touchDown (InputEvent e, float x, float y, int pointer, int button){
@@ -86,7 +76,7 @@ public class MenuScreen extends BaseScreen {
                     return false;
                 //ply.submitScore(cradleGame.leaderboard,100);
                 instrumental.pause();
-                cradleGame.setActiveGameMapScreen();
+                cradleGame.setActiveGameMapScreen(false);
                 return true;
             }
         });
@@ -109,6 +99,7 @@ public class MenuScreen extends BaseScreen {
             }
         });
 
+        /*
         s = cradleGame.getLanguageStrings().get("quit");
         TextButton quitButton = new TextButton( "   "+s+"   ", BaseGame.textButtonStyle );
         // quitButton.setPosition(500,150);
@@ -127,20 +118,9 @@ public class MenuScreen extends BaseScreen {
                 return true;
             }
         });
+*/
 
-        s = cradleGame.getLanguageStrings().get("restart");
-        TextButton restartButton = new TextButton( "   "+s+"   ", BaseGame.textButtonStyle );
 
-        restartButton.addListener(new InputListener() {
-            public boolean touchDown (InputEvent e, float x, float y, int pointer, int button){
-                if (!(e instanceof InputEvent)) return false;
-
-                if (!((InputEvent) e).getType().equals(InputEvent.Type.touchDown)) return false;
-
-                cradleGame.restartGame();
-                return true;
-            }
-        });
 
         s = cradleGame.getLanguageStrings().get("signin");
         final TextButton signInButton = new TextButton( ""+s+"", BaseGame.textButtonStyle );
@@ -202,9 +182,32 @@ public class MenuScreen extends BaseScreen {
         uiTable.row();
         uiTable.add(helpButton);
         uiTable.row();
-        uiTable.add(quitButton);
-        uiTable.row();
-        uiTable.add(restartButton);
+       // uiTable.add(quitButton);
+
+
+        //Settings button
+        Button.ButtonStyle buttonStyle = new Button.ButtonStyle();
+
+        Texture buttonTex = new Texture( Gdx.files.internal("settings_button.png") );
+        TextureRegion buttonRegion =  new TextureRegion(buttonTex);
+        buttonStyle.up = new TextureRegionDrawable( buttonRegion );
+
+        Button settingsButton = new Button( buttonStyle );
+        //restartButton.setColor( Color.CYAN );
+        settingsButton.setPosition(10,10);
+        settingsButton.setSize(h*0.25f,h*0.25f);
+        uiStage.addActor(settingsButton);
+
+        settingsButton.addListener(new InputListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                InputEvent ie = (InputEvent)event;
+                if ( ie.getType().equals(InputEvent.Type.touchDown) ) {
+                    cradleGame.setActiveSettingsScreen();
+                }
+                return false;
+            }
+        });
 
 
     }
@@ -218,7 +221,7 @@ public class MenuScreen extends BaseScreen {
     {
         if (Gdx.input.isKeyPressed(Input.Keys.ENTER))
 
-        cradleGame.setActiveGameMapScreen();
+        cradleGame.setActiveGameMapScreen(false);
         if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE))
             Gdx.app.exit();
         return false;

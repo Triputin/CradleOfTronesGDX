@@ -2,6 +2,7 @@ package by.android.cradle;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
+import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.utils.I18NBundle;
 import com.badlogic.gdx.utils.Timer;
 
@@ -12,6 +13,9 @@ public class CradleGame extends BaseGame
     public final int MaxGameMapLevel=3;
     private int gameMapLevel;
     private int difficultyLevel;
+    private KnightParams knightParams;
+    private boolean isSoundOn;
+    private boolean isMusicOn;
 
     //game screens
     private MenuScreen menuScreen;
@@ -19,6 +23,8 @@ public class CradleGame extends BaseGame
     private ScreenGamePlay screenGamePlay;
     private HelpScreen helpScreen;
     private ShopScreen shopScreen;
+    private SettingsScreen settingsScreen;
+
     private static long SPLASH_MINIMUM_MILLIS = 3000L;
     //private SplashScreen splashScreen;
     //
@@ -86,6 +92,9 @@ public class CradleGame extends BaseGame
          //Setup settings provider
          prefs = Gdx.app.getPreferences("settings.prefs");
 
+         knightParams = new KnightParams(prefs); // loads Knight settings
+
+
          // For debug ru locale
          //Locale locale = new Locale("ru");
          //languageStrings = I18NBundle.createBundle(Gdx.files.internal("strings/strings"),locale);
@@ -94,7 +103,10 @@ public class CradleGame extends BaseGame
          languageStrings = I18NBundle.createBundle(Gdx.files.internal("strings/strings"));
 
          getResFromStorage();
-         //gameMapLevel=3; // for debug
+         //gameMapLevel=2; // for debug
+         //GameRes.Score=999; // for debug
+         isSoundOn = prefs.getBoolean("issoundon", true);
+         isMusicOn = prefs.getBoolean("ismusicon", true);
          menuScreen = new MenuScreen(this,ply);
          screenGamePlay = new ScreenGamePlay(this,ply);
 
@@ -123,7 +135,7 @@ public class CradleGame extends BaseGame
              //System.out.println("CradleGame.create Get:kingdomProtectionState"+i+);
          }
 
-
+         settingsScreen = new SettingsScreen(this,ply);
 
      }
 
@@ -136,8 +148,22 @@ public class CradleGame extends BaseGame
         GameRes.SquareBomb2=prefs.getInteger("SquareBomb2", 0);
         GameRes.Score=prefs.getInteger("Score", 0);
         gameMapLevel = prefs.getInteger("gameMapLevel", 1);
-        //gameMapLevel=3;// for test purpose
+    }
 
+    public boolean isSoundOn() {
+        return isSoundOn;
+    }
+
+    public void setSoundOn(boolean soundOn) {
+        isSoundOn = soundOn;
+    }
+
+    public boolean isMusicOn() {
+        return isMusicOn;
+    }
+
+    public void setMusicOn(boolean musicOn) {
+        isMusicOn = musicOn;
     }
 
     public void saveGameRes(){
@@ -152,6 +178,8 @@ public class CradleGame extends BaseGame
         prefs.putInteger("SquareBomb1", GameRes.SquareBomb1);
         prefs.putInteger("SquareBomb2", GameRes.SquareBomb2);
         prefs.putInteger("Score", GameRes.Score);
+        prefs.putBoolean("issoundon", isSoundOn);
+        prefs.putBoolean("ismusicon", isMusicOn);
 
         Kingdom[] kingdoms = gameMapScreen.getKingdoms();
 
@@ -159,6 +187,8 @@ public class CradleGame extends BaseGame
             prefs.putInteger("kingdomProtectionState"+i, kingdoms[i].getProtectionState());
             //System.out.println("setActiveGameMapScreen Put:kingdomProtectionState"+i);
         }
+
+        knightParams.save();
         prefs.flush();
     }
 
@@ -199,6 +229,7 @@ public class CradleGame extends BaseGame
         GdxLog.print("setActiveMenuScreen():","Called");
         game.setScreen(menuScreen);
         gameMapScreen.PauseMusic();
+        settingsScreen.PauseMusic();
         menuScreen.PlayMusic();
         myRequestHandler.showAds(false);
     }
@@ -213,6 +244,16 @@ public class CradleGame extends BaseGame
         myRequestHandler.showAds(false);
     }
 
+    public  void setActiveSettingsScreen()
+    {
+
+        GdxLog.print("setActiveSettingsScreen():","Called");
+        game.setScreen(settingsScreen);
+        menuScreen.PauseMusic();
+        settingsScreen.PlayMusic();
+        myRequestHandler.showAds(false);
+    }
+
     public  void setActiveShopScreen()
     {
         //System.out.println("setActiveShopScreen()");
@@ -223,10 +264,12 @@ public class CradleGame extends BaseGame
         shopScreen.setupResources();
     }
 
-    public  void setActiveGameMapScreen()
+    public  void setActiveGameMapScreen(boolean showNewHeroLevel)
     {
         //System.out.println("setActiveGameMapScreen");
         GdxLog.print("setActiveGameMapScreen():","Called");
+        int w = Gdx.graphics.getWidth();
+        int h = Gdx.graphics.getHeight();
         game.setScreen(gameMapScreen);
         gameMapScreen.UpdateRes(); //Shows Thron if maplevel ended
 
@@ -240,6 +283,28 @@ public class CradleGame extends BaseGame
         ply.submitScore(leaderboard,GameRes.Score);
         //For Debug
         screenGamePlay.printNumberOfActors();
+
+        //Show hero have rised level dialog
+        System.out.println("setActiveGameMapScreen KnightLevel=" + knightParams.getKnightLevel());
+        if (showNewHeroLevel) {
+            String s = getLanguageStrings().get("information");
+            Dialog dialog = new Dialog(s, BaseGame.skin, "dialog") {
+                public void result(Object obj) {
+                    System.out.println("result " + obj);
+                }
+            };
+            s = getLanguageStrings().get("you_hero_rised_level")+ knightParams.getKnightLevel();
+            dialog.text(s);
+            s = getLanguageStrings().get("ok");
+            dialog.button(s, true); //sends "true" as the result
+            //dialog.button("No", false); //sends "false" as the result
+            dialog.setSize(h*0.4f,h*0.4f); //don't work
+            dialog.show(gameMapScreen.uiStage);
+        }
+
+        if (knightParams.getLifes()<=0){
+            ShowAllLifesLostDialog();
+        }
 
     }
 
@@ -294,7 +359,8 @@ public class CradleGame extends BaseGame
         prefs.putInteger("SquareBomb2", GameRes.SquareBomb2);
         prefs.putInteger("Score", GameRes.Score);
 
-
+        knightParams.reset();
+        if (screenGamePlay.knight!=null) {screenGamePlay.knight.reDraw();}
 
         prefs.flush();
 
@@ -353,5 +419,28 @@ public class CradleGame extends BaseGame
 
     public void setDifficultyLevel(int difficultyLevel) {
         this.difficultyLevel = difficultyLevel;
+    }
+
+    public KnightParams getKnightParams() {
+        return knightParams;
+    }
+
+    public void ShowAllLifesLostDialog(){
+        int w = Gdx.graphics.getWidth();
+        int h = Gdx.graphics.getHeight();
+            String s = getLanguageStrings().get("information");
+            Dialog dialog = new Dialog(s, BaseGame.skin, "dialog") {
+                public void result(Object obj) {
+                    System.out.println("result " + obj);
+                }
+            };
+            s = getLanguageStrings().get("you_hero_lost_all_lives")+ knightParams.getKnightLevel();
+            dialog.text(s);
+            s = getLanguageStrings().get("ok");
+            dialog.button(s, true); //sends "true" as the result
+            //dialog.button("No", false); //sends "false" as the result
+            dialog.setSize(h*0.4f,h*0.4f); //don't work
+            dialog.show(gameMapScreen.uiStage);
+
     }
 }

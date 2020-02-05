@@ -3,7 +3,6 @@ package by.android.cradle;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.fadeIn;
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.fadeOut;
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.sequence;
@@ -13,7 +12,7 @@ public class Weapon extends DragAndDropActor {
     float X;
     float Y;
     Knight knight;
-    private int squareSize;// qtty cells around of center 1 = 9 cells, 2 = 25 cells
+
 
     public Weapon(float x, float y, int width, int height, Stage s, CradleGame cradleGame, Knight knight) {
         super(x, y, s);
@@ -25,7 +24,6 @@ public class Weapon extends DragAndDropActor {
         //AddImage("mace01.png", 0,0,(int) getWidth(), (int) getHeight());
         this.cradleGame = cradleGame;
         this.knight = knight;
-        squareSize=1;
     }
 
     public void onDrop() {
@@ -43,9 +41,10 @@ public class Weapon extends DragAndDropActor {
                 System.out.println("mace has target");
                 Item item = (Item) dropTarget;
                 System.out.println("Drop target item row "+ item.getRow()+" col "+item.getCol());
-                cradleGame.getScreenGamePlay().RemoveAndFillSquare(item.getRow(),item.getCol(),squareSize);
-
+                //cradleGame.getScreenGamePlay().RemoveAndFillSquare(item.getRow(),item.getCol(),squareSize);
+                cradleGame.getScreenGamePlay().RemoveAndFillCells(item.getRow(),item.getCol(),knight.getCellsQttyToDestroy());
             }
         }
     }
+
 }

@@ -16,8 +16,6 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.utils.Align;
 
 public class HelpScreen extends BaseScreen {
-    private Music instrumental;
-    private float audioVolume;
     private BaseActor slide1;
     private int slideNumber;
     private Label infoLabel;
@@ -29,13 +27,6 @@ public class HelpScreen extends BaseScreen {
         super(cradleGame,ply);
     }
 
-    public void PlayMusic(){
-        instrumental.play();
-    }
-
-    public void PauseMusic(){
-        instrumental.pause();
-    }
 
     public void initialize()
     {

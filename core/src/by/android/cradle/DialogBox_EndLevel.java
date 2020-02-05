@@ -125,6 +125,7 @@ public class DialogBox_EndLevel  extends BaseActor{
 
     public void showWithOkButton(InputListener inputListener){
         addActor(okButton);
+        okButton.clearListeners(); //!!!!
         okButton.addListener(inputListener);
 
         Action actions = sequence(Actions.scaleTo(1,0,0.01f),fadeIn(0.01f),Actions.scaleTo(1,1,0.5f));
