@@ -65,6 +65,7 @@ public class MenuScreen extends BaseScreen {
 
         String s = cradleGame.getLanguageStrings().get("start");
         TextButton startButton = new TextButton( "   "+s+"   " , BaseGame.textButtonStyle );
+
         startButton.setScale(2,2);
 
         startButton.addListener(new InputListener() {

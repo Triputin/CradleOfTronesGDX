@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.I18NBundle;
 
 public class SettingsScreen extends BaseScreen {
@@ -45,7 +46,7 @@ public class SettingsScreen extends BaseScreen {
         buttonStyle.up = new TextureRegionDrawable( buttonRegion );
 
         Button closeButton = new Button( buttonStyle );
-        closeButton.setSize(h*0.25f,h*0.25f);
+        closeButton.setSize(h*0.15f,h*0.15f);
         closeButton.setPosition(10,h-10-closeButton.getHeight());
         uiStage.addActor(closeButton);
 
@@ -76,9 +77,10 @@ public class SettingsScreen extends BaseScreen {
         });
 
 
-        uiTable.row();
-        uiTable.add(restartButton);
-
+       // uiTable.row();
+        //uiTable.add(restartButton);
+        uiStage.addActor(restartButton);
+        restartButton.setPosition(w/2f,h/3f, Align.center);
 
         //Music button
         buttonStyle = new Button.ButtonStyle();
@@ -125,8 +127,8 @@ public class SettingsScreen extends BaseScreen {
 
         //Sound button
         Button.ButtonStyle buttonStyle2 = new Button.ButtonStyle();
-        Texture buttonTex3 = new Texture(Gdx.files.internal("sound_on_button.png"));
-        Texture buttonTex4 = new Texture(Gdx.files.internal("sound_off_button.png"));
+        Texture buttonTex3 = new Texture(Gdx.files.internal("sound_on_button02.png"));
+        Texture buttonTex4 = new Texture(Gdx.files.internal("sound_off_button02.png"));
         TextureRegion buttonRegion3 =  new TextureRegion(buttonTex3);
         TextureRegion buttonRegion4 =  new TextureRegion(buttonTex4);
         buttonStyle2.up = new TextureRegionDrawable( buttonRegion3 );
@@ -134,7 +136,7 @@ public class SettingsScreen extends BaseScreen {
 
         final Button soundButton = new Button( buttonStyle2 );
         soundButton.setSize(h*0.25f,h*0.25f);
-        soundButton.setPosition(w*0.7f,h-200-closeButton.getHeight());
+        soundButton.setPosition(w*0.55f,h-200-closeButton.getHeight());
         if (cradleGame.isSoundOn()) {
             soundButton.setChecked(false);
         }else {

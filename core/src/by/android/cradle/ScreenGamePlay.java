@@ -810,7 +810,9 @@ public void RemoveAndFillSquare(int centreRow, int centreCol, int squareSize){
             boom.centerAtActor( item1 );
             boom.start();
             //Explosion sound
+            if(cradleGame.isSoundOn()){
             explosionSound.play(1f);
+            }
 
             mainStage.addActor(boom);
             gameField.changeGameCell(item1.getCell());
