@@ -8,12 +8,14 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
 import java.util.ArrayList;
 
@@ -120,6 +122,33 @@ private ShopItem squareBomb2;
         gLabel.setFontScale(1.0f);
         uiStage.addActor(gLabel);
 
+
+        //Menu button
+        Button.ButtonStyle buttonStyle = new Button.ButtonStyle();
+
+        Texture buttonTex = new Texture( Gdx.files.internal("back_button02.png") );
+        TextureRegion buttonRegion =  new TextureRegion(buttonTex);
+        buttonStyle.up = new TextureRegionDrawable( buttonRegion );
+
+        Button backButton = new Button( buttonStyle );
+        backButton.setSize(h*0.2f,h*0.2f);
+        backButton.setPosition(w*0.00f,h-backButton.getHeight()-5);
+        uiStage.addActor(backButton);
+
+        backButton.addListener(new InputListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                InputEvent ie = (InputEvent)event;
+                if ( ie.getType().equals(InputEvent.Type.touchDown) ) {
+                    cradleGame.setActiveGameMapScreen(false);
+                    return true;
+                }
+                return false;
+            }
+        });
+
+
+        /*
         s = cradleGame.getLanguageStrings().get("back");
         TextButton backButton = new TextButton( "   "+s+"   ", BaseGame.textButtonStyle );
         backButton.setPosition(w*0.00f,h*0.88f);
@@ -134,6 +163,8 @@ private ShopItem squareBomb2;
                 return true;
             }
         });
+
+        */
 
         uiStage.addActor(backButton);
 

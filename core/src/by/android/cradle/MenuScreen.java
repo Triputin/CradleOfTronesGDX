@@ -70,7 +70,7 @@ public class MenuScreen extends BaseScreen {
         String s = cradleGame.getLanguageStrings().get("start");
         TextButton startButton = new TextButton( "   "+s+"   " , BaseGame.textButtonStyle );
 
-        startButton.setScale(2,2);
+        //startButton.setScale(2,2);
 
         startButton.addListener(new InputListener() {
             public boolean touchDown (InputEvent e, float x, float y, int pointer, int button){
@@ -126,11 +126,29 @@ public class MenuScreen extends BaseScreen {
 */
 
 
-
+/*
         s = cradleGame.getLanguageStrings().get("signin");
         final TextButton signInButton = new TextButton( ""+s+"", BaseGame.textButtonStyle );
+
+  */
+
+
         s = cradleGame.getLanguageStrings().get("scores_table");
         final TextButton scoreButton = new TextButton( ""+s+"", BaseGame.textButtonStyle );
+
+        //Sign in button
+        Button.ButtonStyle buttonStyles = new Button.ButtonStyle();
+
+        Texture buttonTexs = new Texture( Gdx.files.internal("signin_button.png") );
+        TextureRegion buttonRegions =  new TextureRegion(buttonTexs);
+        buttonStyles.up = new TextureRegionDrawable( buttonRegions );
+
+        Button signInButton = new Button( buttonStyles );
+        signInButton.setSize(h*0.25f,h*0.25f);
+        signInButton.setPosition(w-signInButton.getWidth()-10,10);
+        uiStage.addActor(signInButton);
+
+
 
         signInButton.addListener(new InputListener() {
             public boolean touchDown (InputEvent e, float x, float y, int pointer, int button){
@@ -174,10 +192,12 @@ public class MenuScreen extends BaseScreen {
         uiTable.row();
         uiTable.add(startButton);
         uiTable.row();
+        /*
         uiStage.addActor(signInButton);
         signInButton.setX(0);
         signInButton.setY(h-signInButton.getHeight());
         uiTable.row();
+        */
         uiTable.add(scoreButton);
         if(ply.isSignedIn()) {
             signInButton.setVisible(false);
@@ -198,7 +218,6 @@ public class MenuScreen extends BaseScreen {
         buttonStyle.up = new TextureRegionDrawable( buttonRegion );
 
         Button settingsButton = new Button( buttonStyle );
-        //restartButton.setColor( Color.CYAN );
         settingsButton.setPosition(10,10);
         settingsButton.setSize(h*0.25f,h*0.25f);
         uiStage.addActor(settingsButton);

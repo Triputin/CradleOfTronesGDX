@@ -3,13 +3,17 @@ package by.android.cradle;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.fadeIn;
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.fadeOut;
@@ -32,6 +36,7 @@ public class GameMapScreen extends BaseScreen {
     private DialogBox mapLevelInfoDialog;
     private boolean isFirstMapLevelRun;
     private LevelOfHardnessDialogBox levelOfHardnessDialog;
+    private Knight knight;
 
     public GameMapScreen(CradleGame cradleGame,IPlayServices ply) {
 
@@ -85,6 +90,11 @@ public class GameMapScreen extends BaseScreen {
         initializeMap(cradleGame.getGameMapLevel());
         instrumental.pause();
 
+        int knSize = Math.round(h*0.4f);
+        int wpSize = Math.round(h*0.1f);
+        if (knight!=null){knight.remove();}
+        knight = new Knight(-knSize*0.2f,h-knSize+knSize*0.2f,knSize,knSize,mainStage,cradleGame.getKnightParams());
+
 
         //Fon for results
         BaseActor fon = new BaseActor(0,0,mainStage,Touchable.disabled);
@@ -98,7 +108,34 @@ public class GameMapScreen extends BaseScreen {
         resultsActor = new ResultsActor(0,0,(int) Math.round(w*0.8),70,mainStage,Touchable.disabled,baseResultsActor);
 
 
+        //Menu button
+        Button.ButtonStyle buttonStyle = new Button.ButtonStyle();
+
+        Texture buttonTex = new Texture( Gdx.files.internal("back_button02.png") );
+        TextureRegion buttonRegion =  new TextureRegion(buttonTex);
+        buttonStyle.up = new TextureRegionDrawable( buttonRegion );
+
+        Button backButton = new Button( buttonStyle );
+        backButton.setSize(h*0.28f,h*0.28f);
+        backButton.setPosition(w-backButton.getWidth()+10,h*0.63f);
+        uiStage.addActor(backButton);
+
+        backButton.addListener(new InputListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                InputEvent ie = (InputEvent)event;
+                if ( ie.getType().equals(InputEvent.Type.touchDown) ) {
+                    instrumental.pause();
+                    UpdateRes();
+                    cradleGame.setActiveMenuScreen();
+                    return true;
+                }
+                return false;
+            }
+        });
+
         //Menu Button
+        /*
         String s = cradleGame.getLanguageStrings().get("menu");
         TextButton backButton = new TextButton( s, BaseGame.textButtonStyle );
         backButton.setPosition(w*0.00f,h*0.88f);
@@ -118,9 +155,36 @@ public class GameMapScreen extends BaseScreen {
             }
         });
 
+*/
+
+        //Shop button
+        Button.ButtonStyle buttonStyle2 = new Button.ButtonStyle();
+
+        Texture buttonTex2 = new Texture( Gdx.files.internal("shop_button.png") );
+        TextureRegion buttonRegion2 =  new TextureRegion(buttonTex2);
+        buttonStyle2.up = new TextureRegionDrawable( buttonRegion2 );
+        Button shopButton = new Button( buttonStyle2 );
+        shopButton.setSize(h*0.25f,h*0.25f);
+        shopButton.setPosition(w-shopButton.getWidth(),h*0.4f);
+        uiStage.addActor(shopButton);
+
+        shopButton.addListener(new InputListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                InputEvent ie = (InputEvent)event;
+                if ( ie.getType().equals(InputEvent.Type.touchDown) ) {
+                    instrumental.pause();
+                    cradleGame.setActiveShopScreen();
+                    return true;
+                }
+                return false;
+            }
+        });
+
 
         //Shop Button
-        s = cradleGame.getLanguageStrings().get("exchange");
+        /*
+        String s = cradleGame.getLanguageStrings().get("exchange");
         shopButton = new TextButton( s, BaseGame.textButtonStyle );
         shopButton.setPosition(w*0.00f,h*0.03f);
         uiStage.addActor(shopButton);
@@ -137,6 +201,9 @@ public class GameMapScreen extends BaseScreen {
                 return true;
             }
         });
+
+        */
+
         // uiTable.add(title).colspan(2);
         // uiTable.row();
         // uiTable.add(backButton);

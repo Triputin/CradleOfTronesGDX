@@ -29,6 +29,7 @@ public abstract class BaseGame extends Game
 
     public static LabelStyle labelStyle; // BitmapFont + Color
     public static TextButtonStyle textButtonStyle; // NPD + BitmapFont + Color
+    public static TextButtonStyle textButtonStyleCheck; // for check boxes
     public static  Skin skin;
 
     private static final String FONT_CHARACTERS = "абвгдеёжзийклмнопрстуфхцчшщъыьэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯabcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789][_!$%#@|\\/?-+=()*&.;,{}\"´`'<>";
@@ -79,14 +80,27 @@ public abstract class BaseGame extends Game
         NinePatch buttonPatch2 = new NinePatch(buttonTex2, 14,14,24,24);
         textButtonStyle.down    = new NinePatchDrawable( buttonPatch2 );
 
-        Texture   buttonTex3= new Texture( Gdx.files.internal("goldbutton_checked.png") );
-        NinePatch buttonPatch3 = new NinePatch(buttonTex3, 14,14,24,24);
-        textButtonStyle.checked = new NinePatchDrawable( buttonPatch3 );
-
         textButtonStyle.font      = customFont;
         textButtonStyle.fontColor = Color.GRAY;
 
         skin = new Skin(Gdx.files.internal("data/uiskin.json"));
+
+        textButtonStyleCheck = new TextButtonStyle();
+
+        Texture   buttonTexCheck   = new Texture( Gdx.files.internal("goldbutton.png") );
+        NinePatch buttonPatchCheck = new NinePatch(buttonTexCheck, 14,14,24,24);
+        textButtonStyleCheck.up    = new NinePatchDrawable( buttonPatchCheck );
+
+        Texture   buttonTexCheck2   = new Texture( Gdx.files.internal("goldbutton_pressed.png") );
+        NinePatch buttonPatchCheck2 = new NinePatch(buttonTexCheck2, 14,14,24,24);
+        textButtonStyleCheck.down    = new NinePatchDrawable( buttonPatchCheck2 );
+
+        Texture   buttonTexCheck3= new Texture( Gdx.files.internal("goldbutton_checked.png") );
+        NinePatch buttonPatchCheck3 = new NinePatch(buttonTexCheck3, 14,14,24,24);
+        textButtonStyleCheck.checked = new NinePatchDrawable( buttonPatchCheck3 );
+
+        textButtonStyleCheck.font      = customFont;
+        textButtonStyleCheck.fontColor = Color.GRAY;
     }
 
     /**

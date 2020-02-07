@@ -65,7 +65,7 @@ public class DialogBox_DailyGift extends BaseActor {
         int pict1posY = Math.round(getHeight() * 0.4f);
 
         scoreLabel.setText(String.valueOf(resQtty));
-
+        //AddImage("gold_plate.png", pict1posX-Math.round(pictSize/4f), pict1posY-Math.round(pictSize/4f), Math.round(pictSize*3f), Math.round(pictSize*2f));
         switch (resType) {
             case "Gold":
                 AddImage("coin2.png", pict1posX, pict1posY, pictSize, pictSize);
