@@ -20,7 +20,11 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
 public class MenuScreen extends BaseScreen {
 
-    static final String TAG = "MenuScreen";
+    private final String TAG = "MenuScreen";
+    private boolean showDailyGift;
+    private String dailyGiftType;
+    private int dailyGiftQtty;
+    private DialogBox_DailyGift dialogBox_dailyGift;
 
     public MenuScreen(CradleGame cradleGame,IPlayServices ply) {
         super(cradleGame,ply);
@@ -211,12 +215,19 @@ public class MenuScreen extends BaseScreen {
         });
 
 
+
+        int dialogSize = Math.round(h*0.8f);
+        dialogBox_dailyGift = new DialogBox_DailyGift(w/2-dialogSize/2,h/2-dialogSize/2,uiStage,dialogSize,dialogSize,cradleGame);
+        dialogBox_dailyGift.setVisible(false);
+
     }
 
     public void update(float dt)
     {
 
     }
+
+
 
     public boolean keyDown(int keyCode)
     {
@@ -228,6 +239,29 @@ public class MenuScreen extends BaseScreen {
         return false;
     }
 
+    public boolean isShowDailyGift() {
+        return showDailyGift;
+    }
 
+    public void setShowDailyGift(boolean showDailyGift, String dailyGiftType, int resQtty) {
+        this.showDailyGift = showDailyGift;
+        this.dailyGiftType = dailyGiftType;
+        this.dailyGiftQtty = resQtty;
+
+        InputListener inputListener3 =new InputListener() {
+            public boolean touchDown (InputEvent e, float x, float y, int pointer, int button){
+                if (!(e instanceof InputEvent))
+                    return false;
+
+                if (!((InputEvent) e).getType().equals(InputEvent.Type.touchDown))
+                    return false;
+                dialogBox_dailyGift.setVisible(false);
+                return true;
+            }
+        };
+        dialogBox_dailyGift.setGift(dailyGiftType,resQtty);
+
+        dialogBox_dailyGift.showWithOkButton(inputListener3);
+    }
 }
 

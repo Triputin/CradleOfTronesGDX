@@ -6,10 +6,16 @@ import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.utils.I18NBundle;
 import com.badlogic.gdx.utils.Timer;
 
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+
 public class CradleGame extends BaseGame
 {
     //settings
     public  final String leaderboard = "CgkIiby2l-0EEAIQAQ";
+    private final String LAST_LOGIN_DAY="lastloginday";
+    private final int DAILY_GIFT_AMOUNT = 25;
     public final int MaxGameMapLevel=3;
     private int gameMapLevel;
     private int difficultyLevel;
@@ -105,8 +111,6 @@ public class CradleGame extends BaseGame
          getResFromStorage();
          //gameMapLevel=2; // for debug
          //GameRes.Score=999; // for debug
-         isSoundOn = prefs.getBoolean("issoundon", true);
-         isMusicOn = prefs.getBoolean("ismusicon", true);
          menuScreen = new MenuScreen(this,ply);
          screenGamePlay = new ScreenGamePlay(this,ply);
 
@@ -137,6 +141,48 @@ public class CradleGame extends BaseGame
 
          settingsScreen = new SettingsScreen(this,ply);
 
+
+
+         // Check daily gift
+         GregorianCalendar calendarG = new GregorianCalendar();
+         calendarG.setTime(new Date());
+
+         if(!prefs.contains(LAST_LOGIN_DAY)) {
+             //first day in App
+             prefs.putInteger(LAST_LOGIN_DAY, calendarG.get(Calendar.DAY_OF_YEAR));
+             prefs.flush();
+         }
+
+         //updateDailyGiftValue(prefs,calendarG); //for Debug only!!!
+
+         if(prefs.getInteger(LAST_LOGIN_DAY)-1==calendarG.get(Calendar.DAY_OF_YEAR)){
+             //next loginday up to a year
+
+             updateDailyGiftValue(prefs,calendarG);
+
+         }else{
+
+             if(calendarG.get(Calendar.DAY_OF_YEAR)==1) {
+
+                 // check for the 1st day of the year
+
+                 boolean isLeap = calendarG.isLeapYear(calendarG.get(Calendar.YEAR));
+                 if (isLeap && prefs.getInteger(LAST_LOGIN_DAY)==366 ) {
+
+                     updateDailyGiftValue(prefs,calendarG);
+
+                 }else  if(prefs.getInteger(LAST_LOGIN_DAY)==365){
+                     updateDailyGiftValue(prefs,calendarG);
+
+                 }
+                 else
+                     prefs.putInteger(LAST_LOGIN_DAY,calendarG.get(Calendar.DAY_OF_YEAR));
+             }
+             else
+                 prefs.putInteger(LAST_LOGIN_DAY,calendarG.get(Calendar.DAY_OF_YEAR));
+
+         }
+
      }
 
     public void getResFromStorage(){
@@ -148,6 +194,8 @@ public class CradleGame extends BaseGame
         GameRes.SquareBomb2=prefs.getInteger("SquareBomb2", 0);
         GameRes.Score=prefs.getInteger("Score", 0);
         gameMapLevel = prefs.getInteger("gameMapLevel", 1);
+        isSoundOn = prefs.getBoolean("issoundon", true);
+        isMusicOn = prefs.getBoolean("ismusicon", true);
     }
 
     public boolean isSoundOn() {
@@ -442,5 +490,40 @@ public class CradleGame extends BaseGame
             dialog.setSize(h*0.4f,h*0.4f); //don't work
             dialog.show(gameMapScreen.uiStage);
 
+    }
+
+    public void updateDailyGiftValue(Preferences preferences, GregorianCalendar calendarG){
+
+        preferences.putInteger(LAST_LOGIN_DAY,calendarG.get(Calendar.DAY_OF_YEAR));
+        preferences.putInteger("dailyCombo", preferences.getInteger("dailyCombo",0) + 1);
+        //preferences.putInteger("Coin", preferences.getInteger("Coin",0) + preferences.getInteger("dailyCombo",0) * 25);
+
+        int dc = preferences.getInteger("dailyCombo",0);
+        if (dc>=4) {dc=4;} // Max combo
+        int resQtty = DAILY_GIFT_AMOUNT + DAILY_GIFT_AMOUNT*dc;
+
+        float x = (float) Math.random()*3f;
+        int y = Math.round(x);
+        String resType = "Gold";
+        switch (y){
+            case 1:
+                resType = "Gold";
+                GameRes.Gold=prefs.getInteger("Gold", 50)+resQtty;
+                prefs.putInteger("Gold", GameRes.Gold);
+                break;
+            case 2:
+                resType = "Wood";
+                GameRes.Gold=prefs.getInteger("Wood", 100)+resQtty;
+                prefs.putInteger("Wood", GameRes.Wood);
+                break;
+            case 3:
+                resType = "Bread";
+                GameRes.Gold=prefs.getInteger("Bread", 100)+resQtty;
+                prefs.putInteger("Bread", GameRes.Bread);
+                break;
+        }
+
+        menuScreen.setShowDailyGift(true,resType,resQtty );
+        preferences.flush();
     }
 }
