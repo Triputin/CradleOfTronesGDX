@@ -93,8 +93,18 @@ public class GameMapScreen extends BaseScreen {
         int knSize = Math.round(h*0.4f);
         int wpSize = Math.round(h*0.1f);
         if (knight!=null){knight.remove();}
-        knight = new Knight(-knSize*0.2f,h-knSize+knSize*0.2f,knSize,knSize,mainStage,cradleGame.getKnightParams());
-
+        knight = new Knight(-knSize*0.1f,h-knSize+knSize*0.15f,knSize,knSize,uiStage,cradleGame.getKnightParams());
+        knight.addListener(new InputListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                InputEvent ie = (InputEvent)event;
+                if ( ie.getType().equals(InputEvent.Type.touchDown) ) {
+                    cradleGame.setActiveKnightScreen();
+                    return true;
+                }
+                return false;
+            }
+        });
 
         //Fon for results
         BaseActor fon = new BaseActor(0,0,mainStage,Touchable.disabled);
@@ -637,5 +647,7 @@ public String getTextForMapLevel(int maplevel){
 
 }
 
-
+    public Knight getKnight() {
+        return knight;
+    }
 }

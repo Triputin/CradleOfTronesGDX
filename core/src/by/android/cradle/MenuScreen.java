@@ -86,6 +86,7 @@ public class MenuScreen extends BaseScreen {
             }
         });
 
+        /*
         s = cradleGame.getLanguageStrings().get("help");
         TextButton helpButton = new TextButton( "   "+s+"   ", BaseGame.textButtonStyle );
         // startButton.setPosition(150,150);
@@ -104,27 +105,7 @@ public class MenuScreen extends BaseScreen {
             }
         });
 
-        /*
-        s = cradleGame.getLanguageStrings().get("quit");
-        TextButton quitButton = new TextButton( "   "+s+"   ", BaseGame.textButtonStyle );
-        // quitButton.setPosition(500,150);
-        // uiStage.addActor(quitButton);
-
-        quitButton.addListener(new InputListener() {
-            public boolean touchDown (InputEvent e, float x, float y, int pointer, int button){
-
-                if (!(e instanceof InputEvent))
-                    return false;
-
-                if (!((InputEvent) e).getType().equals(InputEvent.Type.touchDown))
-                    return false;
-
-                Gdx.app.exit();
-                return true;
-            }
-        });
 */
-
 
 /*
         s = cradleGame.getLanguageStrings().get("signin");
@@ -132,16 +113,91 @@ public class MenuScreen extends BaseScreen {
 
   */
 
-
+/*
         s = cradleGame.getLanguageStrings().get("scores_table");
         final TextButton scoreButton = new TextButton( ""+s+"", BaseGame.textButtonStyle );
+        scoreButton.addListener(new InputListener() {
+            public boolean touchDown (InputEvent e, float x, float y, int pointer, int button){
+                if (!(e instanceof InputEvent)) return false;
 
+                if (!((InputEvent) e).getType().equals(InputEvent.Type.touchDown)) return false;
+
+                if(ply.isSignedIn()) {
+                    ply.showScore(cradleGame.leaderboard);
+                    //GdxLog.d(TAG,"SignedIn Google PlayServices");
+                }
+
+                return true;
+            }
+        });
+
+*/
+        //LeaderBoard button
+        Button.ButtonStyle buttonStyles = new Button.ButtonStyle();
+
+        Texture buttonTexs = new Texture( Gdx.files.internal("leaderboard_button.png") );
+        TextureRegion buttonRegions =  new TextureRegion(buttonTexs);
+        buttonStyles.up = new TextureRegionDrawable( buttonRegions );
+
+
+        Button leaderBoardButton = new Button( buttonStyles );
+        leaderBoardButton.setSize(h*0.21f,h*0.21f);
+        leaderBoardButton.setPosition(w-leaderBoardButton.getWidth()-10,h*0.75f);
+        uiStage.addActor(leaderBoardButton);
+
+
+
+        leaderBoardButton.addListener(new InputListener() {
+            public boolean touchDown (InputEvent e, float x, float y, int pointer, int button){
+                if (!(e instanceof InputEvent)) return false;
+
+                if (!((InputEvent) e).getType().equals(InputEvent.Type.touchDown)) return false;
+
+                if(ply.isSignedIn()) {
+                    ply.showScore(cradleGame.leaderboard);
+                    //GdxLog.d(TAG,"SignedIn Google PlayServices");
+                }
+
+                return true;
+            }
+        });
+
+        //Help button
+        Button.ButtonStyle buttonStylesH = new Button.ButtonStyle();
+
+        Texture buttonTexsH = new Texture( Gdx.files.internal("help_button.png") );
+        TextureRegion buttonRegionsH =  new TextureRegion(buttonTexsH);
+        buttonStylesH.up = new TextureRegionDrawable( buttonRegionsH );
+
+
+        Button helpButton = new Button( buttonStylesH );
+        helpButton.setSize(h*0.22f,h*0.22f);
+        helpButton.setPosition(w-leaderBoardButton.getWidth()-10,h*0.03f);
+        uiStage.addActor(helpButton);
+
+
+
+        helpButton.addListener(new InputListener() {
+            public boolean touchDown (InputEvent e, float x, float y, int pointer, int button){
+                if (!(e instanceof InputEvent)) return false;
+
+                if (!((InputEvent) e).getType().equals(InputEvent.Type.touchDown)) return false;
+
+                instrumental.pause();
+                cradleGame.setActiveHelpScreen();
+
+                return true;
+            }
+        });
+
+/*
         //Sign in button
         Button.ButtonStyle buttonStyles = new Button.ButtonStyle();
 
         Texture buttonTexs = new Texture( Gdx.files.internal("signin_button.png") );
         TextureRegion buttonRegions =  new TextureRegion(buttonTexs);
         buttonStyles.up = new TextureRegionDrawable( buttonRegions );
+
 
         Button signInButton = new Button( buttonStyles );
         signInButton.setSize(h*0.25f,h*0.25f);
@@ -172,21 +228,9 @@ public class MenuScreen extends BaseScreen {
             }
         });
 
+*/
 
-        scoreButton.addListener(new InputListener() {
-            public boolean touchDown (InputEvent e, float x, float y, int pointer, int button){
-                if (!(e instanceof InputEvent)) return false;
 
-                if (!((InputEvent) e).getType().equals(InputEvent.Type.touchDown)) return false;
-
-                if(ply.isSignedIn()) {
-                    ply.showScore(cradleGame.leaderboard);
-                    //GdxLog.d(TAG,"SignedIn Google PlayServices");
-                }
-
-                return true;
-            }
-        });
 
         //uiTable.add(title).colspan(2);
         uiTable.row();
@@ -198,15 +242,15 @@ public class MenuScreen extends BaseScreen {
         signInButton.setY(h-signInButton.getHeight());
         uiTable.row();
         */
-        uiTable.add(scoreButton);
+        //uiTable.add(scoreButton);
         if(ply.isSignedIn()) {
-            signInButton.setVisible(false);
+            //signInButton.setVisible(false);
             //scoreButton.setVisible(true);
 
         }
-        uiTable.row();
-        uiTable.add(helpButton);
-        uiTable.row();
+       // uiTable.row();
+       // uiTable.add(helpButton);
+       // uiTable.row();
        // uiTable.add(quitButton);
 
 

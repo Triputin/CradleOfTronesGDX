@@ -30,6 +30,7 @@ public class CradleGame extends BaseGame
     private HelpScreen helpScreen;
     private ShopScreen shopScreen;
     private SettingsScreen settingsScreen;
+    private KnightScreen knightScreen;
 
     private static long SPLASH_MINIMUM_MILLIS = 3000L;
     //private SplashScreen splashScreen;
@@ -140,7 +141,7 @@ public class CradleGame extends BaseGame
          }
 
          settingsScreen = new SettingsScreen(this,ply);
-
+         knightScreen = new KnightScreen(this,ply);
 
 
          // Check daily gift
@@ -284,11 +285,19 @@ public class CradleGame extends BaseGame
 
     public  void setActiveHelpScreen()
     {
-        //System.out.println("setActiveHelpScreen()");
         GdxLog.print("setActiveHelpScreen():","Called");
         game.setScreen(helpScreen);
         menuScreen.PauseMusic();
         helpScreen.PlayMusic();
+        myRequestHandler.showAds(false);
+    }
+
+    public  void setActiveKnightScreen()
+    {
+        GdxLog.print("setActiveKnightScreen():","Called");
+        game.setScreen(knightScreen);
+        gameMapScreen.PauseMusic();
+        //knightScreen.PlayMusic();
         myRequestHandler.showAds(false);
     }
 
@@ -329,6 +338,8 @@ public class CradleGame extends BaseGame
 
         saveGameRes();
         ply.submitScore(leaderboard,GameRes.Score);
+
+        gameMapScreen.getKnight().setKnightParams(knightParams);
         //For Debug
         screenGamePlay.printNumberOfActors();
 

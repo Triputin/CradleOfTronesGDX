@@ -32,8 +32,8 @@ public class Knight extends BaseActor {
                         "hearts/heart09.png", "hearts/heart10.png"
                 };
 
-        animation = createAnimationFromFiles(filenames, 1.0f, false,  Math.round(width*0.16f),Math.round(height*0.16f));
-        healthActor = new BaseActor(width*0.61f,height*0.08f,s,Touchable.enabled);
+        animation = createAnimationFromFiles(filenames, 1.0f, false,  Math.round(width*0.28f),Math.round(height*0.28f));
+        healthActor = new BaseActor(width*0.54f,height*0.12f,s,Touchable.enabled);
         healthActor.setAnimation(animation);
         healthActor.setAnimationPaused(true);
         addActor(healthActor);
@@ -42,22 +42,22 @@ public class Knight extends BaseActor {
         lifesLabel = new Label("  "+0, BaseGame.labelStyle);
         lifesLabel.setText(""+knightParams.getLifes());
         lifesLabel.setColor( Color.GOLDENROD );
-        lifesLabel.setPosition( width*0.665f,height*0.11f);
-        lifesLabel.setFontScale(1.0f);
+        lifesLabel.setPosition( width*0.63f,height*0.21f);
+        lifesLabel.setFontScale(2.0f);
         addActor(lifesLabel);
 
 
         switch (knightParams.getKnightType()){
             default:
-                animation = loadTexture("knights/knight01_full.png", (int) getWidth(), (int) getHeight());
+                animation = loadTexture("knights/knight02_full.png", (int) getWidth(), (int) getHeight());
                 this.name= "J.Lancaster";
                 break;
             case 2:
-                animation = loadTexture("knights/knight01_full.png", (int) getWidth(), (int) getHeight());
+                animation = loadTexture("knights/knight02_full.png", (int) getWidth(), (int) getHeight());
                 this.name= "K.Targot";
                 break;
             case 3:
-                animation = loadTexture("knights/knight01_full.png", (int) getWidth(), (int) getHeight());
+                animation = loadTexture("knights/knight03_full.png", (int) getWidth(), (int) getHeight());
                 this.name= "A.Star";
                 break;
         }
@@ -118,4 +118,10 @@ public class Knight extends BaseActor {
     public int getHealth() {
         return knightParams.getHealth();
     }
+
+    public void setKnightParams(KnightParams knightParams) {
+        this.knightParams = knightParams;
+        showHealth();
+    }
+
 }

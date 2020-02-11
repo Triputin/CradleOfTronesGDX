@@ -135,7 +135,7 @@ public class ScreenGamePlay extends BaseScreen {
 
 
         w = Gdx.graphics.getWidth();
-        BaseActor baseResultsActor = new BaseActor(w*0.15f,h,mainStage,Touchable.disabled);
+        BaseActor baseResultsActor = new BaseActor(w*0.25f,h,mainStage,Touchable.disabled);
         baseResultsActor.setWidth((int) Math.round(w*0.8));
         baseResultsActor.setHeight(70);
         resultsActor = new ResultsActor(0,0,(int) Math.round(w*0.8),70,mainStage,Touchable.disabled,baseResultsActor);
@@ -1308,8 +1308,8 @@ public void RemoveAndFillSquare(int centreRow, int centreCol, int squareSize){
         int wpSize = Math.round(h*0.1f);
         if (knight!=null){knight.remove();}
         if(weapon!=null){weapon.remove();}
-        knight = new Knight(-knSize*0.2f,h-knSize+knSize*0.2f,knSize,knSize,mainStage,cradleGame.getKnightParams());
-        weapon = new Weapon(knSize*0.53f,h-knSize*0.51f,wpSize,wpSize,mainStage,cradleGame,knight);
+        knight = new Knight(-knSize*0.1f,h-knSize+knSize*0.1f,knSize,knSize,mainStage,cradleGame.getKnightParams());
+        weapon = new Weapon(knSize*0.585f,h-knSize*0.39f,wpSize,wpSize,mainStage,cradleGame,knight);
 
 
 
