@@ -26,8 +26,8 @@ public class DialogBox extends BaseActor
     {
         super(x,y,s, Touchable.enabled);
         this.cradleGame = cradleGame1;
-        loadTexture( "goldenframe.png",width,height );
-        AddImage("fon_white.png",Math.round(width*0.075f),Math.round(height*0.1f),Math.round(width*0.85f), Math.round(height*0.8f));
+        loadTexture( "goldenframe01.png",width,height );
+        AddImage("fon_white.png",Math.round(width*0.04f),Math.round(height*0.08f),Math.round(width*0.93f), Math.round(height*0.85f));
 
         dialogLabel = new Label(" ", BaseGame.labelStyle);
         dialogLabel.setWrap(true);

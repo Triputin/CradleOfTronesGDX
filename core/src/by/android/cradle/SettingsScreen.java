@@ -14,6 +14,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.I18NBundle;
 
+
+
 public class SettingsScreen extends BaseScreen {
 
 
@@ -163,6 +165,47 @@ public class SettingsScreen extends BaseScreen {
                 return false;
             }
         });
+
+
+
+        // Contac us button
+        Button.ButtonStyle buttonStyle9 = new Button.ButtonStyle();
+        Texture buttonTex9 = new Texture(Gdx.files.internal("mail_button.png"));
+        TextureRegion buttonRegion9 =  new TextureRegion(buttonTex9);
+        buttonStyle9.up = new TextureRegionDrawable( buttonRegion9 );
+
+        Button contactUsButton = new Button( buttonStyle9 );
+        contactUsButton.setSize(h*0.25f,h*0.25f);
+        contactUsButton.setPosition(w*0.8f,h-200-contactUsButton.getHeight());
+        contactUsButton.addListener(new InputListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                InputEvent ie = (InputEvent)event;
+                if ( ie.getType().equals(InputEvent.Type.touchDown) ) {
+
+                    /*
+                       // Move code into android section
+                      Intent intent = new Intent(Intent.ACTION_SEND);
+                intent.setType("message/rfc822");
+                intent.putExtra(Intent.EXTRA_EMAIL  , new String[]{"recipient@example.com"});
+                intent.putExtra(Intent.EXTRA_SUBJECT, "subject of email");
+                intent.putExtra(Intent.EXTRA_TEXT   , "body of email");
+                try {
+                    startActivity(Intent.createChooser(intent, "Send mail"));
+                } catch (android.content.ActivityNotFoundException e) {
+                    Toast.makeText(MyActivity.this, "There are no email clients installed.", Toast.LENGTH_SHORT).show();
+                }
+
+                     */
+                    return true;
+                }
+                return false;
+            }
+        });
+
+
+        uiStage.addActor(contactUsButton);
+
     }
 
     public void update(float dt)
@@ -175,7 +218,7 @@ public class SettingsScreen extends BaseScreen {
         int w = Gdx.graphics.getWidth();
         int h = Gdx.graphics.getHeight();
         String s = cradleGame.getLanguageStrings().get("information");
-        Dialog dialog = new Dialog(s, BaseGame.skin, "dialog") {
+        Dialog dialog = new CustomDialog(s, BaseGame.skin, h*0.8f,h*0.2f) {
             public void result(Object obj) {
                 if (obj.toString()=="true"){
                 cradleGame.restartGame();
@@ -189,7 +232,6 @@ public class SettingsScreen extends BaseScreen {
         dialog.button(s, true); //sends "true" as the result
         s = cradleGame.getLanguageStrings().get("cancel");
         dialog.button(s, false); //sends "false" as the result
-        dialog.setSize(h*0.4f,h*0.4f); //don't work
         dialog.show(uiStage);
 
     }

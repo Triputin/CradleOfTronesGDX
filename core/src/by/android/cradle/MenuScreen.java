@@ -172,7 +172,7 @@ public class MenuScreen extends BaseScreen {
 
         Button helpButton = new Button( buttonStylesH );
         helpButton.setSize(h*0.22f,h*0.22f);
-        helpButton.setPosition(w-leaderBoardButton.getWidth()-10,h*0.03f);
+        helpButton.setPosition(w-helpButton.getWidth()-10,h*0.03f);
         uiStage.addActor(helpButton);
 
 

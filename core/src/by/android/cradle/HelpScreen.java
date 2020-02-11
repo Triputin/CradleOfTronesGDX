@@ -4,15 +4,19 @@ package by.android.cradle;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 
 public class HelpScreen extends BaseScreen {
@@ -48,29 +52,40 @@ public class HelpScreen extends BaseScreen {
 
 
 
-        //Menu Button
-        String s = cradleGame.getLanguageStrings().get("menu");
-        TextButton menuButton = new TextButton( s, BaseGame.textButtonStyle );
-        menuButton.setPosition(w*0.00f,h*0.02f);
-        uiStage.addActor(menuButton);
+        //Menu button
+        Button.ButtonStyle buttonStyle = new Button.ButtonStyle();
+        Texture buttonTex = new Texture( Gdx.files.internal("back_button02.png") );
+        TextureRegion buttonRegion =  new TextureRegion(buttonTex);
+        buttonStyle.up = new TextureRegionDrawable( buttonRegion );
 
-        menuButton.addListener(new InputListener() {
-            public boolean touchDown (InputEvent e, float x, float y, int pointer, int button){
-                if (!(e instanceof InputEvent))
-                    return false;
+        Button backButton = new Button( buttonStyle );
+        backButton.setSize(h*0.21f,h*0.21f);
+        backButton.setPosition(10,h*0.00f);
+        uiStage.addActor(backButton);
 
-                if (!((InputEvent) e).getType().equals(InputEvent.Type.touchDown))
-                    return false;
-                instrumental.pause();
-                cradleGame.setActiveMenuScreen();
-                return true;
+        backButton.addListener(new InputListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                InputEvent ie = (InputEvent)event;
+                if ( ie.getType().equals(InputEvent.Type.touchDown) ) {
+                    instrumental.pause();
+                    cradleGame.setActiveMenuScreen();
+                    return true;
+                }
+                return false;
             }
         });
 
+
         //Next Button
-        s = cradleGame.getLanguageStrings().get("next");
-        TextButton nextButton = new TextButton( s, BaseGame.textButtonStyle );
-        nextButton.setPosition(w*0.77f,h*0.2f);
+        Button.ButtonStyle buttonStyleN = new Button.ButtonStyle();
+        Texture buttonTexN = new Texture( Gdx.files.internal("forward_button.png") );
+        TextureRegion buttonRegionN =  new TextureRegion(buttonTexN);
+        buttonStyleN.up = new TextureRegionDrawable( buttonRegionN );
+
+        Button nextButton = new Button( buttonStyleN );
+        nextButton.setSize(h*0.2f,h*0.2f);
+        nextButton.setPosition(w*0.85f,h*0.02f);
         uiStage.addActor(nextButton);
 
         nextButton.addListener(new InputListener() {
@@ -89,9 +104,14 @@ public class HelpScreen extends BaseScreen {
         });
 
         //Prev Button
-        s = cradleGame.getLanguageStrings().get("previous");
-        TextButton prevButton = new TextButton( s, BaseGame.textButtonStyle );
-        prevButton.setPosition(w*0.51f,h*0.2f);
+        Button.ButtonStyle buttonStyleP = new Button.ButtonStyle();
+        Texture buttonTexP = new Texture( Gdx.files.internal("backward_button.png") );
+        TextureRegion buttonRegionP =  new TextureRegion(buttonTexP);
+        buttonStyleP.up = new TextureRegionDrawable( buttonRegionP );
+
+        Button prevButton = new Button( buttonStyleP );
+        prevButton.setSize(h*0.2f,h*0.2f);
+        prevButton.setPosition(w*0.6f,h*0.02f);
         uiStage.addActor(prevButton);
 
         prevButton.addListener(new InputListener() {
@@ -132,7 +152,7 @@ public class HelpScreen extends BaseScreen {
         }
 
         int x = (int) w/2;
-        int y= (int) Math.round(h*0.4);
+        int y= (int) Math.round(h*0.33);
         String s;
        switch(slideNumber){
 

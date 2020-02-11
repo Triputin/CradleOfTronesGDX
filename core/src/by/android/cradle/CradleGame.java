@@ -347,7 +347,7 @@ public class CradleGame extends BaseGame
         System.out.println("setActiveGameMapScreen KnightLevel=" + knightParams.getKnightLevel());
         if (showNewHeroLevel) {
             String s = getLanguageStrings().get("information");
-            Dialog dialog = new Dialog(s, BaseGame.skin, "dialog") {
+            Dialog dialog = new CustomDialog(s, BaseGame.skin, h*0.7f,h*0.3f) {
                 public void result(Object obj) {
                     System.out.println("result " + obj);
                 }
@@ -356,8 +356,6 @@ public class CradleGame extends BaseGame
             dialog.text(s);
             s = getLanguageStrings().get("ok");
             dialog.button(s, true); //sends "true" as the result
-            //dialog.button("No", false); //sends "false" as the result
-            dialog.setSize(h*0.4f,h*0.4f); //don't work
             dialog.show(gameMapScreen.uiStage);
         }
 
