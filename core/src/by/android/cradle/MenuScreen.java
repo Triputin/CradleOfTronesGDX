@@ -67,11 +67,27 @@ public class MenuScreen extends BaseScreen {
         uiTable.addActor(castle);
 
 
-        String s = cradleGame.getLanguageStrings().get("start");
-        TextButton startButton = new TextButton( "   "+s+"   " , BaseGame.textButtonStyle );
+       // String s = cradleGame.getLanguageStrings().get("start");
+        //TextButton startButton = new TextButton( "   "+s+"   " , BaseGame.textButtonStyle );
 
-        //startButton.setScale(2,2);
+        //Button Start
+        Button.ButtonStyle buttonStylesSt = new Button.ButtonStyle();
+        String localeString= java.util.Locale.getDefault().getLanguage().toString();
+        Texture buttonTexsSt;
+        if (localeString=="ru"){
+            buttonTexsSt = new Texture( Gdx.files.internal("shield_play02.png") );
+        }else {
+            buttonTexsSt = new Texture( Gdx.files.internal("shield_play01.png") );
+        }
 
+        TextureRegion buttonRegionsSt =  new TextureRegion(buttonTexsSt);
+        buttonStylesSt.up = new TextureRegionDrawable( buttonRegionsSt );
+
+
+        Button startButton = new Button( buttonStylesSt );
+        startButton.setSize(h*0.55f,h*0.4f);
+        startButton.setPosition(w*0.56f-startButton.getWidth()/2f,h*0.3f);
+        uiStage.addActor(startButton);
         startButton.addListener(new InputListener() {
             public boolean touchDown (InputEvent e, float x, float y, int pointer, int button){
                 if (!(e instanceof InputEvent))
@@ -79,7 +95,6 @@ public class MenuScreen extends BaseScreen {
 
                 if (!((InputEvent) e).getType().equals(InputEvent.Type.touchDown))
                     return false;
-                //ply.submitScore(cradleGame.leaderboard,100);
                 instrumental.pause();
                 cradleGame.setActiveGameMapScreen(false);
                 return true;
@@ -234,7 +249,7 @@ public class MenuScreen extends BaseScreen {
 
         //uiTable.add(title).colspan(2);
         uiTable.row();
-        uiTable.add(startButton);
+        //uiTable.add(startButton);
         uiTable.row();
         /*
         uiStage.addActor(signInButton);
@@ -243,11 +258,11 @@ public class MenuScreen extends BaseScreen {
         uiTable.row();
         */
         //uiTable.add(scoreButton);
-        if(ply.isSignedIn()) {
+       // if(ply.isSignedIn()) {
             //signInButton.setVisible(false);
             //scoreButton.setVisible(true);
 
-        }
+        //}
        // uiTable.row();
        // uiTable.add(helpButton);
        // uiTable.row();

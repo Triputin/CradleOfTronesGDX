@@ -168,7 +168,7 @@ public class SettingsScreen extends BaseScreen {
 
 
 
-        // Contac us button
+        // Contact us button
         Button.ButtonStyle buttonStyle9 = new Button.ButtonStyle();
         Texture buttonTex9 = new Texture(Gdx.files.internal("mail_button.png"));
         TextureRegion buttonRegion9 =  new TextureRegion(buttonTex9);
@@ -203,8 +203,9 @@ public class SettingsScreen extends BaseScreen {
             }
         });
 
+         //add after realisation
+        //uiStage.addActor(contactUsButton);
 
-        uiStage.addActor(contactUsButton);
 
     }
 

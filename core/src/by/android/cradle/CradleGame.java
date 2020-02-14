@@ -110,7 +110,7 @@ public class CradleGame extends BaseGame
          languageStrings = I18NBundle.createBundle(Gdx.files.internal("strings/strings"));
 
          getResFromStorage();
-         //gameMapLevel=2; // for debug
+         //gameMapLevel=1; // for debug
          //GameRes.Score=999; // for debug
          menuScreen = new MenuScreen(this,ply);
          screenGamePlay = new ScreenGamePlay(this,ply);

@@ -318,7 +318,7 @@ public class GameMapScreen extends BaseScreen {
                     kingdoms[3] = new Kingdom(w*0.4f, h*0.45f,kingdomsize,kingdomsize,uiStage,Touchable.enabled,KingdomNames.Kingdom_of_the_Reach);
                     kingdoms[4] = new Kingdom(w*0.45f, h*0.15f,kingdomsize,kingdomsize,uiStage,Touchable.enabled,KingdomNames.Kingdom_of_the_Rock);
                     kingdoms[5] = new Kingdom(w*0.75f, h*0.25f,kingdomsize,kingdomsize,uiStage,Touchable.enabled,KingdomNames.Kingdom_of_the_Stormlands);
-                    kingdoms[6] = new Kingdom(w*0.85f, h*0.6f,kingdomsize,kingdomsize,uiStage,Touchable.enabled,KingdomNames.Principality_of_Dorne);
+                    kingdoms[6] = new Kingdom(w*0.72f, h*0.6f,kingdomsize,kingdomsize,uiStage,Touchable.enabled,KingdomNames.Principality_of_Dorne);
                     arena = new Arena(w * 0.3f, h * 0.18f, Math.round(kingdomsize * 1.56f), kingdomsize, uiStage, Touchable.enabled);
                     instrumental = musicArray[1];
                 break;
@@ -506,10 +506,11 @@ public class GameMapScreen extends BaseScreen {
         };
 
         mapLevelInfoDialog.setText(getTextForMapLevel(mapLevel));
-        mapLevelInfoDialog.setFontScale(1.6f);
+        mapLevelInfoDialog.setFontScale(1.0f);
         mapLevelInfoDialog.setZIndex(101);
         mapLevelInfoDialog.showWithOkButton(inputListener2);
     }
+
 
     public void UpdateRes() {
         resultsActor.UpdateRes();
