@@ -349,6 +349,21 @@ public class GameMapScreen extends BaseScreen {
 
                 break;
 
+            case 4:
+
+                worldMap.loadTexture("maps/worldmap05.png", w, h);
+
+                kingdoms[0] = new Kingdom(w * 0.5f, h * 0.45f, kingdomsize, kingdomsize, uiStage, Touchable.enabled, KingdomNames.Kingdom_of_the_North);
+                kingdoms[1] = new Kingdom(w * 0.4f, h * 0.3f, kingdomsize, kingdomsize, uiStage, Touchable.enabled, KingdomNames.Kingdom_of_the_Isles_and_Rivers);
+                kingdoms[2] = new Kingdom(w*0.45f, h*0.65f,kingdomsize,kingdomsize,uiStage,Touchable.enabled,KingdomNames.Kingdom_of_the_Mountain_and_the_Vale);
+                kingdoms[3] = new Kingdom(w*0.3f, h*0.45f,kingdomsize,kingdomsize,uiStage,Touchable.enabled,KingdomNames.Kingdom_of_the_Reach);
+                kingdoms[4] = new Kingdom(w*0.6f, h*0.33f,kingdomsize,kingdomsize,uiStage,Touchable.enabled,KingdomNames.Kingdom_of_the_Rock);
+                kingdoms[5] = new Kingdom(w*0.7f, h*0.3f,kingdomsize,kingdomsize,uiStage,Touchable.enabled,KingdomNames.Kingdom_of_the_Stormlands);
+                kingdoms[6] = new Kingdom(w*0.65f, h*0.6f,kingdomsize,kingdomsize,uiStage,Touchable.enabled,KingdomNames.Principality_of_Dorne);
+                arena = new Arena(w * 0.6f, h * 0.15f, Math.round(kingdomsize * 1.56f), kingdomsize, uiStage, Touchable.enabled);
+
+                break;
+
         }
 
         PauseMusic();

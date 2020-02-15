@@ -110,7 +110,11 @@ public class ScreenGamePlay extends BaseScreen {
             if(cradleGame.getGameMapLevel()==2) {
                 hall.loadTexture("castle/castlelevel02.png", w, h);
             }else {
-                hall.loadTexture("castle/castlelevel03.png", w, h);
+                if(cradleGame.getGameMapLevel()==4) {
+                    hall.loadTexture("castle/castlelevel04.png", w, h);
+                }else {
+                    hall.loadTexture("castle/castlelevel03.png", w, h);
+                }
             }
         }
 
@@ -984,13 +988,13 @@ public void RemoveAndFillSquare(int centreRow, int centreCol, int squareSize){
         double rnd = Math.random();
 
         if (rnd<0.25){
-            return new Coin2(x, y, cellSize, cellSize, mainStage, row, col);
+            return new Coin2(x, y, cellSize, cellSize, mainStage, row, col,cradleGame);
         }
         if ((rnd>=0.25) && (rnd<0.5)){
-            return new Wood(x, y, cellSize, cellSize, mainStage, row, col);
+            return new Wood(x, y, cellSize, cellSize, mainStage, row, col,cradleGame);
         }
         if ((rnd>=0.5) && (rnd<0.75)){
-            return new Bread(x, y, cellSize, cellSize, mainStage, row, col);
+            return new Bread(x, y, cellSize, cellSize, mainStage, row, col,cradleGame);
         }
 
         float lvl = levelnumber;
@@ -1002,21 +1006,21 @@ public void RemoveAndFillSquare(int centreRow, int centreCol, int squareSize){
         switch (lvlH) {
             case 1:
                 if ((rnd - lvl / 400) > 0.3) {
-                    return new Coin(x, y, cellSize, cellSize, mainStage, row, col);
+                    return new Coin(x, y, cellSize, cellSize, mainStage, row, col,cradleGame);
                 }
-                return new Jem01(x, y, cellSize, cellSize, mainStage, row, col);
+                return new Jem01(x, y, cellSize, cellSize, mainStage, row, col,cradleGame);
 
             case 2:
                 if ((rnd - lvl / 400) > 0.5) {
-                    return new Coin(x, y, cellSize, cellSize, mainStage, row, col);
+                    return new Coin(x, y, cellSize, cellSize, mainStage, row, col,cradleGame);
                 }
-                return new Jem01(x, y, cellSize, cellSize, mainStage, row, col);
+                return new Jem01(x, y, cellSize, cellSize, mainStage, row, col,cradleGame);
 
             default:
             if ((rnd - lvl / 400) > 0.7) {
-                return new Coin(x, y, cellSize, cellSize, mainStage, row, col);
+                return new Coin(x, y, cellSize, cellSize, mainStage, row, col,cradleGame);
             }
-            return new Jem01(x, y, cellSize, cellSize, mainStage, row, col);
+            return new Jem01(x, y, cellSize, cellSize, mainStage, row, col,cradleGame);
 
         }
 
@@ -1232,12 +1236,12 @@ public void RemoveAndFillSquare(int centreRow, int centreCol, int squareSize){
                         if (!((InputEvent) e).getType().equals(InputEvent.Type.touchDown))
                             return false;
 
-                        //Check if level rising is needed fo hero.
+                        //Check if level rising is needed for hero.
                         boolean isHeroLevelNeedsShow;
-                        if ( Math.floor(GameRes.Score/1000f)<Math.floor((GameRes.Score+Math.round(score_during_attack))/1000f)){
+                        if (knight.calcKnightLevelAtScore(GameRes.Score+Math.round(score_during_attack))>knight.getKnightLevel()){
                             knight.incLevel();
                             isHeroLevelNeedsShow = true;
-                        } else {
+                        }else {
                             isHeroLevelNeedsShow = false;
                         }
 

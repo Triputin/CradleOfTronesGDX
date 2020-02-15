@@ -21,7 +21,6 @@ public class Knight extends BaseActor {
         setSize(width,height);
         setBoundaryPolygon(8);
         this.knightParams=knightParams;
-
         BaseActor baseActor = new BaseActor(0,0,s,Touchable.enabled);
         Animation animation;
 
@@ -124,4 +123,8 @@ public class Knight extends BaseActor {
         showHealth();
     }
 
+    public int calcKnightLevelAtScore(int score){
+        float ff = score;
+        return 1+(int)Math.sqrt(ff/1000f);
+    }
 }

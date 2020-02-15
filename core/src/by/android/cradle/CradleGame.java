@@ -16,7 +16,7 @@ public class CradleGame extends BaseGame
     public  final String leaderboard = "CgkIiby2l-0EEAIQAQ";
     private final String LAST_LOGIN_DAY="lastloginday";
     private final int DAILY_GIFT_AMOUNT = 25;
-    public final int MaxGameMapLevel=3;
+    public final int MaxGameMapLevel=4;
     private int gameMapLevel;
     private int difficultyLevel;
     private KnightParams knightParams;
@@ -112,11 +112,12 @@ public class CradleGame extends BaseGame
          getResFromStorage();
          //gameMapLevel=1; // for debug
          //GameRes.Score=999; // for debug
+         knightParams.CheckKnightLevelAtScore(GameRes.Score); // Set KnightLevel according current dependence from Score. It's for old players.
          menuScreen = new MenuScreen(this,ply);
          screenGamePlay = new ScreenGamePlay(this,ply);
 
          int gameLevel = prefs.getInteger("gameLevel", 1);
-         //gameLevel = 1; // for debug purpose
+         //gameLevel = 3; // for debug purpose
          screenGamePlay.setGameLevel(gameLevel);
          difficultyLevel = prefs.getInteger("levelofhardness", 0);
          //difficultyLevel = 0; // for debug purpose
@@ -156,7 +157,7 @@ public class CradleGame extends BaseGame
 
          //updateDailyGiftValue(prefs,calendarG); //for Debug only!!!
 
-         if(prefs.getInteger(LAST_LOGIN_DAY)-1==calendarG.get(Calendar.DAY_OF_YEAR)){
+         if((prefs.getInteger(LAST_LOGIN_DAY)+1)==calendarG.get(Calendar.DAY_OF_YEAR)){
              //next loginday up to a year
 
              updateDailyGiftValue(prefs,calendarG);
@@ -178,9 +179,13 @@ public class CradleGame extends BaseGame
                  }
                  else
                      prefs.putInteger(LAST_LOGIN_DAY,calendarG.get(Calendar.DAY_OF_YEAR));
+                     prefs.putInteger("dailyCombo", 0);
+                     prefs.flush();
              }
              else
                  prefs.putInteger(LAST_LOGIN_DAY,calendarG.get(Calendar.DAY_OF_YEAR));
+                 prefs.putInteger("dailyCombo", 0);
+                 prefs.flush();
 
          }
 
@@ -297,6 +302,7 @@ public class CradleGame extends BaseGame
         GdxLog.print("setActiveKnightScreen():","Called");
         game.setScreen(knightScreen);
         gameMapScreen.PauseMusic();
+        knightScreen.SetParams(knightParams);
         //knightScreen.PlayMusic();
         myRequestHandler.showAds(false);
     }

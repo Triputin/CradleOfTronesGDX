@@ -21,16 +21,18 @@ public class Item extends DropTargetActor {
     private Cell cell;
     private SelDirection selectedDirection;
     private Image lineImage;
-    private int lockLevel=0;
-    private Actor lockImage01;
-    private Actor lockImage02;
+    protected int lockLevel=0;
+    protected Actor lockImage01;
+    protected Actor lockImage02;
     private int qtty; //field for shop
     private Label labelqtty;
+    protected CradleGame cradleGame;
 
 
-    public Item(float x, float y, int width, int height, Stage s, Touchable touchable, int row, int col)
+    public Item(float x, float y, int width, int height, Stage s, Touchable touchable, int row, int col, CradleGame cradleGame)
     {
         super(x,y,s);
+        this.cradleGame = cradleGame;
         cell = new Cell(row,col);
         this.selected = false;
         setHeight(height);

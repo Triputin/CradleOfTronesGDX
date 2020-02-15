@@ -17,6 +17,9 @@ public class KnightScreen extends BaseScreen{
     private int padding=5;
     private Knight knight;
 
+    private Label mightLabel;
+    private Label lifeLabel;
+
     public KnightScreen(CradleGame cradleGame,IPlayServices ply) {
 
         super(cradleGame,ply);
@@ -53,11 +56,11 @@ public class KnightScreen extends BaseScreen{
         mightBadge.setPosition(mightBadge.getWidth()*0.3f,mightBadge.getWidth()*0.05f);
         might.addActor(mightBadge);
 
-        Label mightLabel = new Label(" ", BaseGame.labelStyle);
-        String s = String.valueOf(cradleGame.getKnightParams().getKnightLevel());
+        mightLabel = new Label(" ", BaseGame.labelStyle);
+        String s = String.valueOf(cradleGame.getKnightParams().getCellsQttyToDestroy());
         mightLabel.setText(s);
         mightLabel.setColor( Color.GOLDENROD );
-        mightLabel.setPosition(lineX+lineSizeW/1.8f,lineY+might.getHeight()*0.4f);
+        mightLabel.setPosition(lineX+lineSizeW/1.7f,lineY+might.getHeight()*0.4f);
         mightLabel.setFontScale(3.0f);
         uiStage.addActor(mightLabel);
 
@@ -74,11 +77,13 @@ public class KnightScreen extends BaseScreen{
         lifeBadge.setPosition(lifeBadge.getWidth()*0.3f,lifeBadge.getWidth()*0.05f);
         life.addActor(lifeBadge);
 
-        Label lifeLabel = new Label(" ", BaseGame.labelStyle);
-        s = String.valueOf(cradleGame.getKnightParams().getKnightLevel());
+        lifeLabel = new Label(" ", BaseGame.labelStyle);
+        s = String.valueOf(cradleGame.getKnightParams().getHealth());
+        String sc = cradleGame.getLanguageStrings().get("of");
+        s=s+" "+sc+" "+String.valueOf(cradleGame.getKnightParams().getCurrentHealthMaximum());
         lifeLabel.setText(s);
         lifeLabel.setColor( Color.GOLDENROD );
-        lifeLabel.setPosition(lineX+lineSizeW/1.8f,lineY-lineSize+life.getHeight()*0.4f);
+        lifeLabel.setPosition(lineX+lineSizeW/2.5f,lineY-lineSize+life.getHeight()*0.4f);
         lifeLabel.setFontScale(3.0f);
         uiStage.addActor(lifeLabel);
 
@@ -120,6 +125,23 @@ public class KnightScreen extends BaseScreen{
     public void update(float dt)
     {
 
+    }
+
+    public void SetParams(KnightParams knightParams){
+
+
+        //Might
+        String s = String.valueOf(cradleGame.getKnightParams().getCellsQttyToDestroy());
+        mightLabel.setText(s);
+
+        //life
+        s = String.valueOf(cradleGame.getKnightParams().getHealth());
+        String sc = cradleGame.getLanguageStrings().get("of");
+        s=s+" "+sc+" "+String.valueOf(cradleGame.getKnightParams().getCurrentHealthMaximum());
+        lifeLabel.setText(s);
+
+        //Knight
+        knight.setKnightParams(knightParams);
     }
 
 }

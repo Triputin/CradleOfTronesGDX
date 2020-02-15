@@ -4,9 +4,10 @@ import com.badlogic.gdx.Preferences;
 
 public class KnightParams {
     private final int MAX_Cell_QTTY_TO_DESTROY = 9;
-    private final int FULL_HEALTH = 100;
+    private final int FULL_HEALTH = 100; // default fo restart and start
     private int lifes;
     private int health;
+    private int currentHealthMaximum; // Can be raised up with Knight levels
     private int knightType;
     private int rechargeWeaponTime;
     private int cellsQttyToDestroy; // qtty cells from leftdown cell to destroy including start cell
@@ -26,6 +27,7 @@ public class KnightParams {
         rechargeWeaponTime =  prefs.getInteger("rechargeWeaponTime", 20);
         cellsQttyToDestroy =  prefs.getInteger("cellsQttyToDestroy", 1);
         knightLevel =  prefs.getInteger("knightLevel", 1);
+        currentHealthMaximum =  prefs.getInteger("currentHealthMaximum", FULL_HEALTH);
     }
 
     public void save(){
@@ -35,6 +37,7 @@ public class KnightParams {
         prefs.putInteger("rechargeWeaponTime",rechargeWeaponTime);
         prefs.putInteger("cellsQttyToDestroy",cellsQttyToDestroy);
         prefs.putInteger("knightLevel",knightLevel);
+        prefs.putInteger("currentHealthMaximum",currentHealthMaximum);
         prefs.flush();
     }
 
@@ -51,6 +54,7 @@ public class KnightParams {
         prefs.putInteger("cellsQttyToDestroy",cellsQttyToDestroy);
         knightLevel = 1;
         prefs.putInteger("knightLevel",knightLevel);
+        prefs.putInteger("currentHealthMaximum",FULL_HEALTH);
         prefs.flush();
     }
 
@@ -102,7 +106,7 @@ public class KnightParams {
         health -=10;
         if (health<=0){
             lifes--;
-            health=FULL_HEALTH;
+            health=currentHealthMaximum;
         }
     }
 
@@ -123,5 +127,23 @@ public class KnightParams {
 
     public int getKnightLevel() {
         return knightLevel;
+    }
+
+    public int getCurrentHealthMaximum() {
+        return currentHealthMaximum;
+    }
+
+    public void setCurrentHealthMaximum(int currentHealthMaximum) {
+        this.currentHealthMaximum = currentHealthMaximum;
+    }
+
+    public void CheckKnightLevelAtScore(int score){
+        float ff = score;
+        setKnightLevel(1+(int)Math.sqrt(ff/1000f));
+    }
+
+    public void setKnightLevel(int knightLevel) {
+        this.knightLevel = knightLevel;
+        this.cellsQttyToDestroy = knightLevel;
     }
 }
