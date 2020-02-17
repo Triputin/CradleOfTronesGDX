@@ -176,35 +176,22 @@ public class SettingsScreen extends BaseScreen {
 
         Button contactUsButton = new Button( buttonStyle9 );
         contactUsButton.setSize(h*0.25f,h*0.25f);
-        contactUsButton.setPosition(w*0.8f,h-200-contactUsButton.getHeight());
+        contactUsButton.setPosition(w*0.8f,h*0.1f);
         contactUsButton.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 InputEvent ie = (InputEvent)event;
                 if ( ie.getType().equals(InputEvent.Type.touchDown) ) {
 
-                    /*
-                       // Move code into android section
-                      Intent intent = new Intent(Intent.ACTION_SEND);
-                intent.setType("message/rfc822");
-                intent.putExtra(Intent.EXTRA_EMAIL  , new String[]{"recipient@example.com"});
-                intent.putExtra(Intent.EXTRA_SUBJECT, "subject of email");
-                intent.putExtra(Intent.EXTRA_TEXT   , "body of email");
-                try {
-                    startActivity(Intent.createChooser(intent, "Send mail"));
-                } catch (android.content.ActivityNotFoundException e) {
-                    Toast.makeText(MyActivity.this, "There are no email clients installed.", Toast.LENGTH_SHORT).show();
-                }
-
-                     */
+                    cradleGame.connectUs();
                     return true;
                 }
                 return false;
             }
         });
 
-         //add after realisation
-        //uiStage.addActor(contactUsButton);
+
+        uiStage.addActor(contactUsButton);
 
 
     }

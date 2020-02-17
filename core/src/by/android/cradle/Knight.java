@@ -41,7 +41,7 @@ public class Knight extends BaseActor {
         lifesLabel = new Label("  "+0, BaseGame.labelStyle);
         lifesLabel.setText(""+knightParams.getLifes());
         lifesLabel.setColor( Color.GOLDENROD );
-        lifesLabel.setPosition( width*0.63f,height*0.21f);
+        lifesLabel.setPosition( width*0.64f,height*0.21f);
         lifesLabel.setFontScale(2.0f);
         addActor(lifesLabel);
 

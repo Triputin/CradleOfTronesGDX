@@ -16,6 +16,7 @@ public class KnightScreen extends BaseScreen{
     private final int RowColCount=4;
     private int padding=5;
     private Knight knight;
+    private Weapon weapon;
 
     private Label mightLabel;
     private Label lifeLabel;
@@ -92,6 +93,8 @@ public class KnightScreen extends BaseScreen{
         if (knight!=null){knight.remove();}
         knight = new Knight(-knSize*0.1f,h-knSize+knSize*0.1f,knSize,knSize,uiStage,cradleGame.getKnightParams());
 
+        if(weapon!=null){weapon.remove();}
+        weapon = new Weapon(knSize*0.585f,h-knSize*0.39f,wpSize,wpSize,uiStage,cradleGame,knight);
 
         //Back button
         Button.ButtonStyle buttonStyle = new Button.ButtonStyle();

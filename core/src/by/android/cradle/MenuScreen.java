@@ -86,7 +86,7 @@ public class MenuScreen extends BaseScreen {
 
         Button startButton = new Button( buttonStylesSt );
         startButton.setSize(h*0.55f,h*0.4f);
-        startButton.setPosition(w*0.56f-startButton.getWidth()/2f,h*0.3f);
+        startButton.setPosition(w*0.56f-startButton.getWidth()/2f,h*0.1f);
         uiStage.addActor(startButton);
         startButton.addListener(new InputListener() {
             public boolean touchDown (InputEvent e, float x, float y, int pointer, int button){

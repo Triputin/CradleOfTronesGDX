@@ -14,4 +14,7 @@ public interface IPlayServices
     public void showScore(String LeaderBoard);
     public void showLevel();
     public boolean isSignedIn();
+
+    public void logEvent(String id, String name, String content_type);
+    public void connectUs();
 }

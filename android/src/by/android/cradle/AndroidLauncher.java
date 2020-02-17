@@ -1,6 +1,7 @@
 package by.android.cradle;
 
 import android.app.AlertDialog;
+import android.app.Application;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -28,6 +29,10 @@ import com.google.android.gms.ads.initialization.AdapterStatus;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 
+
+//import com.yandex.metrica.YandexMetrica;
+//import com.yandex.metrica.YandexMetricaConfig;
+
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -53,6 +58,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.example.games.basegameutils.GameHelper;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 
 public class AndroidLauncher extends AndroidApplication implements IActivityRequestHandler,IPlayServices  {
@@ -62,6 +68,7 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
 	private final int HIDE_ADS = 0;
 	//GPS second try
 	private GameHelper gameHelper;
+	private FirebaseAnalytics mFirebaseAnalytics;
 
 
 	//GPS First try
@@ -125,6 +132,10 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
 		//GPS Second try
 		gameHelper.setup(gameHelperListener);
 		//GPS second try finish
+
+
+		// Obtain the FirebaseAnalytics instance.
+		mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
 		// Create the layout
 		RelativeLayout layout = new RelativeLayout(this);
@@ -196,6 +207,16 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
 				new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_GAMES_SIGN_IN).build());
 
 		signInSilently2();
+*/
+
+/*
+		// Creating an extended library configuration.
+		YandexMetricaConfig configY = YandexMetricaConfig.newConfigBuilder("6f7d31e8-fe9d-426c-823e-cbcfecc493b7").build();
+		// Initializing the AppMetrica SDK.
+		YandexMetrica.activate(getApplicationContext(), configY);
+		// Automatic tracking of user activity.
+		YandexMetrica.enableActivityAutoTracking((Application) this);
+
 */
 
 		// Hook it all up
@@ -467,6 +488,32 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
 
 	@Override
 	public void showLevel() {
+
+	}
+
+	@Override
+	public void logEvent(String id, String name, String content_type){
+
+		Bundle bundle = new Bundle();
+		bundle.putString(FirebaseAnalytics.Param.ITEM_ID, id);
+		bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, name);
+		bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, content_type);
+		mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+	}
+
+	@Override
+	public void connectUs() {
+
+		Intent intent = new Intent(Intent.ACTION_SEND);
+		intent.setType("message/rfc822");
+		intent.putExtra(Intent.EXTRA_EMAIL, new String[]{"cradleofthrones@gmail.com"});
+		intent.putExtra(Intent.EXTRA_SUBJECT, "subject of email");
+		intent.putExtra(Intent.EXTRA_TEXT, "Your text");
+		try {
+			startActivity(Intent.createChooser(intent, "Send mail"));
+		} catch (android.content.ActivityNotFoundException e) {
+			//Toast.makeText(MyActivity.this, "There are no email clients installed.", Toast.LENGTH_SHORT).show();
+		}
 
 	}
 

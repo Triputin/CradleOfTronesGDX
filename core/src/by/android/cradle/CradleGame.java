@@ -10,6 +10,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
+
 public class CradleGame extends BaseGame
 {
     //settings
@@ -96,6 +97,7 @@ public class CradleGame extends BaseGame
 
      public void Init(){
          // Gdx.app.setLogLevel(Application.LOG_DEBUG);
+
          //Setup settings provider
          prefs = Gdx.app.getPreferences("settings.prefs");
 
@@ -286,6 +288,7 @@ public class CradleGame extends BaseGame
         settingsScreen.PauseMusic();
         menuScreen.PlayMusic();
         myRequestHandler.showAds(false);
+       ply.logEvent("1", "setActiveMenuScreen", "Switch to");
     }
 
     public  void setActiveHelpScreen()
@@ -295,6 +298,7 @@ public class CradleGame extends BaseGame
         menuScreen.PauseMusic();
         helpScreen.PlayMusic();
         myRequestHandler.showAds(false);
+        ply.logEvent("2", "setActiveHelpScreen", "Switch to");
     }
 
     public  void setActiveKnightScreen()
@@ -305,6 +309,8 @@ public class CradleGame extends BaseGame
         knightScreen.SetParams(knightParams);
         //knightScreen.PlayMusic();
         myRequestHandler.showAds(false);
+        ply.logEvent("3", "setActiveKnightScreen", "Switch to");
+
     }
 
     public  void setActiveSettingsScreen()
@@ -315,6 +321,8 @@ public class CradleGame extends BaseGame
         menuScreen.PauseMusic();
         settingsScreen.PlayMusic();
         myRequestHandler.showAds(false);
+        ply.logEvent("4", "setActiveSettingsScreen", "Switch to");
+
     }
 
     public  void setActiveShopScreen()
@@ -325,11 +333,18 @@ public class CradleGame extends BaseGame
         gameMapScreen.PauseMusic();
         myRequestHandler.showAds(false);
         shopScreen.setupResources();
+        ply.logEvent("5", "setActiveShopScreen", "Switch to");
+
     }
 
     public  void setActiveGameMapScreen(boolean showNewHeroLevel)
     {
         //System.out.println("setActiveGameMapScreen");
+        ply.logEvent("6", "setActiveGameMapScreen", "Switch to");
+        ply.logEvent("7", "DifficultyLevel is ", String.valueOf(difficultyLevel));
+        ply.logEvent("8", "GameMapLevel is ", String.valueOf(gameMapLevel));
+        ply.logEvent("9", "gameLevel is ", String.valueOf(screenGamePlay.getGameLevel()));
+
         GdxLog.print("setActiveGameMapScreen():","Called");
         int w = Gdx.graphics.getWidth();
         int h = Gdx.graphics.getHeight();
@@ -383,6 +398,8 @@ public class CradleGame extends BaseGame
         menuScreen.PauseMusic();
         gameMapScreen.PauseMusic();
         myRequestHandler.showAds(false);
+        ply.logEvent("7", "setActivescreenGamePlay", "Switch to");
+
     }
 
     public void restartGame(){
@@ -426,6 +443,8 @@ public class CradleGame extends BaseGame
         if (screenGamePlay.knight!=null) {screenGamePlay.knight.reDraw();}
 
         prefs.flush();
+        ply.logEvent("10", "restartGame", "Game restarted");
+
 
     }
 
@@ -541,4 +560,11 @@ public class CradleGame extends BaseGame
         menuScreen.setShowDailyGift(true,resType,resQtty );
         preferences.flush();
     }
+
+
+    public void connectUs() {
+        ply.connectUs();
+    }
+
+
 }

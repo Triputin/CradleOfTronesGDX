@@ -37,6 +37,7 @@ public class GameMapScreen extends BaseScreen {
     private boolean isFirstMapLevelRun;
     private LevelOfHardnessDialogBox levelOfHardnessDialog;
     private Knight knight;
+    private Weapon weapon;
 
     public GameMapScreen(CradleGame cradleGame,IPlayServices ply) {
 
@@ -105,6 +106,11 @@ public class GameMapScreen extends BaseScreen {
                 return false;
             }
         });
+
+
+        if(weapon!=null){weapon.remove();}
+        weapon = new Weapon(knSize*0.585f,h-knSize*0.34f,wpSize,wpSize,mainStage,cradleGame,knight);
+
 
         //Fon for results
         BaseActor fon = new BaseActor(0,0,mainStage,Touchable.disabled);

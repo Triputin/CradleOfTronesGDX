@@ -82,4 +82,14 @@ public class DesktopLauncher implements IActivityRequestHandler, IPlayServices {
 	public boolean isSignedIn() {
 		return false;
 	}
+
+	@Override
+	public void logEvent(String id, String name, String content_type){
+	}
+
+	@Override
+	public void connectUs() {
+
+	}
+
 }
