@@ -36,6 +36,7 @@ public class GameMapScreen extends BaseScreen {
     private DialogBox mapLevelInfoDialog;
     private boolean isFirstMapLevelRun;
     private LevelOfHardnessDialogBox levelOfHardnessDialog;
+    private DialogBox castleIsYoursDialog;
     private Knight knight;
     private Weapon weapon;
 
@@ -380,6 +381,21 @@ public class GameMapScreen extends BaseScreen {
                 if ( event.getType().equals(InputEvent.Type.touchDown) ) {
                     Kingdom kingdom = (Kingdom) event.getListenerActor();
                     if(kingdom.getProtectionState()==0){
+                        if ((castleIsYoursDialog.getWidth()+kingdom.getX())>w){
+                            castleIsYoursDialog.setX(w-castleIsYoursDialog.getWidth());
+                        } else{
+                            castleIsYoursDialog.setX(kingdom.getX()+50);
+                        }
+                        castleIsYoursDialog.setY(kingdom.getY()+50);
+                        String s = cradleGame.getLanguageStrings().get("castleIsYours");
+                        castleIsYoursDialog.setText(s);
+                        final Action  completeAction = new Action(){
+                            public boolean act( float delta ) {
+                                // Do your stuff
+                                return true;
+                            }
+                        };
+                        castleIsYoursDialog.showForTime(1,completeAction);
                         return false;
                     }
                     //if ( Item.class.isAssignableFrom(a.getClass()) ){
@@ -461,7 +477,13 @@ public class GameMapScreen extends BaseScreen {
 
         }
         mapLevelInfoDialog.setVisible(false);
-        //mapLevelInfoDialog.setZIndex(100);
+
+        //Castle is yours info dialog
+        if (castleIsYoursDialog == null ){
+            castleIsYoursDialog = new DialogBox(0, 0, uiStage, Math.round(w*0.25f), Math.round(h*0.2f), cradleGame);
+            castleIsYoursDialog.setVisible(false);
+            castleIsYoursDialog.alignCenter();
+        }
 
 
         // Choose level of hardness

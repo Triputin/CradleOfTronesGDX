@@ -34,7 +34,7 @@ public class LevelOfHardnessDialogBox extends DialogBox {
         ButtonGroup buttonGroup = new ButtonGroup(easyButton, middleButton, hardButton);
         //next set the max and min amount to be checked
         buttonGroup.setMaxCheckCount(1);
-        buttonGroup.setMinCheckCount(0);
+        buttonGroup.setMinCheckCount(1);
 
         ms = cradleGame1.getLanguageStrings().get("choosedifficultylevel");
         setText(ms);

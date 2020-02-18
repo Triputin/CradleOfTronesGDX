@@ -13,7 +13,7 @@ buildscript {
         classpath 'org.wisepersist:gwt-gradle-plugin:1.0.9'
         classpath 'com.android.tools.build:gradle:3.4.1'
         classpath 'com.mobidevelop.robovm:robovm-gradle-plugin:2.3.7'
-        
+
 
     }
 }
@@ -72,6 +72,8 @@ project(":android") {
         implementation 'com.android.support:support-v4:28.0.0'
         implementation 'androidx.appcompat:appcompat:1.1.0'
         implementation 'androidx.annotation:annotation:1.1.0'
+        implementation 'com.google.firebase:firebase-analytics:17.2.2'
+
         api "com.badlogicgames.gdx:gdx-backend-android:$gdxVersion"
         natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-armeabi"
         natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-armeabi-v7a"
