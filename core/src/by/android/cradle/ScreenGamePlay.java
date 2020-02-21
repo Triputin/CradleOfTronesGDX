@@ -985,7 +985,7 @@ public void RemoveAndFillSquare(int centreRow, int centreCol, int squareSize){
         float y = gameFieldY + row * cellSize;
         double rnd = Math.random();
         if (isKnightItemPossible) {
-            if (rnd < 0.05f) {
+            if (rnd < 0.5f) {
                 item = getRandomKnightItem(x, y, row, col, levelnumber);
                 return item;
             }
@@ -1064,42 +1064,65 @@ public void RemoveAndFillSquare(int centreRow, int centreCol, int squareSize){
     public KnightItem getRandomKnightItem(float x, float y, int row,int col, int levelnumber) {
         KnightItem knightItem;
         KnightItemParams knightItemParams;
+        KnightItemType knightItemType = KnightItemType.Sword;
 
         double rnd = Math.random();
+        //Choose KnightItemType
+        if (rnd<0.15f) {
+            knightItemType = KnightItemType.Sword;
+        } else
+        if (rnd<0.3f) {
+            knightItemType = KnightItemType.Helmet;
+        } else
+        if (rnd<0.45f) {
+            knightItemType = KnightItemType.Armor;
+        } else
+        if (rnd<0.6f) {
+            knightItemType = KnightItemType.Boots;
+        } else
+        if (rnd<0.75f) {
+            knightItemType = KnightItemType.Gloves;
+        } else
+        if (rnd<0.9f) {
+            knightItemType = KnightItemType.Shield;
+        }
 
+
+
+            //Choose KnightItem
         if (rnd<0.1f){
-            knightItemParams = new KnightItemParams(KnightItemType.Sword,1,1,0,0.1f,0);
+            knightItemParams = new KnightItemParams(knightItemType,1,1,0,0.1f,0);
             knightItem = new KnightItem(x, y, cellSize, cellSize, mainStage, row, col,cradleGame,knightItemParams);
             return  knightItem;
         }
         if (rnd<0.2f){
-            knightItemParams = new KnightItemParams(KnightItemType.Sword,2,1,0,0.2f,0);
+            knightItemParams = new KnightItemParams(knightItemType,2,1,0,0.2f,0);
             knightItem = new KnightItem(x, y, cellSize, cellSize, mainStage, row, col,cradleGame,knightItemParams);
             return  knightItem;
         }
         if (rnd<0.3f){
-            knightItemParams = new KnightItemParams(KnightItemType.Sword,3,1,0,0.3f,0);
+            knightItemParams = new KnightItemParams(knightItemType,3,1,0,0.3f,0);
             knightItem = new KnightItem(x, y, cellSize, cellSize, mainStage, row, col,cradleGame,knightItemParams);
             return  knightItem;
         }
         if (rnd<0.35f){
-            knightItemParams = new KnightItemParams(KnightItemType.Sword,4,2,0,0.5f,0);
+            knightItemParams = new KnightItemParams(knightItemType,4,2,0,0.5f,0);
             knightItem = new KnightItem(x, y, cellSize, cellSize, mainStage, row, col,cradleGame,knightItemParams);
             return  knightItem;
         }
         if (rnd<0.39f){
-            knightItemParams = new KnightItemParams(KnightItemType.Sword,5,2,0,0.6f,0);
+            knightItemParams = new KnightItemParams(knightItemType,5,2,0,0.6f,0);
             knightItem = new KnightItem(x, y, cellSize, cellSize, mainStage, row, col,cradleGame,knightItemParams);
             return  knightItem;
         }
         if (rnd<0.42f){
-            knightItemParams = new KnightItemParams(KnightItemType.Sword,6,2,0,0.7f,0);
+            knightItemParams = new KnightItemParams(knightItemType,6,2,0,0.7f,0);
             knightItem = new KnightItem(x, y, cellSize, cellSize, mainStage, row, col,cradleGame,knightItemParams);
             return  knightItem;
         }
 
 
-        knightItemParams = new KnightItemParams(KnightItemType.Sword,1,1,0,0.1f,0);
+        knightItemParams = new KnightItemParams(knightItemType,1,1,0,0.1f,0);
         knightItem = new KnightItem(x, y, cellSize, cellSize, mainStage, row, col,cradleGame,knightItemParams);
         return  knightItem;
 

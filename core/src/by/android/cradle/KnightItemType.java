@@ -8,7 +8,8 @@ public enum KnightItemType {
     Gloves(2),
     Sword(3),
     Armor(4),
-    Boots(5);
+    Boots(5),
+    Shield (6);
 
     private int value;
     private static Map map = new HashMap<>();

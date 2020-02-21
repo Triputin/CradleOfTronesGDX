@@ -16,38 +16,50 @@ private KnightItemParams knightItemParams;
             case Helmet:
                 switch (knightItemParams.getKnightItemSubType()){
                     case 1:
-                        loadTexture("gem01pressed.png", (int) getWidth(), (int) getHeight());
+                        loadTexture("knightitems/helmet01.png", (int) getWidth(), (int) getHeight());
                         break;
                     case 2:
-                        loadTexture("gem01pressed.png", (int) getWidth(), (int) getHeight());
+                        loadTexture("knightitems/helmet02.png", (int) getWidth(), (int) getHeight());
                         break;
                     case 3:
-                        loadTexture("gem01pressed.png", (int) getWidth(), (int) getHeight());
+                        loadTexture("knightitems/helmet03.png", (int) getWidth(), (int) getHeight());
                         break;
                     case 4:
-                        loadTexture("gem01pressed.png", (int) getWidth(), (int) getHeight());
+                        loadTexture("knightitems/helmet01_gold.png", (int) getWidth(), (int) getHeight());
                         break;
                     case 5:
-                        loadTexture("gem01pressed.png", (int) getWidth(), (int) getHeight());
+                        loadTexture("knightitems/helmet02_gold.png", (int) getWidth(), (int) getHeight());
+                        break;
+                    case 6:
+                        loadTexture("knightitems/helmet03_gold.png", (int) getWidth(), (int) getHeight());
+                        break;
+                    case 7:
+                        loadTexture("knightitems/helmet01_top.png", (int) getWidth(), (int) getHeight());
                         break;
                 }
                 break;
             case Armor:
                 switch (knightItemParams.getKnightItemSubType()){
                     case 1:
-                        loadTexture("gem01pressed.png", (int) getWidth(), (int) getHeight());
+                        loadTexture("knightitems/armour01.png", (int) getWidth(), (int) getHeight());
                         break;
                     case 2:
-                        loadTexture("gem01pressed.png", (int) getWidth(), (int) getHeight());
+                        loadTexture("knightitems/armour02.png", (int) getWidth(), (int) getHeight());
                         break;
                     case 3:
-                        loadTexture("gem01pressed.png", (int) getWidth(), (int) getHeight());
+                        loadTexture("knightitems/armour03.png", (int) getWidth(), (int) getHeight());
                         break;
                     case 4:
-                        loadTexture("gem01pressed.png", (int) getWidth(), (int) getHeight());
+                        loadTexture("knightitems/armour01_gold.png", (int) getWidth(), (int) getHeight());
                         break;
                     case 5:
-                        loadTexture("gem01pressed.png", (int) getWidth(), (int) getHeight());
+                        loadTexture("knightitems/armour02_gold.png", (int) getWidth(), (int) getHeight());
+                        break;
+                    case 6:
+                        loadTexture("knightitems/armour03_gold.png", (int) getWidth(), (int) getHeight());
+                        break;
+                    case 7:
+                        loadTexture("knightitems/armour01_top.png", (int) getWidth(), (int) getHeight());
                         break;
                 }
                 break;
@@ -66,6 +78,12 @@ private KnightItemParams knightItemParams;
                         loadTexture("gem01pressed.png", (int) getWidth(), (int) getHeight());
                         break;
                     case 5:
+                        loadTexture("gem01pressed.png", (int) getWidth(), (int) getHeight());
+                        break;
+                    case 6:
+                        loadTexture("gem01pressed.png", (int) getWidth(), (int) getHeight());
+                        break;
+                    case 7:
                         loadTexture("gem01pressed.png", (int) getWidth(), (int) getHeight());
                         break;
                 }
@@ -112,6 +130,39 @@ private KnightItemParams knightItemParams;
                     case 5:
                         loadTexture("gem01pressed.png", (int) getWidth(), (int) getHeight());
                         break;
+                    case 6:
+                        loadTexture("gem01pressed.png", (int) getWidth(), (int) getHeight());
+                        break;
+                    case 7:
+                        loadTexture("knightitems/glove01_top.png", (int) getWidth(), (int) getHeight());
+                        break;
+
+                }
+                break;
+            case Shield:
+                switch (knightItemParams.getKnightItemSubType()){
+                    case 1:
+                        loadTexture("gem01pressed.png", (int) getWidth(), (int) getHeight());
+                        break;
+                    case 2:
+                        loadTexture("gem01pressed.png", (int) getWidth(), (int) getHeight());
+                        break;
+                    case 3:
+                        loadTexture("gem01pressed.png", (int) getWidth(), (int) getHeight());
+                        break;
+                    case 4:
+                        loadTexture("gem01pressed.png", (int) getWidth(), (int) getHeight());
+                        break;
+                    case 5:
+                        loadTexture("gem01pressed.png", (int) getWidth(), (int) getHeight());
+                        break;
+                    case 6:
+                        loadTexture("gem01pressed.png", (int) getWidth(), (int) getHeight());
+                        break;
+                    case 7:
+                        loadTexture("gem01pressed.png", (int) getWidth(), (int) getHeight());
+                        break;
+
                 }
                 break;
         }
