@@ -1,6 +1,7 @@
 package by.android.cradle;
 
 import com.badlogic.gdx.Preferences;
+import java.util.ArrayList;
 
 public class KnightParams {
     private final int MAX_Cell_QTTY_TO_DESTROY = 9;
@@ -13,10 +14,15 @@ public class KnightParams {
     private int cellsQttyToDestroy; // qtty cells from leftdown cell to destroy including start cell
     private int knightLevel;
 
+    private ArrayList<KnightItemParams> activeKnightItemParamsArrayList; // set of Knight's active accessories
+    private ArrayList<KnightItemParams> passiveKnightItemParamsArrayList; // set of Knight's passive accessories
+
     private Preferences prefs;
 
     public KnightParams (Preferences prefs){
         this.prefs = prefs;
+        activeKnightItemParamsArrayList = new ArrayList<>();
+        passiveKnightItemParamsArrayList = new ArrayList<>();
         load();
     }
 
@@ -28,6 +34,27 @@ public class KnightParams {
         cellsQttyToDestroy =  prefs.getInteger("cellsQttyToDestroy", 1);
         knightLevel =  prefs.getInteger("knightLevel", 1);
         currentHealthMaximum =  prefs.getInteger("currentHealthMaximum", FULL_HEALTH);
+
+        int qttyOfActiveKnightItemParams = prefs.getInteger("qttyOfActiveKnightItemParams", 0);
+        activeKnightItemParamsArrayList.clear();
+        for (int i=0; i<qttyOfActiveKnightItemParams;i++){
+            KnightItemParams knightItemParams = new KnightItemParams(KnightItemType.Helmet,1,1,
+                    0,0,0);
+
+            knightItemParams.load(prefs,i);
+            activeKnightItemParamsArrayList.add(knightItemParams);
+        }
+
+        int qttyOfPassiveKnightItemParams = prefs.getInteger("qttyOfPassiveKnightItemParams", 0);
+        passiveKnightItemParamsArrayList.clear();
+        for (int i=0; i<qttyOfPassiveKnightItemParams;i++){
+            KnightItemParams knightItemParams = new KnightItemParams(KnightItemType.Helmet,1,1,
+                    0,0,0);
+
+            knightItemParams.load(prefs,i+100);
+            passiveKnightItemParamsArrayList.add(knightItemParams);
+        }
+
     }
 
     public void save(){
@@ -38,6 +65,17 @@ public class KnightParams {
         prefs.putInteger("cellsQttyToDestroy",cellsQttyToDestroy);
         prefs.putInteger("knightLevel",knightLevel);
         prefs.putInteger("currentHealthMaximum",currentHealthMaximum);
+        prefs.putInteger("qttyOfActiveKnightItemParams",activeKnightItemParamsArrayList.size());
+        int i=0;
+        for(KnightItemParams knightItemParams: activeKnightItemParamsArrayList){
+            knightItemParams.save(prefs,i);
+            i++;
+        }
+        i=100;
+        for(KnightItemParams knightItemParams: passiveKnightItemParamsArrayList){
+            knightItemParams.save(prefs,i);
+            i++;
+        }
         prefs.flush();
     }
 
@@ -56,6 +94,29 @@ public class KnightParams {
         prefs.putInteger("knightLevel",knightLevel);
         prefs.putInteger("currentHealthMaximum",FULL_HEALTH);
         prefs.flush();
+    }
+
+    public void addKnightItemParams(KnightItemParams knightItemParams){
+        passiveKnightItemParamsArrayList.add(knightItemParams);
+    }
+
+    public void removeKnightItemParams(KnightItemParams knightItemParams){
+        passiveKnightItemParamsArrayList.remove(knightItemParams);
+    }
+
+    public void moveToActiveItemParams(KnightItemParams knightItemParams){
+        // move to passive from active item of the same type
+        KnightItemType knightItemType = knightItemParams.getKnightItemType();
+        for(KnightItemParams knightItemParams1: activeKnightItemParamsArrayList){
+            if(knightItemParams1.getKnightItemType()==knightItemType){
+                passiveKnightItemParamsArrayList.add(knightItemParams1);
+                activeKnightItemParamsArrayList.remove(knightItemParams1);
+            }
+        }
+
+
+        //add to active
+        activeKnightItemParamsArrayList.add(knightItemParams);
     }
 
     public int getHealth() {
