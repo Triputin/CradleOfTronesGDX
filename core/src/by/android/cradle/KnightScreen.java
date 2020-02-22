@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
@@ -11,15 +12,21 @@ import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
+import java.util.ArrayList;
+
 public class KnightScreen extends BaseScreen{
 
-    private final int RowColCount=4;
+    private final int RowColCount=7;
+    private int cellSize;
     private int padding=5;
     private Knight knight;
     private Weapon weapon;
 
     private Label mightLabel;
     private Label lifeLabel;
+
+    private ArrayList<KnightItem> knightActiveItemsArrayList;
+    private ArrayList<KnightItem> knightPassiveItemsArrayList;
 
     public KnightScreen(CradleGame cradleGame,IPlayServices ply) {
 
@@ -28,6 +35,9 @@ public class KnightScreen extends BaseScreen{
 
 
     public void initialize() {
+        knightActiveItemsArrayList = new ArrayList<>();
+        knightPassiveItemsArrayList = new ArrayList<>();
+
         int w = Gdx.graphics.getWidth();
         int h = Gdx.graphics.getHeight();
         int wh;
@@ -36,6 +46,8 @@ public class KnightScreen extends BaseScreen{
         }else{
             wh=w;
         }
+        cellSize = wh/RowColCount;
+
         BaseActor hall = new BaseActor(0,0, mainStage, Touchable.disabled);
         hall.loadTexture( "hall01.png",w,h );
 
@@ -121,7 +133,7 @@ public class KnightScreen extends BaseScreen{
         });
 
 
-
+        showKnightItems();
 
     }
 
@@ -145,6 +157,36 @@ public class KnightScreen extends BaseScreen{
 
         //Knight
         knight.setKnightParams(knightParams);
+
+        showKnightItems();
     }
 
+    private void showKnightItems(){
+
+        //clear Items
+        ArrayList<Item> arrayListItems = new ArrayList<>();
+        for (Actor a : mainStage.getActors())
+        {
+            if ( Item.class.isAssignableFrom(a.getClass()) ){
+                arrayListItems.add((Item)a);
+            }
+
+        }
+
+        for(int i =0;i<arrayListItems.size();i++){
+            arrayListItems.get(i).remove();
+        }
+
+        //show items
+        ArrayList<KnightItemParams> passiveKnightItemParams = knight.getPassiveKnightItemParams();
+        int x=0;
+        int y=0;
+        int i=0;
+        for (KnightItemParams knightItemParams: passiveKnightItemParams) {
+            KnightItem knightItem = new KnightItem(x+cellSize*i, y, cellSize, cellSize, mainStage, 0, i, cradleGame, knightItemParams);
+            knightPassiveItemsArrayList.add(knightItem);
+            i++;
+        }
+
+    }
 }

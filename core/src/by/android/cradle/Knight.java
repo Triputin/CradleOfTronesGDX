@@ -6,6 +6,8 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 
+import java.util.ArrayList;
+
 
 public class Knight extends BaseActor {
     private Label lifesLabel;
@@ -74,13 +76,9 @@ public class Knight extends BaseActor {
     }
 
     public int getCellsQttyToDestroy() {
-        return knightParams.getCellsQttyToDestroy();
+        return knightParams.getFinalCellsQttyToDestroy();
     }
 
-    public void setCellsQttyToDestroy(int cellsQttyToDestroy) {
-
-        knightParams.setCellsQttyToDestroy(cellsQttyToDestroy);
-    }
 
     public void doDamage(){
         System.out.println("doDamage called");
@@ -127,4 +125,24 @@ public class Knight extends BaseActor {
         float ff = score;
         return 1+(int)Math.sqrt(ff/1000f);
     }
+
+    public void addKnightItem(KnightItem knightItem){
+        KnightItemParams knightItemParams = knightItem.getKnightItemParams();
+        KnightItemParams knightItemParams1 = new KnightItemParams(knightItemParams.getKnightItemType(),
+                knightItemParams.getKnightItemSubType(),knightItemParams.getItemLevel(),
+                knightItemParams.getAddHealth(),knightItemParams.getAddCellsQttyToDestroy(),
+                knightItemParams.getAddRechargeWeaponTime());
+
+        knightParams.addKnightItemParams(knightItemParams1);
+
+    }
+
+    public ArrayList<KnightItemParams> getActiveKnightItemParams(){
+        return knightParams.getActiveKnightItemParamsArrayList();
+    }
+
+    public ArrayList<KnightItemParams> getPassiveKnightItemParams(){
+        return knightParams.getPassiveKnightItemParamsArrayList();
+    }
+
 }

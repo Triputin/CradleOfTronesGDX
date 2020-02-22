@@ -66,25 +66,25 @@ private KnightItemParams knightItemParams;
             case Boots:
                 switch (knightItemParams.getKnightItemSubType()){
                     case 1:
-                        loadTexture("gem01pressed.png", (int) getWidth(), (int) getHeight());
+                        loadTexture("knightitems/boots01.png", (int) getWidth(), (int) getHeight());
                         break;
                     case 2:
-                        loadTexture("gem01pressed.png", (int) getWidth(), (int) getHeight());
+                        loadTexture("knightitems/boots02.png", (int) getWidth(), (int) getHeight());
                         break;
                     case 3:
-                        loadTexture("gem01pressed.png", (int) getWidth(), (int) getHeight());
+                        loadTexture("knightitems/boots03.png", (int) getWidth(), (int) getHeight());
                         break;
                     case 4:
-                        loadTexture("gem01pressed.png", (int) getWidth(), (int) getHeight());
+                        loadTexture("knightitems/boots01_gold.png", (int) getWidth(), (int) getHeight());
                         break;
                     case 5:
-                        loadTexture("gem01pressed.png", (int) getWidth(), (int) getHeight());
+                        loadTexture("knightitems/boots02_gold.png", (int) getWidth(), (int) getHeight());
                         break;
                     case 6:
-                        loadTexture("gem01pressed.png", (int) getWidth(), (int) getHeight());
+                        loadTexture("knightitems/boots03_gold.png", (int) getWidth(), (int) getHeight());
                         break;
                     case 7:
-                        loadTexture("gem01pressed.png", (int) getWidth(), (int) getHeight());
+                        loadTexture("knightitems/boots01_top.png", (int) getWidth(), (int) getHeight());
                         break;
                 }
                 break;
@@ -116,25 +116,25 @@ private KnightItemParams knightItemParams;
             case Gloves:
                 switch (knightItemParams.getKnightItemSubType()){
                     case 1:
-                        loadTexture("gem01pressed.png", (int) getWidth(), (int) getHeight());
+                        loadTexture("knightitems/gloves01.png", (int) getWidth(), (int) getHeight());
                         break;
                     case 2:
-                        loadTexture("gem01pressed.png", (int) getWidth(), (int) getHeight());
+                        loadTexture("knightitems/gloves02.png", (int) getWidth(), (int) getHeight());
                         break;
                     case 3:
-                        loadTexture("gem01pressed.png", (int) getWidth(), (int) getHeight());
+                        loadTexture("knightitems/gloves03.png", (int) getWidth(), (int) getHeight());
                         break;
                     case 4:
-                        loadTexture("gem01pressed.png", (int) getWidth(), (int) getHeight());
+                        loadTexture("knightitems/gloves01_gold.png", (int) getWidth(), (int) getHeight());
                         break;
                     case 5:
-                        loadTexture("gem01pressed.png", (int) getWidth(), (int) getHeight());
+                        loadTexture("knightitems/gloves02_gold.png", (int) getWidth(), (int) getHeight());
                         break;
                     case 6:
-                        loadTexture("gem01pressed.png", (int) getWidth(), (int) getHeight());
+                        loadTexture("knightitems/gloves03_gold.png", (int) getWidth(), (int) getHeight());
                         break;
                     case 7:
-                        loadTexture("knightitems/glove01_top.png", (int) getWidth(), (int) getHeight());
+                        loadTexture("knightitems/gloves01_top.png", (int) getWidth(), (int) getHeight());
                         break;
 
                 }
@@ -142,25 +142,25 @@ private KnightItemParams knightItemParams;
             case Shield:
                 switch (knightItemParams.getKnightItemSubType()){
                     case 1:
-                        loadTexture("gem01pressed.png", (int) getWidth(), (int) getHeight());
+                        loadTexture("knightitems/shield01.png", (int) getWidth(), (int) getHeight());
                         break;
                     case 2:
-                        loadTexture("gem01pressed.png", (int) getWidth(), (int) getHeight());
+                        loadTexture("knightitems/shield02.png", (int) getWidth(), (int) getHeight());
                         break;
                     case 3:
-                        loadTexture("gem01pressed.png", (int) getWidth(), (int) getHeight());
+                        loadTexture("knightitems/shield03.png", (int) getWidth(), (int) getHeight());
                         break;
                     case 4:
-                        loadTexture("gem01pressed.png", (int) getWidth(), (int) getHeight());
+                        loadTexture("knightitems/shield01_gold.png", (int) getWidth(), (int) getHeight());
                         break;
                     case 5:
-                        loadTexture("gem01pressed.png", (int) getWidth(), (int) getHeight());
+                        loadTexture("knightitems/shield02_gold.png", (int) getWidth(), (int) getHeight());
                         break;
                     case 6:
-                        loadTexture("gem01pressed.png", (int) getWidth(), (int) getHeight());
+                        loadTexture("knightitems/shield03_gold.png", (int) getWidth(), (int) getHeight());
                         break;
                     case 7:
-                        loadTexture("gem01pressed.png", (int) getWidth(), (int) getHeight());
+                        loadTexture("knightitems/shield01_top.png", (int) getWidth(), (int) getHeight());
                         break;
 
                 }
@@ -173,6 +173,10 @@ private KnightItemParams knightItemParams;
     @Override
     public boolean isLocked(){
             return true;
+    }
+
+    public KnightItemParams getKnightItemParams() {
+        return knightItemParams;
     }
 
 

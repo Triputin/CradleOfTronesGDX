@@ -1325,6 +1325,7 @@ public void RemoveAndFillSquare(int centreRow, int centreCol, int squareSize){
                         }
 
                         GameRes.Score=GameRes.Score+Math.round(score_during_attack); // increase score if win
+                        collectAllKnightItems();
                         cradleGame.setActiveGameMapScreen(isHeroLevelNeedsShow);
 
 
@@ -1445,9 +1446,6 @@ public void RemoveAndFillSquare(int centreRow, int centreCol, int squareSize){
 
         Action completeAction = new Action(){
             public boolean act( float delta ) {
-                // Do your stuff
-
-                //cradleGame.setActiveGameMapScreen();
 
                 //Show dialog
                 dialogBox_endLevel.setResults(0,resultAttack.Gold,resultAttack.Wood,resultAttack.Bread);
@@ -1460,6 +1458,7 @@ public void RemoveAndFillSquare(int centreRow, int centreCol, int squareSize){
                         if (!((InputEvent) e).getType().equals(InputEvent.Type.touchDown))
                             return false;
                         knight.doDamage();
+                        collectAllKnightItems();
                         cradleGame.setActiveGameMapScreen(false);
 
                         return true;
@@ -1611,5 +1610,13 @@ public void RemoveAndFillSquare(int centreRow, int centreCol, int squareSize){
     }
     public void setSquareBomb2QttyLabelText(String text){
         squareBomb2QttyLabel.setText(text);
+    }
+
+    public void collectAllKnightItems(){
+        KnightItem knightItem;
+        for (by.android.cradle.BaseActor baseActor : by.android.cradle.BaseActor.getList(mainStage, "by.android.cradle.KnightItem")) {
+            knightItem = (KnightItem) baseActor;
+            knight.addKnightItem(knightItem);
+        }
     }
 }
