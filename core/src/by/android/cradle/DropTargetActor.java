@@ -22,4 +22,8 @@ public class DropTargetActor extends BaseActor
         return targetable;
     }
 
+    public int getTargetType(){
+        return 0;
+    }
+
 }
