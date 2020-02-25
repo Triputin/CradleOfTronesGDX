@@ -12,11 +12,11 @@ import java.util.ArrayList;
 
 public class KnightItem extends Item {
 
-private KnightItemParams knightItemParams;
 
-private BaseActor selectedBaseActor;
+    private KnightItemParams knightItemParams;
+    private KnightScreen knightScreen;
 
-
+    //Drag and Drop
     protected KnightItem self;
     private float grabOffsetX;
     private float grabOffsetY;
@@ -26,8 +26,10 @@ private BaseActor selectedBaseActor;
     private float startPositionY;
 
 
-    public KnightItem(float x, float y, int width, int height, Stage s, int row, int col, CradleGame cradleGame,KnightItemParams knightItemParams ) {
+    public KnightItem(float x, float y, int width, int height, Stage s, int row, int col, CradleGame cradleGame,KnightItemParams knightItemParams,KnightScreen knightScreen ) {
         super(x, y, width, height, s, Touchable.enabled, row, col, cradleGame);
+        this.knightScreen = knightScreen;
+
 
         // Очень важно, т.е. предок в лице DropTargetActor игнорирует все и ставит Disabled и события перестают доходить!!
         setTouchable(Touchable.enabled);
@@ -312,6 +314,8 @@ private BaseActor selectedBaseActor;
             moveToStart();
         } else {
             self.centerAtActor(dropTarget);
+            knightScreen.moveToActiveItemParams(self);
+
         }
     }
 

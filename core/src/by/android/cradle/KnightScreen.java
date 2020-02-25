@@ -24,11 +24,19 @@ public class KnightScreen extends BaseScreen {
 
     private Label mightLabel;
     private Label lifeLabel;
+    private Label speedLabel;
 
     private ArrayList<KnightItem> knightActiveItemsArrayList;
     private ArrayList<KnightItem> knightPassiveItemsArrayList;
 
     private KnightItemsSlider knightItemsSlider;
+
+    public KnightActiveItemPlace knightActiveItemPlaceHelmet;
+    public KnightActiveItemPlace knightActiveItemPlaceArmor;
+    public KnightActiveItemPlace knightActiveItemPlaceGloves;
+    public KnightActiveItemPlace knightActiveItemPlaceShield;
+    public KnightActiveItemPlace knightActiveItemPlaceSword;
+    public KnightActiveItemPlace knightActiveItemPlaceBoots;
 
     public KnightScreen(CradleGame cradleGame, IPlayServices ply) {
 
@@ -57,8 +65,8 @@ public class KnightScreen extends BaseScreen {
 
         //Size of lines
         int lineX = Math.round(w * 0.49f);
-        int lineY = Math.round(h * 0.52f);
-        int lineSize = Math.round(h * 0.25f);
+        int lineY = Math.round(h * 0.6f);
+        int lineSize = Math.round(h * 0.18f);
         int lineSizeW = Math.round(w * 0.51f);
 
         // Might
@@ -76,7 +84,7 @@ public class KnightScreen extends BaseScreen {
         String s = String.valueOf(cradleGame.getKnightParams().getCellsQttyToDestroy());
         mightLabel.setText(s);
         mightLabel.setColor(Color.GOLDENROD);
-        mightLabel.setPosition(lineX + lineSizeW / 1.7f, lineY + might.getHeight() * 0.4f);
+        mightLabel.setPosition(lineX + lineSizeW / 1.8f, lineY + might.getHeight() * 0.4f);
         mightLabel.setFontScale(3.0f);
         mainStage.addActor(mightLabel);
 
@@ -98,9 +106,32 @@ public class KnightScreen extends BaseScreen {
         s = s + " " + sc + " " + String.valueOf(cradleGame.getKnightParams().getCurrentHealthMaximum());
         lifeLabel.setText(s);
         lifeLabel.setColor(Color.GOLDENROD);
-        lifeLabel.setPosition(lineX + lineSizeW / 2.5f, lineY - lineSize + life.getHeight() * 0.4f);
+        lifeLabel.setPosition(lineX + lineSizeW / 2.9f, lineY - lineSize -10 + life.getHeight() * 0.4f);
         lifeLabel.setFontScale(3.0f);
         mainStage.addActor(lifeLabel);
+
+        // Speed
+        BaseActor speedActor = new BaseActor(lineX, lineY - lineSize*2 - 20, mainStage, Touchable.disabled);
+        speedActor.setSize(lineSizeW, lineSize);
+        speedActor.loadTexture("knights/plate01.png", lineSizeW, lineSize);
+
+        BaseActor speedBadge = new BaseActor(0, 0, mainStage, Touchable.disabled);
+        speedBadge.setSize(lineSize * 0.95f, lineSize * 0.95f);
+        speedBadge.loadTexture("knightitems/speed_badge.png", Math.round(speedBadge.getWidth()), Math.round(speedBadge.getHeight()));
+        speedBadge.setPosition(speedBadge.getWidth() * 0.3f, speedBadge.getWidth() * 0.05f);
+        speedActor.addActor(speedBadge);
+
+        speedLabel = new Label(" ", BaseGame.labelStyle);
+        s = String.valueOf(cradleGame.getKnightParams().getRechargeWeaponTime());
+        speedLabel.setText(s);
+        speedLabel.setColor(Color.GOLDENROD);
+        speedLabel.setPosition(lineX + lineSizeW / 1.8f, lineY - lineSize*2 - 20 + speedActor.getHeight() * 0.4f);
+        speedLabel.setFontScale(3.0f);
+        mainStage.addActor(speedLabel);
+
+
+
+
 
         int knSize = Math.round(h * 0.4f);
         int wpSize = Math.round(h * 0.1f);
@@ -113,17 +144,34 @@ public class KnightScreen extends BaseScreen {
             weapon.remove();
         }
         weapon = new Weapon(knSize * 0.585f, h - knSize * 0.39f, wpSize, wpSize, mainStage, cradleGame, knight);
+        weapon.setDraggable(false);
 
-        int ItemPlaceSize = Math.round(cellSize*1.3f);
-        int itemPlaceLeftSpace = Math.round(w*0.05f);
-        KnightActiveItemPlace knightActiveItemPlace1 = new KnightActiveItemPlace(itemPlaceLeftSpace+ItemPlaceSize,ItemPlaceSize*2, ItemPlaceSize, ItemPlaceSize, mainStage,KnightItemType.Helmet);
-        KnightActiveItemPlace knightActiveItemPlace2 = new KnightActiveItemPlace(itemPlaceLeftSpace+ItemPlaceSize,ItemPlaceSize, ItemPlaceSize, ItemPlaceSize, mainStage,KnightItemType.Armor);
-        KnightActiveItemPlace knightActiveItemPlace3 = new KnightActiveItemPlace(itemPlaceLeftSpace+ItemPlaceSize*2,ItemPlaceSize*2, ItemPlaceSize, ItemPlaceSize, mainStage,KnightItemType.Gloves);
-        KnightActiveItemPlace knightActiveItemPlace4 = new KnightActiveItemPlace(itemPlaceLeftSpace,ItemPlaceSize, ItemPlaceSize, ItemPlaceSize, mainStage,KnightItemType.Shield);
-        KnightActiveItemPlace knightActiveItemPlace5 = new KnightActiveItemPlace(itemPlaceLeftSpace+ItemPlaceSize*2,ItemPlaceSize, ItemPlaceSize, ItemPlaceSize, mainStage,KnightItemType.Sword);
-        KnightActiveItemPlace knightActiveItemPlace6 = new KnightActiveItemPlace(itemPlaceLeftSpace+ItemPlaceSize,0, ItemPlaceSize, ItemPlaceSize, mainStage,KnightItemType.Boots);
+        //show active items places
+        int ItemPlaceSize = Math.round(cellSize*1.18f);
+        int itemPlaceLeftSpace = Math.round(w*0.1f);
+        knightActiveItemPlaceHelmet = new KnightActiveItemPlace(itemPlaceLeftSpace+ItemPlaceSize,cellSize+ItemPlaceSize*2, ItemPlaceSize, ItemPlaceSize, mainStage,KnightItemType.Helmet);
+        knightActiveItemPlaceArmor = new KnightActiveItemPlace(itemPlaceLeftSpace+ItemPlaceSize,cellSize+ItemPlaceSize, ItemPlaceSize, ItemPlaceSize, mainStage,KnightItemType.Armor);
+        knightActiveItemPlaceGloves = new KnightActiveItemPlace(itemPlaceLeftSpace+ItemPlaceSize*2,cellSize+ItemPlaceSize*2, ItemPlaceSize, ItemPlaceSize, mainStage,KnightItemType.Gloves);
+        knightActiveItemPlaceShield = new KnightActiveItemPlace(  itemPlaceLeftSpace,cellSize+ItemPlaceSize, ItemPlaceSize, ItemPlaceSize, mainStage,KnightItemType.Shield);
+        knightActiveItemPlaceSword = new KnightActiveItemPlace(itemPlaceLeftSpace+ItemPlaceSize*2,cellSize+ItemPlaceSize, ItemPlaceSize, ItemPlaceSize, mainStage,KnightItemType.Sword);
+        knightActiveItemPlaceBoots = new KnightActiveItemPlace(itemPlaceLeftSpace+ItemPlaceSize,cellSize, ItemPlaceSize, ItemPlaceSize, mainStage,KnightItemType.Boots);
 
 
+        Label activeItemsLabel = new Label(" ", BaseGame.labelStyle);
+        String str = cradleGame.getLanguageStrings().get("activeitems");
+        activeItemsLabel.setText(str);
+        activeItemsLabel.setColor( Color.GOLDENROD );
+        activeItemsLabel.setPosition(itemPlaceLeftSpace+ItemPlaceSize,wh*0.93f);
+        activeItemsLabel.setFontScale(1.2f);
+        mainStage.addActor(activeItemsLabel);
+
+        Label inventoryLabel = new Label(" ", BaseGame.labelStyle);
+        str = cradleGame.getLanguageStrings().get("inventory");
+        inventoryLabel.setText(str);
+        inventoryLabel.setColor( Color.GOLDENROD );
+        inventoryLabel.setPosition(w*0.05f,cellSize);
+        inventoryLabel.setFontScale(1.2f);
+        mainStage.addActor(inventoryLabel);
 
         //Back button
         Button.ButtonStyle buttonStyle = new Button.ButtonStyle();
@@ -150,55 +198,10 @@ public class KnightScreen extends BaseScreen {
         });
 
         //Slider
-        knightItemsSlider = new KnightItemsSlider(lineX, h * 0.00f, w-ItemPlaceSize*3, cellSize,
-                mainStage, Touchable.enabled, knight, cradleGame);
+        knightItemsSlider = new KnightItemsSlider(0, h * 0.00f, w, cellSize,
+                mainStage, Touchable.enabled, knight, cradleGame,this);
 
         knightItemsSlider.showKnightItems(knight);
-
-        mainStage.addListener(new InputListener() {
-            @Override
-            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                InputEvent ie = (InputEvent) event;
-                if (ie.getType().equals(InputEvent.Type.touchDown)) {
-
-                    //KnightItems
-                    /*
-                   for (KnightItem knightItem : knightItemsSlider.getKnightPassiveItemsArrayList()) {
-                        if (knightItem.getBoundaryPolygon().contains(x, y)) {
-
-                            //knightItem.setSelected(!knightItem.isSelected());
-
-                        }
-                    }
-                    */
-                }
-
-                return true;
-            }
-
-/*
-            @Override
-            public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
-                InputEvent ie = (InputEvent) event;
-                if (ie.getType().equals(InputEvent.Type.touchUp)) {
-
-                    //KnightItems
-                    for (KnightItem knightItem : knightItemsSlider.getKnightPassiveItemsArrayList()) {
-                        if (knightItem.getBoundaryPolygon().contains(x, y)) {
-
-                            knightItem.setSelected(false);
-
-                        }
-                    }
-                }
-
-            }
-*/
-
-
-        });
-
-
 
     }
 
@@ -220,6 +223,12 @@ public class KnightScreen extends BaseScreen {
         s = s + " " + sc + " " + String.valueOf(cradleGame.getKnightParams().getCurrentHealthMaximum());
         lifeLabel.setText(s);
 
+
+        //Speed
+        s = String.valueOf(cradleGame.getKnightParams().getRechargeWeaponTime());
+        speedLabel.setText(s);
+
+
         //Knight
         knight.setKnightParams(knightParams);
 
@@ -227,7 +236,11 @@ public class KnightScreen extends BaseScreen {
     }
 
 
-
+    public void moveToActiveItemParams(KnightItem knightItem){
+        cradleGame.getKnightParams().moveToActiveItemParams(knightItem.getKnightItemParams());
+        //knightItemsSlider.showKnightItems(knight);
+        SetParams(cradleGame.getKnightParams());
+    }
 
 
 }

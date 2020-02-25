@@ -6,6 +6,7 @@ import java.util.ArrayList;
 public class KnightParams {
     private final int MAX_Cell_QTTY_TO_DESTROY = 9;
     private final int FULL_HEALTH = 100; // default fo restart and start
+    private final int RECHARGE_WEAPON_TIME = 25; // default fo restart and start
     private int lifes;
     private int health;
     private int currentHealthMaximum; // Can be raised up with Knight levels
@@ -30,7 +31,7 @@ public class KnightParams {
         lifes = prefs.getInteger("lifes", 3);
         health = prefs.getInteger("health", FULL_HEALTH);
         knightType =  prefs.getInteger("knighttype", 1);
-        rechargeWeaponTime =  prefs.getInteger("rechargeWeaponTime", 20);
+        rechargeWeaponTime =  prefs.getInteger("rechargeWeaponTime", RECHARGE_WEAPON_TIME);
         cellsQttyToDestroy =  prefs.getFloat("cellsQttyToDestroy", 1);
         knightLevel =  prefs.getInteger("knightLevel", 1);
         currentHealthMaximum =  prefs.getInteger("currentHealthMaximum", FULL_HEALTH);
@@ -82,10 +83,16 @@ public class KnightParams {
 
     public void reset(){
         moveAllItemsToPassive();
+
+        // for debug!
+        passiveKnightItemParamsArrayList.clear();
+
+
+
         lifes=3;
         health = FULL_HEALTH;
         knightType =1;
-        rechargeWeaponTime = 20;
+        rechargeWeaponTime = RECHARGE_WEAPON_TIME;
         cellsQttyToDestroy = 1;
         knightLevel = 1;
         setCurrentHealthMaximum(health);
@@ -95,8 +102,8 @@ public class KnightParams {
     public void moveAllItemsToPassive(){
         for(KnightItemParams knightItemParams: activeKnightItemParamsArrayList){
             passiveKnightItemParamsArrayList.add(knightItemParams);
-            activeKnightItemParamsArrayList.remove(knightItemParams);
         }
+        activeKnightItemParamsArrayList.clear();
     }
 
 
@@ -111,18 +118,25 @@ public class KnightParams {
     public void moveToActiveItemParams(KnightItemParams knightItemParams){
         // move to passive from active item of the same type
         KnightItemType knightItemType = knightItemParams.getKnightItemType();
-        for(KnightItemParams knightItemParams1: activeKnightItemParamsArrayList){
-            if(knightItemParams1.getKnightItemType()==knightItemType){
+        KnightItemParams knightItemParams1=null;
+        for(int i=0;i<activeKnightItemParamsArrayList.size();i++){
+            if(activeKnightItemParamsArrayList.get(i).getKnightItemType()==knightItemType){
+                knightItemParams1 = activeKnightItemParamsArrayList.get(i);
+            }
+        }
+        if(knightItemParams1!=null){
                 passiveKnightItemParamsArrayList.add(knightItemParams1);
                 removeFromActiveItemParams(knightItemParams1);
-            }
         }
 
         //add to active
         addToActiveItemParams(knightItemParams);
+        passiveKnightItemParamsArrayList.remove(knightItemParams);
+
     }
 
     public void addToActiveItemParams(KnightItemParams knightItemParams) {
+        System.out.println("addToActiveItemParams: " + knightItemParams.getKnightItemType().toString());
         activeKnightItemParamsArrayList.add(knightItemParams);
         setCurrentHealthMaximum(getCurrentHealthMaximum() + knightItemParams.getAddHealth());
         setCellsQttyToDestroy(getCellsQttyToDestroy() + knightItemParams.getAddCellsQttyToDestroy());
@@ -130,6 +144,7 @@ public class KnightParams {
     }
 
     public void removeFromActiveItemParams(KnightItemParams knightItemParams){
+        System.out.println("removeFromActiveItemParams: " + knightItemParams.getKnightItemType().toString());
         activeKnightItemParamsArrayList.remove(knightItemParams);
         setCurrentHealthMaximum(getCurrentHealthMaximum() - knightItemParams.getAddHealth());
         setCellsQttyToDestroy(getCellsQttyToDestroy() - knightItemParams.getAddCellsQttyToDestroy());
