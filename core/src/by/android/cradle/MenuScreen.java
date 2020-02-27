@@ -75,9 +75,9 @@ public class MenuScreen extends BaseScreen {
         String localeString= java.util.Locale.getDefault().getLanguage().toString();
         Texture buttonTexsSt;
         if (localeString=="ru"){
-            buttonTexsSt = new Texture( Gdx.files.internal("shield_play02.png") );
+            buttonTexsSt = new Texture( Gdx.files.internal("shield_play06.png") );
         }else {
-            buttonTexsSt = new Texture( Gdx.files.internal("shield_play01.png") );
+            buttonTexsSt = new Texture( Gdx.files.internal("shield_play05.png") );
         }
 
         TextureRegion buttonRegionsSt =  new TextureRegion(buttonTexsSt);

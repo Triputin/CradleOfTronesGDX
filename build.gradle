@@ -61,6 +61,7 @@ project(":desktop") {
 
 project(":android") {
     apply plugin: "android"
+    apply plugin: 'com.google.gms.google-services'
 
     configurations { natives }
 
@@ -72,7 +73,12 @@ project(":android") {
         implementation 'com.android.support:support-v4:28.0.0'
         implementation 'androidx.appcompat:appcompat:1.1.0'
         implementation 'androidx.annotation:annotation:1.1.0'
+        // Add the Firebase SDK for Google Analytics
         implementation 'com.google.firebase:firebase-analytics:17.2.2'
+        // Add the SDKs for any other Firebase products you want to use in your app
+        // For example, to use Firebase Authentication and Cloud Firestore
+        implementation 'com.google.firebase:firebase-auth:19.2.0'
+        implementation 'com.google.firebase:firebase-firestore:21.4.0'
 
         api "com.badlogicgames.gdx:gdx-backend-android:$gdxVersion"
         natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-armeabi"

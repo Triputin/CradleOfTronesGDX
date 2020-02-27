@@ -937,7 +937,7 @@ public void RemoveAndFillSquare(int centreRow, int centreCol, int squareSize){
         Cell cell;
         Cell firstCell;
         boolean isKnightItemPossible;
-        if (count>=5){
+        if (count>=7){
             isKnightItemPossible = true;
         }else {
             isKnightItemPossible = false;
@@ -984,12 +984,15 @@ public void RemoveAndFillSquare(int centreRow, int centreCol, int squareSize){
         float x = gameFieldX + col * cellSize;
         float y = gameFieldY + row * cellSize;
         double rnd = Math.random();
+
         if (isKnightItemPossible) {
-            if (rnd < 0.5f) {
+            if (rnd < 0.03f) {
                 item = getRandomKnightItem(x, y, row, col, levelnumber);
                 return item;
             }
         }
+
+
         item = getRandomItem(x,y,row,col,levelnumber);
         return item;
     }
@@ -1092,7 +1095,7 @@ public void RemoveAndFillSquare(int centreRow, int centreCol, int squareSize){
             knightItemType = KnightItemType.Gloves;
             itemSpeed=1;
         } else
-        if (rnd<0.9f) {
+         {
             knightItemType = KnightItemType.Shield;
             itemMight=1;
         }
@@ -1100,21 +1103,22 @@ public void RemoveAndFillSquare(int centreRow, int centreCol, int squareSize){
 
 
             //Choose KnightItem
-        if (rnd<0.1f){
+        if (rnd<0.6f){
             knightItemParams = new KnightItemParams(knightItemType,1,1, 5*itemHealth,0.1f*itemMight,1*itemSpeed);
             knightItem = new KnightItem(x, y, cellSize, cellSize, mainStage, row, col,cradleGame,knightItemParams,null);
             return  knightItem;
-        }
-        if (rnd<0.2f){
+        }else if (rnd<0.8f){
             knightItemParams = new KnightItemParams(knightItemType,2,1,10*itemHealth,0.2f*itemMight,2*itemSpeed);
             knightItem = new KnightItem(x, y, cellSize, cellSize, mainStage, row, col,cradleGame,knightItemParams,null);
             return  knightItem;
-        }
-        if (rnd<0.3f){
+        } else {
             knightItemParams = new KnightItemParams(knightItemType,3,1,15*itemHealth,0.3f*itemMight,3*itemSpeed);
             knightItem = new KnightItem(x, y, cellSize, cellSize, mainStage, row, col,cradleGame,knightItemParams,null);
             return  knightItem;
         }
+
+        /*
+
         if (rnd<0.35f){
             knightItemParams = new KnightItemParams(knightItemType,4,2,20*itemHealth,0.5f*itemMight,4*itemSpeed);
             knightItem = new KnightItem(x, y, cellSize, cellSize, mainStage, row, col,cradleGame,knightItemParams,null);
@@ -1132,9 +1136,11 @@ public void RemoveAndFillSquare(int centreRow, int centreCol, int squareSize){
         }
 
 
+
         knightItemParams = new KnightItemParams(knightItemType,1,1,5*itemHealth,0.1f*itemMight,1*itemSpeed);
         knightItem = new KnightItem(x, y, cellSize, cellSize, mainStage, row, col,cradleGame,knightItemParams,null);
         return  knightItem;
+*/
 
     }
 

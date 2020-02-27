@@ -93,7 +93,7 @@ public class Knight extends BaseActor {
     }
 
     private void showHealth(){
-        int n = Math.round(10-knightParams.getHealth()/10f);
+        int n = Math.round(10-10f*knightParams.getHealth()/knightParams.getCurrentHealthMaximum());
         healthActor.setElapsedTime(n);
         System.out.println("showHealth: setElapsedTime = "+ n);
         System.out.println("knightParams.getHealth()= " + knightParams.getHealth());

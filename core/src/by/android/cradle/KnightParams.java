@@ -85,7 +85,7 @@ public class KnightParams {
         moveAllItemsToPassive();
 
         // for debug!
-        passiveKnightItemParamsArrayList.clear();
+        //passiveKnightItemParamsArrayList.clear();
 
 
 
