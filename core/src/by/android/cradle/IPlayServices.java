@@ -16,5 +16,7 @@ public interface IPlayServices
     public boolean isSignedIn();
 
     public void logEvent(String id, String name, String content_type);
+    public void logLevelUpEvent(String id, String name, String content_type);
+
     public void connectUs();
 }

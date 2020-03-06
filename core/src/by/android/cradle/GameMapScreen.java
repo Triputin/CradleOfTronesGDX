@@ -39,6 +39,7 @@ public class GameMapScreen extends BaseScreen {
     private DialogBox castleIsYoursDialog;
     private Knight knight;
     private Weapon weapon;
+    private BlackMarket blackMarket;
 
     public GameMapScreen(CradleGame cradleGame,IPlayServices ply) {
 
@@ -297,6 +298,10 @@ public class GameMapScreen extends BaseScreen {
             arena.remove();
         }
 
+        if (blackMarket!=null) {
+            blackMarket.remove();
+        }
+
         if (continueButton!=null){
             continueButton.remove();
         }
@@ -327,6 +332,7 @@ public class GameMapScreen extends BaseScreen {
                     kingdoms[5] = new Kingdom(w*0.75f, h*0.25f,kingdomsize,kingdomsize,uiStage,Touchable.enabled,KingdomNames.Kingdom_of_the_Stormlands);
                     kingdoms[6] = new Kingdom(w*0.72f, h*0.6f,kingdomsize,kingdomsize,uiStage,Touchable.enabled,KingdomNames.Principality_of_Dorne);
                     arena = new Arena(w * 0.3f, h * 0.18f, Math.round(kingdomsize * 1.56f), kingdomsize, uiStage, Touchable.enabled);
+                    blackMarket = new BlackMarket(w * 0.54f, h * 0.4f, Math.round(kingdomsize * 1.56f), kingdomsize, uiStage, Touchable.enabled);
                     instrumental = musicArray[1];
                 break;
             case 1:
@@ -340,6 +346,8 @@ public class GameMapScreen extends BaseScreen {
                     kingdoms[5] = new Kingdom(w*0.14f, h*0.25f,kingdomsize,kingdomsize,uiStage,Touchable.enabled,KingdomNames.Kingdom_of_the_Stormlands);
                     kingdoms[6] = new Kingdom(w*0.78f, h*0.35f,kingdomsize,kingdomsize,uiStage,Touchable.enabled,KingdomNames.Principality_of_Dorne);
                     arena = new Arena(w * 0.77f, h * 0.25f, Math.round(kingdomsize * 1.56f), kingdomsize, uiStage, Touchable.enabled);
+                    blackMarket = new BlackMarket(w * 0.68f, h * 0.32f, Math.round(kingdomsize * 1.56f), kingdomsize, uiStage, Touchable.enabled);
+
                 break;
             case 3:
 
@@ -353,6 +361,7 @@ public class GameMapScreen extends BaseScreen {
                 kingdoms[5] = new Kingdom(w*0.6f, h*0.25f,kingdomsize,kingdomsize,uiStage,Touchable.enabled,KingdomNames.Kingdom_of_the_Stormlands);
                 kingdoms[6] = new Kingdom(w*0.75f, h*0.6f,kingdomsize,kingdomsize,uiStage,Touchable.enabled,KingdomNames.Principality_of_Dorne);
                 arena = new Arena(w * 0.15f, h * 0.15f, Math.round(kingdomsize * 1.56f), kingdomsize, uiStage, Touchable.enabled);
+                blackMarket = new BlackMarket(w * 0.3f, h * 0.2f, Math.round(kingdomsize * 1.56f), kingdomsize, uiStage, Touchable.enabled);
 
                 break;
 
@@ -368,6 +377,7 @@ public class GameMapScreen extends BaseScreen {
                 kingdoms[5] = new Kingdom(w*0.7f, h*0.3f,kingdomsize,kingdomsize,uiStage,Touchable.enabled,KingdomNames.Kingdom_of_the_Stormlands);
                 kingdoms[6] = new Kingdom(w*0.65f, h*0.6f,kingdomsize,kingdomsize,uiStage,Touchable.enabled,KingdomNames.Principality_of_Dorne);
                 arena = new Arena(w * 0.6f, h * 0.15f, Math.round(kingdomsize * 1.56f), kingdomsize, uiStage, Touchable.enabled);
+                blackMarket = new BlackMarket(w * 0.45f, h * 0.27f, Math.round(kingdomsize * 1.56f), kingdomsize, uiStage, Touchable.enabled);
 
                 break;
 
@@ -384,14 +394,15 @@ public class GameMapScreen extends BaseScreen {
                         if ((castleIsYoursDialog.getWidth()+kingdom.getX())>w){
                             castleIsYoursDialog.setX(w-castleIsYoursDialog.getWidth());
                         } else{
-                            castleIsYoursDialog.setX(kingdom.getX()+50);
+                            castleIsYoursDialog.setX(kingdom.getX()+70);
                         }
-                        castleIsYoursDialog.setY(kingdom.getY()+50);
+                        castleIsYoursDialog.setY(kingdom.getY()+70);
                         String s = cradleGame.getLanguageStrings().get("castleIsYours");
                         castleIsYoursDialog.setText(s);
                         final Action  completeAction = new Action(){
                             public boolean act( float delta ) {
-                                // Do your stuff
+                                //move outside to allow underline kingdom to be attacked
+                                castleIsYoursDialog.setX(-castleIsYoursDialog.getWidth());
                                 return true;
                             }
                         };
@@ -453,6 +464,19 @@ public class GameMapScreen extends BaseScreen {
         };
 
         arena.addListener(inputListener);
+
+        inputListener = new InputListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                if ( event.getType().equals(InputEvent.Type.touchDown) ) {
+                    cradleGame.setActiveBlackMarketScreen();
+                }
+                return false;
+            }
+        };
+
+        blackMarket.addListener(inputListener);
+
         if (messageActor01!=null) {
          messageActor01.setZIndex(arena.getZIndex() + 1);
         }
@@ -481,10 +505,14 @@ public class GameMapScreen extends BaseScreen {
         //Castle is yours info dialog
         if (castleIsYoursDialog == null ){
             castleIsYoursDialog = new DialogBox(0, 0, uiStage, Math.round(w*0.25f), Math.round(h*0.2f), cradleGame);
-            castleIsYoursDialog.setVisible(false);
-            castleIsYoursDialog.alignCenter();
-        }
 
+        } else
+        {
+            castleIsYoursDialog.remove();
+            castleIsYoursDialog = new DialogBox(0, 0, uiStage, Math.round(w*0.25f), Math.round(h*0.2f), cradleGame);
+        }
+        castleIsYoursDialog.setVisible(false);
+        castleIsYoursDialog.alignCenter();
 
         // Choose level of hardness
         dialogYSize = Math.round(h*0.6f);
@@ -549,7 +577,7 @@ public class GameMapScreen extends BaseScreen {
         };
 
         mapLevelInfoDialog.setText(getTextForMapLevel(mapLevel));
-        mapLevelInfoDialog.setFontScale(1.0f);
+        mapLevelInfoDialog.setFontScale(1.5f);
         mapLevelInfoDialog.setZIndex(101);
         mapLevelInfoDialog.showWithOkButton(inputListener2);
     }
@@ -656,7 +684,7 @@ public class GameMapScreen extends BaseScreen {
         messageLabel = new Label("...", BaseGame.labelStyle);
         String s = cradleGame.getLanguageStrings().get("throne_is_yours");
         messageLabel.setText(s);
-        messageLabel.setX((ww-w)/2f);
+        messageLabel.setX(ww/2f- messageLabel.getWidth()/2f);
         messageLabel.setY(h*0.3f);
         messageLabel.setFontScale(3);
         messageLabel.setVisible(true);

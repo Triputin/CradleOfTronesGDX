@@ -937,7 +937,8 @@ public void RemoveAndFillSquare(int centreRow, int centreCol, int squareSize){
         Cell cell;
         Cell firstCell;
         boolean isKnightItemPossible;
-        if (count>=7){
+        double rnd = Math.random();
+        if ((count>=7) && (rnd<0.3)){
             isKnightItemPossible = true;
         }else {
             isKnightItemPossible = false;
@@ -1105,15 +1106,15 @@ public void RemoveAndFillSquare(int centreRow, int centreCol, int squareSize){
             //Choose KnightItem
         if (rnd<0.6f){
             knightItemParams = new KnightItemParams(knightItemType,1,1, 5*itemHealth,0.1f*itemMight,1*itemSpeed);
-            knightItem = new KnightItem(x, y, cellSize, cellSize, mainStage, row, col,cradleGame,knightItemParams,null);
+            knightItem = new KnightItem(x, y, cellSize, cellSize, mainStage, row, col,cradleGame,knightItemParams,null,null);
             return  knightItem;
         }else if (rnd<0.8f){
             knightItemParams = new KnightItemParams(knightItemType,2,1,10*itemHealth,0.2f*itemMight,2*itemSpeed);
-            knightItem = new KnightItem(x, y, cellSize, cellSize, mainStage, row, col,cradleGame,knightItemParams,null);
+            knightItem = new KnightItem(x, y, cellSize, cellSize, mainStage, row, col,cradleGame,knightItemParams,null,null);
             return  knightItem;
         } else {
             knightItemParams = new KnightItemParams(knightItemType,3,1,15*itemHealth,0.3f*itemMight,3*itemSpeed);
-            knightItem = new KnightItem(x, y, cellSize, cellSize, mainStage, row, col,cradleGame,knightItemParams,null);
+            knightItem = new KnightItem(x, y, cellSize, cellSize, mainStage, row, col,cradleGame,knightItemParams,null,null);
             return  knightItem;
         }
 
@@ -1317,6 +1318,10 @@ public void RemoveAndFillSquare(int centreRow, int centreCol, int squareSize){
                 if (attackedKingdom!=null){
                     attackedKingdom.decreaseProtection();
                     setGameLevel(gameLevel+1);
+                    ply.logLevelUpEvent("1", "Win attack", "GameLevel Rised");
+                    if (attackedKingdom.getProtectionState() == 0){
+                        ply.logLevelUpEvent("2", "Protection state of Kingdom lowered to 0", "Kingdom captured");
+                    }
                 }
 
 

@@ -11,6 +11,7 @@ public class KnightActiveItemPlace extends DropTargetActor{
     {
         super(x,y,s);
         this.knightItemType = knightItemType;
+        setDropPlaceType(1);
         setHeight(height);
         setWidth(width);
         setBoundaryPolygon(8);

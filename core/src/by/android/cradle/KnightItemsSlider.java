@@ -133,7 +133,7 @@ public class KnightItemsSlider extends BaseActor {
 
             //Create Items
             for (KnightItemParams knightItemParams : passiveKnightItemParams) {
-                KnightItem knightItem = new KnightItem(-cellSize, y, cellSize, cellSize, stage, 0, i, cradleGame, knightItemParams,knightScreen);
+                KnightItem knightItem = new KnightItem(-cellSize, y, cellSize, cellSize, stage, 0, i, cradleGame, knightItemParams,knightScreen,null);
                 knightPassiveItemsArrayList.add(knightItem);
                 i++;
             }
@@ -148,7 +148,7 @@ public class KnightItemsSlider extends BaseActor {
         if (knight!=null) {
             ArrayList<KnightItemParams> activeKnightItemParams = knight.getActiveKnightItemParams();
             for (KnightItemParams knightItemParams: activeKnightItemParams){
-                knightItem = new KnightItem(-cellSize, 0, cellSize, cellSize, stage, 0, 0, cradleGame, knightItemParams,knightScreen);
+                knightItem = new KnightItem(-cellSize, 0, cellSize, cellSize, stage, 0, 0, cradleGame, knightItemParams,knightScreen,null);
                 switch(knightItemParams.getKnightItemType()){
                     case Shield:
                         knightItem.centerAtActor(knightScreen.knightActiveItemPlaceShield);

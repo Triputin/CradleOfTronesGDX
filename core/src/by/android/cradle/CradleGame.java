@@ -6,6 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.utils.I18NBundle;
 import com.badlogic.gdx.utils.Timer;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -16,6 +17,7 @@ public class CradleGame extends BaseGame
     //settings
     public  final String leaderboard = "CgkIiby2l-0EEAIQAQ";
     private final String LAST_LOGIN_DAY="lastloginday";
+    private final String LAST_KNIGHT_ITEM_GENERATED_DAY="lastknightitemgeneratedday";
     private final int DAILY_GIFT_AMOUNT = 25;
     public final int MaxGameMapLevel=4;
     private int gameMapLevel;
@@ -23,6 +25,7 @@ public class CradleGame extends BaseGame
     private KnightParams knightParams;
     private boolean isSoundOn;
     private boolean isMusicOn;
+    private ArrayList<KnightItemParams> knightItemsParamsDailyArrayList;
 
     //game screens
     private MenuScreen menuScreen;
@@ -32,6 +35,7 @@ public class CradleGame extends BaseGame
     private ShopScreen shopScreen;
     private SettingsScreen settingsScreen;
     private KnightScreen knightScreen;
+    private BlackMarketScreen blackMarketScreen;
 
     private static long SPLASH_MINIMUM_MILLIS = 3000L;
     //private SplashScreen splashScreen;
@@ -63,12 +67,6 @@ public class CradleGame extends BaseGame
                 Gdx.app.postRunnable(new Runnable() {
                     @Override
                     public void run() {
-                        // ... carga de datos
-                        // ... carga de fuentes tipograficas
-                        // ... carga de sonidos
-                        // ... carga de imagenes
-                        // ... carga de recursos de internacionalizacion
-                        // ... otros
 
                         Init();
                         // Se muestra el menu principal tras la SpashScreen
@@ -99,7 +97,7 @@ public class CradleGame extends BaseGame
          // Gdx.app.setLogLevel(Application.LOG_DEBUG);
 
          //Setup settings provider
-         prefs = Gdx.app.getPreferences("settings.prefs");
+         prefs = Gdx.app.getPreferences("settings.prefs2");
 
          knightParams = new KnightParams(prefs); // loads Knight settings
 
@@ -112,14 +110,15 @@ public class CradleGame extends BaseGame
          languageStrings = I18NBundle.createBundle(Gdx.files.internal("strings/strings"));
 
          getResFromStorage();
+         //GameRes.Gold=5000; // for debug
          //gameMapLevel=1; // for debug
-         //GameRes.Score=999; // for debug
+         GameRes.Score=999; // for debug
          knightParams.CheckKnightLevelAtScore(GameRes.Score); // Set KnightLevel according current dependence from Score. It's for old players.
          menuScreen = new MenuScreen(this,ply);
          screenGamePlay = new ScreenGamePlay(this,ply);
 
          int gameLevel = prefs.getInteger("gameLevel", 1);
-         //gameLevel = 3; // for debug purpose
+         //gameLevel = 2; // for debug purpose
          screenGamePlay.setGameLevel(gameLevel);
          difficultyLevel = prefs.getInteger("levelofhardness", 0);
          //difficultyLevel = 0; // for debug purpose
@@ -150,6 +149,8 @@ public class CradleGame extends BaseGame
          // Check daily gift
          GregorianCalendar calendarG = new GregorianCalendar();
          calendarG.setTime(new Date());
+         getDailySetOfKnightItems(calendarG);
+         blackMarketScreen = new BlackMarketScreen(this,ply);
 
          if(!prefs.contains(LAST_LOGIN_DAY)) {
              //first day in App
@@ -313,6 +314,17 @@ public class CradleGame extends BaseGame
 
     }
 
+
+    public  void setActiveBlackMarketScreen()
+    {
+        GdxLog.print("setActiveBlackMarketScreen():","Called");
+        game.setScreen(blackMarketScreen);
+        gameMapScreen.PauseMusic();
+
+        myRequestHandler.showAds(false);
+        ply.logEvent("10", "setActiveBlackMarketScreen", "Switch to");
+
+    }
     public  void setActiveSettingsScreen()
     {
 
@@ -450,8 +462,10 @@ public class CradleGame extends BaseGame
 
     public void setGameResGold(int gold){
         GameRes.Gold = gold;
-        //prefs.putInteger("Gold", gold);
+        prefs.putInteger("Gold", gold);
+        prefs.flush();
     }
+
     public void setGameResWood(int wood){
         GameRes.Wood = wood;
         //prefs.putInteger("Wood", wood);
@@ -489,6 +503,7 @@ public class CradleGame extends BaseGame
             }
         }
 
+        ply.logLevelUpEvent(String.valueOf(gameMapLevel), "setGameMapLevel", "setGameMapLevel");
     }
 
     public I18NBundle getLanguageStrings() {
@@ -511,17 +526,17 @@ public class CradleGame extends BaseGame
         int w = Gdx.graphics.getWidth();
         int h = Gdx.graphics.getHeight();
             String s = getLanguageStrings().get("information");
-            Dialog dialog = new Dialog(s, BaseGame.skin, "dialog") {
-                public void result(Object obj) {
-                    System.out.println("result " + obj);
-                }
+            Dialog dialog = new CustomDialog(s, BaseGame.skin, h*0.7f,h*0.3f) {
+            public void result(Object obj) {
+                System.out.println("result " + obj);
+            }
             };
             s = getLanguageStrings().get("you_hero_lost_all_lives")+ knightParams.getKnightLevel();
             dialog.text(s);
             s = getLanguageStrings().get("ok");
             dialog.button(s, true); //sends "true" as the result
             //dialog.button("No", false); //sends "false" as the result
-            dialog.setSize(h*0.4f,h*0.4f); //don't work
+            //dialog.setSize(h*0.4f,h*0.4f); //don't work
             dialog.show(gameMapScreen.uiStage);
 
     }
@@ -566,5 +581,46 @@ public class CradleGame extends BaseGame
         ply.connectUs();
     }
 
+    private void getDailySetOfKnightItems(GregorianCalendar calendarG){
+        knightItemsParamsDailyArrayList = new ArrayList<>();
+        int lastKnightItemsGeneratedDay = prefs.getInteger(LAST_KNIGHT_ITEM_GENERATED_DAY,0);
 
+        //Don't generate if set exists or was generated today already
+        if (lastKnightItemsGeneratedDay == calendarG.get(Calendar.DAY_OF_YEAR)){
+
+            for (int i=0; i<9;i++){
+                KnightItemParams knightItemParams = new KnightItemParams(KnightItemType.Helmet,1,1,
+                        0,0,0);
+
+                knightItemParams.load(prefs,200+i);
+                knightItemsParamsDailyArrayList.add(knightItemParams);
+            }
+
+            return;
+        }
+
+        //Generate abd save new KnightItemParams
+        knightItemsParamsDailyArrayList.clear();
+        for (int i=0; i<9;i++){
+            KnightItemParams knightItemParams = KnightItemParams.generateRandomKnightItemParamsForMarket();
+            knightItemsParamsDailyArrayList.add(knightItemParams);
+        }
+
+        saveDailySetOfKnightItems(calendarG);
+
+    }
+
+    private void saveDailySetOfKnightItems(GregorianCalendar calendar){
+        prefs.putInteger(LAST_KNIGHT_ITEM_GENERATED_DAY, calendar.get(Calendar.DAY_OF_YEAR));
+        int i=0;
+        for (KnightItemParams knightItemParams: knightItemsParamsDailyArrayList){
+            knightItemParams.save(prefs,200+i);
+            i++;
+        }
+
+    }
+
+    public ArrayList<KnightItemParams> getKnightItemsParamsDailyArrayList() {
+        return knightItemsParamsDailyArrayList;
+    }
 }

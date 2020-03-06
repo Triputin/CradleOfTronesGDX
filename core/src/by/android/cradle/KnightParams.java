@@ -15,6 +15,7 @@ public class KnightParams {
     private float cellsQttyToDestroy; // qtty cells from leftdown cell to destroy including start cell
     private int knightLevel;
 
+
     private ArrayList<KnightItemParams> activeKnightItemParamsArrayList; // set of Knight's active accessories
     private ArrayList<KnightItemParams> passiveKnightItemParamsArrayList; // set of Knight's passive accessories
 
@@ -37,6 +38,7 @@ public class KnightParams {
         currentHealthMaximum =  prefs.getInteger("currentHealthMaximum", FULL_HEALTH);
 
         int qttyOfActiveKnightItemParams = prefs.getInteger("qttyOfActiveKnightItemParams", 0);
+        if (qttyOfActiveKnightItemParams<0) { qttyOfActiveKnightItemParams = 0;}
         activeKnightItemParamsArrayList.clear();
         for (int i=0; i<qttyOfActiveKnightItemParams;i++){
             KnightItemParams knightItemParams = new KnightItemParams(KnightItemType.Helmet,1,1,
@@ -47,6 +49,7 @@ public class KnightParams {
         }
 
         int qttyOfPassiveKnightItemParams = prefs.getInteger("qttyOfPassiveKnightItemParams", 0);
+        if(qttyOfPassiveKnightItemParams<0 ){qttyOfPassiveKnightItemParams=0;}
         passiveKnightItemParamsArrayList.clear();
         for (int i=0; i<qttyOfPassiveKnightItemParams;i++){
             KnightItemParams knightItemParams = new KnightItemParams(KnightItemType.Helmet,1,1,
@@ -68,6 +71,7 @@ public class KnightParams {
         prefs.putInteger("currentHealthMaximum",currentHealthMaximum);
         prefs.putInteger("qttyOfActiveKnightItemParams",activeKnightItemParamsArrayList.size());
         prefs.putInteger("qttyOfPassiveKnightItemParams",passiveKnightItemParamsArrayList.size());
+
         int i=0;
         for(KnightItemParams knightItemParams: activeKnightItemParamsArrayList){
             knightItemParams.save(prefs,i);
@@ -237,6 +241,7 @@ public class KnightParams {
 
     public void CheckKnightLevelAtScore(int score){
         float ff = score;
+        if (ff<0) {ff=0;}
         setKnightLevel(1+(int)Math.sqrt(ff/1000f));
     }
 
@@ -252,4 +257,6 @@ public class KnightParams {
     public ArrayList<KnightItemParams> getPassiveKnightItemParamsArrayList() {
         return passiveKnightItemParamsArrayList;
     }
+
+
 }

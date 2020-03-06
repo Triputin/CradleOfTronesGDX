@@ -6,6 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.Touchable;
 public class DropTargetActor extends BaseActor
 {
     private boolean targetable;
+    private int dropPlaceType;
     public DropTargetActor(float x, float y, Stage s)
     {
         super(x,y,s, Touchable.disabled);
@@ -28,5 +29,13 @@ public class DropTargetActor extends BaseActor
 
     public KnightItem getTargetKnightItem(){
         return null;
+    }
+
+    public int getDropPlaceType() {
+        return dropPlaceType;
+    }
+
+    public void setDropPlaceType(int dropPlaceType) {
+        this.dropPlaceType = dropPlaceType;
     }
 }

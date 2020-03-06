@@ -15,6 +15,7 @@ public class KnightItem extends Item {
 
     private KnightItemParams knightItemParams;
     private KnightScreen knightScreen;
+    private BlackMarketScreen blackMarketScreen;
 
     //Drag and Drop
     protected KnightItem self;
@@ -26,10 +27,10 @@ public class KnightItem extends Item {
     private float startPositionY;
 
 
-    public KnightItem(float x, float y, int width, int height, Stage s, int row, int col, CradleGame cradleGame,KnightItemParams knightItemParams,KnightScreen knightScreen ) {
+    public KnightItem(float x, float y, int width, int height, Stage s, int row, int col, CradleGame cradleGame,KnightItemParams knightItemParams,KnightScreen knightScreen,BlackMarketScreen blackMarketScreen ) {
         super(x, y, width, height, s, Touchable.enabled, row, col, cradleGame);
         this.knightScreen = knightScreen;
-
+        this.blackMarketScreen = blackMarketScreen;
 
         // Очень важно, т.е. предок в лице DropTargetActor игнорирует все и ставит Disabled и события перестают доходить!!
         setTouchable(Touchable.enabled);
@@ -70,14 +71,30 @@ public class KnightItem extends Item {
                         if (list!=null) {
                             for (BaseActor actor : list) {
                                 DropTargetActor target = (DropTargetActor) actor;
-                                if (target.isTargetable() && self.overlaps(target) && (target.getTargetType()==self.knightItemParams.getKnightItemType().getValue())) {
-                                    float currentDistance =
-                                            Vector2.dst(self.getX(), self.getY(), target.getX(), target.getY());
-                                    // check if this target is even closer
-                                    if (currentDistance < closestDistance) {
-                                        self.setDropTarget(target);
-                                        closestDistance = currentDistance;
+                                if (target.isTargetable() && self.overlaps(target)){
+                                    switch (target.getDropPlaceType()){
+                                        case 1: // KnightScreen
+                                            if (target.getTargetType()==self.knightItemParams.getKnightItemType().getValue()) {
+                                                float currentDistance =
+                                                        Vector2.dst(self.getX(), self.getY(), target.getX(), target.getY());
+                                                // check if this target is even closer
+                                                if (currentDistance < closestDistance) {
+                                                    self.setDropTarget(target);
+                                                    closestDistance = currentDistance;
+                                                }
+                                            }
+                                            break;
+                                        case 2:
+                                            float currentDistance =
+                                                    Vector2.dst(self.getX(), self.getY(), target.getX(), target.getY());
+                                            // check if this target is even closer
+                                            if (currentDistance < closestDistance) {
+                                                self.setDropTarget(target);
+                                                closestDistance = currentDistance;
+                                            }
+                                            break;
                                     }
+
                                 }
                             }
                         }
@@ -255,28 +272,26 @@ public class KnightItem extends Item {
     }
 
     //Always locked so you can't select it in the field
+
     @Override
     public boolean isLocked(){
             return true;
     }
 
+
     public KnightItemParams getKnightItemParams() {
         return knightItemParams;
     }
-
-    /*
-    public void setSelected(boolean selected ){
+/*
+    @Override
+    public void setSelected(boolean selected, Item prev) {
         if(selected){
-            //loadTexture("shield.png", (int) getWidth(), (int) getHeight());
             lockImage01 = AddImage("bread_frosen.png",0,0, (int) getWidth(), (int) getHeight());
-            addActor(lockImage01);
-            //addActor(selectedBaseActor);
-        }else {
-            lockImage01 = AddImage("shield.png",0,0, (int) getWidth(), (int) getHeight());
-            addActor(lockImage01);
 
-            //loadTexture("coin2.png", (int) getWidth(), (int) getHeight());
-           // removeActor(selectedBaseActor);
+        }else {
+            if (lockImage01 !=null) {
+                lockImage01.remove();
+            }
 
         }
 
@@ -308,15 +323,57 @@ public class KnightItem extends Item {
         addAction( Actions.moveTo(startPositionX, startPositionY, 0.50f, Interpolation.pow3) );
     }
 
-    public void onDragStart() {}
+    public void onDragStart() {
+
+        if (blackMarketScreen!=null){
+            if (getKnightItemParams().getAddCellsQttyToDestroy()!=0) {
+                blackMarketScreen.getMightLabel().setText("+" + String.valueOf(getKnightItemParams().getAddCellsQttyToDestroy()));
+            }
+            if(getKnightItemParams().getAddHealth()!=0) {
+                blackMarketScreen.getLifeLabel().setText("+" + String.valueOf(getKnightItemParams().getAddHealth()));
+            }
+            if(getKnightItemParams().getAddRechargeWeaponTime()!=0) {
+                blackMarketScreen.getSpeedLabel().setText("-" + String.valueOf(getKnightItemParams().getAddRechargeWeaponTime()));
+            }
+        }
+
+    }
+
     public void onDrop() {
+
+        if (blackMarketScreen!=null){
+            blackMarketScreen.getMightLabel().setText("");
+            blackMarketScreen.getLifeLabel().setText("");
+            blackMarketScreen.getSpeedLabel().setText("");
+        }
+
         if (!hasDropTarget()){
             moveToStart();
-        } else {
+            return;
+        }
+        // check if place is in Knights screen (KnightActiveItemPlace)
+        if(dropTarget.getDropPlaceType()==1){
             self.centerAtActor(dropTarget);
             knightScreen.moveToActiveItemParams(self);
-
+            return;
         }
+        // check if place is in black market screen (KnightItemShopPlace)
+        if(dropTarget.getDropPlaceType()==2){
+
+           int itemPrice = knightItemParams.getPrice();
+            if(  GameRes.Gold > itemPrice) {
+                //self.centerAtActor(dropTarget);
+                KnightItemShopPlace knightItemShopPlace = (KnightItemShopPlace)dropTarget;
+                cradleGame.setGameResGold(GameRes.Gold - itemPrice);
+                cradleGame.getKnightParams().addKnightItemParams(self.getKnightItemParams());
+                self.remove();
+            } else {
+                moveToStart();
+                self.setDropTarget(null);
+            }
+            return;
+        }
+
     }
 
 }

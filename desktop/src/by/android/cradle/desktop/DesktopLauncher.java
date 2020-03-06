@@ -88,6 +88,10 @@ public class DesktopLauncher implements IActivityRequestHandler, IPlayServices {
 	}
 
 	@Override
+	public void logLevelUpEvent(String id, String name, String content_type){
+	}
+
+	@Override
 	public void connectUs() {
 
 	}

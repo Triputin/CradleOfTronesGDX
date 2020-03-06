@@ -492,7 +492,7 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
 	}
 
 	@Override
-	public void logEvent(String id, String name, String content_type){
+	public void logEvent( String id, String name, String content_type){
 
 		Bundle bundle = new Bundle();
 		bundle.putString(FirebaseAnalytics.Param.ITEM_ID, id);
@@ -501,6 +501,15 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
 		mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 	}
 
+	@Override
+	public void logLevelUpEvent( String id, String name, String content_type){
+
+		Bundle bundle = new Bundle();
+		bundle.putString(FirebaseAnalytics.Param.ITEM_ID, id);
+		bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, name);
+		bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, content_type);
+		mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.LEVEL_UP, bundle);
+	}
 	@Override
 	public void connectUs() {
 
