@@ -139,6 +139,24 @@ public class KnightParams {
 
     }
 
+    public void moveToPassiveItemParams(KnightItemParams knightItemParams){
+
+        if(knightItemParams!=null) {
+            //check if item is in active list
+            boolean isActive = false;
+            for (int i = 0; i < activeKnightItemParamsArrayList.size(); i++) {
+                if (activeKnightItemParamsArrayList.get(i) == knightItemParams) {
+                    isActive = true;
+                }
+            }
+            if (isActive) {
+                    passiveKnightItemParamsArrayList.add(knightItemParams);
+                    removeFromActiveItemParams(knightItemParams);
+            }
+
+        }
+    }
+
     public void addToActiveItemParams(KnightItemParams knightItemParams) {
         System.out.println("addToActiveItemParams: " + knightItemParams.getKnightItemType().toString());
         activeKnightItemParamsArrayList.add(knightItemParams);

@@ -202,6 +202,7 @@ public class KnightScreen extends BaseScreen {
                 mainStage, Touchable.enabled, knight, cradleGame,this);
 
         knightItemsSlider.showKnightItems(knight);
+        knightItemsSlider.setBoundaryPolygon(8);
 
     }
 
@@ -238,10 +239,15 @@ public class KnightScreen extends BaseScreen {
 
     public void moveToActiveItemParams(KnightItem knightItem){
         cradleGame.getKnightParams().moveToActiveItemParams(knightItem.getKnightItemParams());
-        //knightItemsSlider.showKnightItems(knight);
         SetParams(cradleGame.getKnightParams());
     }
 
+
+    public void moveToPassiveItemParams(KnightItem knightItem){
+        cradleGame.getKnightParams().moveToPassiveItemParams(knightItem.getKnightItemParams());
+        //knightItemsSlider.showKnightItems(knight);
+        SetParams(cradleGame.getKnightParams());
+    }
 
 }
 

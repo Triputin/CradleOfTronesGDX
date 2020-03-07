@@ -93,6 +93,13 @@ public class KnightItem extends Item {
                                                 closestDistance = currentDistance;
                                             }
                                             break;
+
+                                        case 3:
+
+                                                    self.setDropTarget(target);
+
+
+                                                break;
                                     }
 
                                 }
@@ -371,6 +378,12 @@ public class KnightItem extends Item {
                 moveToStart();
                 self.setDropTarget(null);
             }
+            return;
+        }
+
+        // if dropped to slider in Knights screen
+        if(dropTarget.getDropPlaceType()==3){
+            knightScreen.moveToPassiveItemParams(self);
             return;
         }
 

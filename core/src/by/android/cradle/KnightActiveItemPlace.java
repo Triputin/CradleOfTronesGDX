@@ -15,6 +15,7 @@ public class KnightActiveItemPlace extends DropTargetActor{
         setHeight(height);
         setWidth(width);
         setBoundaryPolygon(8);
+        setDropPlaceType(1);
         AddImage("knightitems/frame01.png",0,0,Math.round(getWidth()),Math.round(getHeight()));
         switch(knightItemType){
             case Gloves:

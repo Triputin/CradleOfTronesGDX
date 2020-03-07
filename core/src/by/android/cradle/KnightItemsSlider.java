@@ -15,7 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
 import java.util.ArrayList;
 
-public class KnightItemsSlider extends BaseActor {
+public class KnightItemsSlider extends DropTargetActor {
     private ArrayList<KnightItem> knightPassiveItemsArrayList;
     private Stage stage;
     private Knight knight;
@@ -27,7 +27,11 @@ public class KnightItemsSlider extends BaseActor {
 
 
     public KnightItemsSlider(float x, float y, int width, int height, Stage s, Touchable touchable, Knight knight, CradleGame cradleGame, KnightScreen knightScreen) {
-        super(x, y, s, touchable);
+        super(x, y, s);
+        setTouchable(touchable);
+
+        setDropPlaceType(3);
+        setTargetable(true);
         this.stage = s;
         this.knight = knight;
         this.cradleGame = cradleGame;
@@ -37,6 +41,7 @@ public class KnightItemsSlider extends BaseActor {
         setHeight(height);
         setWidth(width);
         this.cellSize = height;
+        setBoundaryPolygon(8);
 
 
         //Tiled texture

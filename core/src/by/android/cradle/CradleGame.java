@@ -112,7 +112,7 @@ public class CradleGame extends BaseGame
          getResFromStorage();
          //GameRes.Gold=5000; // for debug
          //gameMapLevel=1; // for debug
-         GameRes.Score=999; // for debug
+         //GameRes.Score=999; // for debug
          knightParams.CheckKnightLevelAtScore(GameRes.Score); // Set KnightLevel according current dependence from Score. It's for old players.
          menuScreen = new MenuScreen(this,ply);
          screenGamePlay = new ScreenGamePlay(this,ply);
