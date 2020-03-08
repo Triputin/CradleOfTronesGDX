@@ -1347,7 +1347,7 @@ public void RemoveAndFillSquare(int centreRow, int centreCol, int squareSize){
 
                         GameRes.Score=GameRes.Score+Math.round(score_during_attack); // increase score if win
                         collectAllKnightItems();
-                        cradleGame.setActiveGameMapScreen(isHeroLevelNeedsShow);
+                        cradleGame.setActiveGameMapScreen(isHeroLevelNeedsShow,0);
 
 
                         return true;
@@ -1480,7 +1480,7 @@ public void RemoveAndFillSquare(int centreRow, int centreCol, int squareSize){
                             return false;
                         knight.doDamage();
                         collectAllKnightItems();
-                        cradleGame.setActiveGameMapScreen(false);
+                        cradleGame.setActiveGameMapScreen(false,0);
 
                         return true;
                     }

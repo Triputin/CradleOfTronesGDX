@@ -96,7 +96,7 @@ public class MenuScreen extends BaseScreen {
                 if (!((InputEvent) e).getType().equals(InputEvent.Type.touchDown))
                     return false;
                 instrumental.pause();
-                cradleGame.setActiveGameMapScreen(false);
+                cradleGame.setActiveGameMapScreen(false,0);
                 return true;
             }
         });
@@ -311,7 +311,7 @@ public class MenuScreen extends BaseScreen {
     {
         if (Gdx.input.isKeyPressed(Input.Keys.ENTER))
 
-        cradleGame.setActiveGameMapScreen(false);
+        cradleGame.setActiveGameMapScreen(false,0);
         if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE))
             Gdx.app.exit();
         return false;

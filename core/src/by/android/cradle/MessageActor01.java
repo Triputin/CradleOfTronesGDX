@@ -64,7 +64,7 @@ public class MessageActor01 extends BaseActor {
                 if (!((InputEvent) e).getType().equals(InputEvent.Type.touchDown))
                     return false;
 
-                cradleGame.setActiveGameMapScreen(false);
+                cradleGame.setActiveGameMapScreen(false,0);
                 return true;
             }
         });

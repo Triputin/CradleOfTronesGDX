@@ -36,6 +36,7 @@ public class CradleGame extends BaseGame
     private SettingsScreen settingsScreen;
     private KnightScreen knightScreen;
     private BlackMarketScreen blackMarketScreen;
+    private WorldScreen worldScreen;
 
     private static long SPLASH_MINIMUM_MILLIS = 3000L;
     //private SplashScreen splashScreen;
@@ -144,7 +145,7 @@ public class CradleGame extends BaseGame
 
          settingsScreen = new SettingsScreen(this,ply);
          knightScreen = new KnightScreen(this,ply);
-
+         worldScreen = new WorldScreen(this,ply);
 
          // Check daily gift
          GregorianCalendar calendarG = new GregorianCalendar();
@@ -302,6 +303,16 @@ public class CradleGame extends BaseGame
         ply.logEvent("2", "setActiveHelpScreen", "Switch to");
     }
 
+    public  void setActiveWorldScreen()
+    {
+        GdxLog.print("setActiveWorldScreen():","Called");
+        game.setScreen(worldScreen);
+        gameMapScreen.PauseMusic();
+        worldScreen.PlayMusic();
+        myRequestHandler.showAds(false);
+        ply.logEvent("21", "setActiveWorldScreen", "Switch to");
+    }
+
     public  void setActiveKnightScreen()
     {
         GdxLog.print("setActiveKnightScreen():","Called");
@@ -349,7 +360,7 @@ public class CradleGame extends BaseGame
 
     }
 
-    public  void setActiveGameMapScreen(boolean showNewHeroLevel)
+    public  void setActiveGameMapScreen(boolean showNewHeroLevel, int mapLevel)
     {
         //System.out.println("setActiveGameMapScreen");
         ply.logEvent("6", "setActiveGameMapScreen", "Switch to");
@@ -361,10 +372,15 @@ public class CradleGame extends BaseGame
         int w = Gdx.graphics.getWidth();
         int h = Gdx.graphics.getHeight();
         game.setScreen(gameMapScreen);
+        if (mapLevel>0) {
+            gameMapScreen.initializeMap(mapLevel);
+        }
         gameMapScreen.UpdateRes(); //Shows Thron if maplevel ended
 
         screenGamePlay.setPaused(true);
         menuScreen.PauseMusic();
+        worldScreen.PauseMusic();
+        //screenGamePlay.PauseMusic();
         gameMapScreen.PlayMusic();
         gameMapScreen.SetMessageActorVisibility(false);
         myRequestHandler.showAds(true);
@@ -622,5 +638,9 @@ public class CradleGame extends BaseGame
 
     public ArrayList<KnightItemParams> getKnightItemsParamsDailyArrayList() {
         return knightItemsParamsDailyArrayList;
+    }
+
+    public int getMaxGameMapLevel() {
+        return MaxGameMapLevel;
     }
 }

@@ -152,28 +152,6 @@ public class GameMapScreen extends BaseScreen {
             }
         });
 
-        //Menu Button
-        /*
-        String s = cradleGame.getLanguageStrings().get("menu");
-        TextButton backButton = new TextButton( s, BaseGame.textButtonStyle );
-        backButton.setPosition(w*0.00f,h*0.88f);
-        uiStage.addActor(backButton);
-
-        backButton.addListener(new InputListener() {
-            public boolean touchDown (InputEvent e, float x, float y, int pointer, int button){
-                if (!(e instanceof InputEvent))
-                    return false;
-
-                if (!((InputEvent) e).getType().equals(InputEvent.Type.touchDown))
-                    return false;
-                instrumental.pause();
-                UpdateRes();
-                cradleGame.setActiveMenuScreen();
-                return true;
-            }
-        });
-
-*/
 
         //Shop button
         Button.ButtonStyle buttonStyle2 = new Button.ButtonStyle();
@@ -183,7 +161,7 @@ public class GameMapScreen extends BaseScreen {
         buttonStyle2.up = new TextureRegionDrawable( buttonRegion2 );
         Button shopButton = new Button( buttonStyle2 );
         shopButton.setSize(h*0.25f,h*0.25f);
-        shopButton.setPosition(w-shopButton.getWidth(),h*0.4f);
+        shopButton.setPosition(w-shopButton.getWidth(),h*0.42f);
         uiStage.addActor(shopButton);
 
         shopButton.addListener(new InputListener() {
@@ -199,33 +177,29 @@ public class GameMapScreen extends BaseScreen {
             }
         });
 
+        //World button
+        Button.ButtonStyle buttonStyleW = new Button.ButtonStyle();
 
-        //Shop Button
-        /*
-        String s = cradleGame.getLanguageStrings().get("exchange");
-        shopButton = new TextButton( s, BaseGame.textButtonStyle );
-        shopButton.setPosition(w*0.00f,h*0.03f);
-        uiStage.addActor(shopButton);
+        Texture buttonTexW = new Texture( Gdx.files.internal("world_button.png") );
+        TextureRegion buttonRegionW =  new TextureRegion(buttonTexW);
+        buttonStyleW.up = new TextureRegionDrawable( buttonRegionW );
+        Button worldButton = new Button( buttonStyleW );
+        worldButton.setSize(h*0.235f,h*0.235f);
+        worldButton.setPosition(w-shopButton.getWidth(),h*0.2f);
+        uiStage.addActor(worldButton);
 
-        shopButton.addListener(new InputListener() {
-            public boolean touchDown (InputEvent e, float x, float y, int pointer, int button){
-                if (!(e instanceof InputEvent))
-                    return false;
-
-                if (!((InputEvent) e).getType().equals(InputEvent.Type.touchDown))
-                    return false;
-                instrumental.pause();
-                cradleGame.setActiveShopScreen();
-                return true;
+        worldButton.addListener(new InputListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                InputEvent ie = (InputEvent)event;
+                if ( ie.getType().equals(InputEvent.Type.touchDown) ) {
+                    instrumental.pause();
+                    cradleGame.setActiveWorldScreen();
+                    return true;
+                }
+                return false;
             }
         });
-
-        */
-
-        // uiTable.add(title).colspan(2);
-        // uiTable.row();
-        // uiTable.add(backButton);
-        // uiTable.add(quitButton);
 
         messageActor01 = new MessageActor01(0,0,uiStage,500,200,cradleGame);
         messageActor01.setVisible(false);
@@ -322,7 +296,7 @@ public class GameMapScreen extends BaseScreen {
 
             case 2:
 
-                    worldMap.loadTexture("maps/worldmap03.png", w, h);
+                    worldMap.loadTexture("maps/worldmap02.png", w, h);
 
                     kingdoms[0] = new Kingdom(w * 0.3f, h * 0.56f, kingdomsize, kingdomsize, uiStage, Touchable.enabled, KingdomNames.Kingdom_of_the_North);
                     kingdoms[1] = new Kingdom(w * 0.26f, h * 0.3f, kingdomsize, kingdomsize, uiStage, Touchable.enabled, KingdomNames.Kingdom_of_the_Isles_and_Rivers);
@@ -336,7 +310,7 @@ public class GameMapScreen extends BaseScreen {
                     instrumental = musicArray[1];
                 break;
             case 1:
-                worldMap.loadTexture( "maps/worldmap02.png",w,h );
+                worldMap.loadTexture( "maps/worldmap01.png",w,h );
 
                     kingdoms[0] = new Kingdom(w * 0.16f, h * 0.56f, kingdomsize, kingdomsize, uiStage, Touchable.enabled, KingdomNames.Kingdom_of_the_North);
                     kingdoms[1] = new Kingdom(w * 0.28f, h * 0.3f, kingdomsize, kingdomsize, uiStage, Touchable.enabled, KingdomNames.Kingdom_of_the_Isles_and_Rivers);
@@ -351,7 +325,7 @@ public class GameMapScreen extends BaseScreen {
                 break;
             case 3:
 
-                worldMap.loadTexture("maps/worldmap04.png", w, h);
+                worldMap.loadTexture("maps/worldmap03.png", w, h);
 
                 kingdoms[0] = new Kingdom(w * 0.2f, h * 0.56f, kingdomsize, kingdomsize, uiStage, Touchable.enabled, KingdomNames.Kingdom_of_the_North);
                 kingdoms[1] = new Kingdom(w * 0.1f, h * 0.3f, kingdomsize, kingdomsize, uiStage, Touchable.enabled, KingdomNames.Kingdom_of_the_Isles_and_Rivers);
@@ -367,7 +341,7 @@ public class GameMapScreen extends BaseScreen {
 
             case 4:
 
-                worldMap.loadTexture("maps/worldmap05.png", w, h);
+                worldMap.loadTexture("maps/worldmap04.png", w, h);
 
                 kingdoms[0] = new Kingdom(w * 0.5f, h * 0.45f, kingdomsize, kingdomsize, uiStage, Touchable.enabled, KingdomNames.Kingdom_of_the_North);
                 kingdoms[1] = new Kingdom(w * 0.4f, h * 0.3f, kingdomsize, kingdomsize, uiStage, Touchable.enabled, KingdomNames.Kingdom_of_the_Isles_and_Rivers);

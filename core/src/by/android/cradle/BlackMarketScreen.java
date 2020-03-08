@@ -130,7 +130,7 @@ public class BlackMarketScreen extends BaseScreen {
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 InputEvent ie = (InputEvent) event;
                 if (ie.getType().equals(InputEvent.Type.touchDown)) {
-                    cradleGame.setActiveGameMapScreen(false);
+                    cradleGame.setActiveGameMapScreen(false,0);
                     return true;
                 }
                 return false;
