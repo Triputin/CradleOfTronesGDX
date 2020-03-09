@@ -1,21 +1,46 @@
 package by.android.cradle;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Interpolation;
+import com.badlogic.gdx.scenes.scene2d.Action;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.fadeIn;
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.fadeOut;
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.sequence;
 
 public class Kingdom extends BaseActor {
 
     private KingdomNames kingdomNames;
     private KingdomRes kingdomRes;
     private int protectionState;
-    private  Label protectionStateLabel;
+    private Label protectionStateLabel;
     private Animation<TextureRegion> animation;
     private int flagSize;
     private BaseActor baseActor;
+    private long timeOfLastGoldCollection;
+    private Label timeStateLabel;
+    private int levelOfKingdom;
+    private final CradleGame cradleGame;
+    private Actor goldImage;
+    private Sound coinSound;
+    private int goldImageX;
+    private int goldImageY;
+    private int w;
+    private int h;
+    private final ResultsActor resultsActor;
+
+    private int kingdomID; // Should be an unique number through the whole game
 
     private String[] filenames0 =
             { "flag_red/flag02.png", "flag_red/flag03.png",
@@ -73,23 +98,64 @@ public class Kingdom extends BaseActor {
                     "flag_gray/flag10.png", "flag_gray/flag11.png", "flag_gray/flag12.png"
             };
 
-    public Kingdom(float x, float y, int width, int height, Stage s, Touchable touchable,KingdomNames kingdomNames)
+    public Kingdom(float x, float y, int width, int height, Stage s, Touchable touchable,KingdomNames kingdomNames, int kingdomID, final CradleGame  cradleGame,final ResultsActor resultsActor)
     {
         super(x,y,s, touchable);
+        this.cradleGame = cradleGame;
+        this.resultsActor = resultsActor;
         flagSize = height;
-
+        this.kingdomID = kingdomID;
         this.kingdomNames = kingdomNames;
         kingdomRes = new KingdomRes();
         protectionState = 1;
+        setHeight(height);
+        setWidth(width);
+        setBoundaryPolygon(8);
+        coinSound = Gdx.audio.newSound(Gdx.files.internal("sounds/change_drop_on_wood.mp3"));
+        // Get screen size
+         w = Gdx.graphics.getWidth();
+         h = Gdx.graphics.getHeight();
 
         setUpKingdomFlagAndResources(width, height,s,kingdomNames);
+        final Action  completeAction = new Action(){
+            public boolean act( float delta ) {
+                goldImage.setVisible(false);
+                goldImage.setPosition(goldImageX,goldImageY);
+                cradleGame.setGameResGold(GameRes.Gold+getGoldForLevelOfKingdom());
+                resultsActor.UpdateRes();
+                saveParams();
+                return true;
+            }
+        };
+        addListener(
+                new InputListener() {
+                    public boolean touchDown(InputEvent event, float offsetX, float offsetY,
+                                             int pointer, int button) {
+
+                        long timeForLevelOfKingdom = getTimeForLevelOfKingdom();
+                        long timeToShow = timeForLevelOfKingdom - (System.currentTimeMillis() - timeOfLastGoldCollection);
+                        if (timeToShow<=0) {
+                            timeOfLastGoldCollection = System.currentTimeMillis();
+                            if(cradleGame.isSoundOn()){
+                                coinSound.play(1f);
+                            }
+                            Action actions = sequence(Actions.moveTo(w*0.4f, h, 2.00f, Interpolation.bounceOut),completeAction,fadeIn(0.01f));
+                            goldImage.addAction(actions);
+                            goldImage.addAction(fadeOut(2.0f));
+
+                        }
+
+                        return  true;
+                    }
+                });
 
     }
 
     private void setUpKingdomFlagAndResources(int width, int height, Stage s,KingdomNames kingdomNames){
         String[] filenames;
         String flagBasementName;
-
+        timeOfLastGoldCollection = cradleGame.getPrefs().getLong("KingdomTime"+kingdomID,System.currentTimeMillis());
+        levelOfKingdom = cradleGame.getPrefs().getInteger("LevelOfKingdom"+kingdomID,1);
         switch (kingdomNames){
             case Kingdom_of_the_North: kingdomRes.Bread = 10;
                 kingdomRes.Gold = 10;
@@ -168,6 +234,17 @@ public class Kingdom extends BaseActor {
         protectionStateLabel.setPosition( (int) (int) ((width*0.05f)),(int)(0-(height*0.4f)));
         protectionStateLabel.setFontScale(1.2f);
         baseActor.addActor(protectionStateLabel);
+
+        timeStateLabel = new Label("", BaseGame.labelStyle);
+        timeStateLabel.setColor( Color.GOLDENROD );
+        timeStateLabel.setPosition( (int) ((width*0.4f)),(int)(height*0.7f));
+        timeStateLabel.setFontScale(1.2f);
+        addActor(timeStateLabel);
+
+        goldImageX = Math.round(getWidth()*0.3f);
+        goldImageY = Math.round(getHeight()*0.4f);
+        goldImage = AddImage("coin2.png",goldImageX,goldImageY,Math.round(getWidth()*0.9f),Math.round(getWidth()*0.9f));
+        goldImage.setVisible(false);
     }
 
     public KingdomRes getKingdomResForAttack(){
@@ -333,5 +410,72 @@ public void resetProtectionState(int gameMapLevel) {
         baseActor.setAnimation(animation);
         baseActor.AddImage(flagBasementName,0,0,flagSize,flagSize);
 
+    }
+
+    @Override
+    public void act(float dt) {
+        super.act(dt);
+        if (protectionState==0) {
+            showTimeTillGoldCollection();
+        }
+    }
+
+    private void showTimeTillGoldCollection(){
+
+        long timeForLevelOfKingdom = getTimeForLevelOfKingdom();
+
+        long timeToShow = timeForLevelOfKingdom - (System.currentTimeMillis() - timeOfLastGoldCollection);
+        if (timeToShow>0) {
+            if(timeToShow<60000) {
+                timeStateLabel.setText(String.valueOf(Math.round(timeToShow / 1000f))+"s");
+            }
+            if((timeToShow>=60000) && (timeToShow<3600000)){
+                timeStateLabel.setText(String.valueOf(Math.round(timeToShow / 60000f))+"m");
+            }
+            if((timeToShow>=3600000)){
+                timeStateLabel.setText(String.valueOf(Math.round(timeToShow / 3600000f))+"h");
+            }
+
+            timeStateLabel.setX(baseActor.getWidth()*0.5f-timeStateLabel.getWidth()*0.5f);
+
+        }
+        else{
+            timeStateLabel.setText("");
+            goldImage.setVisible(true);
+
+        }
+    }
+
+    private long getTimeForLevelOfKingdom(){
+        long timeForLevelOfKingdom=10000;
+
+        switch(levelOfKingdom){
+            case 1:
+                timeForLevelOfKingdom=1200000;
+                break;
+
+        }
+
+        return timeForLevelOfKingdom;
+    }
+
+
+    private int getGoldForLevelOfKingdom(){
+        int goldForLevelOfKingdom=10;
+
+        switch(levelOfKingdom){
+            case 1:
+                goldForLevelOfKingdom=20;
+                break;
+
+        }
+
+        return goldForLevelOfKingdom;
+    }
+
+    private void saveParams(){
+        cradleGame.getPrefs().putLong("KingdomTime"+kingdomID,timeOfLastGoldCollection);
+        cradleGame.getPrefs().putInteger("LevelOfKingdom"+kingdomID,levelOfKingdom);
+        cradleGame.getPrefs().flush();
     }
 }

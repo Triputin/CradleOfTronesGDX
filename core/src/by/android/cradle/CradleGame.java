@@ -27,6 +27,7 @@ public class CradleGame extends BaseGame
     private boolean isMusicOn;
     private ArrayList<KnightItemParams> knightItemsParamsDailyArrayList;
 
+
     //game screens
     private MenuScreen menuScreen;
     private GameMapScreen gameMapScreen;
@@ -642,5 +643,9 @@ public class CradleGame extends BaseGame
 
     public int getMaxGameMapLevel() {
         return MaxGameMapLevel;
+    }
+
+    public Preferences getPrefs() {
+        return prefs;
     }
 }

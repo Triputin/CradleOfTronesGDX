@@ -89,6 +89,16 @@ public class GameMapScreen extends BaseScreen {
         //h=h-60; //add place for adMob
 
 
+        //Fon for results
+        BaseActor fon = new BaseActor(0,0,uiStage,Touchable.disabled);
+        fon.loadTexture("fon_orange.png",(int) Math.round(w*0.8)+30,70);
+        fon.setX((int) Math.round(w*0.25));
+        fon.setY(h-70);
+
+        BaseActor baseResultsActor = new BaseActor(w*0.25f,h-70,uiStage,Touchable.disabled);
+        baseResultsActor.setWidth((int) Math.round(w*0.8));
+        baseResultsActor.setHeight(70);
+        resultsActor = new ResultsActor(0,0,(int) Math.round(w*0.8),70,uiStage,Touchable.disabled,baseResultsActor);
 
         initializeMap(cradleGame.getGameMapLevel());
         instrumental.pause();
@@ -114,16 +124,6 @@ public class GameMapScreen extends BaseScreen {
         weapon = new Weapon(knSize*0.585f,h-knSize*0.34f,wpSize,wpSize,mainStage,cradleGame,knight);
 
 
-        //Fon for results
-        BaseActor fon = new BaseActor(0,0,mainStage,Touchable.disabled);
-        fon.loadTexture("fon_orange.png",(int) Math.round(w*0.8)+30,70);
-        fon.setX((int) Math.round(w*0.25));
-        fon.setY(h-70);
-
-        BaseActor baseResultsActor = new BaseActor(w*0.25f,h-70,mainStage,Touchable.disabled);
-        baseResultsActor.setWidth((int) Math.round(w*0.8));
-        baseResultsActor.setHeight(70);
-        resultsActor = new ResultsActor(0,0,(int) Math.round(w*0.8),70,mainStage,Touchable.disabled,baseResultsActor);
 
 
         //Menu button
@@ -298,13 +298,13 @@ public class GameMapScreen extends BaseScreen {
 
                     worldMap.loadTexture("maps/worldmap02.png", w, h);
 
-                    kingdoms[0] = new Kingdom(w * 0.3f, h * 0.56f, kingdomsize, kingdomsize, uiStage, Touchable.enabled, KingdomNames.Kingdom_of_the_North);
-                    kingdoms[1] = new Kingdom(w * 0.26f, h * 0.3f, kingdomsize, kingdomsize, uiStage, Touchable.enabled, KingdomNames.Kingdom_of_the_Isles_and_Rivers);
-                    kingdoms[2] = new Kingdom(w*0.6f, h*0.55f,kingdomsize,kingdomsize,uiStage,Touchable.enabled,KingdomNames.Kingdom_of_the_Mountain_and_the_Vale);
-                    kingdoms[3] = new Kingdom(w*0.4f, h*0.45f,kingdomsize,kingdomsize,uiStage,Touchable.enabled,KingdomNames.Kingdom_of_the_Reach);
-                    kingdoms[4] = new Kingdom(w*0.45f, h*0.15f,kingdomsize,kingdomsize,uiStage,Touchable.enabled,KingdomNames.Kingdom_of_the_Rock);
-                    kingdoms[5] = new Kingdom(w*0.75f, h*0.25f,kingdomsize,kingdomsize,uiStage,Touchable.enabled,KingdomNames.Kingdom_of_the_Stormlands);
-                    kingdoms[6] = new Kingdom(w*0.72f, h*0.6f,kingdomsize,kingdomsize,uiStage,Touchable.enabled,KingdomNames.Principality_of_Dorne);
+                    kingdoms[0] = new Kingdom(w * 0.3f, h * 0.56f, kingdomsize, kingdomsize, uiStage, Touchable.enabled, KingdomNames.Kingdom_of_the_North,10,cradleGame,resultsActor);
+                    kingdoms[1] = new Kingdom(w * 0.26f, h * 0.3f, kingdomsize, kingdomsize, uiStage, Touchable.enabled, KingdomNames.Kingdom_of_the_Isles_and_Rivers,11,cradleGame,resultsActor);
+                    kingdoms[2] = new Kingdom(w*0.6f, h*0.55f,kingdomsize,kingdomsize,uiStage,Touchable.enabled,KingdomNames.Kingdom_of_the_Mountain_and_the_Vale,12,cradleGame,resultsActor);
+                    kingdoms[3] = new Kingdom(w*0.4f, h*0.45f,kingdomsize,kingdomsize,uiStage,Touchable.enabled,KingdomNames.Kingdom_of_the_Reach,13,cradleGame,resultsActor);
+                    kingdoms[4] = new Kingdom(w*0.45f, h*0.15f,kingdomsize,kingdomsize,uiStage,Touchable.enabled,KingdomNames.Kingdom_of_the_Rock,14,cradleGame,resultsActor);
+                    kingdoms[5] = new Kingdom(w*0.75f, h*0.25f,kingdomsize,kingdomsize,uiStage,Touchable.enabled,KingdomNames.Kingdom_of_the_Stormlands,15,cradleGame,resultsActor);
+                    kingdoms[6] = new Kingdom(w*0.72f, h*0.6f,kingdomsize,kingdomsize,uiStage,Touchable.enabled,KingdomNames.Principality_of_Dorne,16,cradleGame,resultsActor);
                     arena = new Arena(w * 0.3f, h * 0.18f, Math.round(kingdomsize * 1.56f), kingdomsize, uiStage, Touchable.enabled);
                     blackMarket = new BlackMarket(w * 0.54f, h * 0.4f, Math.round(kingdomsize * 1.56f), kingdomsize, uiStage, Touchable.enabled);
                     instrumental = musicArray[1];
@@ -312,13 +312,13 @@ public class GameMapScreen extends BaseScreen {
             case 1:
                 worldMap.loadTexture( "maps/worldmap01.png",w,h );
 
-                    kingdoms[0] = new Kingdom(w * 0.16f, h * 0.56f, kingdomsize, kingdomsize, uiStage, Touchable.enabled, KingdomNames.Kingdom_of_the_North);
-                    kingdoms[1] = new Kingdom(w * 0.28f, h * 0.3f, kingdomsize, kingdomsize, uiStage, Touchable.enabled, KingdomNames.Kingdom_of_the_Isles_and_Rivers);
-                    kingdoms[2] = new Kingdom(w*0.6f, h*0.4f,kingdomsize,kingdomsize,uiStage,Touchable.enabled,KingdomNames.Kingdom_of_the_Mountain_and_the_Vale);
-                    kingdoms[3] = new Kingdom(w*0.4f, h*0.28f,kingdomsize,kingdomsize,uiStage,Touchable.enabled,KingdomNames.Kingdom_of_the_Reach);
-                    kingdoms[4] = new Kingdom(w*0.45f, h*0.15f,kingdomsize,kingdomsize,uiStage,Touchable.enabled,KingdomNames.Kingdom_of_the_Rock);
-                    kingdoms[5] = new Kingdom(w*0.14f, h*0.25f,kingdomsize,kingdomsize,uiStage,Touchable.enabled,KingdomNames.Kingdom_of_the_Stormlands);
-                    kingdoms[6] = new Kingdom(w*0.78f, h*0.35f,kingdomsize,kingdomsize,uiStage,Touchable.enabled,KingdomNames.Principality_of_Dorne);
+                    kingdoms[0] = new Kingdom(w * 0.16f, h * 0.56f, kingdomsize, kingdomsize, uiStage, Touchable.enabled, KingdomNames.Kingdom_of_the_North,0,cradleGame,resultsActor);
+                    kingdoms[1] = new Kingdom(w * 0.28f, h * 0.3f, kingdomsize, kingdomsize, uiStage, Touchable.enabled, KingdomNames.Kingdom_of_the_Isles_and_Rivers,1,cradleGame,resultsActor);
+                    kingdoms[2] = new Kingdom(w*0.6f, h*0.4f,kingdomsize,kingdomsize,uiStage,Touchable.enabled,KingdomNames.Kingdom_of_the_Mountain_and_the_Vale,2,cradleGame,resultsActor);
+                    kingdoms[3] = new Kingdom(w*0.4f, h*0.28f,kingdomsize,kingdomsize,uiStage,Touchable.enabled,KingdomNames.Kingdom_of_the_Reach,3,cradleGame,resultsActor);
+                    kingdoms[4] = new Kingdom(w*0.45f, h*0.15f,kingdomsize,kingdomsize,uiStage,Touchable.enabled,KingdomNames.Kingdom_of_the_Rock,4,cradleGame,resultsActor);
+                    kingdoms[5] = new Kingdom(w*0.14f, h*0.25f,kingdomsize,kingdomsize,uiStage,Touchable.enabled,KingdomNames.Kingdom_of_the_Stormlands,5,cradleGame,resultsActor);
+                    kingdoms[6] = new Kingdom(w*0.78f, h*0.35f,kingdomsize,kingdomsize,uiStage,Touchable.enabled,KingdomNames.Principality_of_Dorne,6,cradleGame,resultsActor);
                     arena = new Arena(w * 0.77f, h * 0.25f, Math.round(kingdomsize * 1.56f), kingdomsize, uiStage, Touchable.enabled);
                     blackMarket = new BlackMarket(w * 0.68f, h * 0.32f, Math.round(kingdomsize * 1.56f), kingdomsize, uiStage, Touchable.enabled);
 
@@ -327,13 +327,13 @@ public class GameMapScreen extends BaseScreen {
 
                 worldMap.loadTexture("maps/worldmap03.png", w, h);
 
-                kingdoms[0] = new Kingdom(w * 0.2f, h * 0.56f, kingdomsize, kingdomsize, uiStage, Touchable.enabled, KingdomNames.Kingdom_of_the_North);
-                kingdoms[1] = new Kingdom(w * 0.1f, h * 0.3f, kingdomsize, kingdomsize, uiStage, Touchable.enabled, KingdomNames.Kingdom_of_the_Isles_and_Rivers);
-                kingdoms[2] = new Kingdom(w*0.55f, h*0.55f,kingdomsize,kingdomsize,uiStage,Touchable.enabled,KingdomNames.Kingdom_of_the_Mountain_and_the_Vale);
-                kingdoms[3] = new Kingdom(w*0.35f, h*0.45f,kingdomsize,kingdomsize,uiStage,Touchable.enabled,KingdomNames.Kingdom_of_the_Reach);
-                kingdoms[4] = new Kingdom(w*0.45f, h*0.15f,kingdomsize,kingdomsize,uiStage,Touchable.enabled,KingdomNames.Kingdom_of_the_Rock);
-                kingdoms[5] = new Kingdom(w*0.6f, h*0.25f,kingdomsize,kingdomsize,uiStage,Touchable.enabled,KingdomNames.Kingdom_of_the_Stormlands);
-                kingdoms[6] = new Kingdom(w*0.75f, h*0.6f,kingdomsize,kingdomsize,uiStage,Touchable.enabled,KingdomNames.Principality_of_Dorne);
+                kingdoms[0] = new Kingdom(w * 0.2f, h * 0.56f, kingdomsize, kingdomsize, uiStage, Touchable.enabled, KingdomNames.Kingdom_of_the_North,20,cradleGame,resultsActor);
+                kingdoms[1] = new Kingdom(w * 0.1f, h * 0.3f, kingdomsize, kingdomsize, uiStage, Touchable.enabled, KingdomNames.Kingdom_of_the_Isles_and_Rivers,21,cradleGame,resultsActor);
+                kingdoms[2] = new Kingdom(w*0.55f, h*0.55f,kingdomsize,kingdomsize,uiStage,Touchable.enabled,KingdomNames.Kingdom_of_the_Mountain_and_the_Vale,22,cradleGame,resultsActor);
+                kingdoms[3] = new Kingdom(w*0.35f, h*0.45f,kingdomsize,kingdomsize,uiStage,Touchable.enabled,KingdomNames.Kingdom_of_the_Reach,23,cradleGame,resultsActor);
+                kingdoms[4] = new Kingdom(w*0.45f, h*0.15f,kingdomsize,kingdomsize,uiStage,Touchable.enabled,KingdomNames.Kingdom_of_the_Rock,24,cradleGame,resultsActor);
+                kingdoms[5] = new Kingdom(w*0.6f, h*0.25f,kingdomsize,kingdomsize,uiStage,Touchable.enabled,KingdomNames.Kingdom_of_the_Stormlands,25,cradleGame,resultsActor);
+                kingdoms[6] = new Kingdom(w*0.75f, h*0.6f,kingdomsize,kingdomsize,uiStage,Touchable.enabled,KingdomNames.Principality_of_Dorne,26,cradleGame,resultsActor);
                 arena = new Arena(w * 0.15f, h * 0.15f, Math.round(kingdomsize * 1.56f), kingdomsize, uiStage, Touchable.enabled);
                 blackMarket = new BlackMarket(w * 0.3f, h * 0.2f, Math.round(kingdomsize * 1.56f), kingdomsize, uiStage, Touchable.enabled);
 
@@ -343,13 +343,13 @@ public class GameMapScreen extends BaseScreen {
 
                 worldMap.loadTexture("maps/worldmap04.png", w, h);
 
-                kingdoms[0] = new Kingdom(w * 0.5f, h * 0.45f, kingdomsize, kingdomsize, uiStage, Touchable.enabled, KingdomNames.Kingdom_of_the_North);
-                kingdoms[1] = new Kingdom(w * 0.4f, h * 0.3f, kingdomsize, kingdomsize, uiStage, Touchable.enabled, KingdomNames.Kingdom_of_the_Isles_and_Rivers);
-                kingdoms[2] = new Kingdom(w*0.45f, h*0.65f,kingdomsize,kingdomsize,uiStage,Touchable.enabled,KingdomNames.Kingdom_of_the_Mountain_and_the_Vale);
-                kingdoms[3] = new Kingdom(w*0.3f, h*0.45f,kingdomsize,kingdomsize,uiStage,Touchable.enabled,KingdomNames.Kingdom_of_the_Reach);
-                kingdoms[4] = new Kingdom(w*0.6f, h*0.33f,kingdomsize,kingdomsize,uiStage,Touchable.enabled,KingdomNames.Kingdom_of_the_Rock);
-                kingdoms[5] = new Kingdom(w*0.7f, h*0.3f,kingdomsize,kingdomsize,uiStage,Touchable.enabled,KingdomNames.Kingdom_of_the_Stormlands);
-                kingdoms[6] = new Kingdom(w*0.65f, h*0.6f,kingdomsize,kingdomsize,uiStage,Touchable.enabled,KingdomNames.Principality_of_Dorne);
+                kingdoms[0] = new Kingdom(w * 0.5f, h * 0.45f, kingdomsize, kingdomsize, uiStage, Touchable.enabled, KingdomNames.Kingdom_of_the_North,30,cradleGame,resultsActor);
+                kingdoms[1] = new Kingdom(w * 0.4f, h * 0.3f, kingdomsize, kingdomsize, uiStage, Touchable.enabled, KingdomNames.Kingdom_of_the_Isles_and_Rivers,31,cradleGame,resultsActor);
+                kingdoms[2] = new Kingdom(w*0.45f, h*0.65f,kingdomsize,kingdomsize,uiStage,Touchable.enabled,KingdomNames.Kingdom_of_the_Mountain_and_the_Vale,32,cradleGame,resultsActor);
+                kingdoms[3] = new Kingdom(w*0.3f, h*0.45f,kingdomsize,kingdomsize,uiStage,Touchable.enabled,KingdomNames.Kingdom_of_the_Reach,33,cradleGame,resultsActor);
+                kingdoms[4] = new Kingdom(w*0.6f, h*0.33f,kingdomsize,kingdomsize,uiStage,Touchable.enabled,KingdomNames.Kingdom_of_the_Rock,34,cradleGame,resultsActor);
+                kingdoms[5] = new Kingdom(w*0.7f, h*0.3f,kingdomsize,kingdomsize,uiStage,Touchable.enabled,KingdomNames.Kingdom_of_the_Stormlands,35,cradleGame,resultsActor);
+                kingdoms[6] = new Kingdom(w*0.65f, h*0.6f,kingdomsize,kingdomsize,uiStage,Touchable.enabled,KingdomNames.Principality_of_Dorne,36,cradleGame,resultsActor);
                 arena = new Arena(w * 0.6f, h * 0.15f, Math.round(kingdomsize * 1.56f), kingdomsize, uiStage, Touchable.enabled);
                 blackMarket = new BlackMarket(w * 0.45f, h * 0.27f, Math.round(kingdomsize * 1.56f), kingdomsize, uiStage, Touchable.enabled);
 
@@ -370,6 +370,7 @@ public class GameMapScreen extends BaseScreen {
                         } else{
                             castleIsYoursDialog.setX(kingdom.getX()+70);
                         }
+                        /*
                         castleIsYoursDialog.setY(kingdom.getY()+70);
                         String s = cradleGame.getLanguageStrings().get("castleIsYours");
                         castleIsYoursDialog.setText(s);
@@ -381,6 +382,7 @@ public class GameMapScreen extends BaseScreen {
                             }
                         };
                         castleIsYoursDialog.showForTime(1,completeAction);
+                        */
                         return false;
                     }
                     //if ( Item.class.isAssignableFrom(a.getClass()) ){
