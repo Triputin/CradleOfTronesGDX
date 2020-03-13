@@ -363,7 +363,7 @@ public class CradleGame extends BaseGame
 
     public  void setActiveGameMapScreen(boolean showNewHeroLevel, int mapLevel)
     {
-        //System.out.println("setActiveGameMapScreen");
+        System.out.println("setActiveGameMapScreen");
         ply.logEvent("6", "setActiveGameMapScreen", "Switch to");
         ply.logEvent("7", "DifficultyLevel is ", String.valueOf(difficultyLevel));
         ply.logEvent("8", "GameMapLevel is ", String.valueOf(gameMapLevel));
@@ -448,9 +448,12 @@ public class CradleGame extends BaseGame
         gameMapScreen.initializeMap(gameMapLevel);
         Kingdom[] kingdoms = gameMapScreen.getKingdoms();
         //kingdoms[0].setProtectionState(0); // starting Kingdom for player
-        for (int i = 1; i < kingdoms.length; i++) {
+
+        //Ошибка !!!!!
+       /* for (int i = 1; i < kingdoms.length; i++) {
             prefs.putInteger("kingdomProtectionState"+i, kingdoms[i].getProtectionState());
         }
+        */
 
         GameRes.Bread=100;
         GameRes.Wood=100;
@@ -504,11 +507,18 @@ public class CradleGame extends BaseGame
         prefs.putInteger("gameMapLevel", gameMapLevel);
         Kingdom[] kingdoms = gameMapScreen.getKingdoms();
         kingdoms[0].setProtectionState(0); // starting Kingdom for player
+
+        //-----------Ошибка!!  должны сами королевства со своими id записываться!
+       /*
         for (int i = 1; i < kingdoms.length; i++) {
             kingdoms[i].resetProtectionState(gameMapLevel);
             prefs.putInteger("kingdomProtectionState"+i, kingdoms[i].getProtectionState());
         }
+        */
+
         prefs.flush();
+
+
         gameMapScreen.setFirstMapLevelRun(true);
         if(gameMapLevel==1){
             screenGamePlay.getHall().loadTexture( "game_of_thrones_locations4.jpg",w,h );}

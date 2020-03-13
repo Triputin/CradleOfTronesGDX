@@ -42,7 +42,7 @@ public class DialogBox extends BaseActor
         //Ok Button
         String ms = cradleGame.getLanguageStrings().get("ok");
         okButton = new TextButton( ms, BaseGame.textButtonStyle );
-        okButton.setPosition(Math.round(getWidth()/2-okButton.getWidth()/2),padding);
+        okButton.setPosition(Math.round(getWidth()/2-okButton.getWidth()/2),padding*2.0f);
 
 
     }

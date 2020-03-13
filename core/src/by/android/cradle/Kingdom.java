@@ -101,6 +101,7 @@ public class Kingdom extends BaseActor {
     public Kingdom(float x, float y, int width, int height, Stage s, Touchable touchable,KingdomNames kingdomNames, int kingdomID, final CradleGame  cradleGame,final ResultsActor resultsActor)
     {
         super(x,y,s, touchable);
+        System.out.println("Kingdom constructor. Id="+kingdomID);
         this.cradleGame = cradleGame;
         this.resultsActor = resultsActor;
         flagSize = height;
@@ -117,6 +118,7 @@ public class Kingdom extends BaseActor {
          h = Gdx.graphics.getHeight();
 
         setUpKingdomFlagAndResources(width, height,s,kingdomNames);
+        saveParams(); //useful for first run - remembers first run time
         final Action  completeAction = new Action(){
             public boolean act( float delta ) {
                 goldImage.setVisible(false);
@@ -154,8 +156,8 @@ public class Kingdom extends BaseActor {
     private void setUpKingdomFlagAndResources(int width, int height, Stage s,KingdomNames kingdomNames){
         String[] filenames;
         String flagBasementName;
-        timeOfLastGoldCollection = cradleGame.getPrefs().getLong("KingdomTime"+kingdomID,System.currentTimeMillis());
-        levelOfKingdom = cradleGame.getPrefs().getInteger("LevelOfKingdom"+kingdomID,1);
+
+
         switch (kingdomNames){
             case Kingdom_of_the_North: kingdomRes.Bread = 10;
                 kingdomRes.Gold = 10;
@@ -216,7 +218,7 @@ public class Kingdom extends BaseActor {
                 protectionState=1;
 
         }
-
+        getParams();
         animation = createAnimationFromFiles(filenames, 0.1f, true, flagSize,  flagSize);
         baseActor = new BaseActor((int) width/2f,(int) (height*0.9f),s,Touchable.enabled);
         baseActor.setAnimation(animation);
@@ -260,14 +262,16 @@ public class Kingdom extends BaseActor {
                 protectionStateLabel.setText("");
             }
         }
-
+        saveParams();
 
     }
 
     private void addRedFlagAnimation(){
         animation = createAnimationFromFiles(filenames0, 0.1f, true, flagSize,  flagSize);
-        baseActor.setAnimation(animation);
-        baseActor.AddImage("flag_red/flagbasement.png",0,0,flagSize,flagSize);
+        if(baseActor!=null) {
+            baseActor.setAnimation(animation);
+            baseActor.AddImage("flag_red/flagbasement.png", 0, 0, flagSize, flagSize);
+        }
     }
 
     public int getProtectionState() {
@@ -330,6 +334,8 @@ public void resetProtectionState(int gameMapLevel) {
             protectionState = 1;
 
     }
+
+    saveParams();
 }
 
     public void setProtectionState(int protectionState) {
@@ -337,11 +343,17 @@ public void resetProtectionState(int gameMapLevel) {
             resetFlag();
         }
         this.protectionState = protectionState;
-        protectionStateLabel.setText(""+protectionState);
+        if(protectionStateLabel!=null) {
+            protectionStateLabel.setText("" + protectionState);
+        }
         if (protectionState==0){
             addRedFlagAnimation();
+            if(protectionStateLabel!=null) {
             protectionStateLabel.setText("");
+            }
         }
+
+        saveParams();
     }
 
     public void resetFlag(){
@@ -407,8 +419,10 @@ public void resetProtectionState(int gameMapLevel) {
         }
 
         animation = createAnimationFromFiles(filenames, 0.1f, true, flagSize,  flagSize);
-        baseActor.setAnimation(animation);
-        baseActor.AddImage(flagBasementName,0,0,flagSize,flagSize);
+        if (baseActor != null) {
+            baseActor.setAnimation(animation);
+            baseActor.AddImage(flagBasementName, 0, 0, flagSize, flagSize);
+        }
 
     }
 
@@ -473,9 +487,18 @@ public void resetProtectionState(int gameMapLevel) {
         return goldForLevelOfKingdom;
     }
 
-    private void saveParams(){
+    public void saveParams(){
         cradleGame.getPrefs().putLong("KingdomTime"+kingdomID,timeOfLastGoldCollection);
         cradleGame.getPrefs().putInteger("LevelOfKingdom"+kingdomID,levelOfKingdom);
+        cradleGame.getPrefs().putInteger("KingdomProtectionState"+kingdomID,protectionState);
         cradleGame.getPrefs().flush();
+        System.out.println("saveParams(): setProtectionState id="+kingdomID+ " = "+protectionState);
+    }
+
+    private void getParams(){
+        timeOfLastGoldCollection = cradleGame.getPrefs().getLong("KingdomTime"+kingdomID,System.currentTimeMillis());
+        levelOfKingdom = cradleGame.getPrefs().getInteger("LevelOfKingdom"+kingdomID,1);
+        setProtectionState(cradleGame.getPrefs().getInteger("KingdomProtectionState"+kingdomID,5));
+        System.out.println("getParams(): setProtectionState id="+kingdomID+ " = "+ cradleGame.getPrefs().getInteger("KingdomProtectionState"+kingdomID,5));
     }
 }

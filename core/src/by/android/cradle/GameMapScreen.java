@@ -265,6 +265,7 @@ public class GameMapScreen extends BaseScreen {
         int kingdomsize = h/9;
         if (kingdoms!=null){
             for (int i = 0; i < kingdoms.length; i++) {
+                kingdoms[i].saveParams();
                 kingdoms[i].remove();
             }
         }
@@ -410,7 +411,7 @@ public class GameMapScreen extends BaseScreen {
 
         for (int i = 0; i < kingdoms.length; i++) {
             kingdoms[i].addListener(inputListener);
-            kingdoms[i].resetProtectionState(mapLevel);
+            //kingdoms[i].resetProtectionState(mapLevel);
         }
         kingdoms[0].resetFlag();// if protection state>0 then setup gray flag
 
@@ -561,6 +562,10 @@ public class GameMapScreen extends BaseScreen {
 
     public void UpdateRes() {
         resultsActor.UpdateRes();
+        for (int i=0; i<kingdoms.length;i++){
+            kingdoms[i].saveParams();
+        }
+
         checkWin();
         if (isUpdateMapNeeded && (!isWinMapLevel)){
             //changeMapTexture(cradleGame.getGameMapLevel());

@@ -64,10 +64,10 @@ public class KnightScreen extends BaseScreen {
 
 
         //Size of lines
-        int lineX = Math.round(w * 0.49f);
+        int lineX = Math.round(w * 0.52f);
         int lineY = Math.round(h * 0.6f);
         int lineSize = Math.round(h * 0.18f);
-        int lineSizeW = Math.round(w * 0.51f);
+        int lineSizeW = Math.round(w * 0.47f);
 
         // Might
         BaseActor might = new BaseActor(lineX, lineY, mainStage, Touchable.disabled);
@@ -106,7 +106,7 @@ public class KnightScreen extends BaseScreen {
         s = s + " " + sc + " " + String.valueOf(cradleGame.getKnightParams().getCurrentHealthMaximum());
         lifeLabel.setText(s);
         lifeLabel.setColor(Color.GOLDENROD);
-        lifeLabel.setPosition(lineX + lineSizeW / 2.9f, lineY - lineSize -10 + life.getHeight() * 0.4f);
+        lifeLabel.setPosition(lineX + lineSizeW / 3.2f, lineY - lineSize -10 + life.getHeight() * 0.4f);
         lifeLabel.setFontScale(3.0f);
         mainStage.addActor(lifeLabel);
 
@@ -162,7 +162,7 @@ public class KnightScreen extends BaseScreen {
         activeItemsLabel.setText(str);
         activeItemsLabel.setColor( Color.GOLDENROD );
         activeItemsLabel.setPosition(itemPlaceLeftSpace+ItemPlaceSize,wh*0.93f);
-        activeItemsLabel.setFontScale(1.2f);
+        activeItemsLabel.setFontScale(1.4f);
         mainStage.addActor(activeItemsLabel);
 
         Label inventoryLabel = new Label(" ", BaseGame.labelStyle);
@@ -170,7 +170,7 @@ public class KnightScreen extends BaseScreen {
         inventoryLabel.setText(str);
         inventoryLabel.setColor( Color.GOLDENROD );
         inventoryLabel.setPosition(w*0.05f,cellSize);
-        inventoryLabel.setFontScale(1.2f);
+        inventoryLabel.setFontScale(1.4f);
         mainStage.addActor(inventoryLabel);
 
         //Back button
