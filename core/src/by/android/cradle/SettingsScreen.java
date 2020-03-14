@@ -1,14 +1,25 @@
 package by.android.cradle;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.NinePatch;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Window;
+import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.utils.Align;
@@ -205,8 +216,10 @@ public class SettingsScreen extends BaseScreen {
     public void ShowRestartDialog(){
         int w = Gdx.graphics.getWidth();
         int h = Gdx.graphics.getHeight();
+
+
         String s = cradleGame.getLanguageStrings().get("information");
-        Dialog dialog = new CustomDialog(s, BaseGame.skin, h*0.8f,h*0.2f) {
+        Dialog dialog = new CustomDialog("", BaseGame.skin, h*0.7f,h*0.3f) {
             public void result(Object obj) {
                 if (obj.toString()=="true"){
                 cradleGame.restartGame();
@@ -217,11 +230,19 @@ public class SettingsScreen extends BaseScreen {
         s = cradleGame.getLanguageStrings().get("are_you_shure_restart_game");
         dialog.text(s);
         s = cradleGame.getLanguageStrings().get("ok");
-        dialog.button(s, true); //sends "true" as the result
+        dialog.button(s, true,BaseGame.textButtonStyle); //sends "true" as the result
         s = cradleGame.getLanguageStrings().get("cancel");
-        dialog.button(s, false); //sends "false" as the result
+        dialog.button(s, false,BaseGame.textButtonStyle); //sends "false" as the result
+
         dialog.show(uiStage);
 
+    }
+
+    public boolean keyDown(int keyCode)
+    {
+        if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE))
+            cradleGame.setActiveMenuScreen();
+        return false;
     }
 
 }

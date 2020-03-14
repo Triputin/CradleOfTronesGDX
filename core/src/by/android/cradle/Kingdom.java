@@ -136,7 +136,7 @@ public class Kingdom extends BaseActor {
 
                         long timeForLevelOfKingdom = getTimeForLevelOfKingdom();
                         long timeToShow = timeForLevelOfKingdom - (System.currentTimeMillis() - timeOfLastGoldCollection);
-                        if (timeToShow<=0) {
+                        if ((timeToShow<=0) && (protectionState == 0)) {
                             timeOfLastGoldCollection = System.currentTimeMillis();
                             if(cradleGame.isSoundOn()){
                                 coinSound.play(1f);

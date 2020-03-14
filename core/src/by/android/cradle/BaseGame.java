@@ -8,10 +8,14 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
+import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
@@ -30,7 +34,8 @@ public abstract class BaseGame extends Game
     public static LabelStyle labelStyle; // BitmapFont + Color
     public static TextButtonStyle textButtonStyle; // NPD + BitmapFont + Color
     public static TextButtonStyle textButtonStyleCheck; // for check boxes
-    public static  Skin skin;
+    public static Skin skin;
+    public static Skin dialogSkin;
 
     private static final String FONT_CHARACTERS = "абвгдеёжзийклмнопрстуфхцчшщъыьэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯabcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789][_!$%#@|\\/?-+=()*&.;,{}\"´`'<>";
 
@@ -85,6 +90,9 @@ public abstract class BaseGame extends Game
 
         skin = new Skin(Gdx.files.internal("data/uiskin.json"));
 
+
+        fontParameters.size = 40;
+        BitmapFont customFontCheck = fontGenerator.generateFont(fontParameters);
         textButtonStyleCheck = new TextButtonStyle();
 
         Texture   buttonTexCheck   = new Texture( Gdx.files.internal("button01_normal_s.png") );
@@ -95,8 +103,28 @@ public abstract class BaseGame extends Game
         NinePatch buttonPatchCheck3 = new NinePatch(buttonTexCheck3, 14,14,24,24);
         textButtonStyleCheck.checked = new NinePatchDrawable( buttonPatchCheck3 );
 
-        textButtonStyleCheck.font      = customFont;
+        textButtonStyleCheck.font      = customFontCheck;
         textButtonStyleCheck.fontColor = Color.GRAY;
+
+
+        //Don't work!!!!! Dialog crashes!
+        // This is the Skin that we'll use to design our dialog
+        dialogSkin = new Skin();
+        // The only mandatory resource required for a Dialog is the WindowStyle
+        Window.WindowStyle ws = new Window.WindowStyle();
+        ws.titleFontColor = Color.GOLD;
+        ws.titleFont = customFont;
+        ws.stageBackground = new Image(new Texture( Gdx.files.internal("goldbutton.png") )).getDrawable();
+
+        TextureRegion texture_region = new TextureRegion(new Texture( Gdx.files.internal("goldbutton.png") ));
+        Sprite sprite = new Sprite(texture_region);
+        NinePatch np = new NinePatch(sprite, 15, 15, 15, 15);
+        NinePatchDrawable npd = new NinePatchDrawable(np);
+        // We're using the 9patch drawable as the dialog element background
+        ws.background = npd;
+        // This WindowStyle needs to be set as the default style in the skin
+        dialogSkin.add("default", ws);
+
     }
 
     /**

@@ -112,7 +112,7 @@ public class CradleGame extends BaseGame
          languageStrings = I18NBundle.createBundle(Gdx.files.internal("strings/strings"));
 
          getResFromStorage();
-         //GameRes.Gold=5000; // for debug
+         //GameRes.Gold=1000; // for debug
          //gameMapLevel=1; // for debug
          //GameRes.Score=999; // for debug
          knightParams.CheckKnightLevelAtScore(GameRes.Score); // Set KnightLevel according current dependence from Score. It's for old players.
@@ -397,7 +397,7 @@ public class CradleGame extends BaseGame
         System.out.println("setActiveGameMapScreen KnightLevel=" + knightParams.getKnightLevel());
         if (showNewHeroLevel) {
             String s = getLanguageStrings().get("information");
-            Dialog dialog = new CustomDialog(s, BaseGame.skin, h*0.7f,h*0.3f) {
+            Dialog dialog = new CustomDialog("", BaseGame.skin, h*0.7f,h*0.3f) {
                 public void result(Object obj) {
                     System.out.println("result " + obj);
                 }
@@ -405,7 +405,7 @@ public class CradleGame extends BaseGame
             s = getLanguageStrings().get("you_hero_rised_level")+ knightParams.getKnightLevel();
             dialog.text(s);
             s = getLanguageStrings().get("ok");
-            dialog.button(s, true); //sends "true" as the result
+            dialog.button(s, true,BaseGame.textButtonStyle); //sends "true" as the result
             dialog.show(gameMapScreen.uiStage);
         }
 
@@ -506,8 +506,9 @@ public class CradleGame extends BaseGame
         this.gameMapLevel = gameMapLevel;
         prefs.putInteger("gameMapLevel", gameMapLevel);
         Kingdom[] kingdoms = gameMapScreen.getKingdoms();
-        kingdoms[0].setProtectionState(0); // starting Kingdom for player
-
+        if (gameMapLevel ==1) {
+            kingdoms[0].setProtectionState(0); // starting Kingdom for player
+        }
         //-----------Ошибка!!  должны сами королевства со своими id записываться!
        /*
         for (int i = 1; i < kingdoms.length; i++) {
@@ -553,7 +554,7 @@ public class CradleGame extends BaseGame
         int w = Gdx.graphics.getWidth();
         int h = Gdx.graphics.getHeight();
             String s = getLanguageStrings().get("information");
-            Dialog dialog = new CustomDialog(s, BaseGame.skin, h*0.7f,h*0.3f) {
+            Dialog dialog = new CustomDialog("", BaseGame.skin, h*0.7f,h*0.3f) {
             public void result(Object obj) {
                 System.out.println("result " + obj);
             }
@@ -561,9 +562,10 @@ public class CradleGame extends BaseGame
             s = getLanguageStrings().get("you_hero_lost_all_lives")+ knightParams.getKnightLevel();
             dialog.text(s);
             s = getLanguageStrings().get("ok");
-            dialog.button(s, true); //sends "true" as the result
+            dialog.button(s, true,BaseGame.textButtonStyle); //sends "true" as the result
             //dialog.button("No", false); //sends "false" as the result
             //dialog.setSize(h*0.4f,h*0.4f); //don't work
+
             dialog.show(gameMapScreen.uiStage);
 
     }
