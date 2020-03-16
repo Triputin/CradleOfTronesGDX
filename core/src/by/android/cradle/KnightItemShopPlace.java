@@ -22,6 +22,7 @@ public class KnightItemShopPlace extends DropTargetActor {
         priceLabel.setColor(Color.GOLDENROD);
         priceLabel.setFontScale(1.5f);
         priceLabel.setPosition(getWidth()/2 - priceLabel.getWidth()*0.7f, getHeight() * 0.01f);
+        priceLabel.setText("");
         addActor(priceLabel);
 
         if (showImage) {
@@ -41,7 +42,13 @@ public class KnightItemShopPlace extends DropTargetActor {
     public void setKnightItem(KnightItem knightItem){
         this.knightItem = knightItem;
         if (knightItem != null) {
-            priceLabel.setText(knightItem.getKnightItemParams().getPrice());
+            if (getDropPlaceType()==4){
+                int sellPrice = Math.round(knightItem.getKnightItemParams().getPrice()*0.25f);
+                priceLabel.setText(sellPrice);
+                //priceLabel.setVisible(true);
+            } else {
+                priceLabel.setText(knightItem.getKnightItemParams().getPrice());
+            }
         }else{
             priceLabel.setText("");
         }
@@ -51,6 +58,11 @@ public class KnightItemShopPlace extends DropTargetActor {
 
     public KnightItem getKnightItem() {
         return knightItem;
+    }
+
+    public void setPrice(int price) {
+        priceLabel.setText(price);
+
     }
 }
 

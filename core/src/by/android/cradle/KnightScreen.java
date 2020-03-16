@@ -10,7 +10,9 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Align;
 
 import java.util.ArrayList;
 
@@ -21,6 +23,7 @@ public class KnightScreen extends BaseScreen {
     private int padding = 5;
     private Knight knight;
     private Weapon weapon;
+    private final float sellItemKf = 0.25f;
 
     private Label mightLabel;
     private Label lifeLabel;
@@ -37,6 +40,8 @@ public class KnightScreen extends BaseScreen {
     public KnightActiveItemPlace knightActiveItemPlaceShield;
     public KnightActiveItemPlace knightActiveItemPlaceSword;
     public KnightActiveItemPlace knightActiveItemPlaceBoots;
+
+    private KnightItemShopPlace knightItemSellPlace;
 
     public KnightScreen(CradleGame cradleGame, IPlayServices ply) {
 
@@ -65,8 +70,8 @@ public class KnightScreen extends BaseScreen {
 
         //Size of lines
         int lineX = Math.round(w * 0.52f);
-        int lineY = Math.round(h * 0.6f);
-        int lineSize = Math.round(h * 0.18f);
+        int lineY = Math.round(h * 0.82f);
+        int lineSize = Math.round(h * 0.16f);
         int lineSizeW = Math.round(w * 0.47f);
 
         // Might
@@ -84,7 +89,7 @@ public class KnightScreen extends BaseScreen {
         String s = String.valueOf(cradleGame.getKnightParams().getCellsQttyToDestroy());
         mightLabel.setText(s);
         mightLabel.setColor(Color.GOLDENROD);
-        mightLabel.setPosition(lineX + lineSizeW / 1.8f, lineY + might.getHeight() * 0.4f);
+        mightLabel.setPosition(lineX + lineSizeW / 2.0f, lineY + might.getHeight() * 0.4f);
         mightLabel.setFontScale(3.0f);
         mainStage.addActor(mightLabel);
 
@@ -125,7 +130,7 @@ public class KnightScreen extends BaseScreen {
         s = String.valueOf(cradleGame.getKnightParams().getRechargeWeaponTime());
         speedLabel.setText(s);
         speedLabel.setColor(Color.GOLDENROD);
-        speedLabel.setPosition(lineX + lineSizeW / 1.8f, lineY - lineSize*2 - 20 + speedActor.getHeight() * 0.4f);
+        speedLabel.setPosition(lineX + lineSizeW / 2.0f, lineY - lineSize*2 - 20 + speedActor.getHeight() * 0.4f);
         speedLabel.setFontScale(3.0f);
         mainStage.addActor(speedLabel);
 
@@ -204,6 +209,43 @@ public class KnightScreen extends BaseScreen {
         knightItemsSlider.showKnightItems(knight);
         knightItemsSlider.setBoundaryPolygon(8);
 
+
+        knightItemSellPlace = new KnightItemShopPlace(itemPlaceLeftSpace+ItemPlaceSize*4,cellSize, ItemPlaceSize, ItemPlaceSize, mainStage,null,false);
+        knightItemSellPlace.setDropPlaceType(4);
+        Label knightItemSellPlaceLabel = new Label(" ", BaseGame.labelStyle);
+        str = cradleGame.getLanguageStrings().get("PutItemHereToSell");
+        knightItemSellPlaceLabel.setText(str);
+        knightItemSellPlaceLabel.setColor( Color.GOLDENROD );
+        knightItemSellPlaceLabel.setWrap(true);
+        knightItemSellPlaceLabel.setFontScale(1.0f);
+        knightItemSellPlaceLabel.setAlignment(Align.center);
+        knightItemSellPlaceLabel.setPosition(knightItemSellPlace.getX()+knightItemSellPlace.getWidth()*0.15f,knightItemSellPlace.getY()+knightItemSellPlace.getHeight()*0.5f);
+        knightItemSellPlaceLabel.setWidth(knightItemSellPlace.getWidth()*0.7f);
+        mainStage.addActor(knightItemSellPlaceLabel);
+
+        //Sell Button
+        String ms = cradleGame.getLanguageStrings().get("sell");
+        TextButton sellButton = new TextButton( ms, BaseGame.textButtonStyle );
+        sellButton.setPosition(knightItemSellPlaceLabel.getX()+knightItemSellPlaceLabel.getWidth()*1.5f,knightItemSellPlace.getY()+knightItemSellPlace.getHeight()*0.3f);
+        mainStage.addActor(sellButton);
+        sellButton.addListener(new InputListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                InputEvent ie = (InputEvent) event;
+                if (ie.getType().equals(InputEvent.Type.touchDown)) {
+                    KnightItem knightItem = knightItemSellPlace.getKnightItem();
+                    if (knightItem!=null){
+                        int itemPrice = Math.round(knightItem.getKnightItemParams().getPrice()*sellItemKf);
+                        cradleGame.setGameResGold(GameRes.Gold + itemPrice);
+                        cradleGame.getKnightParams().removeKnightItemParams(knightItemSellPlace.getKnightItem().getKnightItemParams());
+                        knightItem.remove();
+                        knightItemSellPlace.setKnightItem(null);
+                    }
+                    return true;
+                }
+                return false;
+            }
+        });
     }
 
 

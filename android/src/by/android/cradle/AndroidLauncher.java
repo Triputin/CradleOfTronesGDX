@@ -66,6 +66,9 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
 	protected AdView adView;
 	private final int SHOW_ADS = 1;
 	private final int HIDE_ADS = 0;
+	private View gameView;
+	private RelativeLayout.LayoutParams gameViewParams;
+	private AndroidLauncher self;
 	//GPS second try
 	private GameHelper gameHelper;
 	private FirebaseAnalytics mFirebaseAnalytics;
@@ -98,11 +101,15 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
 				case SHOW_ADS:
 				{
 					adView.setVisibility(View.VISIBLE);
+					gameViewParams.bottomMargin = AdSize.BANNER.getHeightInPixels(self)+1;
+					gameView.setLayoutParams(gameViewParams);
 					break;
 				}
 				case HIDE_ADS:
 				{
 					adView.setVisibility(View.GONE);
+					gameViewParams.bottomMargin = 0;
+					gameView.setLayoutParams(gameViewParams);
 					break;
 				}
 			}
@@ -112,6 +119,7 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
 	@Override
 	public void onCreate (Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		self = this;
 		//GPS second try start
 		gameHelper = new GameHelper(this, GameHelper.CLIENT_GAMES);
 		gameHelper.enableDebugLog(true);
@@ -148,7 +156,7 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
 
 		AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
 		// Create the libgdx View
-		View gameView = initializeForView(new CradleGame(this,this), config);
+		gameView = initializeForView(new CradleGame(this,this), config);
 
 		// Create and setup the AdMob view
 		adView = new AdView(this);
@@ -174,11 +182,19 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
 			}
 		});
 
-		AdRequest adRequest = new AdRequest.Builder().build();
+		AdRequest adRequest = new AdRequest.Builder()
+				.addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
+				// .addTestDevice("asdfasdfasd234234")
+				.build();
 		adView.loadAd(adRequest);
 
 		// Add the libgdx view
-		layout.addView(gameView);
+		gameViewParams =
+				new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,
+						RelativeLayout.LayoutParams.WRAP_CONTENT);
+
+
+		layout.addView(gameView,gameViewParams);
 
 		// Add the AdMob view
 		RelativeLayout.LayoutParams adParams =

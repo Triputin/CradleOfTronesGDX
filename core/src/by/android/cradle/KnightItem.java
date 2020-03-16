@@ -95,11 +95,12 @@ public class KnightItem extends Item {
                                             break;
 
                                         case 3:
+                                            self.setDropTarget(target);
+                                            break;
 
-                                                    self.setDropTarget(target);
-
-
-                                                break;
+                                        case 4: //knightItemSellPlace
+                                            self.setDropTarget(target);
+                                            break;
                                     }
 
                                 }
@@ -375,15 +376,22 @@ public class KnightItem extends Item {
                 cradleGame.getKnightParams().addKnightItemParams(self.getKnightItemParams());
                 self.remove();
             } else {
-                moveToStart();
-                self.setDropTarget(null);
-            }
+                        moveToStart();
+                        return;
+                    }
             return;
         }
 
         // if dropped to slider in Knights screen
         if(dropTarget.getDropPlaceType()==3){
             knightScreen.moveToPassiveItemParams(self);
+            return;
+        }
+
+        // if dropped to sellItemPlace
+        if (dropTarget.getDropPlaceType()==4){ // sellItemPlace
+            self.centerAtActor(dropTarget);
+            ((KnightItemShopPlace)dropTarget).setKnightItem(self);
             return;
         }
 

@@ -117,6 +117,7 @@ public class KnightParams {
 
     public void removeKnightItemParams(KnightItemParams knightItemParams){
         passiveKnightItemParamsArrayList.remove(knightItemParams);
+        activeKnightItemParamsArrayList.remove(knightItemParams);
     }
 
     public void moveToActiveItemParams(KnightItemParams knightItemParams){
