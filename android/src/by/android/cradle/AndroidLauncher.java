@@ -101,7 +101,7 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
 				case SHOW_ADS:
 				{
 					adView.setVisibility(View.VISIBLE);
-					gameViewParams.bottomMargin = AdSize.BANNER.getHeightInPixels(self)+1;
+					gameViewParams.bottomMargin = AdSize.BANNER.getHeightInPixels(self)+2;
 					gameView.setLayoutParams(gameViewParams);
 					break;
 				}

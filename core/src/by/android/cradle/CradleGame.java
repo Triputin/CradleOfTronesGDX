@@ -25,6 +25,11 @@ public class CradleGame extends BaseGame
     private KnightParams knightParams;
     private boolean isSoundOn;
     private boolean isMusicOn;
+    //----------------------game review
+    private int isGameLiked; // 0 - didn't asked, 1- didn't like; 2 - liked
+    private int lastDayAskedToVote;
+    private int lastScoreWhenAskedToVote;
+
     private ArrayList<KnightItemParams> knightItemsParamsDailyArrayList;
 
 
@@ -207,6 +212,9 @@ public class CradleGame extends BaseGame
         gameMapLevel = prefs.getInteger("gameMapLevel", 1);
         isSoundOn = prefs.getBoolean("issoundon", true);
         isMusicOn = prefs.getBoolean("ismusicon", true);
+        isGameLiked = prefs.getInteger("isGameLiked", 0);
+        lastDayAskedToVote = prefs.getInteger("lastDayAskedToVote", 0);
+        lastScoreWhenAskedToVote = prefs.getInteger("lastScoreWhenAskedToVote", 0);
     }
 
     public boolean isSoundOn() {
@@ -239,6 +247,10 @@ public class CradleGame extends BaseGame
         prefs.putInteger("Score", GameRes.Score);
         prefs.putBoolean("issoundon", isSoundOn);
         prefs.putBoolean("ismusicon", isMusicOn);
+        prefs.putInteger("isgameliked", isGameLiked);
+        prefs.putInteger("lastDayAskedToVote", lastDayAskedToVote);
+        prefs.putInteger("lastScoreWhenAskedToVote", lastScoreWhenAskedToVote);
+
 
         Kingdom[] kingdoms = gameMapScreen.getKingdoms();
 
@@ -286,11 +298,11 @@ public class CradleGame extends BaseGame
     {
         //System.out.println("setActiveMenuScreen()");
         GdxLog.print("setActiveMenuScreen():","Called");
+        myRequestHandler.showAds(false);
         game.setScreen(menuScreen);
         gameMapScreen.PauseMusic();
         settingsScreen.PauseMusic();
         menuScreen.PlayMusic();
-        myRequestHandler.showAds(false);
        ply.logEvent("1", "setActiveMenuScreen", "Switch to");
     }
 
@@ -307,21 +319,21 @@ public class CradleGame extends BaseGame
     public  void setActiveWorldScreen()
     {
         GdxLog.print("setActiveWorldScreen():","Called");
+        myRequestHandler.showAds(false);
         game.setScreen(worldScreen);
         gameMapScreen.PauseMusic();
         worldScreen.PlayMusic();
-        myRequestHandler.showAds(false);
         ply.logEvent("21", "setActiveWorldScreen", "Switch to");
     }
 
     public  void setActiveKnightScreen()
     {
         GdxLog.print("setActiveKnightScreen():","Called");
+        myRequestHandler.showAds(false);
         game.setScreen(knightScreen);
         gameMapScreen.PauseMusic();
         knightScreen.SetParams(knightParams);
         //knightScreen.PlayMusic();
-        myRequestHandler.showAds(false);
         ply.logEvent("3", "setActiveKnightScreen", "Switch to");
 
     }
@@ -330,10 +342,9 @@ public class CradleGame extends BaseGame
     public  void setActiveBlackMarketScreen()
     {
         GdxLog.print("setActiveBlackMarketScreen():","Called");
+        myRequestHandler.showAds(false);
         game.setScreen(blackMarketScreen);
         gameMapScreen.PauseMusic();
-
-        myRequestHandler.showAds(false);
         ply.logEvent("10", "setActiveBlackMarketScreen", "Switch to");
 
     }
@@ -341,10 +352,10 @@ public class CradleGame extends BaseGame
     {
 
         GdxLog.print("setActiveSettingsScreen():","Called");
+        myRequestHandler.showAds(false);
         game.setScreen(settingsScreen);
         menuScreen.PauseMusic();
         settingsScreen.PlayMusic();
-        myRequestHandler.showAds(false);
         ply.logEvent("4", "setActiveSettingsScreen", "Switch to");
 
     }
@@ -353,9 +364,9 @@ public class CradleGame extends BaseGame
     {
         //System.out.println("setActiveShopScreen()");
         GdxLog.print("setActiveShopScreen():","Called");
+        myRequestHandler.showAds(false);
         game.setScreen(shopScreen);
         gameMapScreen.PauseMusic();
-        myRequestHandler.showAds(false);
         shopScreen.setupResources();
         ply.logEvent("5", "setActiveShopScreen", "Switch to");
 
@@ -373,6 +384,7 @@ public class CradleGame extends BaseGame
         int w = Gdx.graphics.getWidth();
         int h = Gdx.graphics.getHeight();
         game.setScreen(gameMapScreen);
+        myRequestHandler.showAds(true);
         if (mapLevel>0) {
             gameMapScreen.initializeMap(mapLevel);
         }
@@ -384,7 +396,7 @@ public class CradleGame extends BaseGame
         //screenGamePlay.PauseMusic();
         gameMapScreen.PlayMusic();
         gameMapScreen.SetMessageActorVisibility(false);
-        myRequestHandler.showAds(true);
+
 
         saveGameRes();
         ply.submitScore(leaderboard,GameRes.Score);
@@ -413,12 +425,15 @@ public class CradleGame extends BaseGame
             ShowAllLifesLostDialog();
         }
 
+        gameMapScreen.askToRateTheGame();
+
     }
 
     public  void setActivescreenGamePlay(AttackType attackType, Kingdom attackedKingdom)
     {
         //System.out.println("setActivescreenGamePlay()");
         GdxLog.print("setActivescreenGamePlay():","Called");
+        myRequestHandler.showAds(false);
         game.setScreen(screenGamePlay);
         screenGamePlay.UpdateRes();
         screenGamePlay.setAttackedKingdom(attackedKingdom);
@@ -426,7 +441,7 @@ public class CradleGame extends BaseGame
         screenGamePlay.StartNewLevel();
         menuScreen.PauseMusic();
         gameMapScreen.PauseMusic();
-        myRequestHandler.showAds(false);
+
         ply.logEvent("7", "setActivescreenGamePlay", "Switch to");
 
     }
@@ -610,6 +625,10 @@ public class CradleGame extends BaseGame
         ply.connectUs();
     }
 
+    public void rateGame() {
+        ply.rateGame();
+    }
+
     private void getDailySetOfKnightItems(GregorianCalendar calendarG){
         knightItemsParamsDailyArrayList = new ArrayList<>();
         int lastKnightItemsGeneratedDay = prefs.getInteger(LAST_KNIGHT_ITEM_GENERATED_DAY,0);
@@ -659,5 +678,34 @@ public class CradleGame extends BaseGame
 
     public Preferences getPrefs() {
         return prefs;
+    }
+
+    public int getIsGameLiked() {
+        return isGameLiked;
+    }
+
+    public void setIsGameLiked(int isGameLiked) {
+        this.isGameLiked = isGameLiked;
+        prefs.putInteger("isgameliked", isGameLiked);
+        prefs.flush();
+
+    }
+
+    public int getLastDayAskedToVote() {
+        return lastDayAskedToVote;
+    }
+
+    public void setLastDayAskedToVote(int lastDayAskedToVote) {
+        this.lastDayAskedToVote = lastDayAskedToVote;
+        prefs.putInteger("lastDayAskedToVote", lastDayAskedToVote);
+    }
+
+    public int getLastScoreWhenAskedToVote() {
+        return lastScoreWhenAskedToVote;
+    }
+
+    public void setLastScoreWhenAskedToVote(int lastScoreWhenAskedToVote) {
+        this.lastScoreWhenAskedToVote = lastScoreWhenAskedToVote;
+        prefs.putInteger("lastScoreWhenAskedToVote", lastScoreWhenAskedToVote);
     }
 }

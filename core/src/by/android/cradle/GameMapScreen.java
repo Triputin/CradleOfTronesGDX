@@ -11,9 +11,14 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.fadeIn;
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.fadeOut;
@@ -703,4 +708,119 @@ public String getTextForMapLevel(int maplevel){
     public Knight getKnight() {
         return knight;
     }
+
+    public void askToRateTheGame(){
+
+        GregorianCalendar calendarG = new GregorianCalendar();
+        calendarG.setTime(new Date());
+        // Check if question needed
+        int isLiked = cradleGame.getIsGameLiked();
+        if (isLiked==0){
+                if (((GameRes.Score - cradleGame.getLastScoreWhenAskedToVote()) > 500) && ((calendarG.get(Calendar.DAY_OF_YEAR) - cradleGame.getLastDayAskedToVote()) > 5)) {
+                    ShowDoYouLikeTheGameDialog();
+                }
+        }
+
+    }
+
+    public void ShowDoYouLikeTheGameDialog(){
+        int w = Gdx.graphics.getWidth();
+        int h = Gdx.graphics.getHeight();
+        final GregorianCalendar calendarG = new GregorianCalendar();
+        calendarG.setTime(new Date());
+
+
+        Dialog dialog = new CustomDialog("", BaseGame.skin, h*0.7f,h*0.3f) {
+            public void result(Object obj) {
+                if (obj.toString()=="true"){
+                    ShowDoYouLikeToVoteDialog();
+                } else{
+                    cradleGame.setIsGameLiked(1);
+                    ShowWritUsDialog();
+                }
+                cradleGame.setLastDayAskedToVote(calendarG.get(Calendar.DAY_OF_YEAR));
+                cradleGame.setLastScoreWhenAskedToVote(GameRes.Score);
+            }
+
+        };
+        String s = cradleGame.getLanguageStrings().get("doyoulikethegame");
+        dialog.text(s);
+        s = cradleGame.getLanguageStrings().get("ok");
+        dialog.button(s, true,BaseGame.textButtonStyle); //sends "true" as the result
+        s = cradleGame.getLanguageStrings().get("cancel");
+        dialog.button(s, false,BaseGame.textButtonStyle); //sends "false" as the result
+
+        dialog.show(uiStage);
+
+    }
+
+
+    public void ShowDoYouLikeToVoteDialog(){
+        int w = Gdx.graphics.getWidth();
+        int h = Gdx.graphics.getHeight();
+        final GregorianCalendar calendarG = new GregorianCalendar();
+        calendarG.setTime(new Date());
+
+        Dialog dialog = new CustomDialog("", BaseGame.skin, h*0.7f,h*0.3f) {
+            public void result(Object obj) {
+                if (obj.toString()=="true"){
+                    cradleGame.setIsGameLiked(2);
+                    goToGooglePlay();
+                }
+                cradleGame.setLastDayAskedToVote(calendarG.get(Calendar.DAY_OF_YEAR));
+                cradleGame.setLastScoreWhenAskedToVote(GameRes.Score);
+            }
+
+        };
+        String s = cradleGame.getLanguageStrings().get("doyouliketorate");
+        dialog.text(s);
+        s = cradleGame.getLanguageStrings().get("ok");
+        dialog.button(s, true,BaseGame.textButtonStyle); //sends "true" as the result
+        s = cradleGame.getLanguageStrings().get("cancel");
+        dialog.button(s, false,BaseGame.textButtonStyle); //sends "false" as the result
+
+        dialog.show(uiStage);
+
+    }
+
+
+    public void ShowWritUsDialog(){
+        int w = Gdx.graphics.getWidth();
+        int h = Gdx.graphics.getHeight();
+        final GregorianCalendar calendarG = new GregorianCalendar();
+        calendarG.setTime(new Date());
+
+
+        Dialog dialog = new CustomDialog("", BaseGame.skin, h*0.7f,h*0.3f) {
+            public void result(Object obj) {
+                if (obj.toString()=="true"){
+                    connectUs();
+                    cradleGame.setIsGameLiked(1);
+                } else{
+                    cradleGame.setIsGameLiked(1);
+                }
+                cradleGame.setLastDayAskedToVote(calendarG.get(Calendar.DAY_OF_YEAR));
+                cradleGame.setLastScoreWhenAskedToVote(GameRes.Score);
+            }
+
+        };
+        String s = cradleGame.getLanguageStrings().get("writeus");
+        dialog.text(s);
+        s = cradleGame.getLanguageStrings().get("ok");
+        dialog.button(s, true,BaseGame.textButtonStyle); //sends "true" as the result
+        s = cradleGame.getLanguageStrings().get("cancel");
+        dialog.button(s, false,BaseGame.textButtonStyle); //sends "false" as the result
+
+        dialog.show(uiStage);
+
+    }
+
+    public void goToGooglePlay(){
+        cradleGame.rateGame();
+    }
+
+    public void connectUs() {
+        cradleGame.connectUs();
+    }
+
 }

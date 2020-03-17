@@ -157,6 +157,9 @@ public class ScreenGamePlay extends BaseScreen {
         float x = gameFieldX+cellSize*CellCount+10;
         float y = gameFieldY+gameFieldWidth*0.05f;
         int sw = (int)(Gdx.graphics.getWidth()-x);
+        if (sw<0){
+            sw=20; //временно!
+        }
         int sandglassduration = getLevelDuration();
         if (gameLevel>20) {
             sandglassduration = getLevelDuration() + gameLevel*2 - 20;
@@ -832,6 +835,10 @@ public void RemoveAndFillSquare(int centreRow, int centreCol, int squareSize){
         ExplosionEffect boom = new ExplosionEffect();
         boom.centerAtActor( item1 );
         boom.start();
+        //Explosion sound
+        if(cradleGame.isSoundOn()){
+            explosionSound.play(1f);
+        }
         mainStage.addActor(boom);
 
         gameField.changeGameCell(item1.getCell());
@@ -1198,8 +1205,7 @@ public void RemoveAndFillSquare(int centreRow, int centreCol, int squareSize){
     }
 
     public void resize (int width, int height) {
-        mainStage.getViewport().update(width, height, true);
-        uiStage.getViewport().update(width, height, true);
+
     }
 
 

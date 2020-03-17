@@ -74,7 +74,10 @@ public abstract class BaseScreen implements Screen, InputProcessor
     }
 
     // methods required by Screen interface
-    public void resize(int width, int height) {  }
+    public void resize(int width, int height) {
+        mainStage.getViewport().update(width, height, true);
+        uiStage.getViewport().update(width, height, true);
+    }
 
     public void pause()   {  }
 
