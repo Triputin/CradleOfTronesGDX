@@ -151,14 +151,17 @@ public class HelpScreen extends BaseScreen {
             slide1.remove();
         }
 
-        int x = (int) w/2;
+        int x = (int)  Math.round(w/1.9f);
         int y= (int) Math.round(h*0.33);
+        int width = (int) Math.round(w*0.5);
+        int height = (int) Math.round(h*0.6);
         String s;
        switch(slideNumber){
 
            case 1:
                slide1 = new BaseActor(x,y,uiStage,Touchable.disabled);
-               slide1.loadTexture("helpimages/im01.png",(int) Math.round(w*0.5),(int) Math.round(h*0.6));
+               slide1.loadTexture("helpimages/im01.png", Math.round(width*0.9f), Math.round(height*0.9f));
+               slide1.AddImage("goldenframe01.png",-Math.round(width*0.05f),-Math.round(height*0.05f),width,height);
                uiStage.addActor(slide1);
                s = cradleGame.getLanguageStrings().get("help01_text");
                dialogBox.setText(s);
@@ -166,7 +169,9 @@ public class HelpScreen extends BaseScreen {
                break;
            case 2:
                slide1 = new BaseActor(x,y,uiStage,Touchable.disabled);
-               slide1.loadTexture("helpimages/im02.png",(int) Math.round(w*0.5),(int) Math.round(h*0.6));
+               slide1.loadTexture("helpimages/im02.png", Math.round(width*0.9f), Math.round(height*0.9f));
+               slide1.AddImage("goldenframe01.png",-Math.round(width*0.05f),-Math.round(height*0.05f),width,height);
+
                uiStage.addActor(slide1);
                s = cradleGame.getLanguageStrings().get("help02_text");
                dialogBox.setText(s);
@@ -174,7 +179,8 @@ public class HelpScreen extends BaseScreen {
                break;
            case 3:
                slide1 = new BaseActor(x,y,uiStage,Touchable.disabled);
-               slide1.loadTexture("helpimages/im03.png",(int) Math.round(w*0.5),(int) Math.round(h*0.6));
+               slide1.loadTexture("helpimages/im03.png", Math.round(width*0.9f), Math.round(height*0.9f));
+               slide1.AddImage("goldenframe01.png",-Math.round(width*0.05f),-Math.round(height*0.05f),width,height);
                uiStage.addActor(slide1);
                s = cradleGame.getLanguageStrings().get("help03_text");
                dialogBox.setText(s);
@@ -182,7 +188,8 @@ public class HelpScreen extends BaseScreen {
                break;
            case 4:
                slide1 = new BaseActor(x,y,uiStage,Touchable.disabled);
-               slide1.loadTexture("helpimages/im04.png",(int) Math.round(w*0.5),(int) Math.round(h*0.6));
+               slide1.loadTexture("helpimages/im04.png", Math.round(width*0.9f), Math.round(height*0.9f));
+               slide1.AddImage("goldenframe01.png",-Math.round(width*0.05f),-Math.round(height*0.05f),width,height);
                uiStage.addActor(slide1);
                s = cradleGame.getLanguageStrings().get("help04_text");
                dialogBox.setText(s);
@@ -190,7 +197,8 @@ public class HelpScreen extends BaseScreen {
                break;
            case 5:
                slide1 = new BaseActor(x,y,uiStage,Touchable.disabled);
-               slide1.loadTexture("helpimages/im04.png",(int) Math.round(w*0.5),(int) Math.round(h*0.6));
+               slide1.loadTexture("helpimages/im04.png", Math.round(width*0.9f), Math.round(height*0.9f));
+               slide1.AddImage("goldenframe01.png",-Math.round(width*0.05f),-Math.round(height*0.05f),width,height);
                uiStage.addActor(slide1);
                s = cradleGame.getLanguageStrings().get("help05_text");
                dialogBox.setText(s);
@@ -198,7 +206,8 @@ public class HelpScreen extends BaseScreen {
                break;
            case 6:
                slide1 = new BaseActor(x,y,uiStage,Touchable.disabled);
-               slide1.loadTexture("helpimages/im05.png",(int) Math.round(w*0.5),(int) Math.round(h*0.6));
+               slide1.loadTexture("helpimages/im05.png", Math.round(width*0.9f), Math.round(height*0.9f));
+               slide1.AddImage("goldenframe01.png",-Math.round(width*0.05f),-Math.round(height*0.05f),width,height);
                uiStage.addActor(slide1);
                s = cradleGame.getLanguageStrings().get("help06_text");
                dialogBox.setText(s);
@@ -206,7 +215,8 @@ public class HelpScreen extends BaseScreen {
                break;
            case 7:
                slide1 = new BaseActor(x,y,uiStage,Touchable.disabled);
-               slide1.loadTexture("helpimages/im06.png",(int) Math.round(w*0.5),(int) Math.round(h*0.6));
+               slide1.loadTexture("helpimages/im06.png", Math.round(width*0.9f), Math.round(height*0.9f));
+               slide1.AddImage("goldenframe01.png",-Math.round(width*0.05f),-Math.round(height*0.05f),width,height);
                uiStage.addActor(slide1);
                s = cradleGame.getLanguageStrings().get("help07_text");
                dialogBox.setText(s);
@@ -214,7 +224,8 @@ public class HelpScreen extends BaseScreen {
                break;
            case 8:
                slide1 = new BaseActor(x,y,uiStage,Touchable.disabled);
-               slide1.loadTexture("helpimages/im06.png",(int) Math.round(w*0.5),(int) Math.round(h*0.6));
+               slide1.loadTexture("helpimages/im06.png", Math.round(width*0.9f), Math.round(height*0.9f));
+               slide1.AddImage("goldenframe01.png",-Math.round(width*0.05f),-Math.round(height*0.05f),width,height);
                uiStage.addActor(slide1);
                s = cradleGame.getLanguageStrings().get("help08_text");
                dialogBox.setText(s);
@@ -222,7 +233,8 @@ public class HelpScreen extends BaseScreen {
                break;
            case 9:
                slide1 = new BaseActor(x,y,uiStage,Touchable.disabled);
-               slide1.loadTexture("helpimages/im06.png",(int) Math.round(w*0.5),(int) Math.round(h*0.6));
+               slide1.loadTexture("helpimages/im06.png", Math.round(width*0.9f), Math.round(height*0.9f));
+               slide1.AddImage("goldenframe01.png",-Math.round(width*0.05f),-Math.round(height*0.05f),width,height);
                uiStage.addActor(slide1);
                s = cradleGame.getLanguageStrings().get("help09_text");
                dialogBox.setText(s);
@@ -230,7 +242,8 @@ public class HelpScreen extends BaseScreen {
                break;
            case 10:
                slide1 = new BaseActor(x,y,uiStage,Touchable.disabled);
-               slide1.loadTexture("helpimages/im06.png",(int) Math.round(w*0.5),(int) Math.round(h*0.6));
+               slide1.loadTexture("helpimages/im06.png", Math.round(width*0.9f), Math.round(height*0.9f));
+               slide1.AddImage("goldenframe01.png",-Math.round(width*0.05f),-Math.round(height*0.05f),width,height);
                uiStage.addActor(slide1);
                s = cradleGame.getLanguageStrings().get("help10_text");
                dialogBox.setText(s);
@@ -238,7 +251,8 @@ public class HelpScreen extends BaseScreen {
                break;
            case 11:
                slide1 = new BaseActor(x,y,uiStage,Touchable.disabled);
-               slide1.loadTexture("helpimages/im07.png",(int) Math.round(w*0.5),(int) Math.round(h*0.6));
+               slide1.loadTexture("helpimages/im07.png", Math.round(width*0.9f), Math.round(height*0.9f));
+               slide1.AddImage("goldenframe01.png",-Math.round(width*0.05f),-Math.round(height*0.05f),width,height);
                uiStage.addActor(slide1);
                s = cradleGame.getLanguageStrings().get("help11_text");
                dialogBox.setText(s);
@@ -246,7 +260,8 @@ public class HelpScreen extends BaseScreen {
                break;
            case 12:
                slide1 = new BaseActor(x,y,uiStage,Touchable.disabled);
-               slide1.loadTexture("helpimages/im08.png",(int) Math.round(w*0.5),(int) Math.round(h*0.6));
+               slide1.loadTexture("helpimages/im08.png", Math.round(width*0.9f), Math.round(height*0.9f));
+               slide1.AddImage("goldenframe01.png",-Math.round(width*0.05f),-Math.round(height*0.05f),width,height);
                uiStage.addActor(slide1);
                s = cradleGame.getLanguageStrings().get("help12_text");
                dialogBox.setText(s);
@@ -254,7 +269,8 @@ public class HelpScreen extends BaseScreen {
                break;
            case 13:
                slide1 = new BaseActor(x,y,uiStage,Touchable.disabled);
-               slide1.loadTexture("helpimages/im09.png",(int) Math.round(w*0.5),(int) Math.round(h*0.6));
+               slide1.loadTexture("helpimages/im09.png", Math.round(width*0.9f), Math.round(height*0.9f));
+               slide1.AddImage("goldenframe01.png",-Math.round(width*0.05f),-Math.round(height*0.05f),width,height);
                uiStage.addActor(slide1);
                s = cradleGame.getLanguageStrings().get("help13_text");
                dialogBox.setText(s);

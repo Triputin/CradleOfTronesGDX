@@ -403,7 +403,7 @@ public class CradleGame extends BaseGame
 
         gameMapScreen.getKnight().setKnightParams(knightParams);
         //For Debug
-        screenGamePlay.printNumberOfActors();
+        //screenGamePlay.printNumberOfActors();
 
         //Show hero have rised level dialog
         System.out.println("setActiveGameMapScreen KnightLevel=" + knightParams.getKnightLevel());

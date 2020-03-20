@@ -710,7 +710,7 @@ public String getTextForMapLevel(int maplevel){
     }
 
     public void askToRateTheGame(){
-
+        //ShowDoYouLikeTheGameDialog(); // for debug
         GregorianCalendar calendarG = new GregorianCalendar();
         calendarG.setTime(new Date());
         // Check if question needed
@@ -745,9 +745,9 @@ public String getTextForMapLevel(int maplevel){
         };
         String s = cradleGame.getLanguageStrings().get("doyoulikethegame");
         dialog.text(s);
-        s = cradleGame.getLanguageStrings().get("ok");
+        s = cradleGame.getLanguageStrings().get("yes");
         dialog.button(s, true,BaseGame.textButtonStyle); //sends "true" as the result
-        s = cradleGame.getLanguageStrings().get("cancel");
+        s = cradleGame.getLanguageStrings().get("no");
         dialog.button(s, false,BaseGame.textButtonStyle); //sends "false" as the result
 
         dialog.show(uiStage);
@@ -774,9 +774,9 @@ public String getTextForMapLevel(int maplevel){
         };
         String s = cradleGame.getLanguageStrings().get("doyouliketorate");
         dialog.text(s);
-        s = cradleGame.getLanguageStrings().get("ok");
+        s = cradleGame.getLanguageStrings().get("yes");
         dialog.button(s, true,BaseGame.textButtonStyle); //sends "true" as the result
-        s = cradleGame.getLanguageStrings().get("cancel");
+        s = cradleGame.getLanguageStrings().get("no");
         dialog.button(s, false,BaseGame.textButtonStyle); //sends "false" as the result
 
         dialog.show(uiStage);
@@ -806,9 +806,9 @@ public String getTextForMapLevel(int maplevel){
         };
         String s = cradleGame.getLanguageStrings().get("writeus");
         dialog.text(s);
-        s = cradleGame.getLanguageStrings().get("ok");
+        s = cradleGame.getLanguageStrings().get("yes");
         dialog.button(s, true,BaseGame.textButtonStyle); //sends "true" as the result
-        s = cradleGame.getLanguageStrings().get("cancel");
+        s = cradleGame.getLanguageStrings().get("no");
         dialog.button(s, false,BaseGame.textButtonStyle); //sends "false" as the result
 
         dialog.show(uiStage);
