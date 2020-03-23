@@ -16,12 +16,14 @@ public abstract class BaseScreen implements Screen, InputProcessor
     protected Stage mainStage;
     protected Stage uiStage;
     protected Table uiTable;
-
+    protected float aspectRatioOnStart;
+    protected float aspectRatioKf;
     protected CradleGame cradleGame;
     protected IPlayServices ply;
 
     public BaseScreen(CradleGame cradleGame,IPlayServices ply)
     {
+        this.aspectRatioOnStart = (float)Gdx.graphics.getHeight()/(float)Gdx.graphics.getWidth();
         mainStage = new Stage();
         uiStage = new Stage();
 
@@ -75,8 +77,13 @@ public abstract class BaseScreen implements Screen, InputProcessor
 
     // methods required by Screen interface
     public void resize(int width, int height) {
+        float aspectRatio = (float)Gdx.graphics.getHeight()/(float)Gdx.graphics.getWidth();
+        aspectRatioKf = aspectRatio/aspectRatioOnStart;
+        //mainStage.getViewport().update(Math.round(width*ratioKf), Math.round(height*ratioKf), true);
+        //uiStage.getViewport().update(Math.round(width*ratioKf), Math.round(height*ratioKf), true);
         mainStage.getViewport().update(width, height, true);
         uiStage.getViewport().update(width, height, true);
+
     }
 
     public void pause()   {  }

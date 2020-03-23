@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.Locale;
 
 
 public class CradleGame extends BaseGame
@@ -110,7 +111,7 @@ public class CradleGame extends BaseGame
 
 
          // For debug ru locale
-         //Locale locale = new Locale("ru");
+         //Locale locale = new Locale("it");
          //languageStrings = I18NBundle.createBundle(Gdx.files.internal("strings/strings"),locale);
 
          //Default locale for realise

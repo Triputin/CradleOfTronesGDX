@@ -65,6 +65,14 @@ public class BlackMarketScreen extends BaseScreen {
         label.setPosition(w*0.65f , h * 0.35f);
         mainStage.addActor(label);
 
+        Label label2 = new Label(" ", BaseGame.labelStyle);
+        String s2 = cradleGame.getLanguageStrings().get("presstofindoutitemparameters");
+        label2.setText(s2);
+        label2.setColor(Color.GOLDENROD);
+        label2.setFontScale(1.5f);
+        label2.setPosition(w*0.03f , h * 0.93f);
+        mainStage.addActor(label2);
+
         //show active items places and items
         ArrayList<KnightItemParams> knightItemParamsArrayList = cradleGame.getKnightItemsParamsDailyArrayList();
 

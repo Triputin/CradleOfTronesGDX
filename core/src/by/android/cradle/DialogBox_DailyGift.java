@@ -16,6 +16,7 @@ import static com.badlogic.gdx.scenes.scene2d.actions.Actions.sequence;
 public class DialogBox_DailyGift extends BaseActor {
 
     private Label dialogLabel;
+    private Label dialogLabel2;
     private int padding = 42;
     private final CradleGame  cradleGame;
     private TextButton okButton;
@@ -42,7 +43,7 @@ public class DialogBox_DailyGift extends BaseActor {
 
         int pictSize = Math.round(getHeight() * 0.25f);
         int pict1posX = Math.round(getWidth() * 0.25f);
-        int pict1posY = Math.round(getHeight() * 0.4f);
+        int pict1posY = Math.round(getHeight() * 0.5f);
 
         scoreLabel = new Label("0", BaseGame.labelStyle);
         //pict1Label.setAlignment(Align.left,Align.center);
@@ -51,10 +52,21 @@ public class DialogBox_DailyGift extends BaseActor {
         this.addActor(scoreLabel);
 
 
+
+        String ms2 = cradleGame.getLanguageStrings().get("dayily_gift_text2");
+        dialogLabel2 = new Label(ms2, BaseGame.labelStyle);
+        dialogLabel2.setWrap(true);
+        dialogLabel2.setAlignment( Align.center );
+        dialogLabel2.setPosition( Math.round(width*0.07f), Math.round(height*0.4f) );
+        dialogLabel2.setWidth( width - 2 * padding );
+        dialogLabel2.setFontScale(1.5f);
+        dialogLabel2.setColor(Color.GOLD);
+        this.addActor(dialogLabel2);
+
         //Ok Button
         ms = cradleGame.getLanguageStrings().get("ok");
         okButton = new TextButton( ms, BaseGame.textButtonStyle );
-        okButton.setPosition(Math.round(getWidth()/2-okButton.getWidth()/2),padding*1.5f);
+        okButton.setPosition(Math.round(getWidth()/2-okButton.getWidth()/2),Math.round(height*0.12f));
 
     }
 
@@ -62,7 +74,7 @@ public class DialogBox_DailyGift extends BaseActor {
     public void setGift(String resType,int resQtty) {
         int pictSize = Math.round(getHeight() * 0.25f);
         int pict1posX = Math.round(getWidth() * 0.25f);
-        int pict1posY = Math.round(getHeight() * 0.4f);
+        int pict1posY = Math.round(getHeight() * 0.5f);
 
         scoreLabel.setText(String.valueOf(resQtty));
         //AddImage("gold_plate.png", pict1posX-Math.round(pictSize/4f), pict1posY-Math.round(pictSize/4f), Math.round(pictSize*3f), Math.round(pictSize*2f));

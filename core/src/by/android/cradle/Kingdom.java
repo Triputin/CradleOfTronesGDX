@@ -234,13 +234,13 @@ public class Kingdom extends BaseActor {
         }
         protectionStateLabel.setColor( Color.GOLDENROD );
         protectionStateLabel.setPosition( (int) (int) ((width*0.05f)),(int)(0-(height*0.4f)));
-        protectionStateLabel.setFontScale(1.2f);
+        protectionStateLabel.setFontScale(1.5f);
         baseActor.addActor(protectionStateLabel);
 
         timeStateLabel = new Label("", BaseGame.labelStyle);
         timeStateLabel.setColor( Color.GOLDENROD );
         timeStateLabel.setPosition( (int) ((width*0.4f)),(int)(height*0.7f));
-        timeStateLabel.setFontScale(1.2f);
+        timeStateLabel.setFontScale(1.3f);
         addActor(timeStateLabel);
 
         goldImageX = Math.round(getWidth()*0.3f);

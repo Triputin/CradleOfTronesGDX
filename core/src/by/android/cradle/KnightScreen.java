@@ -69,7 +69,7 @@ public class KnightScreen extends BaseScreen {
 
 
         //Size of lines
-        int lineX = Math.round(w * 0.52f);
+        int lineX = Math.round(w * 0.53f);
         int lineY = Math.round(h * 0.82f);
         int lineSize = Math.round(h * 0.16f);
         int lineSizeW = Math.round(w * 0.47f);
@@ -78,9 +78,10 @@ public class KnightScreen extends BaseScreen {
         BaseActor might = new BaseActor(lineX, lineY, mainStage, Touchable.disabled);
         might.setSize(lineSizeW, lineSize);
         might.loadTexture("knights/plate01.png", lineSizeW, lineSize);
+        might.AddImage("goldenframe02.png",0,0,lineSizeW, lineSize);
 
         BaseActor mightBadge = new BaseActor(0, 0, mainStage, Touchable.disabled);
-        mightBadge.setSize(lineSize * 0.95f, lineSize * 0.95f);
+        mightBadge.setSize(lineSize * 0.88f, lineSize * 0.88f);
         mightBadge.loadTexture("knights/sword_badge.png", Math.round(mightBadge.getWidth()), Math.round(mightBadge.getHeight()));
         mightBadge.setPosition(mightBadge.getWidth() * 0.3f, mightBadge.getWidth() * 0.05f);
         might.addActor(mightBadge);
@@ -98,6 +99,7 @@ public class KnightScreen extends BaseScreen {
         BaseActor life = new BaseActor(lineX, lineY - lineSize - 10, mainStage, Touchable.disabled);
         life.setSize(lineSizeW, lineSize);
         life.loadTexture("knights/plate01.png", lineSizeW, lineSize);
+        life.AddImage("goldenframe02.png",0,0,lineSizeW, lineSize);
 
         BaseActor lifeBadge = new BaseActor(0, 0, mainStage, Touchable.disabled);
         lifeBadge.setSize(lineSize * 0.95f, lineSize * 0.95f);
@@ -119,9 +121,10 @@ public class KnightScreen extends BaseScreen {
         BaseActor speedActor = new BaseActor(lineX, lineY - lineSize*2 - 20, mainStage, Touchable.disabled);
         speedActor.setSize(lineSizeW, lineSize);
         speedActor.loadTexture("knights/plate01.png", lineSizeW, lineSize);
+        speedActor.AddImage("goldenframe02.png",0,0,lineSizeW, lineSize);
 
         BaseActor speedBadge = new BaseActor(0, 0, mainStage, Touchable.disabled);
-        speedBadge.setSize(lineSize * 0.95f, lineSize * 0.95f);
+        speedBadge.setSize(lineSize * 0.88f, lineSize * 0.88f);
         speedBadge.loadTexture("knightitems/speed_badge.png", Math.round(speedBadge.getWidth()), Math.round(speedBadge.getHeight()));
         speedBadge.setPosition(speedBadge.getWidth() * 0.3f, speedBadge.getWidth() * 0.05f);
         speedActor.addActor(speedBadge);
@@ -167,7 +170,7 @@ public class KnightScreen extends BaseScreen {
         activeItemsLabel.setText(str);
         activeItemsLabel.setColor( Color.GOLDENROD );
         activeItemsLabel.setPosition(itemPlaceLeftSpace+ItemPlaceSize,wh*0.93f);
-        activeItemsLabel.setFontScale(1.4f);
+        activeItemsLabel.setFontScale(1.7f);
         mainStage.addActor(activeItemsLabel);
 
         Label inventoryLabel = new Label(" ", BaseGame.labelStyle);
@@ -175,7 +178,7 @@ public class KnightScreen extends BaseScreen {
         inventoryLabel.setText(str);
         inventoryLabel.setColor( Color.GOLDENROD );
         inventoryLabel.setPosition(w*0.05f,cellSize);
-        inventoryLabel.setFontScale(1.4f);
+        inventoryLabel.setFontScale(1.7f);
         mainStage.addActor(inventoryLabel);
 
         //Back button
@@ -186,8 +189,8 @@ public class KnightScreen extends BaseScreen {
         buttonStyle.up = new TextureRegionDrawable(buttonRegion);
 
         Button backButton = new Button(buttonStyle);
-        backButton.setSize(h * 0.2f, h * 0.2f);
-        backButton.setPosition(w - backButton.getWidth() + 10, h - backButton.getHeight() - 5);
+        backButton.setSize(h * 0.22f, h * 0.22f);
+        backButton.setPosition(w*0.00f, h*0.24f);
         uiStage.addActor(backButton);
 
         backButton.addListener(new InputListener() {
