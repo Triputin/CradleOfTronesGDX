@@ -155,6 +155,13 @@ public class HelpScreen extends BaseScreen {
         int y= (int) Math.round(h*0.33);
         int width = (int) Math.round(w*0.5);
         int height = (int) Math.round(h*0.6);
+
+        float fontScale = 1.0f;
+        if (w>1000){
+            fontScale = 1.8f;
+        } else {
+            fontScale = 0.9f;
+        }
         String s;
        switch(slideNumber){
 
@@ -165,7 +172,7 @@ public class HelpScreen extends BaseScreen {
                uiStage.addActor(slide1);
                s = cradleGame.getLanguageStrings().get("help01_text");
                dialogBox.setText(s);
-               dialogBox.setFontScale(1.8f);
+               dialogBox.setFontScale(fontScale);
                break;
            case 2:
                slide1 = new BaseActor(x,y,uiStage,Touchable.disabled);
@@ -175,7 +182,7 @@ public class HelpScreen extends BaseScreen {
                uiStage.addActor(slide1);
                s = cradleGame.getLanguageStrings().get("help02_text");
                dialogBox.setText(s);
-               dialogBox.setFontScale(1.8f);
+               dialogBox.setFontScale(fontScale);
                break;
            case 3:
                slide1 = new BaseActor(x,y,uiStage,Touchable.disabled);
@@ -184,7 +191,7 @@ public class HelpScreen extends BaseScreen {
                uiStage.addActor(slide1);
                s = cradleGame.getLanguageStrings().get("help03_text");
                dialogBox.setText(s);
-               dialogBox.setFontScale(1.8f);
+               dialogBox.setFontScale(fontScale);
                break;
            case 4:
                slide1 = new BaseActor(x,y,uiStage,Touchable.disabled);
@@ -193,7 +200,7 @@ public class HelpScreen extends BaseScreen {
                uiStage.addActor(slide1);
                s = cradleGame.getLanguageStrings().get("help04_text");
                dialogBox.setText(s);
-               dialogBox.setFontScale(1.8f);
+               dialogBox.setFontScale(fontScale);
                break;
            case 5:
                slide1 = new BaseActor(x,y,uiStage,Touchable.disabled);
@@ -202,7 +209,7 @@ public class HelpScreen extends BaseScreen {
                uiStage.addActor(slide1);
                s = cradleGame.getLanguageStrings().get("help05_text");
                dialogBox.setText(s);
-               dialogBox.setFontScale(1.8f);
+               dialogBox.setFontScale(fontScale);
                break;
            case 6:
                slide1 = new BaseActor(x,y,uiStage,Touchable.disabled);
@@ -211,7 +218,7 @@ public class HelpScreen extends BaseScreen {
                uiStage.addActor(slide1);
                s = cradleGame.getLanguageStrings().get("help06_text");
                dialogBox.setText(s);
-               dialogBox.setFontScale(1.8f);
+               dialogBox.setFontScale(fontScale);
                break;
            case 7:
                slide1 = new BaseActor(x,y,uiStage,Touchable.disabled);
@@ -220,7 +227,7 @@ public class HelpScreen extends BaseScreen {
                uiStage.addActor(slide1);
                s = cradleGame.getLanguageStrings().get("help07_text");
                dialogBox.setText(s);
-               dialogBox.setFontScale(1.8f);
+               dialogBox.setFontScale(fontScale);
                break;
            case 8:
                slide1 = new BaseActor(x,y,uiStage,Touchable.disabled);
@@ -229,7 +236,7 @@ public class HelpScreen extends BaseScreen {
                uiStage.addActor(slide1);
                s = cradleGame.getLanguageStrings().get("help08_text");
                dialogBox.setText(s);
-               dialogBox.setFontScale(1.8f);
+               dialogBox.setFontScale(fontScale);
                break;
            case 9:
                slide1 = new BaseActor(x,y,uiStage,Touchable.disabled);
@@ -238,7 +245,7 @@ public class HelpScreen extends BaseScreen {
                uiStage.addActor(slide1);
                s = cradleGame.getLanguageStrings().get("help09_text");
                dialogBox.setText(s);
-               dialogBox.setFontScale(1.8f);
+               dialogBox.setFontScale(fontScale);
                break;
            case 10:
                slide1 = new BaseActor(x,y,uiStage,Touchable.disabled);
@@ -247,7 +254,7 @@ public class HelpScreen extends BaseScreen {
                uiStage.addActor(slide1);
                s = cradleGame.getLanguageStrings().get("help10_text");
                dialogBox.setText(s);
-               dialogBox.setFontScale(1.8f);
+               dialogBox.setFontScale(fontScale);
                break;
            case 11:
                slide1 = new BaseActor(x,y,uiStage,Touchable.disabled);
@@ -256,7 +263,7 @@ public class HelpScreen extends BaseScreen {
                uiStage.addActor(slide1);
                s = cradleGame.getLanguageStrings().get("help11_text");
                dialogBox.setText(s);
-               dialogBox.setFontScale(1.8f);
+               dialogBox.setFontScale(fontScale);
                break;
            case 12:
                slide1 = new BaseActor(x,y,uiStage,Touchable.disabled);
@@ -265,7 +272,7 @@ public class HelpScreen extends BaseScreen {
                uiStage.addActor(slide1);
                s = cradleGame.getLanguageStrings().get("help12_text");
                dialogBox.setText(s);
-               dialogBox.setFontScale(1.8f);
+               dialogBox.setFontScale(fontScale);
                break;
            case 13:
                slide1 = new BaseActor(x,y,uiStage,Touchable.disabled);
@@ -274,7 +281,7 @@ public class HelpScreen extends BaseScreen {
                uiStage.addActor(slide1);
                s = cradleGame.getLanguageStrings().get("help13_text");
                dialogBox.setText(s);
-               dialogBox.setFontScale(1.8f);
+               dialogBox.setFontScale(fontScale);
                break;
        }
     }

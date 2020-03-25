@@ -15,8 +15,11 @@ public class DesktopLauncher implements IActivityRequestHandler, IPlayServices {
 			application = new DesktopLauncher();
 		}
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-		config.width = 1422;
-		config.height = 800;
+		//config.width = 854;
+		//config.height = 480;
+
+		config.width = 1200;
+		config.height = 675;
 		CradleGame cradleGame = new CradleGame(application,application);
 		new LwjglApplication(cradleGame, config);
 

@@ -55,6 +55,13 @@ public class KnightScreen extends BaseScreen {
 
         int w = Gdx.graphics.getWidth();
         int h = Gdx.graphics.getHeight();
+        float fontScale = 1.0f;
+        if (w>1000){
+            fontScale = 3.0f;
+        } else {
+            fontScale = 2.0f;
+        }
+
         int wh;
         if (w > h) {
             wh = h;
@@ -91,7 +98,7 @@ public class KnightScreen extends BaseScreen {
         mightLabel.setText(s);
         mightLabel.setColor(Color.GOLDENROD);
         mightLabel.setPosition(lineX + lineSizeW / 2.0f, lineY + might.getHeight() * 0.4f);
-        mightLabel.setFontScale(3.0f);
+        mightLabel.setFontScale(fontScale);
         mainStage.addActor(mightLabel);
 
 
@@ -114,7 +121,7 @@ public class KnightScreen extends BaseScreen {
         lifeLabel.setText(s);
         lifeLabel.setColor(Color.GOLDENROD);
         lifeLabel.setPosition(lineX + lineSizeW / 3.2f, lineY - lineSize -10 + life.getHeight() * 0.4f);
-        lifeLabel.setFontScale(3.0f);
+        lifeLabel.setFontScale(fontScale);
         mainStage.addActor(lifeLabel);
 
         // Speed
@@ -134,7 +141,7 @@ public class KnightScreen extends BaseScreen {
         speedLabel.setText(s);
         speedLabel.setColor(Color.GOLDENROD);
         speedLabel.setPosition(lineX + lineSizeW / 2.0f, lineY - lineSize*2 - 20 + speedActor.getHeight() * 0.4f);
-        speedLabel.setFontScale(3.0f);
+        speedLabel.setFontScale(fontScale);
         mainStage.addActor(speedLabel);
 
 
@@ -170,7 +177,12 @@ public class KnightScreen extends BaseScreen {
         activeItemsLabel.setText(str);
         activeItemsLabel.setColor( Color.GOLDENROD );
         activeItemsLabel.setPosition(itemPlaceLeftSpace+ItemPlaceSize,wh*0.93f);
-        activeItemsLabel.setFontScale(1.7f);
+        if (w>1000){
+            activeItemsLabel.setFontScale(1.7f);
+        } else {
+            activeItemsLabel.setFontScale(1.0f);
+        }
+
         mainStage.addActor(activeItemsLabel);
 
         Label inventoryLabel = new Label(" ", BaseGame.labelStyle);
@@ -178,7 +190,12 @@ public class KnightScreen extends BaseScreen {
         inventoryLabel.setText(str);
         inventoryLabel.setColor( Color.GOLDENROD );
         inventoryLabel.setPosition(w*0.05f,cellSize);
-        inventoryLabel.setFontScale(1.7f);
+        if (w>1000){
+            inventoryLabel.setFontScale(1.7f);
+        } else {
+            inventoryLabel.setFontScale(1.0f);
+        }
+
         mainStage.addActor(inventoryLabel);
 
         //Back button
@@ -220,7 +237,12 @@ public class KnightScreen extends BaseScreen {
         knightItemSellPlaceLabel.setText(str);
         knightItemSellPlaceLabel.setColor( Color.GOLDENROD );
         knightItemSellPlaceLabel.setWrap(true);
-        knightItemSellPlaceLabel.setFontScale(1.0f);
+        if (w>1000){
+            knightItemSellPlaceLabel.setFontScale(1.0f);
+        } else {
+            knightItemSellPlaceLabel.setFontScale(0.6f);
+        }
+
         knightItemSellPlaceLabel.setAlignment(Align.center);
         knightItemSellPlaceLabel.setPosition(knightItemSellPlace.getX()+knightItemSellPlace.getWidth()*0.15f,knightItemSellPlace.getY()+knightItemSellPlace.getHeight()*0.5f);
         knightItemSellPlaceLabel.setWidth(knightItemSellPlace.getWidth()*0.7f);
@@ -229,6 +251,10 @@ public class KnightScreen extends BaseScreen {
         //Sell Button
         String ms = cradleGame.getLanguageStrings().get("sell");
         TextButton sellButton = new TextButton( ms, BaseGame.textButtonStyle );
+        if (w<1000) {
+            sellButton.setWidth(sellButton.getWidth()*0.8f);
+            sellButton.setHeight(sellButton.getHeight()*0.8f);
+        }
         sellButton.setPosition(knightItemSellPlaceLabel.getX()+knightItemSellPlaceLabel.getWidth()*1.5f,knightItemSellPlace.getY()+knightItemSellPlace.getHeight()*0.3f);
         mainStage.addActor(sellButton);
         sellButton.addListener(new InputListener() {

@@ -44,6 +44,16 @@ public class BlackMarketScreen extends BaseScreen {
 
         int w = Gdx.graphics.getWidth();
         int h = Gdx.graphics.getHeight();
+        float fontScale = 1.0f;
+        float fontScale2 = 1.0f;
+        if (w>1000){
+            fontScale = 1.5f;
+            fontScale2 = 3.0f;
+        } else {
+            fontScale = 0.8f;
+            fontScale2 = 2.0f;
+        }
+
         int wh;
         if (w > h) {
             wh = h;
@@ -61,7 +71,7 @@ public class BlackMarketScreen extends BaseScreen {
         String s = cradleGame.getLanguageStrings().get("moveheretobuy");
         label.setText(s);
         label.setColor(Color.GOLDENROD);
-        label.setFontScale(1.5f);
+        label.setFontScale(fontScale);
         label.setPosition(w*0.65f , h * 0.35f);
         mainStage.addActor(label);
 
@@ -69,7 +79,7 @@ public class BlackMarketScreen extends BaseScreen {
         String s2 = cradleGame.getLanguageStrings().get("presstofindoutitemparameters");
         label2.setText(s2);
         label2.setColor(Color.GOLDENROD);
-        label2.setFontScale(1.5f);
+        label2.setFontScale(fontScale);
         label2.setPosition(w*0.03f , h * 0.93f);
         mainStage.addActor(label2);
 
@@ -169,7 +179,7 @@ public class BlackMarketScreen extends BaseScreen {
         mightLabel.setText(s);
         mightLabel.setColor(Color.GOLDENROD);
         mightLabel.setPosition(lineX + lineSizeW / 1.8f, lineY + might.getHeight() * 0.4f);
-        mightLabel.setFontScale(3.0f);
+        mightLabel.setFontScale(fontScale2);
         mainStage.addActor(mightLabel);
 
 
@@ -189,7 +199,7 @@ public class BlackMarketScreen extends BaseScreen {
         lifeLabel.setText(s);
         lifeLabel.setColor(Color.GOLDENROD);
         lifeLabel.setPosition(lineX+lineSizeW+10 + lineSizeW / 1.8f, lineY  + life.getHeight() * 0.4f);
-        lifeLabel.setFontScale(3.0f);
+        lifeLabel.setFontScale(fontScale2);
         mainStage.addActor(lifeLabel);
 
         // Speed
@@ -208,7 +218,7 @@ public class BlackMarketScreen extends BaseScreen {
         speedLabel.setText(s);
         speedLabel.setColor(Color.GOLDENROD);
         speedLabel.setPosition(lineX+lineSizeW*2+20 + lineSizeW / 1.8f, lineY  + speedActor.getHeight() * 0.4f);
-        speedLabel.setFontScale(3.0f);
+        speedLabel.setFontScale(fontScale2);
         mainStage.addActor(speedLabel);
 
 

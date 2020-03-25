@@ -54,6 +54,9 @@ public abstract class BaseGame extends Game
     public void create() 
     {        
         // prepare for multiple classes/stages/actors to receive discrete input
+        int w = Gdx.graphics.getWidth();
+        int h = Gdx.graphics.getHeight();
+
         InputMultiplexer im = new InputMultiplexer();
         Gdx.input.setInputProcessor( im );
 
@@ -90,13 +93,16 @@ public abstract class BaseGame extends Game
 
         skin = new Skin(Gdx.files.internal("data/uiskin.json"));
 
-
-        fontParameters.size = 40;
+        if (w>1000){
+            fontParameters.size = 40;
+        } else {
+            fontParameters.size = 24;
+        }
         BitmapFont customFontCheck = fontGenerator.generateFont(fontParameters);
         textButtonStyleCheck = new TextButtonStyle();
 
         Texture   buttonTexCheck   = new Texture( Gdx.files.internal("button01_normal_s.png") );
-        NinePatch buttonPatchCheck = new NinePatch(buttonTexCheck, 14,14,24,24);
+        NinePatch buttonPatchCheck = new NinePatch(buttonTexCheck, 14,14,14,14);
         textButtonStyleCheck.up    = new NinePatchDrawable( buttonPatchCheck );
 
         Texture   buttonTexCheck3= new Texture( Gdx.files.internal("button01_checked_s.png") );

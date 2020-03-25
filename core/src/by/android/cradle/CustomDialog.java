@@ -19,8 +19,17 @@ public class CustomDialog extends Dialog {
         super(title, skin);
         dialog_width = width;
         dialog_height = height;
-        getButtonTable().defaults().height(height*0.3f);
-        getButtonTable().defaults().width(width*0.4f);
+        int w = Gdx.graphics.getWidth();
+        int h = Gdx.graphics.getHeight();
+        if (w>1000) {
+            getButtonTable().defaults().height(height * 0.3f);
+        } else
+        {
+            getButtonTable().defaults().height(height * 0.5f);
+        }
+
+        getButtonTable().defaults().width(width * 0.4f);
+
         getContentTable().defaults().width(dialog_width);
         //setBackground(new Image(new Texture( Gdx.files.internal("marble.jpg") )).getDrawable());
     }
@@ -37,11 +46,19 @@ public class CustomDialog extends Dialog {
 
     @Override
     public CustomDialog text(String text) {
+        int w = Gdx.graphics.getWidth();
+        int h = Gdx.graphics.getHeight();
+        float fontScale = 1.0f;
+        if (w>1000){
+            fontScale = 1.5f;
+        } else {
+            fontScale = 0.6f;
+        }
         Label dialogLabel = new Label(text, BaseGame.labelStyle);
         dialogLabel.setWrap(true);
         dialogLabel.setAlignment( Align.center );
         dialogLabel.setWidth( dialog_width);
-        dialogLabel.setFontScale(1.5f);
+        dialogLabel.setFontScale(fontScale);
         dialogLabel.setColor(Color.GOLD);
         text(dialogLabel);
         return this;

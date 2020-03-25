@@ -1,5 +1,6 @@
 package by.android.cradle;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -35,6 +36,14 @@ public class DialogBox_EndLevel  extends BaseActor{
         AddImage("goldenframe01.png",0,0,width,height);
         //AddImage("fon_white.png",Math.round(width*0.075f),Math.round(height*0.1f),Math.round(width*0.85f), Math.round(height*0.8f));
 
+        int w = Gdx.graphics.getWidth();
+        int h = Gdx.graphics.getHeight();
+        float fontScale = 1.0f;
+        if (w>1000){
+            fontScale = 1.5f;
+        } else {
+            fontScale = 0.8f;
+        }
 
         String ms = cradleGame.getLanguageStrings().get("levelresults");
         dialogLabel = new Label(ms, BaseGame.labelStyle);
@@ -42,7 +51,7 @@ public class DialogBox_EndLevel  extends BaseActor{
         dialogLabel.setAlignment( Align.center );
         dialogLabel.setPosition( Math.round(width*0.077f), Math.round(height*0.83f) );
         dialogLabel.setWidth( width - 2 * padding );
-        dialogLabel.setFontScale(1.5f);
+        dialogLabel.setFontScale(fontScale);
         dialogLabel.setColor(Color.GOLD);
         this.addActor(dialogLabel);
 
@@ -53,7 +62,7 @@ public class DialogBox_EndLevel  extends BaseActor{
         AddImage("goldcup.png",pict1posX,pict1posY,pictSize,pictSize);
         scoreLabel = new Label("42", BaseGame.labelStyle);
         //pict1Label.setAlignment(Align.left,Align.center);
-        scoreLabel.setFontScale(1.5f);
+        scoreLabel.setFontScale(fontScale);
         scoreLabel.setPosition(Math.round(width*0.7f),pict1posY+pictSize*.3f);
         this.addActor(scoreLabel);
 
@@ -62,7 +71,7 @@ public class DialogBox_EndLevel  extends BaseActor{
         pict1posY = Math.round(height*0.5f);
         AddImage("coin2.png",pict1posX,pict1posY,pictSize,pictSize);
         goldLabel = new Label("43", BaseGame.labelStyle);
-        goldLabel.setFontScale(1.5f);
+        goldLabel.setFontScale(fontScale);
         goldLabel.setPosition(Math.round(width*0.7f),pict1posY+pictSize*.25f);
         this.addActor(goldLabel);
 
@@ -71,7 +80,7 @@ public class DialogBox_EndLevel  extends BaseActor{
         pict1posY = Math.round(height*0.36f);
         AddImage("wood.png",pict1posX,pict1posY,pictSize,pictSize);
         woodLabel = new Label("42", BaseGame.labelStyle);
-        woodLabel.setFontScale(1.5f);
+        woodLabel.setFontScale(fontScale);
         woodLabel.setPosition(Math.round(width*0.7f),pict1posY+pictSize*.25f);
         this.addActor(woodLabel);
 
@@ -80,14 +89,18 @@ public class DialogBox_EndLevel  extends BaseActor{
         pict1posY = Math.round(height*0.24f);
         AddImage("bread.png",pict1posX,pict1posY,pictSize,pictSize);
         breadLabel = new Label("42", BaseGame.labelStyle);
-        breadLabel.setFontScale(1.5f);
+        breadLabel.setFontScale(fontScale);
         breadLabel.setPosition(Math.round(width*0.7f),pict1posY+pictSize*.25f);
         this.addActor(breadLabel);
 
         //Ok Button
         ms = cradleGame.getLanguageStrings().get("ok");
         okButton = new TextButton( ms, BaseGame.textButtonStyle );
-        okButton.setPosition(Math.round(width*0.5f-okButton.getWidth()/2f),padding*2.0f);
+        if (w<1000) {
+            okButton.setWidth(okButton.getWidth()*0.8f);
+            okButton.setHeight(okButton.getHeight()*0.8f);
+        }
+        okButton.setPosition(Math.round(width*0.5f-okButton.getWidth()/2f),height*0.05f);
         this.addActor(okButton);
 
     }

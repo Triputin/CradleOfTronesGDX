@@ -149,7 +149,7 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
 		RelativeLayout layout = new RelativeLayout(this);
 
 		// Do the stuff that initialize() would do for you
-		requestWindowFeature(Window.FEATURE_NO_TITLE);
+		//requestWindowFeature(Window.FEATURE_NO_TITLE);
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
 				WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);

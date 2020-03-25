@@ -1,5 +1,6 @@
 package by.android.cradle;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -27,6 +28,16 @@ public class DialogBox_DailyGift extends BaseActor {
         super(x,y,s, Touchable.enabled);
         this.cradleGame = cradleGame1;
         this.setSize(width, height);
+
+        int w = Gdx.graphics.getWidth();
+        int h = Gdx.graphics.getHeight();
+        float fontScale = 1.0f;
+        if (w>1000){
+            fontScale = 1.5f;
+        } else {
+            fontScale = 0.8f;
+        }
+
         AddImage("fon_white2.png",Math.round(width*0.04f),Math.round(height*0.075f),Math.round(width*0.92f), Math.round(height*0.85f));
         AddImage("goldenframe01.png",0,0,width,height);
 
@@ -36,7 +47,7 @@ public class DialogBox_DailyGift extends BaseActor {
         dialogLabel.setAlignment( Align.center );
         dialogLabel.setPosition( Math.round(width*0.07f), Math.round(height*0.8f) );
         dialogLabel.setWidth( width - 2 * padding );
-        dialogLabel.setFontScale(1.5f);
+        dialogLabel.setFontScale(fontScale);
         dialogLabel.setColor(Color.GOLD);
         this.addActor(dialogLabel);
 
@@ -47,7 +58,7 @@ public class DialogBox_DailyGift extends BaseActor {
 
         scoreLabel = new Label("0", BaseGame.labelStyle);
         //pict1Label.setAlignment(Align.left,Align.center);
-        scoreLabel.setFontScale(1.6f);
+        scoreLabel.setFontScale(fontScale);
         scoreLabel.setPosition(Math.round(getWidth()*0.6f),pict1posY+pictSize*.4f);
         this.addActor(scoreLabel);
 
@@ -59,13 +70,18 @@ public class DialogBox_DailyGift extends BaseActor {
         dialogLabel2.setAlignment( Align.center );
         dialogLabel2.setPosition( Math.round(width*0.07f), Math.round(height*0.4f) );
         dialogLabel2.setWidth( width - 2 * padding );
-        dialogLabel2.setFontScale(1.5f);
+        dialogLabel2.setFontScale(fontScale);
         dialogLabel2.setColor(Color.GOLD);
         this.addActor(dialogLabel2);
 
         //Ok Button
         ms = cradleGame.getLanguageStrings().get("ok");
         okButton = new TextButton( ms, BaseGame.textButtonStyle );
+
+        if (w<1000) {
+            okButton.setWidth(okButton.getWidth()*0.8f);
+            okButton.setHeight(okButton.getHeight()*0.8f);
+        }
         okButton.setPosition(Math.round(getWidth()/2-okButton.getWidth()/2),Math.round(height*0.12f));
 
     }
