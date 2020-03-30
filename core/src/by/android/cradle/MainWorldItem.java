@@ -40,7 +40,8 @@ public class MainWorldItem extends BaseActor {
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 InputEvent ie = (InputEvent)event;
                 if ( ie.getType().equals(InputEvent.Type.touchDown) ) {
-                    if (gameMapLevel<=cradleGame.getGameMapLevel()) {
+                    if (gameMapLevel<=cradleGame.getMaxOpenedMapLevel()) {
+                        cradleGame.setGameMapLevel(gameMapLevel);
                         cradleGame.setActiveGameMapScreen(false, gameMapLevel);
                     }
                     return true;
@@ -67,7 +68,7 @@ public class MainWorldItem extends BaseActor {
 
         }
 
-        if (gameMapLevel>cradleGame.getGameMapLevel()){
+        if (gameMapLevel>cradleGame.getMaxOpenedMapLevel()){
             clouds = AddImage("maps/clouds.png",0,0, Math.round(getWidth()),Math.round( getHeight()));
             int lockSize = Math.round( getHeight()*0.3f);
             lock = AddImage("maps/lock.png",Math.round(getWidth()*0.5f-lockSize*0.5f),Math.round( getHeight()*0.2f), lockSize,lockSize);

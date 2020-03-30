@@ -21,7 +21,8 @@ public class CradleGame extends BaseGame
     private final String LAST_KNIGHT_ITEM_GENERATED_DAY="lastknightitemgeneratedday";
     private final int DAILY_GIFT_AMOUNT = 25;
     public final int MaxGameMapLevel=4;
-    private int gameMapLevel;
+    private int gameMapLevel; //currentGameMapLevelToShow
+    private int maxOpenedMapLevel; // Player win maps levels+1;
     private int difficultyLevel;
     private KnightParams knightParams;
     private boolean isSoundOn;
@@ -118,6 +119,8 @@ public class CradleGame extends BaseGame
          languageStrings = I18NBundle.createBundle(Gdx.files.internal("strings/strings"));
 
          getResFromStorage();
+        // gameMapLevel=1; // for debug
+         //maxOpenedMapLevel=1; // for debug
          //GameRes.Gold=1000; // for debug
          //gameMapLevel=1; // for debug
          //GameRes.Score=999; // for debug
@@ -130,6 +133,7 @@ public class CradleGame extends BaseGame
          screenGamePlay.setGameLevel(gameLevel);
          difficultyLevel = prefs.getInteger("levelofhardness", 0);
          //difficultyLevel = 0; // for debug purpose
+
          gameMapScreen = new GameMapScreen(this,ply);
          helpScreen = new HelpScreen(this,ply);
          shopScreen = new ShopScreen(this,ply);
@@ -140,8 +144,8 @@ public class CradleGame extends BaseGame
          } else {
              kingdoms[0].setProtectionState(5+gameMapLevel);
          }
-         //For Debug
-         //kingdoms[0].setProtectionState(1);
+
+
          for (int i = 1; i < kingdoms.length; i++) {
              kingdoms[i].setProtectionState(prefs.getInteger("kingdomProtectionState"+i, 5));
 
@@ -149,6 +153,7 @@ public class CradleGame extends BaseGame
              //kingdoms[i].setProtectionState(0);
              //System.out.println("CradleGame.create Get:kingdomProtectionState"+i+);
          }
+         //kingdoms[0].setProtectionState(1); //for debug
 
          settingsScreen = new SettingsScreen(this,ply);
          knightScreen = new KnightScreen(this,ply);
@@ -211,6 +216,11 @@ public class CradleGame extends BaseGame
         GameRes.SquareBomb2=prefs.getInteger("SquareBomb2", 0);
         GameRes.Score=prefs.getInteger("Score", 0);
         gameMapLevel = prefs.getInteger("gameMapLevel", 1);
+        maxOpenedMapLevel = prefs.getInteger("maxOpenedMapLevel", 1);
+        // for old players who don't have maxOpenedMapLevel in prefs
+        if (maxOpenedMapLevel<gameMapLevel){
+            maxOpenedMapLevel = gameMapLevel;
+        }
         isSoundOn = prefs.getBoolean("issoundon", true);
         isMusicOn = prefs.getBoolean("ismusicon", true);
         isGameLiked = prefs.getInteger("isGameLiked", 0);
@@ -238,6 +248,7 @@ public class CradleGame extends BaseGame
 
         prefs.putInteger("gameLevel", screenGamePlay.getGameLevel());
         prefs.putInteger("gameMapLevel", gameMapLevel);
+        prefs.putInteger("maxOpenedMapLevel", maxOpenedMapLevel);
         prefs.putInteger("levelofhardness", difficultyLevel);
         prefs.putInteger("Gold", GameRes.Gold);
         prefs.putInteger("Wood", GameRes.Wood);
@@ -322,6 +333,7 @@ public class CradleGame extends BaseGame
         GdxLog.print("setActiveWorldScreen():","Called");
         myRequestHandler.showAds(false);
         game.setScreen(worldScreen);
+        worldScreen.initializeMap();
         gameMapScreen.PauseMusic();
         worldScreen.PlayMusic();
         ply.logEvent("21", "setActiveWorldScreen", "Switch to");
@@ -456,20 +468,24 @@ public class CradleGame extends BaseGame
         prefs.putInteger("gameLevel", screenGamePlay.getGameLevel());
 
         gameMapLevel = 1;
+        setMaxOpenedMapLevel(1);
         gameMapScreen.setFirstMapLevelRun(true);
         prefs.putInteger("gameMapLevel", gameMapLevel);
+        prefs.putInteger("maxOpenedMapLevel", maxOpenedMapLevel);
         // reset levelofhardness
         difficultyLevel = 0;
         prefs.putInteger("levelofhardness", difficultyLevel);
-        gameMapScreen.initializeMap(gameMapLevel);
-        Kingdom[] kingdoms = gameMapScreen.getKingdoms();
-        //kingdoms[0].setProtectionState(0); // starting Kingdom for player
-
-        //Ошибка !!!!!
-       /* for (int i = 1; i < kingdoms.length; i++) {
-            prefs.putInteger("kingdomProtectionState"+i, kingdoms[i].getProtectionState());
+        for (int i =0; i<36; i++){
+            prefs.putInteger("KingdomProtectionState"+i,gameMapScreen.getKingdomPlannedProtectionState(i));
         }
-        */
+
+        for (int i=0; i<gameMapScreen.getKingdoms().length;i++){
+            gameMapScreen.getKingdoms()[i].resetProtectionState(gameMapLevel);
+            gameMapScreen.getKingdoms()[i].resetFlag();
+        }
+        gameMapScreen.getGameMapLevelInfo().resetMapLevelsWinned();
+        gameMapScreen.initializeMap(gameMapLevel);
+
 
         GameRes.Bread=100;
         GameRes.Wood=100;
@@ -489,6 +505,7 @@ public class CradleGame extends BaseGame
 
         knightParams.reset();
         if (screenGamePlay.knight!=null) {screenGamePlay.knight.reDraw();}
+
 
         prefs.flush();
         ply.logEvent("10", "restartGame", "Game restarted");
@@ -517,10 +534,16 @@ public class CradleGame extends BaseGame
 
     public void setGameMapLevel(int gameMapLevel) {
         // Get screen size
+        if (gameMapScreen==null) return;
         int w = Gdx.graphics.getWidth();
         int h = Gdx.graphics.getHeight();
         this.gameMapLevel = gameMapLevel;
         prefs.putInteger("gameMapLevel", gameMapLevel);
+        System.out.println("setGameMapLevel = "+gameMapLevel);
+        if(gameMapLevel>maxOpenedMapLevel){
+            maxOpenedMapLevel=gameMapLevel;
+            prefs.putInteger("maxOpenedMapLevel", maxOpenedMapLevel);
+        }
         Kingdom[] kingdoms = gameMapScreen.getKingdoms();
         if (gameMapLevel ==1) {
             kingdoms[0].setProtectionState(0); // starting Kingdom for player
@@ -536,7 +559,7 @@ public class CradleGame extends BaseGame
         prefs.flush();
 
 
-        gameMapScreen.setFirstMapLevelRun(true);
+        //gameMapScreen.setFirstMapLevelRun(true);
         if(gameMapLevel==1){
             screenGamePlay.getHall().loadTexture( "game_of_thrones_locations4.jpg",w,h );}
         else{
@@ -708,5 +731,15 @@ public class CradleGame extends BaseGame
     public void setLastScoreWhenAskedToVote(int lastScoreWhenAskedToVote) {
         this.lastScoreWhenAskedToVote = lastScoreWhenAskedToVote;
         prefs.putInteger("lastScoreWhenAskedToVote", lastScoreWhenAskedToVote);
+    }
+
+    public int getMaxOpenedMapLevel() {
+        return maxOpenedMapLevel;
+    }
+
+    public void setMaxOpenedMapLevel(int maxOpenedMapLevel) {
+        this.maxOpenedMapLevel = maxOpenedMapLevel;
+        prefs.putInteger("maxOpenedMapLevel", maxOpenedMapLevel);
+        prefs.flush();
     }
 }

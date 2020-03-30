@@ -100,7 +100,7 @@ public class DialogBox_EndLevel  extends BaseActor{
             okButton.setWidth(okButton.getWidth()*0.8f);
             okButton.setHeight(okButton.getHeight()*0.8f);
         }
-        okButton.setPosition(Math.round(width*0.5f-okButton.getWidth()/2f),height*0.05f);
+        okButton.setPosition(Math.round(width*0.5f-okButton.getWidth()/2f),height*0.07f);
         this.addActor(okButton);
 
     }

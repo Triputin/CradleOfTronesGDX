@@ -16,6 +16,7 @@ import java.util.ArrayList;
 public class WorldScreen extends BaseScreen {
 
     private ArrayList<MainWorldItem> mainWorldItemArrayList;
+    private BaseActor fon;
     private int scrollPos;
     private final int ItemsQttyPerScreen = 3;
 
@@ -50,21 +51,9 @@ public class WorldScreen extends BaseScreen {
 
 
         //Items
-        int itemSizeH = Math.round(h*0.5f);
-        //int itemSizeW = Math.round(itemSizeH*16f/9f);
-        int itemSizeW = w/ItemsQttyPerScreen;
-        int itemPosition = Math.round(h*0.5f);
         mainWorldItemArrayList = new ArrayList<>();
-        for (int i=0; i<cradleGame.MaxGameMapLevel;i++){
-            mainWorldItemArrayList.add(new MainWorldItem(i*itemSizeW, Math.round(itemPosition - itemSizeH*0.5f),itemSizeW,itemSizeH,mainStage,cradleGame,i+1));
-        }
+        initializeMap();
 
-
-        //Fon
-        BaseActor fon = new BaseActor(0, 0, uiStage, Touchable.disabled);
-        fon.loadTexture("maps/main_world_frame01.png", w, itemSizeH);
-        fon.setPosition(0,itemPosition-fon.getHeight()*0.5f);
-        uiStage.addActor(fon);
 
 
         //Menu button
@@ -148,6 +137,34 @@ public class WorldScreen extends BaseScreen {
 
     }
 
+
+    public void initializeMap(){
+
+        for (int i=0; i<mainWorldItemArrayList.size();i++){
+            mainWorldItemArrayList.get(i).remove();
+        }
+        mainWorldItemArrayList.clear();
+        if (fon!=null){
+            fon.clear();
+            fon.remove();
+        }
+
+        int w = Gdx.graphics.getWidth();
+        int h = Gdx.graphics.getHeight();
+        int itemSizeH = Math.round(h*0.5f);
+        int itemSizeW = w/ItemsQttyPerScreen;
+        int itemPosition = Math.round(h*0.5f);
+        for (int i=0; i<cradleGame.MaxGameMapLevel;i++){
+            mainWorldItemArrayList.add(new MainWorldItem(i*itemSizeW, Math.round(itemPosition - itemSizeH*0.5f),itemSizeW,itemSizeH,mainStage,cradleGame,i+1));
+        }
+
+
+        //Fon
+        fon = new BaseActor(0, 0, uiStage, Touchable.disabled);
+        fon.loadTexture("maps/main_world_frame01.png", w, itemSizeH);
+        fon.setPosition(0,itemPosition-fon.getHeight()*0.5f);
+        uiStage.addActor(fon);
+    }
 
     private void moveForward(){
         MainWorldItem mainWorldItem;

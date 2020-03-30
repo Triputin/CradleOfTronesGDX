@@ -45,11 +45,13 @@ public class GameMapScreen extends BaseScreen {
     private Knight knight;
     private Weapon weapon;
     private BlackMarket blackMarket;
+    private GameMapLevelInfo gameMapLevelInfo; // holds info about winned gameMapLevels
 
     public GameMapScreen(CradleGame cradleGame,IPlayServices ply) {
 
         super(cradleGame,ply);
         isUpdateMapNeeded = false;
+        gameMapLevelInfo = new GameMapLevelInfo(cradleGame);
 
     }
 
@@ -526,9 +528,10 @@ public class GameMapScreen extends BaseScreen {
 
                     levelOfHardnessDialog.setVisible(false);
                     int lvlH=levelOfHardnessDialog.getSelectedDifficultyLevel();
-                    System.out.println("Levl of hardness ="+ lvlH);
+                    System.out.println("Level of hardness ="+ lvlH);
                     cradleGame.setDifficultyLevel(lvlH);
                     if (isFirstMapLevelRun){
+                        isFirstMapLevelRun=false;
                         startInfoDialog(mapLevel);
                     }
                     return true;
@@ -539,11 +542,13 @@ public class GameMapScreen extends BaseScreen {
         }
 
         if (isFirstMapLevelRun && (!levelOfHardnessDialog.isVisible())){
+            isFirstMapLevelRun=false;
             startInfoDialog(mapLevel);
         }
     }
 
     private void startInfoDialog(int mapLevel){
+
         final InputListener inputListener2 = new InputListener() {
             public boolean touchDown (InputEvent e, float x, float y, int pointer, int button){
                 if (!(e instanceof InputEvent))
@@ -559,7 +564,13 @@ public class GameMapScreen extends BaseScreen {
         };
 
         mapLevelInfoDialog.setText(getTextForMapLevel(mapLevel));
-        mapLevelInfoDialog.setFontScale(1.5f);
+        int w = Gdx.graphics.getWidth();
+        if (w>1000){
+            mapLevelInfoDialog.setFontScale(1.4f);
+        } else {
+            mapLevelInfoDialog.setFontScale(0.6f);
+        }
+
         mapLevelInfoDialog.setZIndex(101);
         mapLevelInfoDialog.showWithOkButton(inputListener2);
     }
@@ -595,6 +606,10 @@ public class GameMapScreen extends BaseScreen {
             }
         }
 
+        if ((gameMapLevelInfo!=null) && gameMapLevelInfo.isGameMapLevelWinned(cradleGame.getGameMapLevel()))
+        {
+         return;// Already winned before
+        }
         // win game reached!!!
         isWinMapLevel=true;
         System.out.println("CheckWin called");
@@ -606,6 +621,11 @@ public class GameMapScreen extends BaseScreen {
 
 
     public void WinGame(){
+        if (gameMapLevelInfo==null){return;}
+        if(cradleGame.getGameMapLevel()<cradleGame.getMaxOpenedMapLevel()){
+            return;
+        }
+
         // Get screen size
         int w = Gdx.graphics.getWidth();
         int ww = w;
@@ -618,9 +638,7 @@ public class GameMapScreen extends BaseScreen {
         if (throne!=null){
             throne.remove();
         }
-        if (messageLabel!=null){
-            messageLabel.remove();
-        }
+
 
         throne = new BaseActor(0,-h,uiStage,Touchable.disabled);
         throne.loadTexture("ironthrone.png",w,h);
@@ -630,12 +648,16 @@ public class GameMapScreen extends BaseScreen {
         Action actions = sequence(moveTo((ww-w)/2,0,2f));
         throne.addAction(actions);
 
+        if (messageLabel!=null){
+            messageLabel.remove();
+        }
+
         //System.out.println("Throne anim started!!!");
         Action completeAction = new Action(){
             public boolean act( float delta ) {
                 // Do your stuff
 
-                if (isUpdateMapNeeded) {
+
                     String s = cradleGame.getLanguageStrings().get("continue_to_next_level");
                     continueButton = new TextButton("   "+s+"   ", BaseGame.textButtonStyle);
                     uiStage.addActor(continueButton);
@@ -650,32 +672,43 @@ public class GameMapScreen extends BaseScreen {
                             return false;
                         isWinMapLevel=false;
                         UpdateRes();
+                        cradleGame.setGameMapLevel(cradleGame.getMaxOpenedMapLevel());
+                        setFirstMapLevelRun(true);
+                        cradleGame.setActiveGameMapScreen(false,cradleGame.getGameMapLevel());
                         return true;
                     }
                 });
 
-            }
+
                 return true;
             }
         };
 
 
-        if (cradleGame.getGameMapLevel()<cradleGame.MaxGameMapLevel) {
-            cradleGame.setGameMapLevel(cradleGame.getGameMapLevel() + 1);
+        if (cradleGame.getMaxOpenedMapLevel()<cradleGame.MaxGameMapLevel) {
+            gameMapLevelInfo.setMapLevelWinned(cradleGame.getGameMapLevel());
+
+
+            cradleGame.setMaxOpenedMapLevel(cradleGame.getMaxOpenedMapLevel()+1);
+
+            isUpdateMapNeeded=true;
+        } else {
             isUpdateMapNeeded=true;
         }
 
         actions = sequence(fadeOut(0.01f), Actions.delay(3),fadeIn(1f) , completeAction);
 
-        messageLabel = new Label("...", BaseGame.labelStyle);
         String s = cradleGame.getLanguageStrings().get("throne_is_yours");
-        messageLabel.setText(s);
-        messageLabel.setX(ww/2f- messageLabel.getWidth()/2f);
-        messageLabel.setY(h*0.3f);
+        messageLabel = new Label(s, BaseGame.labelStyle);
         messageLabel.setFontScale(3);
+        //messageLabel.setText(s);
         messageLabel.setVisible(true);
+        messageLabel.setX((float)ww/4.0f);
+        //System.out.println("messageLabel.getWidth()/2.0f="+messageLabel.getWidth()/2.0f);
+        messageLabel.setY(h*0.3f);
         messageLabel.setColor(Color.RED);
         messageLabel.addAction(actions);
+        //uiTable.add(messageLabel).expandY();
         uiStage.addActor(messageLabel);
 
     }
@@ -696,6 +729,9 @@ public String getTextForMapLevel(int maplevel){
                 break;
             case 3:
                 s = cradleGame.getLanguageStrings().get("maplevel3text");
+                break;
+            case 4:
+                s = cradleGame.getLanguageStrings().get("maplevel4text");
                 break;
              default:
                  s="";
@@ -823,4 +859,49 @@ public String getTextForMapLevel(int maplevel){
         cradleGame.connectUs();
     }
 
+    public GameMapLevelInfo getGameMapLevelInfo() {
+        return gameMapLevelInfo;
+    }
+
+    public int getKingdomPlannedProtectionState(int Id){
+        int res=5;
+        switch(Id){
+            //level 1
+            case 0: res=0;break;
+            case 1: res=5;break;
+            case 2: res=7;break;
+            case 3: res=5;break;
+            case 4: res=7;break;
+            case 5: res=5;break;
+            case 6: res=7;break;
+
+            //level 2
+            case 10: res=6;break;
+            case 11: res=8;break;
+            case 12: res=6;break;
+            case 13: res=8;break;
+            case 14: res=6;break;
+            case 15: res=8;break;
+            case 16: res=6;break;
+
+            // level 3
+            case 20: res=7;break;
+            case 21: res=9;break;
+            case 22: res=7;break;
+            case 23: res=9;break;
+            case 24: res=7;break;
+            case 25: res=9;break;
+            case 26: res=7;break;
+
+            // level 4
+            case 30: res=10;break;
+            case 31: res=10;break;
+            case 32: res=8;break;
+            case 33: res=10;break;
+            case 34: res=8;break;
+            case 35: res=10;break;
+            case 36: res=10;break;
+        }
+        return res;
+    }
 }

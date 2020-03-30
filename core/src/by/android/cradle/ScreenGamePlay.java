@@ -862,13 +862,22 @@ public void RemoveAndFillSquare(int centreRow, int centreCol, int squareSize){
         x0=cell.getCol();
         y0=cell.getRow();
 
-//Создаем змейку из существующих и новых элементов
-        newCells = FindCellsToMove(cell,directionToFill);
-        newItems = FindItemsToMove(newCells);
-        AddNewItems(newCells,newItems,arrayList.size(),cell);
-        //System.out.println("FillRemovedCells: newCells = "+newCells.size());
-        //System.out.println("FillRemovedCells: newItems = "+newItems.size());
 
+        newCells = FindCellsToMove(cell,directionToFill);
+
+        // Если True то Крюк найден, поэтому просто удалить и заполнить ячейки без движения змейки
+        if(checkForDublicates(newCells, arrayList)){
+
+            newCells.clear();
+        }
+        else {
+        newItems = FindItemsToMove(newCells);
+        }
+
+        AddNewItems(newCells,newItems,arrayList.size(),cell);
+
+
+        //Создаем змейку из существующих и новых элементов
         for (int i=0; i<arrayList.size();i++){
             newItems.get(0).setCell(arrayList.get(i));
             newItems.get(0).addAction(Actions.after(Actions.moveTo(gameFieldX +newItems.get(0).getCol() * cellSize, gameFieldY + newItems.get(0).getRow() * cellSize,0.1f)));
@@ -889,7 +898,7 @@ public void RemoveAndFillSquare(int centreRow, int centreCol, int squareSize){
 
     }
 
-    // Ошибка в расчете (лишняя ячейка добавляется, если крюк сделан, т.к. расчет количества ячеек к сдвигу идет от стартовой без учета крюка
+
     private ArrayList<Cell> FindCellsToMove(Cell firstCell,ItemPos itemPos){
         int count = 0;
         ArrayList<Cell> arrayList = new ArrayList<>();
@@ -938,6 +947,18 @@ public void RemoveAndFillSquare(int centreRow, int centreCol, int squareSize){
             }
         }
         return arrayListItems;
+    }
+
+    //Check if the same item exists in both arrays
+    private boolean checkForDublicates(ArrayList<Cell> arrayListMove, ArrayList<Cell> arrayListDel){
+        for (int i=0;i<arrayListMove.size();i++){
+            for (int j=0;j<arrayListDel.size();j++){
+                if (arrayListDel.get(j).isEqual(arrayListMove.get(i))){
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     public void AddNewItems(ArrayList<Cell> arrayListCells,ArrayList<Item> arrayListItems,int count,Cell fCell){

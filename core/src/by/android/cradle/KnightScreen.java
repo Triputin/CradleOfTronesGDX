@@ -57,7 +57,7 @@ public class KnightScreen extends BaseScreen {
         int h = Gdx.graphics.getHeight();
         float fontScale = 1.0f;
         if (w>1000){
-            fontScale = 3.0f;
+            fontScale = 2.8f;
         } else {
             fontScale = 2.0f;
         }
