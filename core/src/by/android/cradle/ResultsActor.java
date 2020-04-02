@@ -13,32 +13,35 @@ public class ResultsActor extends BaseActor{
     public ResultsActor(float x, float y, int width, int height, Stage s, Touchable touchable, BaseActor baseActor)
     {
         super(x,y,s, touchable);
+        float fontScale = 1.9f;
         setHeight(height);
         setWidth(width);
+        baseActor.loadTexture("fon_black.png",(int)getWidth(),(int)getHeight());
         baseActor.AddImage("results.png",Math.round(x),Math.round(y), (int) getWidth(), (int) getHeight());
+        baseActor.AddImage("goldenframe02.png",Math.round(x),Math.round(y), (int) getWidth(), (int) getHeight());
 
         goldQuantityLabel = new Label(" "+0, BaseGame.labelStyle);
         goldQuantityLabel.setColor( Color.GOLDENROD );
         goldQuantityLabel.setPosition( x+width*0.1f,y+20 );
-        goldQuantityLabel.setFontScale(2f);
+        goldQuantityLabel.setFontScale(fontScale);
         baseActor.addActor(goldQuantityLabel);
 
         woodQuantityLabel = new Label(" "+0, BaseGame.labelStyle);
         woodQuantityLabel.setColor( Color.GOLDENROD );
         woodQuantityLabel.setPosition( x+width*0.32f,y+20 );
-        woodQuantityLabel.setFontScale(2f);
+        woodQuantityLabel.setFontScale(fontScale);
         baseActor.addActor(woodQuantityLabel);
 
         breadQuantityLabel = new Label(" "+0, BaseGame.labelStyle);
         breadQuantityLabel.setColor( Color.GOLDENROD );
         breadQuantityLabel.setPosition( x+width*0.58f,y+20 );
-        breadQuantityLabel.setFontScale(2f);
+        breadQuantityLabel.setFontScale(fontScale);
         baseActor.addActor(breadQuantityLabel);
 
         scoreLabel = new Label(" "+0, BaseGame.labelStyle);
         scoreLabel.setColor( Color.GOLDENROD );
         scoreLabel.setPosition( x+width*0.78f,y+20 );
-        scoreLabel.setFontScale(2f);
+        scoreLabel.setFontScale(fontScale);
         baseActor.addActor(scoreLabel);
     }
 

@@ -139,10 +139,12 @@ public class ScreenGamePlay extends BaseScreen {
 
 
         w = Gdx.graphics.getWidth();
-        BaseActor baseResultsActor = new BaseActor(w*0.25f,h,mainStage,Touchable.disabled);
-        baseResultsActor.setWidth((int) Math.round(w*0.8));
-        baseResultsActor.setHeight(70);
-        resultsActor = new ResultsActor(0,0,(int) Math.round(w*0.8),70,mainStage,Touchable.disabled,baseResultsActor);
+        h = Gdx.graphics.getHeight();
+        int resHeight = (int)Math.round(h*0.12);
+        BaseActor baseResultsActor = new BaseActor(w*0.25f,h-resHeight,mainStage,Touchable.disabled);
+        baseResultsActor.setWidth((int) Math.round(w*0.75));
+        baseResultsActor.setHeight(resHeight);
+        resultsActor = new ResultsActor(0,0,(int) Math.round(w*0.75),resHeight,mainStage,Touchable.disabled,baseResultsActor);
 
         /*
         BaseActor baseResultsActor = new BaseActor(gameFieldX*0.9f,h,uiStage,Touchable.disabled);

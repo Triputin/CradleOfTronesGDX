@@ -97,15 +97,17 @@ public class GameMapScreen extends BaseScreen {
 
 
         //Fon for results
+        int resHeight = (int)Math.round(h*0.12);
+        /*
         BaseActor fon = new BaseActor(0,0,uiStage,Touchable.disabled);
-        fon.loadTexture("fon_orange.png",(int) Math.round(w*0.8)+30,70);
+        fon.loadTexture("fon_orange.png",(int) Math.round(w*0.8)+30,resHeight);
         fon.setX((int) Math.round(w*0.25));
-        fon.setY(h-70);
-
-        BaseActor baseResultsActor = new BaseActor(w*0.25f,h-70,uiStage,Touchable.disabled);
-        baseResultsActor.setWidth((int) Math.round(w*0.8));
-        baseResultsActor.setHeight(70);
-        resultsActor = new ResultsActor(0,0,(int) Math.round(w*0.8),70,uiStage,Touchable.disabled,baseResultsActor);
+        fon.setY(h-resHeight);
+*/
+        BaseActor baseResultsActor = new BaseActor(w*0.25f,h-resHeight,uiStage,Touchable.disabled);
+        baseResultsActor.setWidth((int) Math.round(w*0.75));
+        baseResultsActor.setHeight(resHeight);
+        resultsActor = new ResultsActor(0,0,(int) Math.round(w*0.75),resHeight,uiStage,Touchable.disabled,baseResultsActor);
 
         initializeMap(cradleGame.getGameMapLevel());
         instrumental.pause();
