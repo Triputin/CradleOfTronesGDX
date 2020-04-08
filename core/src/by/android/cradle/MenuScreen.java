@@ -17,6 +17,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
+import java.io.File;
+
 
 public class MenuScreen extends BaseScreen {
 
@@ -43,6 +45,8 @@ public class MenuScreen extends BaseScreen {
 
         int w = Gdx.graphics.getWidth();
         int h = Gdx.graphics.getHeight();
+
+
 
         //Flags
 
@@ -101,21 +105,20 @@ public class MenuScreen extends BaseScreen {
             }
         });
 
-        /*
-        s = cradleGame.getLanguageStrings().get("help");
-        TextButton helpButton = new TextButton( "   "+s+"   ", BaseGame.textButtonStyle );
-        // startButton.setPosition(150,150);
-        // uiStage.addActor(startButton);
 
-        helpButton.addListener(new InputListener() {
+/*
+        TextButton testButton = new TextButton( "Test", BaseGame.textButtonStyle );
+        testButton.setPosition(300,300);
+        uiStage.addActor(testButton);
+
+        testButton.addListener(new InputListener() {
             public boolean touchDown (InputEvent e, float x, float y, int pointer, int button){
                 if (!(e instanceof InputEvent))
                     return false;
 
                 if (!((InputEvent) e).getType().equals(InputEvent.Type.touchDown))
                     return false;
-                instrumental.pause();
-                cradleGame.setActiveHelpScreen();
+                cradleGame.scheduleReminder(1);
                 return true;
             }
         });
@@ -309,11 +312,29 @@ public class MenuScreen extends BaseScreen {
 
     public boolean keyDown(int keyCode)
     {
+        /*
         if (Gdx.input.isKeyPressed(Input.Keys.ENTER))
 
         cradleGame.setActiveGameMapScreen(false,0);
         if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE))
             Gdx.app.exit();
+            */
+        /*
+        System.out.println("keyDown of MenuScreen called!!!");
+
+        if(keyCode == Input.Keys.BACK){
+            // Respond to the back button click here
+            System.out.println("keyDown");
+            return true;
+        }
+
+        if(keyCode == Input.Keys.MENU){
+            // Respond to the back button click here
+            System.out.println("keyMenu!!");
+            return true;
+        }
+*/
+
         return false;
     }
 

@@ -4,11 +4,12 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import by.android.cradle.CradleGame;
 import by.android.cradle.IActivityRequestHandler;
+import by.android.cradle.INotification;
 import by.android.cradle.IPlayServices;
 import by.android.cradle.SplashScreen;
 
 
-public class DesktopLauncher implements IActivityRequestHandler, IPlayServices {
+public class DesktopLauncher implements IActivityRequestHandler, IPlayServices, INotification {
 	private static DesktopLauncher application;
 	public static void main (String[] argv) {
 		if (application == null) {
@@ -20,7 +21,7 @@ public class DesktopLauncher implements IActivityRequestHandler, IPlayServices {
 
 		config.width = 900;
 		config.height = 600;
-		CradleGame cradleGame = new CradleGame(application,application);
+		CradleGame cradleGame = new CradleGame(application,application,application);
 		new LwjglApplication(cradleGame, config);
 
 	}
@@ -99,4 +100,13 @@ public class DesktopLauncher implements IActivityRequestHandler, IPlayServices {
 
 	}
 
+	@Override
+	public void scheduleReminder(long duration_minutes,String title, String message,String messageId, String tag){
+
+	}
+
+	@Override
+	public void cancelReminder(String tag){
+
+	}
 }

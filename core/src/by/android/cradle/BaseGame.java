@@ -1,6 +1,7 @@
 package by.android.cradle;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputMultiplexer;
 
 import com.badlogic.gdx.Gdx;
@@ -59,6 +60,9 @@ public abstract class BaseGame extends Game
 
         InputMultiplexer im = new InputMultiplexer();
         Gdx.input.setInputProcessor( im );
+
+        //Gdx.input.setCatchKey(Input.Keys.BACK, true); //to catch the back key so it is not passed on to the operating system
+        //Gdx.input.setCatchKey(Input.Keys.MENU, true);
 
         // parameters for generating a custom bitmap font
         FreeTypeFontGenerator fontGenerator = 

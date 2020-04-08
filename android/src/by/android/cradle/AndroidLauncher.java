@@ -2,13 +2,25 @@ package by.android.cradle;
 
 import android.app.AlertDialog;
 import android.app.Application;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.media.RingtoneManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 //import android.support.annotation.NonNull;
 import androidx.annotation.NonNull;
+import androidx.core.app.NotificationCompat;
+import androidx.work.Data;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkManager;
+
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -17,6 +29,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
 import by.android.cradle.IActivityRequestHandler;
@@ -33,8 +46,10 @@ import com.google.android.gms.ads.initialization.OnInitializationCompleteListene
 //import com.yandex.metrica.YandexMetrica;
 //import com.yandex.metrica.YandexMetricaConfig;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.concurrent.TimeUnit;
 
 //GPS
 import com.google.android.gms.auth.api.Auth;
@@ -59,9 +74,19 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.example.games.basegameutils.GameHelper;
 import com.google.firebase.analytics.FirebaseAnalytics;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 
 
-public class AndroidLauncher extends AndroidApplication implements IActivityRequestHandler,IPlayServices  {
+public class AndroidLauncher extends AndroidApplication implements IActivityRequestHandler,IPlayServices,INotification  {
+
+	public static String Default_notification_channel_id="channel01";
+	public static String Default_notification_channel_name="Information";
+
+	public static String MessageTitleKey = "Title";
+	public static String MessageTextKey = "Text";
+	public static String MessageIdKey = "Id";
+	private static long back_pressed;
 
 	protected AdView adView;
 	private final int SHOW_ADS = 1;
@@ -72,6 +97,7 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
 	//GPS second try
 	private GameHelper gameHelper;
 	private FirebaseAnalytics mFirebaseAnalytics;
+	private CradleGame cradleGame;
 
 
 	//GPS First try
@@ -145,6 +171,7 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
 		// Obtain the FirebaseAnalytics instance.
 		mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
+
 		// Create the layout
 		RelativeLayout layout = new RelativeLayout(this);
 
@@ -156,7 +183,8 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
 
 		AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
 		// Create the libgdx View
-		gameView = initializeForView(new CradleGame(this,this), config);
+		cradleGame = new CradleGame(this,this,this);
+		gameView = initializeForView(cradleGame, config);
 
 		// Create and setup the AdMob view
 		adView = new AdView(this);
@@ -237,6 +265,56 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
 
 		// Hook it all up
 		setContentView(layout);
+
+
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+			// Create channel to show notifications.
+			String channelId  = AndroidLauncher.Default_notification_channel_id;
+			String channelName = AndroidLauncher.Default_notification_channel_name;
+			NotificationManager notificationManager =
+					getSystemService(NotificationManager.class);
+			notificationManager.createNotificationChannel(new NotificationChannel(channelId,
+					channelName, NotificationManager.IMPORTANCE_LOW));
+		}
+
+		// If a notification message is tapped, any data accompanying the notification
+		// message is available in the intent extras. In this sample the launcher
+		// intent is fired when the notification is tapped, so any accompanying data would
+		// be handled here. If you want a different intent fired, set the click_action
+		// field of the notification message to the desired intent. The launcher intent
+		// is used when no click_action is specified.
+		//
+		// Handle possible data accompanying notification message.
+		// [START handle_data_extras]
+		if (getIntent().getExtras() != null) {
+			for (String key : getIntent().getExtras().keySet()) {
+				Object value = getIntent().getExtras().get(key);
+				Log.d(TAG, "Key: " + key + " Value: " + value);
+			}
+		}
+		// [END handle_data_extras]
+
+
+
+		// Get token
+		// [START retrieve_current_token]
+		FirebaseInstanceId.getInstance().getInstanceId()
+				.addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+					@Override
+					public void onComplete(@NonNull Task<InstanceIdResult> task) {
+						if (!task.isSuccessful()) {
+							Log.w(TAG, "getInstanceId failed", task.getException());
+							return;
+						}
+
+						// Get new Instance ID token
+						String token = task.getResult().getToken();
+
+						// Log and toast
+						System.out.println("Token: "+token);
+					}
+				});
+		// [END retrieve_current_token]
 
 
 
@@ -402,6 +480,7 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
 	protected void onStop() {
 		super.onStop();
 		gameHelper.onStop();
+
 	}
 
 	@Override
@@ -541,5 +620,74 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
 		}
 
 	}
+
+	@Override
+	public void scheduleReminder(long duration_minutes,String title, String message,String messageId, String tag){
+		AndroidWorker.scheduleReminder(duration_minutes,title,message,messageId,tag);
+	}
+
+	@Override
+	public void cancelReminder(String tag){
+		AndroidWorker.cancelReminder(tag);
+	}
+
+	@Override
+	public void onBackPressed() {
+		System.out.println("Android Launcher onBackPressed");
+		if (back_pressed + 2000 > System.currentTimeMillis()) {
+			if (cradleGame!=null) {
+				cradleGame.scheduleReminder(20);
+			}
+			super.onBackPressed();
+		}
+		else
+			if ((cradleGame!=null) && cradleGame.getLanguageStrings()!=null){
+				String s = cradleGame.getLanguageStrings().get("pressonceagaintoexit");
+				Toast.makeText(getBaseContext(), s,
+						Toast.LENGTH_SHORT).show();
+			}
+
+		back_pressed = System.currentTimeMillis();
+	}
+
+	/*
+	private void openQuitDialog() {
+		AlertDialog.Builder quitDialog = new AlertDialog.Builder(
+				this);
+		quitDialog.setTitle("Выход: Вы уверены?");
+
+		quitDialog.setPositiveButton("Таки да!", new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				// TODO Auto-generated method stub
+				finish();
+			}
+		});
+
+		quitDialog.setNegativeButton("Нет", new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				// TODO Auto-generated method stub
+			}
+		});
+
+		quitDialog.show();
+	}
+
+*/
+
+
+	//Method is called when user pressed home button
+	@Override
+	protected void onUserLeaveHint() {
+		//Toast toast = Toast.makeText(getApplicationContext(), "Нажата кнопка HOME", Toast.LENGTH_SHORT);
+		//toast.show();
+		//System.out.println("Android Launcher onUserLeaveHint");
+		if ((cradleGame!=null) && cradleGame.getLanguageStrings()!=null){
+			cradleGame.scheduleReminder(20);
+		}
+		super.onUserLeaveHint();
+	}
+
 
 }

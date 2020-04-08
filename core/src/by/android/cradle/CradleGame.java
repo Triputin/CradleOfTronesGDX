@@ -34,6 +34,7 @@ public class CradleGame extends BaseGame
 
     private ArrayList<KnightItemParams> knightItemsParamsDailyArrayList;
 
+    public static String DefaultWorkerTag = "CradleOfThronesWorker"; //notifications tag for clearing unneeded
 
     //game screens
     private MenuScreen menuScreen;
@@ -53,12 +54,14 @@ public class CradleGame extends BaseGame
     private IActivityRequestHandler myRequestHandler; //interface for AdMob
     private I18NBundle languageStrings; //loader for multilanguage strings
     private IPlayServices ply; //interface to connect core with android google play services
+    private INotification notification; // interface for sending notifications to user
 
-
-    public CradleGame(IActivityRequestHandler handler, IPlayServices ply) {
+    public CradleGame(IActivityRequestHandler handler, IPlayServices ply, INotification notification) {
         //connect core code with platform objects from launchers which implemented interfaces
         this.myRequestHandler = handler;
         this.ply=ply;
+        this.notification = notification;
+        notification.cancelReminder(DefaultWorkerTag); //remove all notifications
 
     }
 
@@ -742,4 +745,30 @@ public class CradleGame extends BaseGame
         prefs.putInteger("maxOpenedMapLevel", maxOpenedMapLevel);
         prefs.flush();
     }
+
+    public void scheduleReminder(int delayMinutes){
+
+        notification.cancelReminder(DefaultWorkerTag);
+
+        String title = getLanguageStrings().get("app_name");
+        String message = getLanguageStrings().get("reminder_message01");
+        notification.scheduleReminder(delayMinutes,title,message,"1",DefaultWorkerTag);
+        notification.scheduleReminder(delayMinutes+60,title,message,"2",DefaultWorkerTag);
+        notification.scheduleReminder(delayMinutes+180,title,message,"3",DefaultWorkerTag);
+        message = getLanguageStrings().get("reminder_message02");
+        notification.scheduleReminder(delayMinutes+1400,title,message,"4",DefaultWorkerTag);
+        notification.scheduleReminder(delayMinutes+1400+4320,title,message,"5",DefaultWorkerTag);
+        notification.scheduleReminder(delayMinutes+1400+4320+4320,title,message,"6",DefaultWorkerTag);
+        notification.scheduleReminder(delayMinutes+1400+4320+4320,title,message,"7",DefaultWorkerTag);
+        notification.scheduleReminder(delayMinutes+28800,title,message,"8",DefaultWorkerTag);
+
+    }
+
+    @Override
+    public void dispose() {
+        super.dispose();
+        scheduleReminder(1);
+    }
+
+
 }

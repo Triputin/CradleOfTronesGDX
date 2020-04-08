@@ -1,5 +1,6 @@
 package by.android.cradle;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -33,6 +34,8 @@ public abstract class BaseScreen implements Screen, InputProcessor
         this.cradleGame = cradleGame;
         this.ply=ply;
 
+        //Gdx.input.setCatchBackKey(true);
+
         initialize();
     }
 
@@ -65,6 +68,14 @@ public abstract class BaseScreen implements Screen, InputProcessor
 
         // defined by user
         update(dt);
+/*
+        if (Gdx.input.isKeyPressed(Input.Keys.BACK)){
+        System.out.println("BaseScreen render Back key pressed!");
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.MENU)){
+        System.out.println("BaseScreen render Menu key pressed!");
+        }
+*/
 
         // clear the screen
         Gdx.gl.glClearColor(0,0,0,1);
