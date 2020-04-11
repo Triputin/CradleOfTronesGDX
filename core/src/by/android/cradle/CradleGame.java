@@ -122,7 +122,6 @@ public class CradleGame extends BaseGame
          languageStrings = I18NBundle.createBundle(Gdx.files.internal("strings/strings"));
 
          getResFromStorage();
-        // gameMapLevel=1; // for debug
          //maxOpenedMapLevel=1; // for debug
          //GameRes.Gold=1000; // for debug
          //gameMapLevel=1; // for debug
@@ -132,7 +131,7 @@ public class CradleGame extends BaseGame
          screenGamePlay = new ScreenGamePlay(this,ply);
 
          int gameLevel = prefs.getInteger("gameLevel", 1);
-         //gameLevel = 2; // for debug purpose
+         //gameLevel = 1; // for debug purpose
          screenGamePlay.setGameLevel(gameLevel);
          difficultyLevel = prefs.getInteger("levelofhardness", 0);
          //difficultyLevel = 0; // for debug purpose
@@ -404,7 +403,7 @@ public class CradleGame extends BaseGame
         if (mapLevel>0) {
             gameMapScreen.initializeMap(mapLevel);
         }
-        gameMapScreen.UpdateRes(); //Shows Thron if maplevel ended
+        gameMapScreen.UpdateRes(); //Shows Thron if maplevel ended and hides arrows if gamelevel>1
 
         screenGamePlay.setPaused(true);
         menuScreen.PauseMusic();
@@ -767,7 +766,6 @@ public class CradleGame extends BaseGame
     @Override
     public void dispose() {
         super.dispose();
-        scheduleReminder(1);
     }
 
 

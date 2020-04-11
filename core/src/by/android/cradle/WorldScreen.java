@@ -74,6 +74,7 @@ public class WorldScreen extends BaseScreen {
                 if ( ie.getType().equals(InputEvent.Type.touchDown) ) {
                     instrumental.pause();
                     cradleGame.setActiveGameMapScreen(false,0);
+                    cradleGame.getGameMapScreen().UpdateRes();
                     return true;
                 }
                 return false;

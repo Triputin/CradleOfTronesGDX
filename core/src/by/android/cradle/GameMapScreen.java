@@ -46,6 +46,8 @@ public class GameMapScreen extends BaseScreen {
     private Weapon weapon;
     private BlackMarket blackMarket;
     private GameMapLevelInfo gameMapLevelInfo; // holds info about winned gameMapLevels
+    private ArrowDownActor arrowDownActor;
+    private int kingdomsize;
 
     public GameMapScreen(CradleGame cradleGame,IPlayServices ply) {
 
@@ -271,7 +273,7 @@ public class GameMapScreen extends BaseScreen {
 
         final int w = Gdx.graphics.getWidth();
         int h = Gdx.graphics.getHeight();
-        int kingdomsize = h/9;
+        kingdomsize = h/9;
         if (kingdoms!=null){
             for (int i = 0; i < kingdoms.length; i++) {
                 kingdoms[i].saveParams();
@@ -282,6 +284,9 @@ public class GameMapScreen extends BaseScreen {
             arena.remove();
         }
 
+        if(arrowDownActor!=null){
+            arrowDownActor.remove();
+        }
         if (blackMarket!=null) {
             blackMarket.remove();
         }
@@ -331,7 +336,10 @@ public class GameMapScreen extends BaseScreen {
                     kingdoms[6] = new Kingdom(w*0.78f, h*0.35f,kingdomsize,kingdomsize,uiStage,Touchable.enabled,KingdomNames.Principality_of_Dorne,6,cradleGame,resultsActor);
                     arena = new Arena(w * 0.75f, h * 0.25f, Math.round(kingdomsize * 1.56f), kingdomsize, uiStage, Touchable.enabled);
                     blackMarket = new BlackMarket(w * 0.68f, h * 0.32f, Math.round(kingdomsize * 1.56f), kingdomsize, uiStage, Touchable.enabled);
-
+                    if ((cradleGame.getGameMapLevel()==1)&&(cradleGame.getScreenGamePlay().getGameLevel()==1)){
+                       arrowDownActor = new ArrowDownActor(w*0.6f, h*0.5f,kingdomsize, kingdomsize,uiStage, cradleGame);
+                       arrowDownActor.setVisible(false);
+                    }
                 break;
             case 3:
 
@@ -547,6 +555,14 @@ public class GameMapScreen extends BaseScreen {
             isFirstMapLevelRun=false;
             startInfoDialog(mapLevel);
         }
+/*
+        if (isFirstMapLevelRun==false){
+            if (arrowDownActor!=null) {
+                arrowDownActor.setVisible(true);
+            }
+        }
+        */
+
     }
 
     private void startInfoDialog(int mapLevel){
@@ -561,6 +577,12 @@ public class GameMapScreen extends BaseScreen {
 
                 mapLevelInfoDialog.setVisible(false);
                 setFirstMapLevelRun(false);
+                int w = Gdx.graphics.getWidth();
+                int h = Gdx.graphics.getHeight();
+                if ((cradleGame.getGameMapLevel()==1)&&(cradleGame.getScreenGamePlay().getGameLevel()==1)) {
+                    arrowDownActor.startAnimation(w * 0.6f + kingdomsize * 0.1f, h * 0.4f + kingdomsize * 1.5f, w * 0.6f + kingdomsize * 0.1f, h * 0.4f + kingdomsize);
+                    arrowDownActor.setVisible(true);
+                }
                 return true;
             }
         };
@@ -583,7 +605,11 @@ public class GameMapScreen extends BaseScreen {
         for (int i=0; i<kingdoms.length;i++){
             kingdoms[i].saveParams();
         }
-
+        if (cradleGame.getScreenGamePlay().getGameLevel()>1){
+            if(arrowDownActor!=null) {
+                arrowDownActor.setVisible(false);
+            }
+        }
         checkWin();
         if (isUpdateMapNeeded && (!isWinMapLevel)){
             //changeMapTexture(cradleGame.getGameMapLevel());
