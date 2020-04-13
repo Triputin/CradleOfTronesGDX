@@ -35,14 +35,14 @@ public class DialogBox extends BaseActor
         dialogLabel.setPosition( Math.round(width*0.075f), Math.round(height*0.1f) );
         this.setSize(width, height);
         dialogLabel.setWidth( Math.round(width*0.85f) );
-        dialogLabel.setHeight( Math.round(height*0.8f));
+        dialogLabel.setHeight( Math.round(height*0.75f));
 
         this.addActor(dialogLabel);
 
         //Ok Button
         String ms = cradleGame.getLanguageStrings().get("ok");
         okButton = new TextButton( ms, BaseGame.textButtonStyle );
-        okButton.setPosition(Math.round(getWidth()/2-okButton.getWidth()/2),height*0.07f);
+        okButton.setPosition(Math.round(getWidth()/2-okButton.getWidth()/2),height*0.12f);
 
 
     }

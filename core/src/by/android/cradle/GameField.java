@@ -9,12 +9,14 @@ import java.util.ArrayList;
 public class GameField extends BaseActor {
     private ArrayList<GameCell> gameCells ;
     protected CradleGame cradleGame;
+    private int cellsCount;
 
     public GameField(float x, float y, Stage s,float width,float height,int cellsCount, int gameLevel,CradleGame cradleGame)
     {
         super(x,y,s,Touchable.enabled);
         this.cradleGame = cradleGame;
         gameCells = new ArrayList<>();
+        this.cellsCount = cellsCount;
         int cellSizeX = (int)width/cellsCount;
         int cellSizeY = (int)height/cellsCount;
         //loadTexture("game_of_thrones_locations4.jpg", (int) width,(int) height);
@@ -73,8 +75,12 @@ public ArrayList<ArrayList<Item>> FindSolutions(int cellsCount, Stage stage){
        for (int j =0; j< cellsCount;j++){
             cell.setCol(j);
             cell.setRow(i);
-            arrayList = GetSoluton(cell, stage, cellsCount);
-            if (arrayList.size()>2){arraySolutions.add(arrayList);}
+            if (!GetItemAtCell(cell,stage).isLocked()) {
+                arrayList = GetSoluton(cell, stage, cellsCount);
+                if (arrayList.size() > 2) {
+                    arraySolutions.add(arrayList);
+                }
+            }
 
        }
     }
@@ -85,6 +91,16 @@ public ArrayList<ArrayList<Item>> FindSolutions(int cellsCount, Stage stage){
 
 
     return arraySolutions;
+}
+
+public ArrayList<Item> GetAllItems(){
+    ArrayList<Item> arrayList = new ArrayList<>();
+
+    for (GameCell gameCell: gameCells){
+        arrayList.add(GetItemAtCell(gameCell.getCell(),getStage()));
+    }
+
+    return arrayList;
 }
 
 public Item GetItemAtCell(Cell cell, Stage stage){
@@ -118,7 +134,7 @@ public ArrayList<Item> GetSoluton (Cell cell, Stage stage, int cellCount){
     if (cell.getCol()>0){
         item2 = GetItemAtCell(new Cell(cell.getRow(),cell.getCol()-1), stage);
         className2 = item2.getClass().getName();
-        if ((className1 == className2) && (!item2.isLocked())){
+        if (((className1 == className2)||(className2=="by.android.cradle.Coin")) && (!item2.isLocked())){
             root.childs.add(new GameNode(item2.getCell(),item1.getCell()));
         }
     }
@@ -126,7 +142,7 @@ public ArrayList<Item> GetSoluton (Cell cell, Stage stage, int cellCount){
     if (cell.getCol()<(cellCount-2)){
         item2 = GetItemAtCell(new Cell(cell.getRow(),cell.getCol()+1), stage);
         className2 = item2.getClass().getName();
-        if ((className1 == className2) && (!item2.isLocked())){
+        if (((className1 == className2)||(className2=="by.android.cradle.Coin")) && (!item2.isLocked())){
             root.childs.add(new GameNode(item2.getCell(),item1.getCell()));
         }
     }
@@ -134,7 +150,7 @@ public ArrayList<Item> GetSoluton (Cell cell, Stage stage, int cellCount){
     if (cell.getRow()<(cellCount-2)){
         item2 = GetItemAtCell(new Cell(cell.getRow()+1,cell.getCol()), stage);
         className2 = item2.getClass().getName();
-        if ((className1 == className2) && (!item2.isLocked())){
+        if (((className1 == className2)||(className2=="by.android.cradle.Coin")) && (!item2.isLocked())){
             root.childs.add(new GameNode(item2.getCell(),item1.getCell()));
         }
     }
@@ -142,7 +158,7 @@ public ArrayList<Item> GetSoluton (Cell cell, Stage stage, int cellCount){
     if (cell.getRow()>0){
         item2 = GetItemAtCell(new Cell(cell.getRow()-1,cell.getCol()), stage);
         className2 = item2.getClass().getName();
-        if ((className1 == className2) && (!item2.isLocked())){
+        if (((className1 == className2)||(className2=="by.android.cradle.Coin")) && (!item2.isLocked())){
             root.childs.add(new GameNode(item2.getCell(),item1.getCell()));
         }
     }
@@ -170,7 +186,7 @@ private void FillNodes(Cell prevcell, GameNode gameNode,Stage stage, int cellCou
     if (cell.getCol()>0){
         item2 = GetItemAtCell(new Cell(cell.getRow(),cell.getCol()-1), stage);
         className2 = item2.getClass().getName();
-        if ((className1 == className2)&&(!root.isInNodes(item2.getCell()))){
+        if (((className1 == className2)||(className2=="by.android.cradle.Coin"))&&(!root.isInNodes(item2.getCell())&& (!item2.isLocked()))){
             gameNode.childs.add(new GameNode(item2.getCell(),item1.getCell()));
         }
     }
@@ -178,7 +194,7 @@ private void FillNodes(Cell prevcell, GameNode gameNode,Stage stage, int cellCou
     if (cell.getCol()<(cellCount-2)){
         item2 = GetItemAtCell(new Cell(cell.getRow(),cell.getCol()+1), stage);
         className2 = item2.getClass().getName();
-        if ((className1 == className2)&&(!root.isInNodes(item2.getCell()))){
+        if (((className1 == className2)||(className2=="by.android.cradle.Coin"))&&(!root.isInNodes(item2.getCell())&& (!item2.isLocked()))){
             gameNode.childs.add(new GameNode(item2.getCell(),item1.getCell()));
         }
     }
@@ -186,7 +202,7 @@ private void FillNodes(Cell prevcell, GameNode gameNode,Stage stage, int cellCou
     if (cell.getRow()<(cellCount-2)){
         item2 = GetItemAtCell(new Cell(cell.getRow()+1,cell.getCol()), stage);
         className2 = item2.getClass().getName();
-        if ((className1 == className2)&&(!root.isInNodes(item2.getCell()))){
+        if (((className1 == className2)||(className2=="by.android.cradle.Coin"))&&(!root.isInNodes(item2.getCell())&& (!item2.isLocked()))){
             gameNode.childs.add(new GameNode(item2.getCell(),item1.getCell()));
         }
     }
@@ -194,7 +210,7 @@ private void FillNodes(Cell prevcell, GameNode gameNode,Stage stage, int cellCou
     if (cell.getRow()>0){
         item2 = GetItemAtCell(new Cell(cell.getRow()-1,cell.getCol()), stage);
         className2 = item2.getClass().getName();
-        if ((className1 == className2)&&(!root.isInNodes(item2.getCell()))){
+        if (((className1 == className2)||(className2=="by.android.cradle.Coin"))&&(!root.isInNodes(item2.getCell())&& (!item2.isLocked()))){
             gameNode.childs.add(new GameNode(item2.getCell(),item1.getCell()));
         }
     }

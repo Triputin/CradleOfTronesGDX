@@ -765,6 +765,7 @@ public class CradleGame extends BaseGame
 
     @Override
     public void dispose() {
+        scheduleReminder(20);
         super.dispose();
     }
 

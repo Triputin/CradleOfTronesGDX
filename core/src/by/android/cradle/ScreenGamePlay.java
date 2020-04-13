@@ -3,6 +3,8 @@ package by.android.cradle;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -10,8 +12,11 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.TimeUtils;
 
 import java.util.ArrayList;
 
@@ -56,8 +61,11 @@ public class ScreenGamePlay extends BaseScreen {
     private Label squareBomb1QttyLabel;
     private Label squareBomb2QttyLabel;
 
+    private Long timeLastSelectionEnded;
     public Knight knight;
     public Weapon weapon;
+
+
 
     public ScreenGamePlay(CradleGame cradleGame,IPlayServices ply) {
         super(cradleGame,ply);
@@ -74,13 +82,13 @@ public class ScreenGamePlay extends BaseScreen {
         uiTable.add(messageLabel).expandY();
         score_during_attack=0;
         explosionSound = Gdx.audio.newSound(Gdx.files.internal("sounds/glass_windows_breaking.mp3"));
-
+        timeLastSelectionEnded= TimeUtils.millis();;
         screenGamePlay = this;
 
         // Get screen size
         int w = Gdx.graphics.getWidth();
         int h = Gdx.graphics.getHeight();
-
+        int resHeight = (int)Math.round(h*0.12);
 
         timeBombQttyLabel = new Label(" ", BaseGame.labelStyle);
         timeBombQttyLabel.setColor( Color.GOLDENROD );
@@ -122,29 +130,30 @@ public class ScreenGamePlay extends BaseScreen {
         dialogBox_endLevel = new DialogBox_EndLevel(w/2-dialogSize/2,h/2-dialogSize/2,uiStage,dialogSize,dialogSize,cradleGame);
         dialogBox_endLevel.setVisible(false);
 
-
+        cellSize = (h-resHeight)/CellCount;
         h=h-70; //place for top menu items
         if (w<h) {
             h=w;
         } else w=h;
-        cellSize = w/CellCount;
+
 
 
 
         BaseActor.setWorldBounds(cellSize*CellCount,cellSize*CellCount);
-        gameFieldX=(Gdx.graphics.getWidth()-w)/2;
-        gameFieldY=0;
         int gameFieldWidth = cellSize*CellCount;
+        gameFieldX=(Gdx.graphics.getWidth()-gameFieldWidth)/2;
+        gameFieldY=0;
+
         gameField = new GameField(gameFieldX,gameFieldY,mainStage,gameFieldWidth,gameFieldWidth,CellCount,1,cradleGame);
 
 
         w = Gdx.graphics.getWidth();
         h = Gdx.graphics.getHeight();
-        int resHeight = (int)Math.round(h*0.12);
-        BaseActor baseResultsActor = new BaseActor(w*0.25f,h-resHeight,mainStage,Touchable.disabled);
-        baseResultsActor.setWidth((int) Math.round(w*0.75));
+
+        BaseActor baseResultsActor = new BaseActor(gameFieldX,h-resHeight,mainStage,Touchable.disabled);
+        baseResultsActor.setWidth( w-gameFieldX);
         baseResultsActor.setHeight(resHeight);
-        resultsActor = new ResultsActor(0,0,(int) Math.round(w*0.75),resHeight,mainStage,Touchable.disabled,baseResultsActor);
+        resultsActor = new ResultsActor(0,0,(int) (w-gameFieldX),resHeight,mainStage,Touchable.disabled,baseResultsActor);
 
         /*
         BaseActor baseResultsActor = new BaseActor(gameFieldX*0.9f,h,uiStage,Touchable.disabled);
@@ -205,10 +214,14 @@ public class ScreenGamePlay extends BaseScreen {
                 return false;
             }
         });
-
-        //FindSolution Button
+*/
+ /*       //FindSolution Button
+        Button.ButtonStyle buttonStyle = new Button.ButtonStyle();
+        Texture buttonTex = new Texture( Gdx.files.internal("undo.png") );
+        TextureRegion buttonRegion =  new TextureRegion(buttonTex);
+        buttonStyle.up = new TextureRegionDrawable( buttonRegion );
         Button testButton = new Button( buttonStyle );
-        testButton.setPosition(50,450);
+        testButton.setPosition(50,100);
         uiStage.addActor(testButton);
 
         testButton.addListener(new InputListener() {
@@ -216,11 +229,13 @@ public class ScreenGamePlay extends BaseScreen {
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 InputEvent ie = (InputEvent)event;
                 if ( ie.getType().equals(InputEvent.Type.touchDown) ) {
+                    clearAllSelections();
                     SelectSolution(gameField.FindSolutions(CellCount,mainStage));
                 }
                 return false;
             }
         });
+
 */
 
         //gameField.boundToWorld();
@@ -236,6 +251,8 @@ public class ScreenGamePlay extends BaseScreen {
                 InputEvent ie = (InputEvent)event;
                 if ( ie.getType().equals(InputEvent.Type.touchDown) ){
 
+                    clearAllSelections();
+                    timeLastSelectionEnded = TimeUtils.millis();
                         //Coin
                     for (by.android.cradle.BaseActor CoinActor : by.android.cradle.BaseActor.getList(mainStage, "by.android.cradle.Coin")){
                         if(CoinActor.getBoundaryPolygon().contains(x+gameFieldX,y+gameFieldY)){
@@ -317,6 +334,7 @@ public class ScreenGamePlay extends BaseScreen {
             public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
                     flag = false;
                     InputEvent ie = (InputEvent)event;
+                timeLastSelectionEnded = TimeUtils.millis();
                 if (lastSelectedItem==null) return;
                     String className = lastSelectedItem.getClass().getName();
                     if ( ie.getType().equals(InputEvent.Type.touchUp) ){
@@ -324,9 +342,7 @@ public class ScreenGamePlay extends BaseScreen {
                         if (firstSelectedItem.getCountOfSelectedItems()>=3) {
                             FillRemovedCells(removeSelectedItems());
                         }else{
-                            for (by.android.cradle.BaseActor CoinActor : by.android.cradle.BaseActor.getList(mainStage, className)){
-                                ((Item)CoinActor).setSelected(false,null);
-                            }
+                            clearAllSelections();
                         }
                         lastSelectedItem = null;
                         firstSelectedItem = null;
@@ -760,6 +776,24 @@ public void RemoveAndFillSquare(int centreRow, int centreCol, int squareSize){
         if (sandGlass.isAnimationFinished()&&!isPaused) {
             LoseLevel();
         }
+
+        long diffInMillis = TimeUtils.timeSinceMillis(timeLastSelectionEnded);
+        if((diffInMillis>7000) &&(!flag)){
+            clearAllSelections();
+            SelectSolution(gameField.FindSolutions(CellCount,mainStage));
+            timeLastSelectionEnded = TimeUtils.millis();
+        }
+    }
+
+    public void clearAllSelections(){
+        ArrayList<Item> arrayList = gameField.GetAllItems();
+
+        for(Item item: arrayList) {
+            if (item.isSelected()) {
+                item.setSelected(false, null);
+            }
+        }
+
     }
 
     public ArrayList<Cell> removeSelectedItems(){
@@ -1442,8 +1476,8 @@ public void RemoveAndFillSquare(int centreRow, int centreCol, int squareSize){
         int wpSize = Math.round(h*0.1f);
         if (knight!=null){knight.remove();}
         if(weapon!=null){weapon.remove();}
-        knight = new Knight(-knSize*0.1f,h-knSize+knSize*0.1f,knSize,knSize,mainStage,cradleGame.getKnightParams());
-        weapon = new Weapon(knSize*0.585f,h-knSize*0.39f,wpSize,wpSize,mainStage,cradleGame,knight);
+        knight = new Knight(-knSize*0.1f,h-knSize*0.8f,knSize,knSize,mainStage,cradleGame.getKnightParams());
+        weapon = new Weapon(knSize*0.585f,h-knSize*0.29f,wpSize,wpSize,mainStage,cradleGame,knight);
 
 
 
@@ -1474,6 +1508,8 @@ public void RemoveAndFillSquare(int centreRow, int centreCol, int squareSize){
         } else {
             squareBomb2QttyLabel.setText("");
         }
+
+        timeLastSelectionEnded = TimeUtils.millis();
 
     }
 

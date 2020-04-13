@@ -297,7 +297,11 @@ public boolean isLocked(){
         }
 
         if (previous != this) this.previous= previous;
-        this.selectedDirection = findDirection(previous,this);
+        if(selected) {
+            this.selectedDirection = findDirection(previous, this);
+        }else{
+            this.selectedDirection = SelDirection.None;
+        }
         AddImageDirection();
     }
 

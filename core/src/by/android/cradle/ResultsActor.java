@@ -18,9 +18,9 @@ public class ResultsActor extends BaseActor{
         int h = Gdx.graphics.getHeight();
         float fontScale = 1.0f;
         if (w>1000){
-            fontScale = 1.9f;
+            fontScale = 3.5f;
         } else {
-            fontScale = 1.2f;
+            fontScale = 1.4f;
         }
         setHeight(height);
         setWidth(width);
@@ -30,25 +30,25 @@ public class ResultsActor extends BaseActor{
 
         goldQuantityLabel = new Label(" "+0, BaseGame.labelStyle);
         goldQuantityLabel.setColor( Color.GOLDENROD );
-        goldQuantityLabel.setPosition( x+width*0.1f,y+h*0.02f );
+        goldQuantityLabel.setPosition( x+width*0.1f,y+height*0.3f );
         goldQuantityLabel.setFontScale(fontScale);
         baseActor.addActor(goldQuantityLabel);
 
         woodQuantityLabel = new Label(" "+0, BaseGame.labelStyle);
         woodQuantityLabel.setColor( Color.GOLDENROD );
-        woodQuantityLabel.setPosition( x+width*0.32f,y+h*0.02f );
+        woodQuantityLabel.setPosition( x+width*0.32f,y+height*0.3f );
         woodQuantityLabel.setFontScale(fontScale);
         baseActor.addActor(woodQuantityLabel);
 
         breadQuantityLabel = new Label(" "+0, BaseGame.labelStyle);
         breadQuantityLabel.setColor( Color.GOLDENROD );
-        breadQuantityLabel.setPosition( x+width*0.58f,y+h*0.02f );
+        breadQuantityLabel.setPosition( x+width*0.58f,y+height*0.3f );
         breadQuantityLabel.setFontScale(fontScale);
         baseActor.addActor(breadQuantityLabel);
 
         scoreLabel = new Label(" "+0, BaseGame.labelStyle);
         scoreLabel.setColor( Color.GOLDENROD );
-        scoreLabel.setPosition( x+width*0.78f,y+h*0.02f );
+        scoreLabel.setPosition( x+width*0.78f,y+height*0.3f );
         scoreLabel.setFontScale(fontScale);
         baseActor.addActor(scoreLabel);
     }
