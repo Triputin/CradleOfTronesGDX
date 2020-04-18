@@ -15,6 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Align;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -649,10 +650,12 @@ public class GameMapScreen extends BaseScreen {
 
 
     public void WinGame(){
+
         if (gameMapLevelInfo==null){return;}
         if(cradleGame.getGameMapLevel()<cradleGame.getMaxOpenedMapLevel()){
             return;
         }
+
 
         // Get screen size
         int w = Gdx.graphics.getWidth();
@@ -680,7 +683,7 @@ public class GameMapScreen extends BaseScreen {
             messageLabel.remove();
         }
 
-        //System.out.println("Throne anim started!!!");
+
         Action completeAction = new Action(){
             public boolean act( float delta ) {
                 // Do your stuff
@@ -729,14 +732,12 @@ public class GameMapScreen extends BaseScreen {
         String s = cradleGame.getLanguageStrings().get("throne_is_yours");
         messageLabel = new Label(s, BaseGame.labelStyle);
         messageLabel.setFontScale(3);
-        //messageLabel.setText(s);
         messageLabel.setVisible(true);
-        messageLabel.setX((float)ww/4.0f);
-        //System.out.println("messageLabel.getWidth()/2.0f="+messageLabel.getWidth()/2.0f);
-        messageLabel.setY(h*0.3f);
+        messageLabel.setX((ww-messageLabel.getWidth())/2.0f);
+        messageLabel.setY(h*0.4f);
         messageLabel.setColor(Color.RED);
+        messageLabel.setAlignment(Align.center);
         messageLabel.addAction(actions);
-        //uiTable.add(messageLabel).expandY();
         uiStage.addActor(messageLabel);
 
     }

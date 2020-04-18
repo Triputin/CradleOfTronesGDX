@@ -126,6 +126,29 @@ public class MenuScreen extends BaseScreen {
 */
 
 /*
+        TextButton testButton = new TextButton( "Test", BaseGame.textButtonStyle );
+        testButton.setPosition(300,300);
+        uiStage.addActor(testButton);
+
+        testButton.addListener(new InputListener() {
+            public boolean touchDown (InputEvent e, float x, float y, int pointer, int button){
+                if (!(e instanceof InputEvent))
+                    return false;
+
+                if (!((InputEvent) e).getType().equals(InputEvent.Type.touchDown))
+                    return false;
+                //BaseActor bactor = new BaseActor(300,200, uiStage,Touchable.disabled);
+                MovingRaysActor movingRaysActor = new MovingRaysActor(0,0,300,300,uiStage);
+                //movingRaysActor.startAnimation(0,0,300,300);
+                //bactor.addActor(movingRaysActor);
+                return true;
+            }
+        });
+
+*/
+
+
+/*
         s = cradleGame.getLanguageStrings().get("signin");
         final TextButton signInButton = new TextButton( ""+s+"", BaseGame.textButtonStyle );
 

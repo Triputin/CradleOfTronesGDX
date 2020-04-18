@@ -7,11 +7,16 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 
 public class Coin2 extends Item {
 
+
+
     public Coin2(float x, float y, int width, int height, Stage s, int row, int col, CradleGame cradleGame)
     {
         super(x,y,width, height,s, Touchable.disabled,row,col, cradleGame);
+
+
         setSelected(false, null);
         setBoundaryPolygon(8);
+
         //Action spin = Actions.rotateBy(5, 1);
         //addAction( Actions.forever(spin) );
     }
@@ -20,8 +25,10 @@ public class Coin2 extends Item {
     public void setSelected(boolean selected, Item prev) {
         if(selected){
             loadTexture("coin2pressed.png", (int) getWidth(), (int) getHeight());
+
         }else {
             loadTexture("coin2.png", (int) getWidth(), (int) getHeight());
+
         }
 
         super.setSelected(selected, prev);

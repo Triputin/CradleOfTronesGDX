@@ -34,8 +34,8 @@ android {
         applicationId "by.android.cradle"
         minSdkVersion 23
         targetSdkVersion 28
-        versionCode 38
-        versionName "2.38"
+        versionCode 40
+        versionName "2.40"
     }
     buildTypes {
         release {

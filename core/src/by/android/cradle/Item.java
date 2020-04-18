@@ -28,6 +28,7 @@ public class Item extends DropTargetActor {
     private Label labelqtty;
     protected CradleGame cradleGame;
 
+    private MovingRaysActor movingRaysActor;
 
     public Item(float x, float y, int width, int height, Stage s, Touchable touchable, int row, int col, CradleGame cradleGame)
     {
@@ -40,6 +41,9 @@ public class Item extends DropTargetActor {
         selectedDirection = SelDirection.None;
         selectedFirst=false;
 
+        movingRaysActor = new MovingRaysActor(0,0,width,height,s);
+        movingRaysActor.setVisible(false);
+        addActor(movingRaysActor);
 
         labelqtty = new Label("", BaseGame.labelStyle);
         //labelqtty.setText(""+qtty);
@@ -299,8 +303,16 @@ public boolean isLocked(){
         if (previous != this) this.previous= previous;
         if(selected) {
             this.selectedDirection = findDirection(previous, this);
+
+            if (movingRaysActor!=null) {
+                movingRaysActor.setVisible(true);
+            }
+
         }else{
             this.selectedDirection = SelDirection.None;
+            if (movingRaysActor!=null) {
+                movingRaysActor.setVisible(false);
+            }
         }
         AddImageDirection();
     }

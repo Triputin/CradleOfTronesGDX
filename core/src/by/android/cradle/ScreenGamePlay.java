@@ -5,6 +5,7 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -15,7 +16,9 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.TimeUtils;
 
 import java.util.ArrayList;
@@ -30,6 +33,7 @@ public class ScreenGamePlay extends BaseScreen {
 
 
     // Game constant params
+    private final float SoundEffectsVolume = 0.7f;
     private int LevelDuration = 60; // Time of every level (HourGlass)
     private int cellSize;
     private final int CellCount = 7;
@@ -107,8 +111,6 @@ public class ScreenGamePlay extends BaseScreen {
         squareBomb2QttyLabel.setPosition( 15, h * 0.1f+(h*1.0f)/20f);
         squareBomb2QttyLabel.setFontScale(1.5f);
         uiStage.addActor(squareBomb2QttyLabel);
-
-
 
         hall = new BaseActor(0,0, mainStage, Touchable.disabled);
         //hall.loadTexture( "hall01.png",w,h );
@@ -801,6 +803,8 @@ public void RemoveAndFillSquare(int centreRow, int centreCol, int squareSize){
         Item item1;
         Item item2;
         String className;
+        int resCollected=0;
+
         if (firstSelectedItem==null)return arrayList;
         if (firstSelectedItem.getNext()!=null) {
             directionToFill = firstSelectedItem.getNext().findItemPos(firstSelectedItem);
@@ -847,14 +851,14 @@ public void RemoveAndFillSquare(int centreRow, int centreCol, int squareSize){
             item2 = item1.getNext();
             arrayList.add(item1.getCell());
             className = item1.getClass().getName();
-            IncreaseRes(className);
+            resCollected += IncreaseRes(className);
             //Explosion
             ExplosionEffect boom = new ExplosionEffect();
             boom.centerAtActor( item1 );
             boom.start();
             //Explosion sound
             if(cradleGame.isSoundOn()){
-            explosionSound.play(1f);
+            explosionSound.play(SoundEffectsVolume);
             }
 
             mainStage.addActor(boom);
@@ -866,14 +870,15 @@ public void RemoveAndFillSquare(int centreRow, int centreCol, int squareSize){
         }
         arrayList.add(item1.getCell());
         className = item1.getClass().getName();
-        IncreaseRes(className);
+        resCollected += IncreaseRes(className);
+        ShowCollectedResCount(item1.getX(),item1.getY(),resCollected);
         //Explosion
         ExplosionEffect boom = new ExplosionEffect();
         boom.centerAtActor( item1 );
         boom.start();
         //Explosion sound
         if(cradleGame.isSoundOn()){
-            explosionSound.play(1f);
+            explosionSound.play(SoundEffectsVolume);
         }
         mainStage.addActor(boom);
 
@@ -1216,30 +1221,35 @@ public void RemoveAndFillSquare(int centreRow, int centreCol, int squareSize){
 
     }
 
-    public void IncreaseRes(String className){
+    public int IncreaseRes(String className){
 
+        int resCollectedCount=0; //indicates if res was collected
         switch (className)
         {
             case "by.android.cradle.Coin2":
                 cradleGame.setGameResGold(GameRes.Gold+1);
                 resultAttack.Gold++;
-                IncrementScoreDuringAttack(); //temporarely increase score. Finally aplied after win game
+                IncrementScoreDuringAttack(); //temporarily increase score. Finally applied after win game
+                resCollectedCount++;
             break;
             case "by.android.cradle.Wood":
                 cradleGame.setGameResWood(GameRes.Wood+1);
                 resultAttack.Wood++;
-                IncrementScoreDuringAttack(); //temporarely increase score. Finally aplied after win game
+                IncrementScoreDuringAttack(); //temporarily increase score. Finally applied after win game
+                resCollectedCount++;
                 break;
             case "by.android.cradle.Bread":
                 cradleGame.setGameResBread(GameRes.Bread+1);
                 resultAttack.Bread++;
-                IncrementScoreDuringAttack(); //temporarely increase score. Finally aplied after win game
+                IncrementScoreDuringAttack(); //temporarily increase score. Finally applied after win game
+                resCollectedCount++;
                 break;
 
         }
 
 
         resultsActor.UpdateRes();
+        return resCollectedCount;
     }
 
     private void IncrementScoreDuringAttack(){
@@ -1704,5 +1714,33 @@ public void RemoveAndFillSquare(int centreRow, int centreCol, int squareSize){
             knightItem = (KnightItem) baseActor;
             knight.addKnightItem(knightItem);
         }
+    }
+
+
+    public void ShowCollectedResCount(float x, float y, int count){
+        if (count==0) return;
+        //int w = Gdx.graphics.getWidth();
+        int h = Gdx.graphics.getHeight();
+        String s = String.valueOf(count);
+        final Label resCollectedLabel = new Label(s, BaseGame.labelStyle);
+        resCollectedLabel.setFontScale(2);
+        resCollectedLabel.setColor(Color.GOLD);
+        resCollectedLabel.setAlignment(Align.center);
+        resCollectedLabel.setPosition(x,y);
+        uiStage.addActor(resCollectedLabel);
+
+
+        Action completeAction = new Action(){
+            public boolean act( float delta ) {
+                // Do your stuff
+                resCollectedLabel.remove();
+                return true;
+            }
+        };
+
+
+        Action actions = sequence(Actions.moveTo(x, y+cellSize, 1.50f, Interpolation.circleOut),fadeOut(0.5f),completeAction);
+        resCollectedLabel.addAction(actions);
+
     }
 }
