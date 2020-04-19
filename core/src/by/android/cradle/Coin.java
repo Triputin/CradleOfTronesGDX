@@ -16,9 +16,11 @@ public class Coin extends Item {
     @Override
     public void setSelected(boolean selected, Item prev) {
         if(selected){
-            loadTextureFromAssets(Assets.COIN01_PRESSED, (int) getWidth(), (int) getHeight());
+            //loadTextureFromAssets(Assets.COIN01_PRESSED, (int) getWidth(), (int) getHeight());
+            setAnimation(cradleGame.getCradleAssetManager().getAnimation(Assets.COIN01_PRESSED_ANIMATION_ID));
         }else {
-            loadTextureFromAssets(Assets.COIN01, (int) getWidth(), (int) getHeight());
+            //loadTextureFromAssets(Assets.COIN01, (int) getWidth(), (int) getHeight());
+            setAnimation(cradleGame.getCradleAssetManager().getAnimation(Assets.COIN01_ANIMATION_ID));
         }
 
         super.setSelected(selected, prev);

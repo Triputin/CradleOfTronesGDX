@@ -14,9 +14,11 @@ public class Jem01 extends Item {
     @Override
     public void setSelected(boolean selected, Item prev) {
         if (selected) {
-            loadTextureFromAssets(Assets.JEM01_PRESSED, (int) getWidth(), (int) getHeight());
+            //loadTextureFromAssets(Assets.JEM01_PRESSED, (int) getWidth(), (int) getHeight());
+            setAnimation(cradleGame.getCradleAssetManager().getAnimation(Assets.JEM01_PRESSED_ANIMATION_ID));
         } else {
-            loadTextureFromAssets(Assets.JEM01, (int) getWidth(), (int) getHeight());
+            //loadTextureFromAssets(Assets.JEM01, (int) getWidth(), (int) getHeight());
+            setAnimation(cradleGame.getCradleAssetManager().getAnimation(Assets.JEM01_ANIMATION_ID));
         }
 
         super.setSelected(selected, prev);

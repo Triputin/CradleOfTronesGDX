@@ -15,9 +15,11 @@ public class Wood extends Item {
     @Override
     public void setSelected(boolean selected, Item prev) {
         if(selected){
-            loadTextureFromAssets(Assets.WOOD_PRESSED, (int) getWidth(), (int) getHeight());
+            //loadTextureFromAssets(Assets.WOOD_PRESSED, (int) getWidth(), (int) getHeight());
+            setAnimation(cradleGame.getCradleAssetManager().getAnimation(Assets.WOOD_PRESSED_ANIMATION_ID));
         }else {
-            loadTextureFromAssets(Assets.WOOD, (int) getWidth(), (int) getHeight());
+            //loadTextureFromAssets(Assets.WOOD, (int) getWidth(), (int) getHeight());
+            setAnimation(cradleGame.getCradleAssetManager().getAnimation(Assets.WOOD_ANIMATION_ID));
         }
 
         super.setSelected(selected, prev);

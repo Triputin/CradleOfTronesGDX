@@ -15,9 +15,11 @@ public class Bread extends Item {
     @Override
     public void setSelected(boolean selected, Item prev) {
         if(selected){
-            loadTextureFromAssets(Assets.BREAD_PRESSED, (int) getWidth(), (int) getHeight());
+            //loadTextureFromAssets(Assets.BREAD_PRESSED, (int) getWidth(), (int) getHeight());
+            setAnimation(cradleGame.getCradleAssetManager().getAnimation(Assets.BREAD_PRESSED_ANIMATION_ID));
         }else {
-            loadTextureFromAssets(Assets.BREAD, (int) getWidth(), (int) getHeight());
+            //loadTextureFromAssets(Assets.BREAD, (int) getWidth(), (int) getHeight());
+            setAnimation(cradleGame.getCradleAssetManager().getAnimation(Assets.BREAD_ANIMATION_ID));
         }
 
         super.setSelected(selected, prev);

@@ -954,6 +954,7 @@ public class BaseActor extends Group
         img.setSize(width,height);
         img.setPosition(x, y);
         addActor(img);
+        //texture.dispose(); // it influences to the image! so image holds pointer to texture.
         return img;
     }
 

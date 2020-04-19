@@ -76,21 +76,25 @@ public boolean isLocked(){
 
             case 1:
                 if (lockImage01==null){
-                    lockImage01 = AddImage("lockitem01.png",0,0, (int) getWidth(), (int) getHeight());
+                    //lockImage01 = AddImage("lockitem01.png",0,0, (int) getWidth(), (int) getHeight());
+                    lockImage01 = cradleGame.getCradleAssetManager().AddImage(Assets.LOCKED_ITEM_LEVEL01,0,0,(int) getWidth(), (int) getHeight());
                 }
                 if (this.lockLevel ==0){
                     addActor(lockImage01);
                 }
                 if (this.lockLevel == 2){
                     lockImage02.remove();
+
                 }
                 break;
             case 2:
                 if (lockImage01==null){
-                    lockImage01 = AddImage("lockitem01.png",0,0, (int) getWidth(), (int) getHeight());
+                    //lockImage01 = AddImage("lockitem01.png",0,0, (int) getWidth(), (int) getHeight());
+                    lockImage01 = cradleGame.getCradleAssetManager().AddImage(Assets.LOCKED_ITEM_LEVEL01,0,0,(int) getWidth(), (int) getHeight());
                 }
                 if (lockImage02==null){
-                    lockImage02 = AddImage("lockitem02.png",0,0, (int) getWidth(), (int) getHeight());
+                    //lockImage02 = AddImage("lockitem02.png",0,0, (int) getWidth(), (int) getHeight());
+                    lockImage02 = cradleGame.getCradleAssetManager().AddImage(Assets.LOCKED_ITEM_LEVEL02,0,0,(int) getWidth(), (int) getHeight());
                 }
                 if (this.lockLevel ==0){
                     addActor(lockImage01);
@@ -107,9 +111,11 @@ public boolean isLocked(){
             case 0:
                 if (this.lockLevel == 1){
                     lockImage01.remove();
+
                 }
                 if (this.lockLevel == 2){
                     lockImage02.remove();
+
                 }
                 break;
 
@@ -137,6 +143,77 @@ public boolean isLocked(){
         this.selectedDirection = selectedDirection;
     }
 
+
+    private void AddImageDirection()
+    {
+        if (selectedDirection!=SelDirection.None) {
+            if (lineImage!=null){
+                removeActor(lineImage);
+            }
+            Image img;
+            switch (selectedDirection){
+
+                case ArrowToEast:
+                    //pixmap200 = new Pixmap(Gdx.files.internal("arrowtoeast.png"));
+                    img = cradleGame.getCradleAssetManager().AddImage(Assets.ArrowToEast,0,0,(int) getWidth(), (int) getHeight());
+                    break;
+                case ArrowToWest:
+                    //pixmap200 = new Pixmap(Gdx.files.internal("arrowtowest.png"));
+                    img = cradleGame.getCradleAssetManager().AddImage(Assets.ArrowToWest,0,0,(int) getWidth(), (int) getHeight());
+                    break;
+                case HorizontalLine:
+                    //pixmap200 = new Pixmap(Gdx.files.internal("linehoriz.png"));
+                    img = cradleGame.getCradleAssetManager().AddImage(Assets.HorizontalLine,0,0,(int) getWidth(), (int) getHeight());
+                    break;
+                case ArrowToNorth:
+                    //pixmap200 = new Pixmap(Gdx.files.internal("arrowtonorth.png"));
+                    img = cradleGame.getCradleAssetManager().AddImage(Assets.ArrowToNorth,0,0,(int) getWidth(), (int) getHeight());
+                    break;
+                case ArrowToSouth:
+                    //pixmap200 = new Pixmap(Gdx.files.internal("arrowtosouth.png"));
+                    img = cradleGame.getCradleAssetManager().AddImage(Assets.ArrowToSouth,0,0,(int) getWidth(), (int) getHeight());
+                    break;
+                case VerticalLine:
+                    //pixmap200 = new Pixmap(Gdx.files.internal("linevert.png"));
+                    img = cradleGame.getCradleAssetManager().AddImage(Assets.VerticalLine,0,0,(int) getWidth(), (int) getHeight());
+                    break;
+                case UpToLeft:
+                    //pixmap200 = new Pixmap(Gdx.files.internal("LineCorner03.png"));
+                    img = cradleGame.getCradleAssetManager().AddImage(Assets.UpToLeft,0,0,(int) getWidth(), (int) getHeight());
+                    break;
+                case UpToRight:
+                    //pixmap200 = new Pixmap(Gdx.files.internal("LineCorner04.png"));
+                    img = cradleGame.getCradleAssetManager().AddImage(Assets.UpToRight,0,0,(int) getWidth(), (int) getHeight());
+                    break;
+                case DownToLeft:
+                    //pixmap200 = new Pixmap(Gdx.files.internal("LineCorner02.png"));
+                    img = cradleGame.getCradleAssetManager().AddImage(Assets.DownToLeft,0,0,(int) getWidth(), (int) getHeight());
+                    break;
+                case DownToRight:
+                    //pixmap200 = new Pixmap(Gdx.files.internal("LineCorner01.png"));
+                    img = cradleGame.getCradleAssetManager().AddImage(Assets.DownToRight,0,0,(int) getWidth(), (int) getHeight());
+                    break;
+                default:
+                    //pixmap200 = new Pixmap(Gdx.files.internal("linehoriz.png"));
+                    img = cradleGame.getCradleAssetManager().AddImage(Assets.HorizontalLine,0,0,(int) getWidth(), (int) getHeight());
+            }
+
+            addActor(img);
+            lineImage=img;
+        }else
+        {
+            if (lineImage!=null){
+                removeActor(lineImage);
+            }
+
+        }
+
+
+    }
+
+
+
+/*
     private void AddImageDirection()
     {
         Pixmap pixmap200;
@@ -211,6 +288,8 @@ public boolean isLocked(){
         }
 
     }
+
+*/
 
 
     private SelDirection findDirection ( Item firstItem, Item secondItem){
