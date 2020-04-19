@@ -8,9 +8,9 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 public class BaseActorRepeatMove extends BaseActor {
 
     int pictureSize;
-    public BaseActorRepeatMove(float x, float y, int width, int height, Stage s)
+    public BaseActorRepeatMove(float x, float y, int width, int height, Stage s, CradleGame cradleGame)
     {
-        super(x,y,s, Touchable.disabled);
+        super(x,y,s, Touchable.disabled, cradleGame);
         //setAcceleration(1);
         setSpeed(3);
         //setMaxSpeed(10);

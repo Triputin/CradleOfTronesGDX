@@ -19,14 +19,12 @@ public class DialogBox_DailyGift extends BaseActor {
     private Label dialogLabel;
     private Label dialogLabel2;
     private int padding = 42;
-    private final CradleGame  cradleGame;
     private TextButton okButton;
     private Label scoreLabel;
 
     public DialogBox_DailyGift(float x, float y, Stage s, int width, int height, CradleGame cradleGame1)
     {
-        super(x,y,s, Touchable.enabled);
-        this.cradleGame = cradleGame1;
+        super(x,y,s, Touchable.enabled,cradleGame1);
         this.setSize(width, height);
 
         int w = Gdx.graphics.getWidth();

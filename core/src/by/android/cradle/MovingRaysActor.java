@@ -18,19 +18,25 @@ public class MovingRaysActor extends BaseActor {
     //BaseActor rayActor;
    // private Animation<TextureRegion> specialEffectAnimation;
 
-    public MovingRaysActor(float x, float y, int width, int height, Stage s)
+    public MovingRaysActor(float x, float y, int width, int height, Stage s, CradleGame cradleGame)
     {
-        super(x,y,s, Touchable.disabled);
+        super(x,y,s, Touchable.disabled, cradleGame);
         setHeight(height);
         setWidth(width);
         int w = Gdx.graphics.getWidth();
         int h = Gdx.graphics.getHeight();
         setBoundaryPolygon(8);
+        setAnimation(cradleGame.getCradleAssetManager().getAnimation(Assets.SOLAREFFECT_ANIMATION_ID));
+
+        /*
         String[] filenames1 =
                 { "solareffect/sf01.png", "solareffect/sf02.png",
                         "solareffect/sf03.png", "solareffect/sf04.png", "solareffect/sf05.png"
                 };
         loadAnimationFromFiles(filenames1, 0.2f, true,  (int)getWidth(),  (int) getHeight());
+        */
+
+        //loadAnimationFromAssetsAtlas(Assets.SOLAREFFECT_ATLAS,1,5,0.2f, true,  (int)getWidth(),  (int) getHeight());
 
         /*
         rayActor = new BaseActor(0,0,s,Touchable.disabled);

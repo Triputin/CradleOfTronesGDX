@@ -8,13 +8,11 @@ import java.util.ArrayList;
 
 public class GameField extends BaseActor {
     private ArrayList<GameCell> gameCells ;
-    protected CradleGame cradleGame;
     private int cellsCount;
 
     public GameField(float x, float y, Stage s,float width,float height,int cellsCount, int gameLevel,CradleGame cradleGame)
     {
-        super(x,y,s,Touchable.enabled);
-        this.cradleGame = cradleGame;
+        super(x,y,s,Touchable.enabled,cradleGame);
         gameCells = new ArrayList<>();
         this.cellsCount = cellsCount;
         int cellSizeX = (int)width/cellsCount;
@@ -27,7 +25,7 @@ public class GameField extends BaseActor {
 
         for (int i = 0;i<cellsCount;i++){
             for (int j = 0;j<cellsCount;j++){
-                gameCell = new GameCell(x+i*cellSizeX,y+j*cellSizeY,cellSizeX,cellSizeY,s, Touchable.disabled,j,i);
+                gameCell = new GameCell(x+i*cellSizeX,y+j*cellSizeY,cellSizeX,cellSizeY,s, Touchable.disabled,j,i,cradleGame);
                 gameCells.add(gameCell);
             }
         }

@@ -14,13 +14,13 @@ public class MessageActor01 extends BaseActor {
 
     public MessageActor01(float x, float y, Stage s, int width, int height , final CradleGame cradleGame)
     {
-        super(x,y,s, Touchable.enabled);
+        super(x,y,s, Touchable.enabled,cradleGame);
         attackType = AttackType.AttackKingdom;
         this.kingdomRes = new KingdomRes();
         loadTexture( "goldenframe.png",width,height );
         AddImage("fon_white.png",Math.round(width*0.075f),Math.round(height*0.1f),Math.round(width*0.85f), Math.round(height*0.8f));
 
-        resultsActorForAttack = new ResultsActorForAttack(x+width*0.1f,(int)(y+height/2),(int)(width-width*0.2f),(int)(height/2.5),s,Touchable.disabled,this);
+        resultsActorForAttack = new ResultsActorForAttack(x+width*0.1f,(int)(y+height/2),(int)(width-width*0.2f),(int)(height/2.5),s,Touchable.disabled,this,cradleGame);
 
         //Attack Button
         String ms = cradleGame.getLanguageStrings().get("attack");

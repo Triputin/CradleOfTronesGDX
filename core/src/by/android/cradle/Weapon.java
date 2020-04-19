@@ -8,21 +8,19 @@ import static com.badlogic.gdx.scenes.scene2d.actions.Actions.fadeOut;
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.sequence;
 
 public class Weapon extends DragAndDropActor {
-    CradleGame cradleGame;
     float X;
     float Y;
     Knight knight;
 
 
     public Weapon(float x, float y, int width, int height, Stage s, CradleGame cradleGame, Knight knight) {
-        super(x, y, s);
+        super(x, y, s,cradleGame);
         this.X=x;
         this.Y=y;
         setHeight(height);
         setWidth(width);
         loadTexture("knights/mace01.png", (int) getWidth(), (int) getHeight());
         //AddImage("mace01.png", 0,0,(int) getWidth(), (int) getHeight());
-        this.cradleGame = cradleGame;
         this.knight = knight;
     }
 

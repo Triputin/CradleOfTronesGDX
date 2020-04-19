@@ -24,9 +24,9 @@ public class DragAndDropActor extends BaseActor
     private float startPositionX;
     private float startPositionY;
 
-    public DragAndDropActor(float x, float y, Stage s)
+    public DragAndDropActor(float x, float y, Stage s, CradleGame cradleGame)
     {
-        super(x,y,s, Touchable.enabled);
+        super(x,y,s, Touchable.enabled,cradleGame);
         self = this;
         draggable = true;
 

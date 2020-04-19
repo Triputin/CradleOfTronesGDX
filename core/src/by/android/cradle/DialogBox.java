@@ -19,13 +19,11 @@ public class DialogBox extends BaseActor
 {
     private Label dialogLabel;
     private float padding = 42;
-    private final CradleGame  cradleGame;
     TextButton okButton;
 
     public DialogBox(float x, float y, Stage s, int width, int height,CradleGame cradleGame1)
     {
-        super(x,y,s, Touchable.enabled);
-        this.cradleGame = cradleGame1;
+        super(x,y,s, Touchable.enabled,cradleGame1);
         loadTexture( "goldenframe01.png",width,height );
         AddImage("fon_white.png",Math.round(width*0.04f),Math.round(height*0.08f),Math.round(width*0.93f), Math.round(height*0.85f));
 

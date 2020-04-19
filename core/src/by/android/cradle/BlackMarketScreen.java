@@ -64,7 +64,7 @@ public class BlackMarketScreen extends BaseScreen {
 
 
         //fon
-        BaseActor hall = new BaseActor(0, 0, mainStage, Touchable.disabled);
+        BaseActor hall = new BaseActor(0, 0, mainStage, Touchable.disabled, cradleGame);
         hall.loadTexture("blackmarketfon.png", w, h);
 
         Label label = new Label(" ", BaseGame.labelStyle);
@@ -88,45 +88,45 @@ public class BlackMarketScreen extends BaseScreen {
 
         int ItemPlaceSize = Math.round(cellSize*1.18f);
         int itemPlaceLeftSpace = Math.round(w*0.05f);
-        knightItemShopPlace01 = new KnightItemShopPlace(itemPlaceLeftSpace,cellSize+ItemPlaceSize*2, ItemPlaceSize, ItemPlaceSize, mainStage,null,true);
+        knightItemShopPlace01 = new KnightItemShopPlace(itemPlaceLeftSpace,cellSize+ItemPlaceSize*2, ItemPlaceSize, ItemPlaceSize, mainStage,null,true,cradleGame);
         KnightItem knightItem = new KnightItem(knightItemShopPlace01.getX(), knightItemShopPlace01.getY(), cellSize, cellSize, mainStage, 0, 0,cradleGame,knightItemParamsArrayList.get(0),null,this);
         knightItem.centerAtActor(knightItemShopPlace01);
         knightItemShopPlace01.setKnightItem(knightItem);
-        knightItemShopPlace02 = new KnightItemShopPlace(itemPlaceLeftSpace+ItemPlaceSize,cellSize+ItemPlaceSize*2, ItemPlaceSize, ItemPlaceSize, mainStage,null,true);
+        knightItemShopPlace02 = new KnightItemShopPlace(itemPlaceLeftSpace+ItemPlaceSize,cellSize+ItemPlaceSize*2, ItemPlaceSize, ItemPlaceSize, mainStage,null,true,cradleGame);
         knightItem = new KnightItem(knightItemShopPlace02.getX(), knightItemShopPlace02.getY(), cellSize, cellSize, mainStage, 0, 0,cradleGame,knightItemParamsArrayList.get(1),null,this);
         knightItem.centerAtActor(knightItemShopPlace02);
         knightItemShopPlace02.setKnightItem(knightItem);
-        knightItemShopPlace03 = new KnightItemShopPlace(itemPlaceLeftSpace+ItemPlaceSize*2,cellSize+ItemPlaceSize*2, ItemPlaceSize, ItemPlaceSize, mainStage,null,true);
+        knightItemShopPlace03 = new KnightItemShopPlace(itemPlaceLeftSpace+ItemPlaceSize*2,cellSize+ItemPlaceSize*2, ItemPlaceSize, ItemPlaceSize, mainStage,null,true,cradleGame);
         knightItem = new KnightItem(knightItemShopPlace03.getX(), knightItemShopPlace03.getY(), cellSize, cellSize, mainStage, 0, 0,cradleGame,knightItemParamsArrayList.get(2),null,this);
         knightItem.centerAtActor(knightItemShopPlace03);
         knightItemShopPlace03.setKnightItem(knightItem);
-        knightItemShopPlace04 = new KnightItemShopPlace(itemPlaceLeftSpace,cellSize+ItemPlaceSize, ItemPlaceSize, ItemPlaceSize, mainStage,null,true);
+        knightItemShopPlace04 = new KnightItemShopPlace(itemPlaceLeftSpace,cellSize+ItemPlaceSize, ItemPlaceSize, ItemPlaceSize, mainStage,null,true,cradleGame);
         knightItem = new KnightItem(knightItemShopPlace04.getX(), knightItemShopPlace04.getY(), cellSize, cellSize, mainStage, 0, 0,cradleGame,knightItemParamsArrayList.get(3),null,this);
         knightItem.centerAtActor(knightItemShopPlace04);
         knightItemShopPlace04.setKnightItem(knightItem);
-        knightItemShopPlace05 = new KnightItemShopPlace(itemPlaceLeftSpace+ItemPlaceSize,cellSize+ItemPlaceSize, ItemPlaceSize, ItemPlaceSize, mainStage,null,true);
+        knightItemShopPlace05 = new KnightItemShopPlace(itemPlaceLeftSpace+ItemPlaceSize,cellSize+ItemPlaceSize, ItemPlaceSize, ItemPlaceSize, mainStage,null,true,cradleGame);
         knightItem = new KnightItem(knightItemShopPlace05.getX(), knightItemShopPlace05.getY(), cellSize, cellSize, mainStage, 0, 0,cradleGame,knightItemParamsArrayList.get(4),null,this);
         knightItem.centerAtActor(knightItemShopPlace05);
         knightItemShopPlace05.setKnightItem(knightItem);
-        knightItemShopPlace06 = new KnightItemShopPlace(itemPlaceLeftSpace+ItemPlaceSize*2,cellSize+ItemPlaceSize, ItemPlaceSize, ItemPlaceSize, mainStage,null,true);
+        knightItemShopPlace06 = new KnightItemShopPlace(itemPlaceLeftSpace+ItemPlaceSize*2,cellSize+ItemPlaceSize, ItemPlaceSize, ItemPlaceSize, mainStage,null,true,cradleGame);
         knightItem = new KnightItem(knightItemShopPlace06.getX(), knightItemShopPlace06.getY(), cellSize, cellSize, mainStage, 0, 0,cradleGame,knightItemParamsArrayList.get(5),null,this);
         knightItem.centerAtActor(knightItemShopPlace06);
         knightItemShopPlace06.setKnightItem(knightItem);
-        knightItemShopPlace07 = new KnightItemShopPlace(itemPlaceLeftSpace,cellSize+ItemPlaceSize*0, ItemPlaceSize, ItemPlaceSize, mainStage,null,true);
+        knightItemShopPlace07 = new KnightItemShopPlace(itemPlaceLeftSpace,cellSize+ItemPlaceSize*0, ItemPlaceSize, ItemPlaceSize, mainStage,null,true,cradleGame);
         knightItem = new KnightItem(knightItemShopPlace07.getX(), knightItemShopPlace07.getY(), cellSize, cellSize, mainStage, 0, 0,cradleGame,knightItemParamsArrayList.get(6),null,this);
         knightItem.centerAtActor(knightItemShopPlace07);
         knightItemShopPlace07.setKnightItem(knightItem);
-        knightItemShopPlace08 = new KnightItemShopPlace(itemPlaceLeftSpace+ItemPlaceSize,cellSize+ItemPlaceSize*0, ItemPlaceSize, ItemPlaceSize, mainStage,null,true);
+        knightItemShopPlace08 = new KnightItemShopPlace(itemPlaceLeftSpace+ItemPlaceSize,cellSize+ItemPlaceSize*0, ItemPlaceSize, ItemPlaceSize, mainStage,null,true,cradleGame);
         knightItem = new KnightItem(knightItemShopPlace08.getX(), knightItemShopPlace08.getY(), cellSize, cellSize, mainStage, 0, 0,cradleGame,knightItemParamsArrayList.get(7),null,this);
         knightItem.centerAtActor(knightItemShopPlace08);
         knightItemShopPlace08.setKnightItem(knightItem);
-        knightItemShopPlace09 = new KnightItemShopPlace(itemPlaceLeftSpace+ItemPlaceSize*2,cellSize+ItemPlaceSize*0, ItemPlaceSize, ItemPlaceSize, mainStage,null,true);
+        knightItemShopPlace09 = new KnightItemShopPlace(itemPlaceLeftSpace+ItemPlaceSize*2,cellSize+ItemPlaceSize*0, ItemPlaceSize, ItemPlaceSize, mainStage,null,true,cradleGame);
         knightItem = new KnightItem(knightItemShopPlace09.getX(), knightItemShopPlace09.getY(), cellSize, cellSize, mainStage, 0, 0,cradleGame,knightItemParamsArrayList.get(8),null,this);
         knightItem.centerAtActor(knightItemShopPlace09);
         knightItemShopPlace09.setKnightItem(knightItem);
 
         //Place for bying
-        knightItemShopPlace10 = new KnightItemShopPlace(itemPlaceLeftSpace+ItemPlaceSize*5,cellSize+ItemPlaceSize, ItemPlaceSize, ItemPlaceSize, mainStage,null,false);
+        knightItemShopPlace10 = new KnightItemShopPlace(itemPlaceLeftSpace+ItemPlaceSize*5,cellSize+ItemPlaceSize, ItemPlaceSize, ItemPlaceSize, mainStage,null,false,cradleGame);
         knightItemShopPlace10.setKnightItem(null);
         knightItemShopPlace10.setDropPlaceType(2);
 
@@ -164,11 +164,11 @@ public class BlackMarketScreen extends BaseScreen {
         int lineSizeW = Math.round(w * 0.3f);
 
         // Might
-        BaseActor might = new BaseActor(lineX, lineY, mainStage, Touchable.disabled);
+        BaseActor might = new BaseActor(lineX, lineY, mainStage, Touchable.disabled,cradleGame);
         might.setSize(lineSizeW, lineSize);
         might.loadTexture("knights/plate01.png", lineSizeW, lineSize);
 
-        BaseActor mightBadge = new BaseActor(0, 0, mainStage, Touchable.disabled);
+        BaseActor mightBadge = new BaseActor(0, 0, mainStage, Touchable.disabled,cradleGame);
         mightBadge.setSize(lineSize * 0.95f, lineSize * 0.95f);
         mightBadge.loadTexture("knights/sword_badge.png", Math.round(mightBadge.getWidth()), Math.round(mightBadge.getHeight()));
         mightBadge.setPosition(mightBadge.getWidth() * 0.3f, mightBadge.getWidth() * 0.05f);
@@ -184,11 +184,11 @@ public class BlackMarketScreen extends BaseScreen {
 
 
         // Life
-        BaseActor life = new BaseActor(lineX+lineSizeW+10, lineY , mainStage, Touchable.disabled);
+        BaseActor life = new BaseActor(lineX+lineSizeW+10, lineY , mainStage, Touchable.disabled,cradleGame);
         life.setSize(lineSizeW, lineSize);
         life.loadTexture("knights/plate01.png", lineSizeW, lineSize);
 
-        BaseActor lifeBadge = new BaseActor(0, 0, mainStage, Touchable.disabled);
+        BaseActor lifeBadge = new BaseActor(0, 0, mainStage, Touchable.disabled,cradleGame);
         lifeBadge.setSize(lineSize * 0.95f, lineSize * 0.95f);
         lifeBadge.loadTexture("knights/heart.png", Math.round(lifeBadge.getWidth()), Math.round(lifeBadge.getHeight()));
         lifeBadge.setPosition(lifeBadge.getWidth() * 0.3f, lifeBadge.getWidth() * 0.05f);
@@ -203,11 +203,11 @@ public class BlackMarketScreen extends BaseScreen {
         mainStage.addActor(lifeLabel);
 
         // Speed
-        BaseActor speedActor = new BaseActor(lineX+lineSizeW*2+20, lineY , mainStage, Touchable.disabled);
+        BaseActor speedActor = new BaseActor(lineX+lineSizeW*2+20, lineY , mainStage, Touchable.disabled,cradleGame);
         speedActor.setSize(lineSizeW, lineSize);
         speedActor.loadTexture("knights/plate01.png", lineSizeW, lineSize);
 
-        BaseActor speedBadge = new BaseActor(0, 0, mainStage, Touchable.disabled);
+        BaseActor speedBadge = new BaseActor(0, 0, mainStage, Touchable.disabled,cradleGame);
         speedBadge.setSize(lineSize * 0.95f, lineSize * 0.95f);
         speedBadge.loadTexture("knightitems/speed_badge.png", Math.round(speedBadge.getWidth()), Math.round(speedBadge.getHeight()));
         speedBadge.setPosition(speedBadge.getWidth() * 0.3f, speedBadge.getWidth() * 0.05f);

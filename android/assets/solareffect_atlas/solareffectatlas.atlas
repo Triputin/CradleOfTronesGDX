@@ -1,0 +1,41 @@
+
+solareffectatlas.png
+size: 500,100
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+sf01
+  rotate: false
+  xy: 2, 0
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+sf02
+  rotate: false
+  xy: 100, 2
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+sf03
+  rotate: false
+  xy: 200, 0
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+sf04
+  rotate: false
+  xy: 300, 0
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+sf05
+  rotate: false
+  xy: 400, 0
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1

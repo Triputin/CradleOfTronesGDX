@@ -19,13 +19,12 @@ import static com.badlogic.gdx.scenes.scene2d.actions.Actions.sequence;
 
 public class ArrowDownActor extends BaseActor {
 
-    CradleGame cradleGame;
     BaseActor arrowActor;
     Label label;
 
     public ArrowDownActor(float x, float y,float width, float height, Stage s, CradleGame cradleGame)
     {
-        super(x,y,s, Touchable.disabled);
+        super(x,y,s, Touchable.disabled, cradleGame);
         setHeight(height);
         setWidth(width);
         int w = Gdx.graphics.getWidth();
@@ -36,12 +35,11 @@ public class ArrowDownActor extends BaseActor {
         } else {
             fontScale = 0.8f;
         }
-        arrowActor = new BaseActor(0,0,s,Touchable.disabled);
+        arrowActor = new BaseActor(0,0,s,Touchable.disabled,cradleGame);
         //arrowActor.loadTexture("arrow_down.png", (int) getWidth(), (int) getHeight());
         arrowActor.setSize((int) getWidth(), (int) getHeight());
         arrowActor.AddImage("arrow_down.png", 0,0,(int) getWidth(), (int) getHeight());
         //arrowActor.addAction(fadeOut(0.01f));
-        this.cradleGame = cradleGame;
         String st = cradleGame.getLanguageStrings().get("pressheretoattack");
         label = new Label(st, BaseGame.labelStyle);
         label.setFontScale(fontScale);

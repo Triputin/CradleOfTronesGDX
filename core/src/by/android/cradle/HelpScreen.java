@@ -46,7 +46,7 @@ public class HelpScreen extends BaseScreen {
         final int h = Gdx.graphics.getHeight();
 
         //Fon
-        BaseActor fon = new BaseActor(0,0,uiStage,Touchable.disabled);
+        BaseActor fon = new BaseActor(0,0,uiStage,Touchable.disabled,cradleGame);
         fon.loadTexture("castle/castle04.png",w,h);
         uiStage.addActor(fon);
 
@@ -166,7 +166,7 @@ public class HelpScreen extends BaseScreen {
        switch(slideNumber){
 
            case 1:
-               slide1 = new BaseActor(x,y,uiStage,Touchable.disabled);
+               slide1 = new BaseActor(x,y,uiStage,Touchable.disabled,cradleGame);
                slide1.loadTexture("helpimages/im01.png", Math.round(width*0.9f), Math.round(height*0.9f));
                slide1.AddImage("goldenframe01.png",-Math.round(width*0.05f),-Math.round(height*0.05f),width,height);
                uiStage.addActor(slide1);
@@ -175,7 +175,7 @@ public class HelpScreen extends BaseScreen {
                dialogBox.setFontScale(fontScale);
                break;
            case 2:
-               slide1 = new BaseActor(x,y,uiStage,Touchable.disabled);
+               slide1 = new BaseActor(x,y,uiStage,Touchable.disabled,cradleGame);
                slide1.loadTexture("helpimages/im02.png", Math.round(width*0.9f), Math.round(height*0.9f));
                slide1.AddImage("goldenframe01.png",-Math.round(width*0.05f),-Math.round(height*0.05f),width,height);
 
@@ -185,7 +185,7 @@ public class HelpScreen extends BaseScreen {
                dialogBox.setFontScale(fontScale);
                break;
            case 3:
-               slide1 = new BaseActor(x,y,uiStage,Touchable.disabled);
+               slide1 = new BaseActor(x,y,uiStage,Touchable.disabled,cradleGame);
                slide1.loadTexture("helpimages/im03.png", Math.round(width*0.9f), Math.round(height*0.9f));
                slide1.AddImage("goldenframe01.png",-Math.round(width*0.05f),-Math.round(height*0.05f),width,height);
                uiStage.addActor(slide1);
@@ -194,7 +194,7 @@ public class HelpScreen extends BaseScreen {
                dialogBox.setFontScale(fontScale);
                break;
            case 4:
-               slide1 = new BaseActor(x,y,uiStage,Touchable.disabled);
+               slide1 = new BaseActor(x,y,uiStage,Touchable.disabled,cradleGame);
                slide1.loadTexture("helpimages/im04.png", Math.round(width*0.9f), Math.round(height*0.9f));
                slide1.AddImage("goldenframe01.png",-Math.round(width*0.05f),-Math.round(height*0.05f),width,height);
                uiStage.addActor(slide1);
@@ -203,7 +203,7 @@ public class HelpScreen extends BaseScreen {
                dialogBox.setFontScale(fontScale);
                break;
            case 5:
-               slide1 = new BaseActor(x,y,uiStage,Touchable.disabled);
+               slide1 = new BaseActor(x,y,uiStage,Touchable.disabled,cradleGame);
                slide1.loadTexture("helpimages/im04.png", Math.round(width*0.9f), Math.round(height*0.9f));
                slide1.AddImage("goldenframe01.png",-Math.round(width*0.05f),-Math.round(height*0.05f),width,height);
                uiStage.addActor(slide1);
@@ -212,7 +212,7 @@ public class HelpScreen extends BaseScreen {
                dialogBox.setFontScale(fontScale);
                break;
            case 6:
-               slide1 = new BaseActor(x,y,uiStage,Touchable.disabled);
+               slide1 = new BaseActor(x,y,uiStage,Touchable.disabled,cradleGame);
                slide1.loadTexture("helpimages/im05.png", Math.round(width*0.9f), Math.round(height*0.9f));
                slide1.AddImage("goldenframe01.png",-Math.round(width*0.05f),-Math.round(height*0.05f),width,height);
                uiStage.addActor(slide1);
@@ -221,7 +221,7 @@ public class HelpScreen extends BaseScreen {
                dialogBox.setFontScale(fontScale);
                break;
            case 7:
-               slide1 = new BaseActor(x,y,uiStage,Touchable.disabled);
+               slide1 = new BaseActor(x,y,uiStage,Touchable.disabled,cradleGame);
                slide1.loadTexture("helpimages/im06.png", Math.round(width*0.9f), Math.round(height*0.9f));
                slide1.AddImage("goldenframe01.png",-Math.round(width*0.05f),-Math.round(height*0.05f),width,height);
                uiStage.addActor(slide1);
@@ -230,7 +230,7 @@ public class HelpScreen extends BaseScreen {
                dialogBox.setFontScale(fontScale);
                break;
            case 8:
-               slide1 = new BaseActor(x,y,uiStage,Touchable.disabled);
+               slide1 = new BaseActor(x,y,uiStage,Touchable.disabled,cradleGame);
                slide1.loadTexture("helpimages/im06.png", Math.round(width*0.9f), Math.round(height*0.9f));
                slide1.AddImage("goldenframe01.png",-Math.round(width*0.05f),-Math.round(height*0.05f),width,height);
                uiStage.addActor(slide1);
@@ -239,7 +239,7 @@ public class HelpScreen extends BaseScreen {
                dialogBox.setFontScale(fontScale);
                break;
            case 9:
-               slide1 = new BaseActor(x,y,uiStage,Touchable.disabled);
+               slide1 = new BaseActor(x,y,uiStage,Touchable.disabled,cradleGame);
                slide1.loadTexture("helpimages/im06.png", Math.round(width*0.9f), Math.round(height*0.9f));
                slide1.AddImage("goldenframe01.png",-Math.round(width*0.05f),-Math.round(height*0.05f),width,height);
                uiStage.addActor(slide1);
@@ -248,7 +248,7 @@ public class HelpScreen extends BaseScreen {
                dialogBox.setFontScale(fontScale);
                break;
            case 10:
-               slide1 = new BaseActor(x,y,uiStage,Touchable.disabled);
+               slide1 = new BaseActor(x,y,uiStage,Touchable.disabled,cradleGame);
                slide1.loadTexture("helpimages/im06.png", Math.round(width*0.9f), Math.round(height*0.9f));
                slide1.AddImage("goldenframe01.png",-Math.round(width*0.05f),-Math.round(height*0.05f),width,height);
                uiStage.addActor(slide1);
@@ -257,7 +257,7 @@ public class HelpScreen extends BaseScreen {
                dialogBox.setFontScale(fontScale);
                break;
            case 11:
-               slide1 = new BaseActor(x,y,uiStage,Touchable.disabled);
+               slide1 = new BaseActor(x,y,uiStage,Touchable.disabled,cradleGame);
                slide1.loadTexture("helpimages/im07.png", Math.round(width*0.9f), Math.round(height*0.9f));
                slide1.AddImage("goldenframe01.png",-Math.round(width*0.05f),-Math.round(height*0.05f),width,height);
                uiStage.addActor(slide1);
@@ -266,7 +266,7 @@ public class HelpScreen extends BaseScreen {
                dialogBox.setFontScale(fontScale);
                break;
            case 12:
-               slide1 = new BaseActor(x,y,uiStage,Touchable.disabled);
+               slide1 = new BaseActor(x,y,uiStage,Touchable.disabled,cradleGame);
                slide1.loadTexture("helpimages/im08.png", Math.round(width*0.9f), Math.round(height*0.9f));
                slide1.AddImage("goldenframe01.png",-Math.round(width*0.05f),-Math.round(height*0.05f),width,height);
                uiStage.addActor(slide1);
@@ -275,7 +275,7 @@ public class HelpScreen extends BaseScreen {
                dialogBox.setFontScale(fontScale);
                break;
            case 13:
-               slide1 = new BaseActor(x,y,uiStage,Touchable.disabled);
+               slide1 = new BaseActor(x,y,uiStage,Touchable.disabled,cradleGame);
                slide1.loadTexture("helpimages/im09.png", Math.round(width*0.9f), Math.round(height*0.9f));
                slide1.AddImage("goldenframe01.png",-Math.round(width*0.05f),-Math.round(height*0.05f),width,height);
                uiStage.addActor(slide1);

@@ -20,21 +20,19 @@ public class KnightItemsSlider extends DropTargetActor {
     private Stage stage;
     private Knight knight;
     private int cellSize;
-    private CradleGame cradleGame;
     private int sliderPos;
     private int qttyOfVisibleItems;
     KnightScreen knightScreen;
 
 
     public KnightItemsSlider(float x, float y, int width, int height, Stage s, Touchable touchable, Knight knight, CradleGame cradleGame, KnightScreen knightScreen) {
-        super(x, y, s);
+        super(x, y, s,cradleGame);
         setTouchable(touchable);
 
         setDropPlaceType(3);
         setTargetable(true);
         this.stage = s;
         this.knight = knight;
-        this.cradleGame = cradleGame;
         this.sliderPos = 0;
         this.knightScreen = knightScreen;
 

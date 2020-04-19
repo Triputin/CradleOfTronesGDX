@@ -16,9 +16,9 @@ public class Coin extends Item {
     @Override
     public void setSelected(boolean selected, Item prev) {
         if(selected){
-            loadTexture("coin1pressed.png", (int) getWidth(), (int) getHeight());
+            loadTextureFromAssets(Assets.COIN01_PRESSED, (int) getWidth(), (int) getHeight());
         }else {
-            loadTexture("coin1.png", (int) getWidth(), (int) getHeight());
+            loadTextureFromAssets(Assets.COIN01, (int) getWidth(), (int) getHeight());
         }
 
         super.setSelected(selected, prev);

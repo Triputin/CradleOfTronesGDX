@@ -14,9 +14,9 @@ public class Jem01 extends Item {
     @Override
     public void setSelected(boolean selected, Item prev) {
         if (selected) {
-            loadTexture("gem01pressed.png", (int) getWidth(), (int) getHeight());
+            loadTextureFromAssets(Assets.JEM01_PRESSED, (int) getWidth(), (int) getHeight());
         } else {
-            loadTexture("gem01.png", (int) getWidth(), (int) getHeight());
+            loadTextureFromAssets(Assets.JEM01, (int) getWidth(), (int) getHeight());
         }
 
         super.setSelected(selected, prev);

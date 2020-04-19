@@ -17,13 +17,13 @@ public class Knight extends BaseActor {
     private BaseActor healthActor;
 
 
-    public Knight(float x, float y, int width, int height, Stage s, KnightParams knightParams)
+    public Knight(float x, float y, int width, int height, Stage s, KnightParams knightParams, CradleGame cradleGame)
     {
-        super(x,y,s, Touchable.enabled);
+        super(x,y,s, Touchable.enabled,cradleGame);
         setSize(width,height);
         setBoundaryPolygon(8);
         this.knightParams=knightParams;
-        BaseActor baseActor = new BaseActor(0,0,s,Touchable.enabled);
+        BaseActor baseActor = new BaseActor(0,0,s,Touchable.enabled,cradleGame);
         Animation animation;
 
         String[] filenames =
@@ -34,7 +34,7 @@ public class Knight extends BaseActor {
                 };
 
         animation = createAnimationFromFiles(filenames, 1.0f, false,  Math.round(width*0.28f),Math.round(height*0.28f));
-        healthActor = new BaseActor(width*0.54f,height*0.12f,s,Touchable.enabled);
+        healthActor = new BaseActor(width*0.54f,height*0.12f,s,Touchable.enabled,cradleGame);
         healthActor.setAnimation(animation);
         healthActor.setAnimationPaused(true);
         addActor(healthActor);

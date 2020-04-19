@@ -50,12 +50,12 @@ public class MenuScreen extends BaseScreen {
 
         //Flags
 
-        Flag f1=new Flag(w*0.525f,h*0.79f,(int)Math.round(w*0.12f),(int)Math.round(h*0.2f),uiStage,Touchable.enabled,KingdomNames.Kingdom_of_the_North);
-        Flag f2=new Flag(w*0.11f,h*0.48f,(int)Math.round(w*0.08f),(int)Math.round(h*0.15f),uiStage,Touchable.enabled,KingdomNames.Kingdom_of_the_North);
+        Flag f1=new Flag(w*0.525f,h*0.79f,(int)Math.round(w*0.12f),(int)Math.round(h*0.2f),uiStage,Touchable.enabled,KingdomNames.Kingdom_of_the_North,cradleGame);
+        Flag f2=new Flag(w*0.11f,h*0.48f,(int)Math.round(w*0.08f),(int)Math.round(h*0.15f),uiStage,Touchable.enabled,KingdomNames.Kingdom_of_the_North,cradleGame);
 
 
         // BaseActor castleSky = new BaseActor(-w,0, uiStage,Touchable.disabled);
-        BaseActorRepeatMove baseActorRepeatMove = new BaseActorRepeatMove(-w,0,w,h,uiStage);
+        BaseActorRepeatMove baseActorRepeatMove = new BaseActorRepeatMove(-w,0,w,h,uiStage,cradleGame);
         //baseActorRepeatMove.loadTexture("castle/castle03_sky.png",w*2,h);
         uiTable.addActor(baseActorRepeatMove);
 
@@ -65,7 +65,7 @@ public class MenuScreen extends BaseScreen {
         //Action moveAction = Actions.sequence(Actions.moveBy(0.3f,0),Actions.delay(0.05f));
         //castleSky.addAction( Actions.forever(moveAction) );
 
-        BaseActor castle = new BaseActor(0,0, uiStage,Touchable.disabled);
+        BaseActor castle = new BaseActor(0,0, uiStage,Touchable.disabled,cradleGame);
         castle.loadTexture( "castle/castle02.png",w,h );
        // castle.setSize(800,600);
         uiTable.addActor(castle);

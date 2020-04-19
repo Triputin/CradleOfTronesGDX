@@ -1,7 +1,9 @@
 package by.android.cradle;
 
+import com.badlogic.gdx.assets.AssetDescriptor;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.TextureData;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 
@@ -29,6 +31,7 @@ import java.util.ArrayList;
 import com.badlogic.gdx.math.Rectangle;
 
 import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.utils.ObjectSet;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.badlogic.gdx.scenes.scene2d.Group;
 
@@ -43,7 +46,7 @@ import com.badlogic.gdx.scenes.scene2d.Group;
 public class BaseActor extends Group
 {
 
-
+    protected CradleGame cradleGame;
     private Animation<TextureRegion> animation;
     private float elapsedTime;
     private boolean animationPaused;
@@ -59,10 +62,11 @@ public class BaseActor extends Group
     // stores size of game world for all actors
     private static Rectangle worldBounds;
 
-    public BaseActor(float x, float y, Stage s, Touchable touchable)
+    public BaseActor(float x, float y, Stage s, Touchable touchable, CradleGame cradleGame)
     {
         // call constructor from Actor class
         super();
+        this.cradleGame = cradleGame;
         this.setTouchable(touchable);
         // perform additional initialization tasks
         setPosition(x,y);
@@ -362,6 +366,127 @@ public class BaseActor extends Group
         fileNames[0] = fileName;
         return loadAnimationFromFiles(fileNames, 1, true, width, height);
     }
+
+
+    public Animation<TextureRegion> loadTextureFromAssets(AssetDescriptor<Texture> assetDescriptor, int width, int height)
+    {
+        Array<TextureRegion> textureArray = new Array<TextureRegion>();
+        Texture texture200 =   cradleGame.getCradleAssetManager().manager.get(assetDescriptor);
+        TextureData textureData200 = texture200.getTextureData();
+        if (!textureData200.isPrepared()) {
+            textureData200.prepare();
+        }
+        Pixmap pixmap200 = textureData200.consumePixmap();
+
+        Pixmap pixmap100 = new Pixmap(width, height, pixmap200.getFormat());
+        pixmap100.drawPixmap(pixmap200,
+                0, 0, pixmap200.getWidth(), pixmap200.getHeight(),
+                0, 0, pixmap100.getWidth(), pixmap100.getHeight()
+        );
+        Texture texture = new Texture(pixmap100);
+        texture.setFilter( TextureFilter.Linear, TextureFilter.Linear );
+        pixmap200.dispose();
+        pixmap100.dispose();
+        texture200.dispose();
+
+
+        TextureRegion textureRegion=new TextureRegion( texture );
+        textureArray.add(textureRegion);
+        Animation<TextureRegion> anim = new Animation<TextureRegion>(1, textureArray);
+        anim.setPlayMode(Animation.PlayMode.LOOP);
+        setAnimation(anim);
+        return anim;
+    }
+
+    public Animation<TextureRegion> loadAnimationFromAssetsAtlas(AssetDescriptor<TextureAtlas> assetDescriptor, int rows, int cols, float frameDuration, boolean loop, int width, int height){
+        TextureAtlas textureAtlas = cradleGame.getCradleAssetManager().manager.get(assetDescriptor);
+        Array<TextureRegion> textureArray = new Array<TextureRegion>();
+        Array<TextureAtlas.AtlasRegion> atlasRegions = textureAtlas.getRegions();
+
+
+        Texture texture = atlasRegions.get(0).getTexture();
+        texture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+        int frameWidth = texture.getWidth() / cols;
+        int frameHeight = texture.getHeight() / rows;
+
+        TextureRegion[][] temp = TextureRegion.split(texture, frameWidth, frameHeight);
+
+        for (int r = 0; r < rows; r++)
+            for (int c = 0; c < cols; c++){
+            Pixmap pixmap200 = extractPixmapFromTextureRegion(temp[r][c]);
+            Pixmap pixmap100 = new Pixmap(width, height, pixmap200.getFormat());
+            pixmap100.drawPixmap(pixmap200,
+                    0, 0, pixmap200.getWidth(), pixmap200.getHeight(),
+                    0, 0, pixmap100.getWidth(), pixmap100.getHeight()
+            );
+            Texture texture2 = new Texture(pixmap100);
+            texture2.setFilter( TextureFilter.Linear, TextureFilter.Linear );
+            pixmap200.dispose();
+            pixmap100.dispose();
+
+            TextureRegion textureRegion=new TextureRegion( texture2 );
+            textureArray.add(textureRegion);
+        }
+
+        Animation<TextureRegion> anim = new Animation<TextureRegion>(frameDuration, textureArray);
+
+        if (loop)
+            anim.setPlayMode(Animation.PlayMode.LOOP);
+        else
+            anim.setPlayMode(Animation.PlayMode.NORMAL);
+
+        if (animation == null)
+            setAnimation(anim);
+
+        return anim;
+
+    }
+
+    public Animation<TextureRegion> loadAnimationFromAssets(String[] fileNames, float frameDuration, boolean loop, int width, int height)
+    {
+        int fileCount = fileNames.length;
+        Array<TextureRegion> textureArray = new Array<TextureRegion>();
+
+        for (int n = 0; n < fileCount; n++)
+        {
+            String fileName = fileNames[n];
+            //Texture texture = new Texture( Gdx.files.internal(fileName) );
+            //texture.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);
+
+            // Изменяем размер загружаемой картинки из файла на заданный
+            Pixmap pixmap200 = new Pixmap(Gdx.files.internal(fileName));
+
+            Pixmap pixmap100 = new Pixmap(width, height, pixmap200.getFormat());
+            pixmap100.drawPixmap(pixmap200,
+                    0, 0, pixmap200.getWidth(), pixmap200.getHeight(),
+                    0, 0, pixmap100.getWidth(), pixmap100.getHeight()
+            );
+            Texture texture = new Texture(pixmap100);
+            texture.setFilter( TextureFilter.Linear, TextureFilter.Linear );
+            pixmap200.dispose();
+            pixmap100.dispose();
+
+
+            TextureRegion textureRegion=new TextureRegion( texture );
+            //textureRegion.setRegionWidth(128);
+            //textureRegion.setRegionHeight(128);
+            textureArray.add(textureRegion);
+        }
+
+        Animation<TextureRegion> anim = new Animation<TextureRegion>(frameDuration, textureArray);
+
+        if (loop)
+            anim.setPlayMode(Animation.PlayMode.LOOP);
+        else
+            anim.setPlayMode(Animation.PlayMode.NORMAL);
+
+        //if (animation == null)
+        setAnimation(anim);
+
+
+        return anim;
+    }
+
 
     /**
      *  Set the pause state of the animation.

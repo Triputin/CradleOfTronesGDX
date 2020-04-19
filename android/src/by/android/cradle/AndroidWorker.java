@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Build;
 import android.provider.SyncStateContract;
 import android.util.Log;
 
@@ -70,7 +71,7 @@ public class AndroidWorker extends Worker {
         Bitmap bitmap;
         //bitmap = BitmapFactory.decodeResource(getApplicationContext().getResources(),R.drawable.ic_stat_outlined_flag, options);
         //String fname=new File(getApplicationContext().getFilesDir(), "logo.png").getAbsolutePath();
-        //System.out.println("fname="+fname);
+        //System.out.println("sendNotification ="+fname);
         //bitmap = BitmapFactory.decodeFile(fname,options);
         //bitmap = BitmapFactory.decodeFile(Gdx.files.internal("logo.png").file().getAbsolutePath()+"/"+"logo.png",options);
         //Pixmap pixmap200 = new Pixmap(Gdx.files.internal("logo.png"));
@@ -83,12 +84,13 @@ public class AndroidWorker extends Worker {
 
         try {
              bitmapStream=getApplicationContext().getAssets().open("logo.png");
-
+             bitmap = BitmapFactory.decodeStream(bitmapStream);
         } catch (IOException e1) {
             // TODO Auto-generated catch block
             e1.printStackTrace();
+            bitmap = null;
         }
-        bitmap = BitmapFactory.decodeStream(bitmapStream);
+
 
         Intent intent = new Intent(getApplicationContext(), AndroidLauncher.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -99,10 +101,13 @@ public class AndroidWorker extends Worker {
         //NotificationManager notificationManager = (NotificationManager)getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
         NotificationManager notificationManager = (NotificationManager)getApplicationContext().getSystemService(NotificationManager.class);
 
+        //System.out.println("android.os.Build.VERSION.SDK_INT"+android.os.Build.VERSION.SDK_INT);
+        //System.out.println("android.os.Build.VERSION_CODES.O"+android.os.Build.VERSION_CODES.O);
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            NotificationChannel channel = new NotificationChannel(AndroidLauncher.Default_notification_channel_id, AndroidLauncher.Default_notification_channel_name, NotificationManager.IMPORTANCE_DEFAULT);
+            NotificationChannel channel = new NotificationChannel(AndroidLauncher.Default_notification_channel_id, AndroidLauncher.Default_notification_channel_name, NotificationManager.IMPORTANCE_LOW);
             Objects.requireNonNull(notificationManager).createNotificationChannel(channel);
         }
+
 
         Notification notification;
         if (bitmap != null) {
@@ -131,9 +136,16 @@ public class AndroidWorker extends Worker {
     }
 
 
-    public static void scheduleReminder(long duration_minutes,String title, String message,String messageId, String tag) {
+    public static void scheduleReminder(long duration_minutes,String title, String message,String messageId, String tag, Context context) {
         //Prepare data
-
+        /*
+        System.out.println("AndroidWorker ----------------------------------------");
+        System.out.println("AndroidWorker scheduleReminder messageId="+messageId);
+        System.out.println("AndroidWorker scheduleReminder duration_minutes="+duration_minutes);
+        System.out.println("AndroidWorker scheduleReminder title="+title);
+        System.out.println("AndroidWorker scheduleReminder message="+message);
+        System.out.println("AndroidWorker scheduleReminder tag="+tag);
+*/
         Data myData = new Data.Builder()
                 .putString(AndroidLauncher.MessageTitleKey, title)
                 .putString(AndroidLauncher.MessageTextKey, message)
@@ -147,11 +159,12 @@ public class AndroidWorker extends Worker {
                 .addTag(tag)
                 .setInputData(myData).build();
 
-        WorkManager instance = WorkManager.getInstance();
+        WorkManager instance = WorkManager.getInstance(context);
         instance.enqueue(notificationWork);
     }
 
     public static void cancelReminder(String tag) {
+        System.out.println("AndroidWorker cancelReminder tag="+tag);
         WorkManager instance = WorkManager.getInstance();
         instance.cancelAllWorkByTag(tag);
     }

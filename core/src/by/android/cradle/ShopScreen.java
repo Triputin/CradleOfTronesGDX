@@ -228,41 +228,41 @@ private ShopItem squareBomb2;
 
         //Items of player
         leftArraySh = new ArrayList<>();
-        goldItem = new ShopItem(leftSqX, leftSqY, itemSize, Math.round(itemSize*1.2f), uiStage, GameRes.Gold,"coin2.png", "coin2pressed.png","Coin2",2);
+        goldItem = new ShopItem(leftSqX, leftSqY, itemSize, Math.round(itemSize*1.2f), uiStage, GameRes.Gold,"coin2.png", "coin2pressed.png","Coin2",2,cradleGame);
         goldItem.setShowQtty(true);
         leftArraySh.add(goldItem);
-        woodItem = new ShopItem(leftSqX+itemSize+padding, leftSqY, itemSize, Math.round(itemSize*1.2f), uiStage, GameRes.Wood,"wood.png", "woodpressed.png","Wood",2);
+        woodItem = new ShopItem(leftSqX+itemSize+padding, leftSqY, itemSize, Math.round(itemSize*1.2f), uiStage, GameRes.Wood,"wood.png", "woodpressed.png","Wood",2,cradleGame);
         woodItem.setShowQtty(true);
         leftArraySh.add(woodItem);
-        breadItem = new ShopItem(leftSqX+itemSize+padding+itemSize+padding, leftSqY, itemSize, Math.round(itemSize*1.2f), uiStage, GameRes.Bread,"bread.png", "breadpressed.png","Bread",2);
+        breadItem = new ShopItem(leftSqX+itemSize+padding+itemSize+padding, leftSqY, itemSize, Math.round(itemSize*1.2f), uiStage, GameRes.Bread,"bread.png", "breadpressed.png","Bread",2,cradleGame);
         breadItem.setShowQtty(true);
         leftArraySh.add(breadItem);
-        timeBomb = new ShopItem(leftSqX, leftSqY-itemSize+padding, itemSize, Math.round(itemSize*1.2f), uiStage, GameRes.TimeBomb,"timebomb.png", "timebombpressed.png","TimeBomb",30);
+        timeBomb = new ShopItem(leftSqX, leftSqY-itemSize+padding, itemSize, Math.round(itemSize*1.2f), uiStage, GameRes.TimeBomb,"timebomb.png", "timebombpressed.png","TimeBomb",30,cradleGame);
         timeBomb.setShowQtty(true);
         timeBomb.setTouchable(Touchable.disabled);
         leftArraySh.add(timeBomb);
-        squareBomb1 = new ShopItem(leftSqX+itemSize+padding, leftSqY-itemSize+padding, itemSize, Math.round(itemSize*1.2f), uiStage, GameRes.SquareBomb1,"squarebomb01.png", "squarebomb01pressed.png","SquareBomb1",30);
+        squareBomb1 = new ShopItem(leftSqX+itemSize+padding, leftSqY-itemSize+padding, itemSize, Math.round(itemSize*1.2f), uiStage, GameRes.SquareBomb1,"squarebomb01.png", "squarebomb01pressed.png","SquareBomb1",30,cradleGame);
         squareBomb1.setShowQtty(true);
         squareBomb1.setTouchable(Touchable.disabled);
         leftArraySh.add(squareBomb1);
-        squareBomb2 = new ShopItem(leftSqX+itemSize+padding+itemSize+padding, leftSqY-itemSize+padding, itemSize, Math.round(itemSize*1.2f), uiStage, GameRes.SquareBomb2,"squarebomb02.png", "squarebomb02pressed.png","SquareBomb2",60);
+        squareBomb2 = new ShopItem(leftSqX+itemSize+padding+itemSize+padding, leftSqY-itemSize+padding, itemSize, Math.round(itemSize*1.2f), uiStage, GameRes.SquareBomb2,"squarebomb02.png", "squarebomb02pressed.png","SquareBomb2",60,cradleGame);
         squareBomb2.setShowQtty(true);
         squareBomb2.setTouchable(Touchable.disabled);
         leftArraySh.add(squareBomb2);
 
         //Items to buy
         rightArraySh = new ArrayList<>();
-        goldItemR = new ShopItem(rightSqX, leftSqY, itemSize, Math.round(itemSize*1.2f), mainStage, 0,"coin2.png", "coin2pressed.png","Coin2",2);
+        goldItemR = new ShopItem(rightSqX, leftSqY, itemSize, Math.round(itemSize*1.2f), mainStage, 0,"coin2.png", "coin2pressed.png","Coin2",2,cradleGame);
         rightArraySh.add(goldItemR);
-        woodItemR = new ShopItem(rightSqX+itemSize+padding, leftSqY, itemSize, Math.round(itemSize*1.2f), mainStage, 0,"wood.png", "woodpressed.png","Wood",2);
+        woodItemR = new ShopItem(rightSqX+itemSize+padding, leftSqY, itemSize, Math.round(itemSize*1.2f), mainStage, 0,"wood.png", "woodpressed.png","Wood",2,cradleGame);
         rightArraySh.add(woodItemR);
-        breadItemR = new ShopItem(rightSqX+itemSize+padding+itemSize+padding, leftSqY, itemSize, Math.round(itemSize*1.2f), mainStage, 0,"bread.png", "breadpressed.png","Bread",2);
+        breadItemR = new ShopItem(rightSqX+itemSize+padding+itemSize+padding, leftSqY, itemSize, Math.round(itemSize*1.2f), mainStage, 0,"bread.png", "breadpressed.png","Bread",2,cradleGame);
         rightArraySh.add(breadItemR);
-        timeBombR = new ShopItem(rightSqX, leftSqY-itemSize+padding, itemSize, Math.round(itemSize*1.2f), mainStage, 0,"timebomb.png", "timebombpressed.png","TimeBomb",30);
+        timeBombR = new ShopItem(rightSqX, leftSqY-itemSize+padding, itemSize, Math.round(itemSize*1.2f), mainStage, 0,"timebomb.png", "timebombpressed.png","TimeBomb",30,cradleGame);
         rightArraySh.add(timeBombR);
-        squareBomb1R = new ShopItem(rightSqX+itemSize+padding, leftSqY-itemSize+padding, itemSize, Math.round(itemSize*1.2f), mainStage, 0,"squarebomb01.png", "squarebomb01pressed.png","SquareBomb1",30);
+        squareBomb1R = new ShopItem(rightSqX+itemSize+padding, leftSqY-itemSize+padding, itemSize, Math.round(itemSize*1.2f), mainStage, 0,"squarebomb01.png", "squarebomb01pressed.png","SquareBomb1",30,cradleGame);
         rightArraySh.add(squareBomb1R);
-        squareBomb2R = new ShopItem(rightSqX+itemSize+padding+itemSize+padding, leftSqY-itemSize+padding, itemSize, Math.round(itemSize*1.2f), mainStage, 0,"squarebomb02.png", "squarebomb02pressed.png","SquareBomb2",60);
+        squareBomb2R = new ShopItem(rightSqX+itemSize+padding+itemSize+padding, leftSqY-itemSize+padding, itemSize, Math.round(itemSize*1.2f), mainStage, 0,"squarebomb02.png", "squarebomb02pressed.png","SquareBomb2",60,cradleGame);
         rightArraySh.add(squareBomb2R);
 
 

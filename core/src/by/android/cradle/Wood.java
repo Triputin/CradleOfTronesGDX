@@ -15,9 +15,9 @@ public class Wood extends Item {
     @Override
     public void setSelected(boolean selected, Item prev) {
         if(selected){
-            loadTexture("woodpressed.png", (int) getWidth(), (int) getHeight());
+            loadTextureFromAssets(Assets.WOOD_PRESSED, (int) getWidth(), (int) getHeight());
         }else {
-            loadTexture("wood.png", (int) getWidth(), (int) getHeight());
+            loadTextureFromAssets(Assets.WOOD, (int) getWidth(), (int) getHeight());
         }
 
         super.setSelected(selected, prev);

@@ -33,10 +33,10 @@ public class ScreenGamePlay extends BaseScreen {
 
 
     // Game constant params
-    private final float SoundEffectsVolume = 0.7f;
+    private final float SoundEffectsVolume = 0.1f;
     private int LevelDuration = 60; // Time of every level (HourGlass)
     private int cellSize;
-    private final int CellCount = 7;
+    private int CellCount;
     private GameField gameField;
     private float gameFieldX;
     private float gameFieldY;
@@ -90,9 +90,10 @@ public class ScreenGamePlay extends BaseScreen {
         screenGamePlay = this;
 
         // Get screen size
-        int w = Gdx.graphics.getWidth();
-        int h = Gdx.graphics.getHeight();
-        int resHeight = (int)Math.round(h*0.12);
+        int w = cradleGame.getW();
+        int h = cradleGame.getH();
+        int resHeight = cradleGame.getResHeight();
+        CellCount = cradleGame.getCellCount();
 
         timeBombQttyLabel = new Label(" ", BaseGame.labelStyle);
         timeBombQttyLabel.setColor( Color.GOLDENROD );
@@ -112,7 +113,7 @@ public class ScreenGamePlay extends BaseScreen {
         squareBomb2QttyLabel.setFontScale(1.5f);
         uiStage.addActor(squareBomb2QttyLabel);
 
-        hall = new BaseActor(0,0, mainStage, Touchable.disabled);
+        hall = new BaseActor(0,0, mainStage, Touchable.disabled,cradleGame);
         //hall.loadTexture( "hall01.png",w,h );
         if(cradleGame.getGameMapLevel()==1){
         hall.loadTexture( "game_of_thrones_locations4.jpg",w,h );}
@@ -132,7 +133,7 @@ public class ScreenGamePlay extends BaseScreen {
         dialogBox_endLevel = new DialogBox_EndLevel(w/2-dialogSize/2,h/2-dialogSize/2,uiStage,dialogSize,dialogSize,cradleGame);
         dialogBox_endLevel.setVisible(false);
 
-        cellSize = (h-resHeight)/CellCount;
+        cellSize = cradleGame.getCellSize();
         h=h-70; //place for top menu items
         if (w<h) {
             h=w;
@@ -152,10 +153,10 @@ public class ScreenGamePlay extends BaseScreen {
         w = Gdx.graphics.getWidth();
         h = Gdx.graphics.getHeight();
 
-        BaseActor baseResultsActor = new BaseActor(gameFieldX,h-resHeight,mainStage,Touchable.disabled);
+        BaseActor baseResultsActor = new BaseActor(gameFieldX,h-resHeight,mainStage,Touchable.disabled,cradleGame);
         baseResultsActor.setWidth( w-gameFieldX);
         baseResultsActor.setHeight(resHeight);
-        resultsActor = new ResultsActor(0,0,(int) (w-gameFieldX),resHeight,mainStage,Touchable.disabled,baseResultsActor);
+        resultsActor = new ResultsActor(0,0,(int) (w-gameFieldX),resHeight,mainStage,Touchable.disabled,baseResultsActor,cradleGame);
 
         /*
         BaseActor baseResultsActor = new BaseActor(gameFieldX*0.9f,h,uiStage,Touchable.disabled);
@@ -179,7 +180,7 @@ public class ScreenGamePlay extends BaseScreen {
             if (sandglassduration > 400) sandglassduration = 400;
         }
 
-        sandGlass = new SandGlass(x,y,uiStage,sw, Math.round( gameFieldWidth*0.8f), sandglassduration);
+        sandGlass = new SandGlass(x,y,uiStage,sw, Math.round( gameFieldWidth*0.8f), sandglassduration,cradleGame);
         //Game level
         //gameLevel = 1 ;
         gameLevelLabel = new Label("  "+0, BaseGame.labelStyle);
@@ -1291,6 +1292,7 @@ public void RemoveAndFillSquare(int centreRow, int centreCol, int squareSize){
 
                 for(int i =0;i<arrayListItems.size();i++){
                     arrayListItems.get(i).remove();
+                    arrayListItems.get(i).clear();
                 }
 
                 //clear Bombs
@@ -1354,7 +1356,7 @@ public void RemoveAndFillSquare(int centreRow, int centreCol, int squareSize){
     public void WinMessageAndNewLevelCreate(){
         isPaused=true; // block timer in update
         //Fon
-        BaseActor fon = new BaseActor(0,0,uiStage,Touchable.disabled);
+        BaseActor fon = new BaseActor(0,0,uiStage,Touchable.disabled,cradleGame);
         fon.loadTexture("fon_orange.png",cellSize*CellCount,cellSize*CellCount);
         fon.setX(gameFieldX);
         fon.setY(gameFieldY);
@@ -1478,7 +1480,7 @@ public void RemoveAndFillSquare(int centreRow, int centreCol, int squareSize){
             sandglassduration = getLevelDuration() + gameLevel*2 - 20;
             if (sandglassduration > 400) sandglassduration = 400;
         }
-        sandGlass = new SandGlass(x,y,uiStage,sw,Math.round( cellSize*CellCount*0.8f), sandglassduration);
+        sandGlass = new SandGlass(x,y,uiStage,sw,Math.round( cellSize*CellCount*0.8f), sandglassduration,cradleGame);
         isPaused=false;
 
 
@@ -1486,7 +1488,7 @@ public void RemoveAndFillSquare(int centreRow, int centreCol, int squareSize){
         int wpSize = Math.round(h*0.1f);
         if (knight!=null){knight.remove();}
         if(weapon!=null){weapon.remove();}
-        knight = new Knight(-knSize*0.1f,h-knSize*0.8f,knSize,knSize,mainStage,cradleGame.getKnightParams());
+        knight = new Knight(-knSize*0.1f,h-knSize*0.8f,knSize,knSize,mainStage,cradleGame.getKnightParams(),cradleGame);
         weapon = new Weapon(knSize*0.585f,h-knSize*0.29f,wpSize,wpSize,mainStage,cradleGame,knight);
 
 
@@ -1495,10 +1497,10 @@ public void RemoveAndFillSquare(int centreRow, int centreCol, int squareSize){
             new TimeBomb(50, h * 0.5f, h / 6, h / 6, mainStage, Touchable.enabled, sandGlass, 60, cradleGame);
         }
         for (int i=0;i<GameRes.SquareBomb1;i++) {
-            new SquareBomb(50,h*0.3f,h/6,h/6,mainStage,Touchable.enabled,1,this);
+            new SquareBomb(50,h*0.3f,h/6,h/6,mainStage,Touchable.enabled,1,this,cradleGame);
         }
         for (int i=0;i<GameRes.SquareBomb2;i++) {
-            new SquareBomb(50,h*0.1f,h/6,h/6,mainStage,Touchable.enabled,2,this);
+            new SquareBomb(50,h*0.1f,h/6,h/6,mainStage,Touchable.enabled,2,this,cradleGame);
         }
 
         if (GameRes.TimeBomb>0) {
@@ -1719,11 +1721,16 @@ public void RemoveAndFillSquare(int centreRow, int centreCol, int squareSize){
 
     public void ShowCollectedResCount(float x, float y, int count){
         if (count==0) return;
-        //int w = Gdx.graphics.getWidth();
+        int w = Gdx.graphics.getWidth();
         int h = Gdx.graphics.getHeight();
         String s = String.valueOf(count);
         final Label resCollectedLabel = new Label(s, BaseGame.labelStyle);
-        resCollectedLabel.setFontScale(2);
+        if (w>1000) {
+            resCollectedLabel.setFontScale(3);
+        }
+        else{
+            resCollectedLabel.setFontScale(2);
+        }
         resCollectedLabel.setColor(Color.GOLD);
         resCollectedLabel.setAlignment(Align.center);
         resCollectedLabel.setPosition(x,y);
@@ -1734,6 +1741,7 @@ public void RemoveAndFillSquare(int centreRow, int centreCol, int squareSize){
             public boolean act( float delta ) {
                 // Do your stuff
                 resCollectedLabel.remove();
+
                 return true;
             }
         };

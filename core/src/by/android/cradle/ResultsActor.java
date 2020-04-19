@@ -11,9 +11,9 @@ public class ResultsActor extends BaseActor{
     private Label woodQuantityLabel;
     private Label breadQuantityLabel;
     private Label scoreLabel;
-    public ResultsActor(float x, float y, int width, int height, Stage s, Touchable touchable, BaseActor baseActor)
+    public ResultsActor(float x, float y, int width, int height, Stage s, Touchable touchable, BaseActor baseActor, CradleGame cradleGame)
     {
-        super(x,y,s, touchable);
+        super(x,y,s, touchable, cradleGame);
         int w = Gdx.graphics.getWidth();
         int h = Gdx.graphics.getHeight();
         float fontScale = 1.0f;

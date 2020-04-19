@@ -31,7 +31,6 @@ public class Kingdom extends BaseActor {
     private long timeOfLastGoldCollection;
     private Label timeStateLabel;
     private int levelOfKingdom;
-    private final CradleGame cradleGame;
     private Actor goldImage;
     private Sound coinSound;
     private int goldImageX;
@@ -100,9 +99,8 @@ public class Kingdom extends BaseActor {
 
     public Kingdom(float x, float y, int width, int height, Stage s, Touchable touchable,KingdomNames kingdomNames, int kingdomID, final CradleGame  cradleGame,final ResultsActor resultsActor)
     {
-        super(x,y,s, touchable);
+        super(x,y,s, touchable,cradleGame);
         System.out.println("Kingdom constructor. Id="+kingdomID);
-        this.cradleGame = cradleGame;
         this.resultsActor = resultsActor;
         flagSize = height;
         this.kingdomID = kingdomID;
@@ -157,6 +155,9 @@ public class Kingdom extends BaseActor {
         String[] filenames;
         String flagBasementName;
 
+        // Get screen size
+        w = Gdx.graphics.getWidth();
+        h = Gdx.graphics.getHeight();
 
         switch (kingdomNames){
             case Kingdom_of_the_North: kingdomRes.Bread = 10;
@@ -220,7 +221,7 @@ public class Kingdom extends BaseActor {
         }
         getParams();
         animation = createAnimationFromFiles(filenames, 0.1f, true, flagSize,  flagSize);
-        baseActor = new BaseActor((int) width/2f,(int) (height*0.9f),s,Touchable.enabled);
+        baseActor = new BaseActor((int) width/2f,(int) (height*0.9f),s,Touchable.enabled,cradleGame);
         baseActor.setAnimation(animation);
         addActor(baseActor);
 
@@ -234,13 +235,24 @@ public class Kingdom extends BaseActor {
         }
         protectionStateLabel.setColor( Color.GOLDENROD );
         protectionStateLabel.setPosition( (int) (int) ((width*0.05f)),(int)(0-(height*0.4f)));
-        protectionStateLabel.setFontScale(1.5f);
+        if (w>1000) {
+            protectionStateLabel.setFontScale(2.0f);
+        }
+        else
+        {
+            protectionStateLabel.setFontScale(1.5f);
+        }
         baseActor.addActor(protectionStateLabel);
 
         timeStateLabel = new Label("", BaseGame.labelStyle);
         timeStateLabel.setColor( Color.GOLDENROD );
         timeStateLabel.setPosition( (int) ((width*0.4f)),(int)(height*0.7f));
-        timeStateLabel.setFontScale(1.3f);
+        if (w>1000){
+            timeStateLabel.setFontScale(1.6f);
+        }
+        else{
+            timeStateLabel.setFontScale(1.3f);
+        }
         addActor(timeStateLabel);
 
         goldImageX = Math.round(getWidth()*0.3f);

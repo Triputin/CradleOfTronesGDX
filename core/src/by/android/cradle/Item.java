@@ -26,14 +26,12 @@ public class Item extends DropTargetActor {
     protected Actor lockImage02;
     private int qtty; //field for shop
     private Label labelqtty;
-    protected CradleGame cradleGame;
 
     private MovingRaysActor movingRaysActor;
 
     public Item(float x, float y, int width, int height, Stage s, Touchable touchable, int row, int col, CradleGame cradleGame)
     {
-        super(x,y,s);
-        this.cradleGame = cradleGame;
+        super(x,y,s, cradleGame);
         cell = new Cell(row,col);
         this.selected = false;
         setHeight(height);
@@ -41,7 +39,7 @@ public class Item extends DropTargetActor {
         selectedDirection = SelDirection.None;
         selectedFirst=false;
 
-        movingRaysActor = new MovingRaysActor(0,0,width,height,s);
+        movingRaysActor = new MovingRaysActor(0,0,width,height,s,cradleGame);
         movingRaysActor.setVisible(false);
         addActor(movingRaysActor);
 

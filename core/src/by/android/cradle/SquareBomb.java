@@ -8,8 +8,8 @@ public class SquareBomb extends DragAndDropActor {
     private int squareSize;// qtty cells around of center 1 = 9 cells, 2 = 25 cells
     private ScreenGamePlay screenGamePlay;
 
-    public SquareBomb(float x, float y, int width, int height, Stage s, Touchable touchable, int squareSize,ScreenGamePlay screenGamePlay) {
-        super(x, y, s);
+    public SquareBomb(float x, float y, int width, int height, Stage s, Touchable touchable, int squareSize,ScreenGamePlay screenGamePlay,CradleGame cradleGame) {
+        super(x, y, s, cradleGame);
         setHeight(height);
         setWidth(width);
         this.squareSize = squareSize;

@@ -11,7 +11,6 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 public class MainWorldItem extends BaseActor {
 
     private Label label;
-    private CradleGame cradleGame;
     private int gameMapLevel;
     private Actor clouds;
     private Actor lock;
@@ -19,11 +18,10 @@ public class MainWorldItem extends BaseActor {
 
     public MainWorldItem(int x, int y, int width, int height , Stage s, final CradleGame cradleGame, final int gameMapLevel)
     {
-        super(x,y,s, Touchable.enabled);
+        super(x,y,s, Touchable.enabled,cradleGame);
         setWidth(width);
         setHeight(height);
         setBoundaryPolygon(8);
-        this.cradleGame = cradleGame;
         this.gameMapLevel = gameMapLevel;
         setUpPicture(gameMapLevel);
 

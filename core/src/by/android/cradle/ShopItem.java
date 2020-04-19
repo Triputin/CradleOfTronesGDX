@@ -17,9 +17,9 @@ public class ShopItem extends BaseActor {
     private String itemType;
     private int itemCost;
 
-    public ShopItem(int x, int y, int width, int height , Stage s, int qtty, String normalStateString, String selectedStateString, String itemType, int itemCost)
+    public ShopItem(int x, int y, int width, int height , Stage s, int qtty, String normalStateString, String selectedStateString, String itemType, int itemCost, CradleGame cradleGame)
     {
-        super(x,y,s,Touchable.enabled);
+        super(x,y,s,Touchable.enabled,cradleGame);
         setWidth(width);
         setHeight(height);
 

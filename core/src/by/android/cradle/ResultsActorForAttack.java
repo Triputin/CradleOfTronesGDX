@@ -10,9 +10,9 @@ public class ResultsActorForAttack extends BaseActor{
     private Label woodQuantityLabel;
     private Label breadQuantityLabel;
 
-    public ResultsActorForAttack(float x, float y, int width, int height, Stage s, Touchable touchable, BaseActor baseActor)
+    public ResultsActorForAttack(float x, float y, int width, int height, Stage s, Touchable touchable, BaseActor baseActor, CradleGame cradleGame)
     {
-        super(x,y,s, touchable);
+        super(x,y,s, touchable, cradleGame);
         setHeight(height);
         setWidth(width);
         baseActor.AddImage("results_fo_attack.png",Math.round(x),Math.round(y), (int) getWidth(), (int) getHeight());

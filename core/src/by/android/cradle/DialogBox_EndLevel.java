@@ -19,7 +19,6 @@ public class DialogBox_EndLevel  extends BaseActor{
 
     private Label dialogLabel;
     private float padding = 42;
-    private final CradleGame  cradleGame;
     private TextButton okButton;
     private Label scoreLabel;
     private Label goldLabel;
@@ -28,8 +27,7 @@ public class DialogBox_EndLevel  extends BaseActor{
 
     public DialogBox_EndLevel(float x, float y, Stage s, int width, int height, CradleGame cradleGame1)
     {
-        super(x,y,s, Touchable.enabled);
-        this.cradleGame = cradleGame1;
+        super(x,y,s, Touchable.enabled,cradleGame1);
         this.setSize(width, height);
         AddImage("fon_white2.png",Math.round(width*0.03f),Math.round(height*0.075f),Math.round(width*.95f), Math.round(height*0.85f));
         //loadTexture( "goldenframe.png",width,height );

@@ -161,7 +161,7 @@ public class WorldScreen extends BaseScreen {
 
 
         //Fon
-        fon = new BaseActor(0, 0, uiStage, Touchable.disabled);
+        fon = new BaseActor(0, 0, uiStage, Touchable.disabled,cradleGame);
         fon.loadTexture("maps/main_world_frame01.png", w, itemSizeH);
         fon.setPosition(0,itemPosition-fon.getHeight()*0.5f);
         uiStage.addActor(fon);

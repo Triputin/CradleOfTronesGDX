@@ -47,6 +47,13 @@ public class CradleGame extends BaseGame
     private BlackMarketScreen blackMarketScreen;
     private WorldScreen worldScreen;
 
+    //Game params and constants
+    private int w; //width of device or window
+    private int h; //height of device or window
+    private int resHeight; // height of resources line
+    private int cellSize; // size of game cells and items
+    private final int CellCount = 7;
+
     private static long SPLASH_MINIMUM_MILLIS = 3000L;
     //private SplashScreen splashScreen;
     //
@@ -56,18 +63,23 @@ public class CradleGame extends BaseGame
     private IPlayServices ply; //interface to connect core with android google play services
     private INotification notification; // interface for sending notifications to user
 
+    private CradleAssetManager cradleAssetManager;
+
     public CradleGame(IActivityRequestHandler handler, IPlayServices ply, INotification notification) {
         //connect core code with platform objects from launchers which implemented interfaces
         this.myRequestHandler = handler;
         this.ply=ply;
         this.notification = notification;
         notification.cancelReminder(DefaultWorkerTag); //remove all notifications
+        cradleAssetManager = new CradleAssetManager();
 
     }
 
     public void create()
     {
+
         setScreen(new SplashScreen2());
+
         myRequestHandler.showAds(false);
         super.create();
 
@@ -81,6 +93,7 @@ public class CradleGame extends BaseGame
                     public void run() {
 
                         Init();
+
                         // Se muestra el menu principal tras la SpashScreen
                         long splash_elapsed_time = System.currentTimeMillis() - splash_start_time;
                         if (splash_elapsed_time < SPLASH_MINIMUM_MILLIS) {
@@ -108,11 +121,20 @@ public class CradleGame extends BaseGame
      public void Init(){
          // Gdx.app.setLogLevel(Application.LOG_DEBUG);
 
+         // Get screen size
+         w = Gdx.graphics.getWidth();
+         h = Gdx.graphics.getHeight();
+         resHeight = (int)Math.round(h*0.12);
+         cellSize = (h-resHeight)/CellCount;
+
          //Setup settings provider
          prefs = Gdx.app.getPreferences("settings.prefs2");
 
          knightParams = new KnightParams(prefs); // loads Knight settings
 
+         cradleAssetManager.loadAssets();
+         cradleAssetManager.finishLoading();
+         cradleAssetManager.prepareAnimations(this);
 
          // For debug ru locale
          //Locale locale = new Locale("it");
@@ -747,7 +769,7 @@ public class CradleGame extends BaseGame
 
     public void scheduleReminder(int delayMinutes){
 
-        notification.cancelReminder(DefaultWorkerTag);
+        //notification.cancelReminder(DefaultWorkerTag);
 
         String title = getLanguageStrings().get("app_name");
         String message = getLanguageStrings().get("reminder_message01");
@@ -758,16 +780,40 @@ public class CradleGame extends BaseGame
         notification.scheduleReminder(delayMinutes+1400,title,message,"4",DefaultWorkerTag);
         notification.scheduleReminder(delayMinutes+1400+4320,title,message,"5",DefaultWorkerTag);
         notification.scheduleReminder(delayMinutes+1400+4320+4320,title,message,"6",DefaultWorkerTag);
-        notification.scheduleReminder(delayMinutes+1400+4320+4320,title,message,"7",DefaultWorkerTag);
+        notification.scheduleReminder(delayMinutes+1400+4320+4320+4320,title,message,"7",DefaultWorkerTag);
         notification.scheduleReminder(delayMinutes+28800,title,message,"8",DefaultWorkerTag);
 
     }
 
     @Override
     public void dispose() {
-        scheduleReminder(20);
+        //scheduleReminder(20); duplicates and notifications don't work if called here
+        System.out.println("CradleGame Dispose");
         super.dispose();
+        cradleAssetManager.dispose();
     }
 
+    public CradleAssetManager getCradleAssetManager() {
+        return cradleAssetManager;
+    }
 
+    public int getW() {
+        return w;
+    }
+
+    public int getH() {
+        return h;
+    }
+
+    public int getResHeight() {
+        return resHeight;
+    }
+
+    public int getCellSize() {
+        return cellSize;
+    }
+
+    public int getCellCount() {
+        return CellCount;
+    }
 }

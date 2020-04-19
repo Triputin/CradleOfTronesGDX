@@ -6,9 +6,9 @@ import com.badlogic.gdx.scenes.scene2d.Touchable;
 public class GameCell extends BaseActor {
     private Cell cell;
     private int lockLevel = 0;
-    public GameCell(float x, float y, int width, int height, Stage s, Touchable touchable, int row, int col)
+    public GameCell(float x, float y, int width, int height, Stage s, Touchable touchable, int row, int col, CradleGame cradleGame)
     {
-        super(x,y,s, touchable);
+        super(x,y,s, touchable, cradleGame);
         cell = new Cell(row,col);
         setHeight(height);
         setWidth(width);

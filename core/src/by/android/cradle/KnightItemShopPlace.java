@@ -10,9 +10,9 @@ public class KnightItemShopPlace extends DropTargetActor {
     KnightItem knightItem;
     Label priceLabel;
 
-    public KnightItemShopPlace(float x, float y, int width, int height, Stage s, KnightItemType knightItemType, boolean showImage)
+    public KnightItemShopPlace(float x, float y, int width, int height, Stage s, KnightItemType knightItemType, boolean showImage, CradleGame cradleGame)
     {
-        super(x,y,s);
+        super(x,y,s, cradleGame);
         setHeight(height);
         setWidth(width);
         setBoundaryPolygon(8);

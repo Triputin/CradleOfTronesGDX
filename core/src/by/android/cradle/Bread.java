@@ -15,9 +15,9 @@ public class Bread extends Item {
     @Override
     public void setSelected(boolean selected, Item prev) {
         if(selected){
-            loadTexture("breadpressed.png", (int) getWidth(), (int) getHeight());
+            loadTextureFromAssets(Assets.BREAD_PRESSED, (int) getWidth(), (int) getHeight());
         }else {
-            loadTexture("bread.png", (int) getWidth(), (int) getHeight());
+            loadTextureFromAssets(Assets.BREAD, (int) getWidth(), (int) getHeight());
         }
 
         super.setSelected(selected, prev);

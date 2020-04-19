@@ -8,9 +8,9 @@ public class SandGlass extends BaseActor{
    // float stateTime;
 private float totalDuration;
 
-public SandGlass(float x, float y, Stage s, int width, int height ,float duration)
+public SandGlass(float x, float y, Stage s, int width, int height ,float duration, CradleGame cradleGame)
         {
-            super(x,y,s, Touchable.disabled);
+            super(x,y,s, Touchable.disabled, cradleGame);
             this.totalDuration = duration;
             System.out.println("SandGlass Duration = "+duration);
             String[] filenames =

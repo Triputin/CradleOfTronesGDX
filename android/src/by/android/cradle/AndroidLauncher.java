@@ -210,9 +210,10 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
 			}
 		});
 
+		// I/Ads: Use RequestConfiguration.Builder().setTestDeviceIds(Arrays.asList("10D929FF85B7803BB2D5CEE273F4FBFE")
 		AdRequest adRequest = new AdRequest.Builder()
 				.addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
-				// .addTestDevice("asdfasdfasd234234")
+				.addTestDevice("10D929FF85B7803BB2D5CEE273F4FBFE")
 				.build();
 		adView.loadAd(adRequest);
 
@@ -623,7 +624,7 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
 
 	@Override
 	public void scheduleReminder(long duration_minutes,String title, String message,String messageId, String tag){
-		AndroidWorker.scheduleReminder(duration_minutes,title,message,messageId,tag);
+		AndroidWorker.scheduleReminder(duration_minutes,title,message,messageId,tag, getApplicationContext());
 	}
 
 	@Override
@@ -636,6 +637,7 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
 		System.out.println("Android Launcher onBackPressed");
 		if (back_pressed + 2000 > System.currentTimeMillis()) {
 			if (cradleGame!=null) {
+				System.out.println("Android Launcher onBackPressed - scheduleReminder");
 				cradleGame.scheduleReminder(20);
 			}
 			super.onBackPressed();
@@ -645,6 +647,7 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
 				String s = cradleGame.getLanguageStrings().get("pressonceagaintoexit");
 				Toast.makeText(getBaseContext(), s,
 						Toast.LENGTH_SHORT).show();
+
 			}
 
 		back_pressed = System.currentTimeMillis();
@@ -682,7 +685,7 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
 	protected void onUserLeaveHint() {
 		//Toast toast = Toast.makeText(getApplicationContext(), "Нажата кнопка HOME", Toast.LENGTH_SHORT);
 		//toast.show();
-		//System.out.println("Android Launcher onUserLeaveHint");
+		System.out.println("Android Launcher onUserLeaveHint");
 		if ((cradleGame!=null) && cradleGame.getLanguageStrings()!=null){
 			cradleGame.scheduleReminder(20);
 		}

@@ -7,9 +7,9 @@ package by.android.cradle;
 
 public class Flag extends BaseActor {
 
-    public Flag(float x, float y, int width, int height, Stage s, Touchable touchable, KingdomNames kingdomNames)
+    public Flag(float x, float y, int width, int height, Stage s, Touchable touchable, KingdomNames kingdomNames, CradleGame cradleGame)
     {
-        super(x,y,s, touchable);
+        super(x,y,s, touchable,cradleGame);
         setHeight(height);
         setWidth(width);
 
@@ -26,10 +26,10 @@ public class Flag extends BaseActor {
                         };
 
                 animation = loadAnimationFromFiles(filenames, 0.1f, true,  (int)getWidth(),  (int) getHeight());
-                baseActor = new BaseActor(0,0,s,Touchable.enabled);
+                baseActor = new BaseActor(0,0,s,Touchable.enabled,cradleGame);
                 baseActor.setAnimation(animation);
                 addActor(baseActor);
-                baseActor = new BaseActor(0,0,s,Touchable.enabled);
+                baseActor = new BaseActor(0,0,s,Touchable.enabled,cradleGame);
                 animation = loadTexture("flag_red/flagbasement.png", (int) getWidth(), (int) getHeight());
                 baseActor.setAnimation(animation);
                 addActor(baseActor);
@@ -43,10 +43,10 @@ public class Flag extends BaseActor {
                         };
 
                 animation = loadAnimationFromFiles(filenames1, 0.1f, true,  (int)getWidth(),  (int) getHeight());
-                baseActor = new BaseActor((int) getWidth()/2.8f,(int) (getHeight()*0.5f),s,Touchable.enabled);
+                baseActor = new BaseActor((int) getWidth()/2.8f,(int) (getHeight()*0.5f),s,Touchable.enabled,cradleGame);
                 baseActor.setAnimation(animation);
                 addActor(baseActor);
-                baseActor = new BaseActor((int) getWidth()/2.8f,(int) (getHeight()*0.5f),s,Touchable.enabled);
+                baseActor = new BaseActor((int) getWidth()/2.8f,(int) (getHeight()*0.5f),s,Touchable.enabled,cradleGame);
                 animation = loadTexture("flag_yellow/flagbasement.png", (int) getWidth(), (int) getHeight());
                 baseActor.setAnimation(animation);
                 addActor(baseActor);
@@ -60,10 +60,10 @@ public class Flag extends BaseActor {
                         };
 
                 animation = loadAnimationFromFiles(filenames2, 0.1f, true,  (int)getWidth(),  (int) getHeight());
-                baseActor = new BaseActor((int) getWidth()/2.8f,(int) (getHeight()*0.5f),s,Touchable.enabled);
+                baseActor = new BaseActor((int) getWidth()/2.8f,(int) (getHeight()*0.5f),s,Touchable.enabled,cradleGame);
                 baseActor.setAnimation(animation);
                 addActor(baseActor);
-                baseActor = new BaseActor((int) getWidth()/2.8f,(int) (getHeight()*0.5f),s,Touchable.enabled);
+                baseActor = new BaseActor((int) getWidth()/2.8f,(int) (getHeight()*0.5f),s,Touchable.enabled,cradleGame);
                 animation = loadTexture("flag_purple/flagbasement.png", (int) getWidth(), (int) getHeight());
                 baseActor.setAnimation(animation);
                 addActor(baseActor);
@@ -77,10 +77,10 @@ public class Flag extends BaseActor {
                         };
 
                 animation = loadAnimationFromFiles(filenames3, 0.1f, true,  (int)getWidth(),  (int) getHeight());
-                baseActor = new BaseActor((int) getWidth()/2.8f,(int) (getHeight()*0.5f),s,Touchable.enabled);
+                baseActor = new BaseActor((int) getWidth()/2.8f,(int) (getHeight()*0.5f),s,Touchable.enabled,cradleGame);
                 baseActor.setAnimation(animation);
                 addActor(baseActor);
-                baseActor = new BaseActor((int) getWidth()/2.8f,(int) (getHeight()*0.5f),s,Touchable.enabled);
+                baseActor = new BaseActor((int) getWidth()/2.8f,(int) (getHeight()*0.5f),s,Touchable.enabled,cradleGame);
                 animation = loadTexture("flag_orange/flagbasement.png", (int) getWidth(), (int) getHeight());
                 baseActor.setAnimation(animation);
                 addActor(baseActor);
@@ -94,10 +94,10 @@ public class Flag extends BaseActor {
                         };
 
                 animation = loadAnimationFromFiles(filenames4, 0.1f, true,  (int)getWidth(),  (int) getHeight());
-                baseActor = new BaseActor((int) getWidth()/2.8f,(int) (getHeight()*0.5f),s,Touchable.enabled);
+                baseActor = new BaseActor((int) getWidth()/2.8f,(int) (getHeight()*0.5f),s,Touchable.enabled,cradleGame);
                 baseActor.setAnimation(animation);
                 addActor(baseActor);
-                baseActor = new BaseActor((int) getWidth()/2.8f,(int) (getHeight()*0.5f),s,Touchable.enabled);
+                baseActor = new BaseActor((int) getWidth()/2.8f,(int) (getHeight()*0.5f),s,Touchable.enabled,cradleGame);
                 animation = loadTexture("flag_green/flagbasement.png", (int) getWidth(), (int) getHeight());
                 baseActor.setAnimation(animation);
                 addActor(baseActor);
@@ -111,10 +111,10 @@ public class Flag extends BaseActor {
                         };
 
                 animation = loadAnimationFromFiles(filenames5, 0.1f, true,  (int)getWidth(),  (int) getHeight());
-                baseActor = new BaseActor((int) getWidth()/2.8f,(int) (getHeight()*0.5f),s,Touchable.enabled);
+                baseActor = new BaseActor((int) getWidth()/2.8f,(int) (getHeight()*0.5f),s,Touchable.enabled,cradleGame);
                 baseActor.setAnimation(animation);
                 addActor(baseActor);
-                baseActor = new BaseActor((int) getWidth()/2.8f,(int) (getHeight()*0.5f),s,Touchable.enabled);
+                baseActor = new BaseActor((int) getWidth()/2.8f,(int) (getHeight()*0.5f),s,Touchable.enabled,cradleGame);
                 animation = loadTexture("flag_brown/flagbasement.png", (int) getWidth(), (int) getHeight());
                 baseActor.setAnimation(animation);
                 addActor(baseActor);
@@ -128,10 +128,10 @@ public class Flag extends BaseActor {
                         };
 
                 animation = loadAnimationFromFiles(filenames6, 0.1f, true,  (int)getWidth(),  (int) getHeight());
-                baseActor = new BaseActor((int) getWidth()/2.8f,(int) (getHeight()*0.5f),s,Touchable.enabled);
+                baseActor = new BaseActor((int) getWidth()/2.8f,(int) (getHeight()*0.5f),s,Touchable.enabled,cradleGame);
                 baseActor.setAnimation(animation);
                 addActor(baseActor);
-                baseActor = new BaseActor((int) getWidth()/2.8f,(int) (getHeight()*0.5f),s,Touchable.enabled);
+                baseActor = new BaseActor((int) getWidth()/2.8f,(int) (getHeight()*0.5f),s,Touchable.enabled,cradleGame);
                 animation = loadTexture("flag_blue/flagbasement.png", (int) getWidth(), (int) getHeight());
                 baseActor.setAnimation(animation);
                 addActor(baseActor);

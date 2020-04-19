@@ -7,9 +7,9 @@ public class KnightActiveItemPlace extends DropTargetActor{
     KnightItemType knightItemType;
     KnightItem knightItem;
 
-    public KnightActiveItemPlace(float x, float y, int width, int height, Stage s, KnightItemType knightItemType)
+    public KnightActiveItemPlace(float x, float y, int width, int height, Stage s, KnightItemType knightItemType, CradleGame cradleGame)
     {
-        super(x,y,s);
+        super(x,y,s, cradleGame);
         this.knightItemType = knightItemType;
         setDropPlaceType(1);
         setHeight(height);
