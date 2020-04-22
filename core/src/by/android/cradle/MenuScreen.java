@@ -36,7 +36,8 @@ public class MenuScreen extends BaseScreen {
     public void initialize()
     {
 
-        instrumental = Gdx.audio.newMusic(Gdx.files.internal("sounds/2_hearts.mp3"));
+        //instrumental = Gdx.audio.newMusic(Gdx.files.internal("sounds/2_hearts.mp3"));
+        instrumental = cradleGame.getCradleAssetManager().manager.get(Assets.MUSIC_2_HEARTS);
         audioVolume = 0.7f;
         instrumental.setLooping(true);
         instrumental.setVolume(audioVolume);

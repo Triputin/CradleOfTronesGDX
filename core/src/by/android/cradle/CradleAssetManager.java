@@ -20,10 +20,27 @@ public class CradleAssetManager  {
 
     public final AssetManager manager = new AssetManager();
     private HashMap<Integer,Animation<TextureRegion>> hashMapAnimations = new HashMap<>(); //holds animations
-    private HashMap<Integer,Actor> hashMapActors = new HashMap<>(); //holds Actors (Images...)
+   // private HashMap<Integer,Actor> hashMapActors = new HashMap<>(); //holds Actors (Images...) doesn't work, because more than one actor is needed
 
     //Load textures from files, but load finished either after  finishLoading() or update() true
     public void loadAssets(){
+
+        loadImages();
+        loadMusicAndSounds();
+
+    }
+
+    private void loadMusicAndSounds(){
+        manager.load(Assets.MUSIC_2_HEARTS);
+        manager.load(Assets.MUSIC_NEW_LAND);
+        manager.load(Assets.MUSIC_SOUNDMAP02);
+        manager.load(Assets.SOUND_GLASS_WINDOW_BREAKING);
+        manager.load(Assets.SOUND_CHANGE_DROP_ON_WOOD);
+
+    }
+
+    private void loadImages(){
+        //Items
         manager.load(Assets.BREAD);
         manager.load(Assets.BREAD_PRESSED);
         manager.load(Assets.COIN01);
@@ -48,7 +65,15 @@ public class CradleAssetManager  {
         manager.load(Assets.UpToRight);
         manager.load(Assets.DownToLeft);
         manager.load(Assets.DownToRight);
-
+        //Game cells
+        manager.load(Assets.GAMECELL);
+        manager.load(Assets.GAMECELL_LOCK01);
+        manager.load(Assets.GAMECELL_LOCK02);
+        //Game maps
+        manager.load(Assets.WORLDMAP01);
+        manager.load(Assets.WORLDMAP02);
+        manager.load(Assets.WORLDMAP03);
+        manager.load(Assets.WORLDMAP04);
 
     }
 
@@ -77,6 +102,14 @@ public class CradleAssetManager  {
         hashMapAnimations.put(Assets.JEM01_ANIMATION_ID,loadAnimationFromAssets(Assets.JEM01,cradleGame.getCellSize(),  cradleGame.getCellSize()));
         hashMapAnimations.put(Assets.JEM01_PRESSED_ANIMATION_ID,loadAnimationFromAssets(Assets.JEM01_PRESSED,cradleGame.getCellSize(),  cradleGame.getCellSize()));
 
+        hashMapAnimations.put(Assets.GAMECELL_ANIMATION_ID,loadAnimationFromAssets(Assets.GAMECELL,cradleGame.getCellSize(),  cradleGame.getCellSize()));
+        hashMapAnimations.put(Assets.GAMECELL_LOCK01_ANIMATION_ID,loadAnimationFromAssets(Assets.GAMECELL_LOCK01,cradleGame.getCellSize(),  cradleGame.getCellSize()));
+        hashMapAnimations.put(Assets.GAMECELL_LOCK02_ANIMATION_ID,loadAnimationFromAssets(Assets.GAMECELL_LOCK02,cradleGame.getCellSize(),  cradleGame.getCellSize()));
+
+        hashMapAnimations.put(Assets.WORLDMAP01_ANIMATION_ID,loadAnimationFromAssets(Assets.WORLDMAP01,cradleGame.getW(),  cradleGame.getH()));
+        hashMapAnimations.put(Assets.WORLDMAP02_ANIMATION_ID,loadAnimationFromAssets(Assets.WORLDMAP02,cradleGame.getW(),  cradleGame.getH()));
+        hashMapAnimations.put(Assets.WORLDMAP03_ANIMATION_ID,loadAnimationFromAssets(Assets.WORLDMAP03,cradleGame.getW(),  cradleGame.getH()));
+        hashMapAnimations.put(Assets.WORLDMAP04_ANIMATION_ID,loadAnimationFromAssets(Assets.WORLDMAP04,cradleGame.getW(),  cradleGame.getH()));
 
         //Actors (Images) // Don't work, if actor the same it works equally everywhere
         //hashMapActors.put(Assets.LOCKED_ITEM_LEVEL01_ANIMATION_ID,AddImage(Assets.LOCKED_ITEM_LEVEL01,0,0,cradleGame.getCellSize(),  cradleGame.getCellSize()));

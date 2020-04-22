@@ -85,7 +85,8 @@ public class ScreenGamePlay extends BaseScreen {
         messageLabel.setVisible(false);
         uiTable.add(messageLabel).expandY();
         score_during_attack=0;
-        explosionSound = Gdx.audio.newSound(Gdx.files.internal("sounds/glass_windows_breaking.mp3"));
+        //explosionSound = Gdx.audio.newSound(Gdx.files.internal("sounds/glass_windows_breaking.mp3"));
+        explosionSound = cradleGame.getCradleAssetManager().manager.get(Assets.SOUND_GLASS_WINDOW_BREAKING);
         timeLastSelectionEnded= TimeUtils.millis();;
         screenGamePlay = this;
 
@@ -432,56 +433,7 @@ public class ScreenGamePlay extends BaseScreen {
         Item curItem = null;
         int cellToRemoveRemainded = cellQttyToRemove;
         Cell cell = new Cell(0,0);
-/*
-        //Find leftdown cell
-        int leftdownitempos = 1; // 1- start item, 2 - down item, 3 - leftdown item, 4 - left item
-        Cell leftDownCell = new Cell(startCell.getRow(), startCell.getCol());
-        switch(cellQttyToRemove) {
-            case 1:
-                break;
-            case 2:
-                if(startCell.getRow()>0){
-                    leftDownCell.setRow(startCell.getRow()-1);
-                    leftDownCell.setCol(startCell.getCol());
-                    leftdownitempos=2;
-                }
-                break;
-            case 3:
-                if(startCell.getRow()>0) {
-                    leftDownCell.setRow(startCell.getRow() - 1);
-                    leftdownitempos=2;
-                    if (startCell.getCol() > 0) {
-                        leftDownCell.setCol(startCell.getCol() - 1);
-                        leftdownitempos=3;
-                    }
-                }
-               break;
 
-            default: // 4 и более
-                if(startCell.getRow()>0) {
-                    leftDownCell.setRow(startCell.getRow() - 1);
-                    leftdownitempos=2;
-                }
-                if (startCell.getCol() > 0) {
-                    leftDownCell.setCol(startCell.getCol() - 1);
-                    if (leftdownitempos==2) {
-                        leftdownitempos = 3;
-                    } else {
-                        leftdownitempos = 4;
-                    }
-                }
-                break;
-
-        }
-
-
-        switch (leftdownitempos){
-            case 1: // start item
-                cellToRemoveRemainded-=4;
-
-        }
-
-*/
 
         //Select all possible items -------------
         while (true) {
@@ -492,92 +444,7 @@ public class ScreenGamePlay extends BaseScreen {
             if (cellToRemoveRemainded == 0) {
                 break;
             }
-/*
-            // check cell down
-            prevItem = curItem;
-            if (startItem.getRow()>0) {
-                cell.setRow(startItem.getRow()-1);
-                cell.setCol(startItem.getCol());
-                curItem = gameField.GetItemAtCell(cell, mainStage);
-                curItem.setSelected(true,prevItem);
-                prevItem.setSelectedNext(curItem);
-            }
-            cellToRemoveRemainded--; // at any case count even if cell unreachable
-            if (cellToRemoveRemainded == 0) {
-                break;
-            }
 
-            //check cell downleft
-            prevItem = curItem;
-            if ((startItem.getRow()>0) && (startItem.getCol()>0)) {
-                cell.setRow(startItem.getRow()-1);
-                cell.setCol(startItem.getCol()-1);
-                curItem = gameField.GetItemAtCell(cell, mainStage);
-                curItem.setSelected(true,prevItem);
-                prevItem.setSelectedNext(curItem);
-            }
-            cellToRemoveRemainded--; // at any case count even if cell unreachable
-            if (cellToRemoveRemainded == 0) {
-                break;
-            }
-
-            //check cell at left
-            prevItem = curItem;
-            if ((startItem.getCol()>0)) {
-                cell.setRow(startItem.getRow());
-                cell.setCol(startItem.getCol()-1);
-                curItem = gameField.GetItemAtCell(cell, mainStage);
-                curItem.setSelected(true,prevItem);
-                prevItem.setSelectedNext(curItem);
-            }
-            cellToRemoveRemainded--; // at any case count even if cell unreachable
-            if (cellToRemoveRemainded == 0) {
-                break;
-            }
-
-            //check cell upleft
-            prevItem = curItem;
-            if ((startItem.getRow()<(CellCount-1)) && (startItem.getCol()>0)) {
-                cell.setRow(startItem.getRow()+1);
-                cell.setCol(startItem.getCol()-1);
-                curItem = gameField.GetItemAtCell(cell, mainStage);
-                curItem.setSelected(true,prevItem);
-                prevItem.setSelectedNext(curItem);
-            }
-            cellToRemoveRemainded--; // at any case count even if cell unreachable
-            if (cellToRemoveRemainded == 0) {
-                break;
-            }
-
-
-            //check cell up
-            prevItem = curItem;
-            if (startItem.getRow()<(CellCount-1)) {
-                cell.setRow(startItem.getRow()+1);
-                cell.setCol(startItem.getCol());
-                curItem = gameField.GetItemAtCell(cell, mainStage);
-                curItem.setSelected(true,prevItem);
-                prevItem.setSelectedNext(curItem);
-            }
-            cellToRemoveRemainded--; // at any case count even if cell unreachable
-            if (cellToRemoveRemainded == 0) {
-                break;
-            }
-
-        //check cell upright
-        prevItem = curItem;
-        if ((startItem.getRow()<(CellCount-1)) && (startItem.getCol()<(CellCount-1))) {
-            cell.setRow(startItem.getRow()+1);
-            cell.setCol(startItem.getCol()+1);
-            curItem = gameField.GetItemAtCell(cell, mainStage);
-            curItem.setSelected(true,prevItem);
-            prevItem.setSelectedNext(curItem);
-        }
-        cellToRemoveRemainded--; // at any case count even if cell unreachable
-        if (cellToRemoveRemainded == 0) {
-            break;
-        }
-*/
             //check cell right
             prevItem = curItem;
             if (startItem.getCol()<(CellCount-1)) {
@@ -752,7 +619,7 @@ public void RemoveAndFillSquare(int centreRow, int centreCol, int squareSize){
 
         if(arrayLists.size()<1){
         // We need to restart level because no steps remains...
-            RestartLevel();
+            //RestartLevel(); // Don't work right moves elements outside and hides the Knight
             return;
 
         }
@@ -1215,12 +1082,17 @@ public void RemoveAndFillSquare(int centreRow, int centreCol, int squareSize){
 
     }
 
+    // Don't work right moves elements outside and hides the Knight
+    //Don't see silotions with coin
+    /*
     private void RestartLevel() {
         mainStage.clear();
         uiStage.clear();
         initialize();
 
     }
+    */
+
 
     public int IncreaseRes(String className){
 

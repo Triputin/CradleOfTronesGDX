@@ -1,6 +1,8 @@
 package by.android.cradle;
 
 import com.badlogic.gdx.assets.AssetDescriptor;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 
@@ -68,7 +70,35 @@ public class Assets {
             new AssetDescriptor<Texture>("LineCorner02.png", Texture.class);
     public static final AssetDescriptor<Texture> DownToRight =
             new AssetDescriptor<Texture>("LineCorner01.png", Texture.class);
+    //Game cells
+    public static final AssetDescriptor<Texture> GAMECELL =
+            new AssetDescriptor<Texture>("gamecell.png", Texture.class);
+    public static final AssetDescriptor<Texture> GAMECELL_LOCK01 =
+            new AssetDescriptor<Texture>("gamecellock01.png", Texture.class);
+    public static final AssetDescriptor<Texture> GAMECELL_LOCK02 =
+            new AssetDescriptor<Texture>("gamecellock02.png", Texture.class);
 
+    //Game maps
+    public static final AssetDescriptor<Texture> WORLDMAP01 =
+            new AssetDescriptor<Texture>("maps/worldmap01.png", Texture.class);
+    public static final AssetDescriptor<Texture> WORLDMAP02 =
+            new AssetDescriptor<Texture>("maps/worldmap02.png", Texture.class);
+    public static final AssetDescriptor<Texture> WORLDMAP03 =
+            new AssetDescriptor<Texture>("maps/worldmap03.png", Texture.class);
+    public static final AssetDescriptor<Texture> WORLDMAP04 =
+            new AssetDescriptor<Texture>("maps/worldmap04.png", Texture.class);
+
+    //Sounds and music
+    public static final AssetDescriptor<Music> MUSIC_2_HEARTS =
+            new AssetDescriptor<Music>("sounds/2_hearts.mp3", Music.class);
+    public static final AssetDescriptor<Music> MUSIC_NEW_LAND =
+            new AssetDescriptor<Music>("sounds/new_land.mp3", Music.class);
+    public static final AssetDescriptor<Music> MUSIC_SOUNDMAP02 =
+            new AssetDescriptor<Music>("sounds/soundmap02.mp3", Music.class);
+    public static final AssetDescriptor<Sound> SOUND_GLASS_WINDOW_BREAKING =
+            new AssetDescriptor<Sound>("sounds/glass_windows_breaking.mp3", Sound.class);
+    public static final AssetDescriptor<Sound> SOUND_CHANGE_DROP_ON_WOOD =
+            new AssetDescriptor<Sound>("sounds/change_drop_on_wood.mp3", Sound.class);
 
 
 
@@ -97,5 +127,13 @@ public class Assets {
     public static final int JEM01_PRESSED_ANIMATION_ID = 17;
     public static final int JEM01_FROZEN_ANIMATION_ID = 18;
 
+    public static final int GAMECELL_ANIMATION_ID = 19;
+    public static final int GAMECELL_LOCK01_ANIMATION_ID = 20;
+    public static final int GAMECELL_LOCK02_ANIMATION_ID = 21;
+
+    public static final int WORLDMAP01_ANIMATION_ID = 22;
+    public static final int WORLDMAP02_ANIMATION_ID = 23;
+    public static final int WORLDMAP03_ANIMATION_ID = 24;
+    public static final int WORLDMAP04_ANIMATION_ID = 25;
 
 }

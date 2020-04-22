@@ -75,17 +75,17 @@ public class GameMapScreen extends BaseScreen {
     public void initialize()
     {
         audioVolume = 0.7f;
-        musicArray[0] = Gdx.audio.newMusic(Gdx.files.internal("sounds/new_land.mp3"));
+        //musicArray[0] = Gdx.audio.newMusic(Gdx.files.internal("sounds/new_land.mp3"));
+        musicArray[0] = cradleGame.getCradleAssetManager().manager.get(Assets.MUSIC_NEW_LAND);
         musicArray[0].setLooping(true);
         musicArray[0].setVolume(audioVolume);
         musicArray[0].pause();
-        musicArray[1] = Gdx.audio.newMusic(Gdx.files.internal("sounds/soundmap02.mp3"));
+        //musicArray[1] = Gdx.audio.newMusic(Gdx.files.internal("sounds/soundmap02.mp3"));
+        musicArray[1] = cradleGame.getCradleAssetManager().manager.get(Assets.MUSIC_SOUNDMAP02);
         musicArray[1].setLooping(true);
         musicArray[1].setVolume(audioVolume);
         musicArray[1].pause();
         instrumental=musicArray[0];
-        //instrumental = Gdx.audio.newMusic(Gdx.files.internal("sounds/new_land.mp3"));
-
 
         isWinMapLevel = false;
 
@@ -312,7 +312,8 @@ public class GameMapScreen extends BaseScreen {
 
             case 2:
 
-                    worldMap.loadTexture("maps/worldmap02.png", w, h);
+                    //worldMap.loadTexture("maps/worldmap02.png", w, h);
+                    worldMap.setAnimation(cradleGame.getCradleAssetManager().getAnimation(Assets.WORLDMAP02_ANIMATION_ID));
 
                     kingdoms[0] = new Kingdom(w * 0.3f, h * 0.56f, kingdomsize, kingdomsize, uiStage, Touchable.enabled, KingdomNames.Kingdom_of_the_North,10,cradleGame,resultsActor);
                     kingdoms[1] = new Kingdom(w * 0.26f, h * 0.3f, kingdomsize, kingdomsize, uiStage, Touchable.enabled, KingdomNames.Kingdom_of_the_Isles_and_Rivers,11,cradleGame,resultsActor);
@@ -326,7 +327,8 @@ public class GameMapScreen extends BaseScreen {
                     instrumental = musicArray[1];
                 break;
             case 1:
-                worldMap.loadTexture( "maps/worldmap01.png",w,h );
+                    //worldMap.loadTexture( "maps/worldmap01.png",w,h );
+                    worldMap.setAnimation(cradleGame.getCradleAssetManager().getAnimation(Assets.WORLDMAP01_ANIMATION_ID));
 
                     kingdoms[0] = new Kingdom(w * 0.16f, h * 0.56f, kingdomsize, kingdomsize, uiStage, Touchable.enabled, KingdomNames.Kingdom_of_the_North,0,cradleGame,resultsActor);
                     kingdoms[1] = new Kingdom(w * 0.28f, h * 0.3f, kingdomsize, kingdomsize, uiStage, Touchable.enabled, KingdomNames.Kingdom_of_the_Isles_and_Rivers,1,cradleGame,resultsActor);
@@ -344,7 +346,8 @@ public class GameMapScreen extends BaseScreen {
                 break;
             case 3:
 
-                worldMap.loadTexture("maps/worldmap03.png", w, h);
+                //worldMap.loadTexture("maps/worldmap03.png", w, h);
+                worldMap.setAnimation(cradleGame.getCradleAssetManager().getAnimation(Assets.WORLDMAP03_ANIMATION_ID));
 
                 kingdoms[0] = new Kingdom(w * 0.2f, h * 0.56f, kingdomsize, kingdomsize, uiStage, Touchable.enabled, KingdomNames.Kingdom_of_the_North,20,cradleGame,resultsActor);
                 kingdoms[1] = new Kingdom(w * 0.1f, h * 0.3f, kingdomsize, kingdomsize, uiStage, Touchable.enabled, KingdomNames.Kingdom_of_the_Isles_and_Rivers,21,cradleGame,resultsActor);
@@ -360,7 +363,8 @@ public class GameMapScreen extends BaseScreen {
 
             case 4:
 
-                worldMap.loadTexture("maps/worldmap04.png", w, h);
+                //worldMap.loadTexture("maps/worldmap04.png", w, h);
+                worldMap.setAnimation(cradleGame.getCradleAssetManager().getAnimation(Assets.WORLDMAP04_ANIMATION_ID));
 
                 kingdoms[0] = new Kingdom(w * 0.5f, h * 0.45f, kingdomsize, kingdomsize, uiStage, Touchable.enabled, KingdomNames.Kingdom_of_the_North,30,cradleGame,resultsActor);
                 kingdoms[1] = new Kingdom(w * 0.4f, h * 0.3f, kingdomsize, kingdomsize, uiStage, Touchable.enabled, KingdomNames.Kingdom_of_the_Isles_and_Rivers,31,cradleGame,resultsActor);

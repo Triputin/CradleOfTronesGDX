@@ -110,7 +110,8 @@ public class Kingdom extends BaseActor {
         setHeight(height);
         setWidth(width);
         setBoundaryPolygon(8);
-        coinSound = Gdx.audio.newSound(Gdx.files.internal("sounds/change_drop_on_wood.mp3"));
+        //coinSound = Gdx.audio.newSound(Gdx.files.internal("sounds/change_drop_on_wood.mp3"));
+        coinSound = cradleGame.getCradleAssetManager().manager.get(Assets.SOUND_CHANGE_DROP_ON_WOOD);
         // Get screen size
          w = Gdx.graphics.getWidth();
          h = Gdx.graphics.getHeight();
@@ -428,6 +429,11 @@ public void resetProtectionState(int gameMapLevel) {
                 filenames = filenames00;
                 flagBasementName = "flag_red/flagbasement.png";
 
+        }
+
+        if(protectionState==0){
+            filenames = filenames0;
+            flagBasementName = "flag_red/flagbasement.png";
         }
 
         animation = createAnimationFromFiles(filenames, 0.1f, true, flagSize,  flagSize);

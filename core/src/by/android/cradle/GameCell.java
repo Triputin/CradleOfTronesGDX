@@ -12,8 +12,8 @@ public class GameCell extends BaseActor {
         cell = new Cell(row,col);
         setHeight(height);
         setWidth(width);
-        loadTexture("gamecell.png", (int) getWidth(), (int) getHeight());
-
+        //loadTexture("gamecell.png", (int) getWidth(), (int) getHeight());
+        setAnimation(cradleGame.getCradleAssetManager().getAnimation(Assets.GAMECELL_ANIMATION_ID));
     }
 
     public int getLockLevel() {
@@ -23,13 +23,15 @@ public class GameCell extends BaseActor {
     public void setLockLevel(int lockLevel) {
         this.lockLevel = lockLevel;
         if(lockLevel == 0) {
-            loadTexture("gamecell.png", (int) getWidth(), (int) getHeight());
-
+            //loadTexture("gamecell.png", (int) getWidth(), (int) getHeight());
+            setAnimation(cradleGame.getCradleAssetManager().getAnimation(Assets.GAMECELL_ANIMATION_ID));
         }else {
             if (lockLevel == 1){
-                loadTexture("gamecellock01.png", (int) getWidth(), (int) getHeight());
+                //loadTexture("gamecellock01.png", (int) getWidth(), (int) getHeight());
+                setAnimation(cradleGame.getCradleAssetManager().getAnimation(Assets.GAMECELL_LOCK01_ANIMATION_ID));
             } else {
-                loadTexture("gamecellock02.png", (int) getWidth(), (int) getHeight());
+                //loadTexture("gamecellock02.png", (int) getWidth(), (int) getHeight());
+                setAnimation(cradleGame.getCradleAssetManager().getAnimation(Assets.GAMECELL_LOCK02_ANIMATION_ID));
             }
 
         }

@@ -1,0 +1,96 @@
+
+flag_redatlas.png
+size: 1024,1024
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+flag
+  rotate: false
+  xy: 2, 758
+  size: 500, 250
+  orig: 500, 250
+  offset: 0, 0
+  index: 1
+flag
+  rotate: false
+  xy: 2, 506
+  size: 500, 250
+  orig: 500, 250
+  offset: 0, 0
+  index: 2
+flag
+  rotate: false
+  xy: 504, 758
+  size: 500, 250
+  orig: 500, 250
+  offset: 0, 0
+  index: 3
+flag
+  rotate: false
+  xy: 2, 254
+  size: 500, 250
+  orig: 500, 250
+  offset: 0, 0
+  index: 4
+flag
+  rotate: false
+  xy: 504, 506
+  size: 500, 250
+  orig: 500, 250
+  offset: 0, 0
+  index: 5
+flag
+  rotate: false
+  xy: 2, 2
+  size: 500, 250
+  orig: 500, 250
+  offset: 0, 0
+  index: 6
+flag
+  rotate: false
+  xy: 504, 254
+  size: 500, 250
+  orig: 500, 250
+  offset: 0, 0
+  index: 7
+flag
+  rotate: false
+  xy: 504, 2
+  size: 500, 250
+  orig: 500, 250
+  offset: 0, 0
+  index: 8
+
+flag_redatlas2.png
+size: 1024,512
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+flag
+  rotate: false
+  xy: 2, 254
+  size: 500, 250
+  orig: 500, 250
+  offset: 0, 0
+  index: 9
+flag
+  rotate: false
+  xy: 2, 2
+  size: 500, 250
+  orig: 500, 250
+  offset: 0, 0
+  index: 10
+flag
+  rotate: false
+  xy: 504, 254
+  size: 500, 250
+  orig: 500, 250
+  offset: 0, 0
+  index: 11
+flag
+  rotate: false
+  xy: 504, 2
+  size: 500, 250
+  orig: 500, 250
+  offset: 0, 0
+  index: 12
