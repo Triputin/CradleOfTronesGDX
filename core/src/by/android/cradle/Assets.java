@@ -9,7 +9,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 //1. Loads Textures from files  AssetDescriptor used for that
 //2. Prepare (scale) textures and makes animations depending from size of screen (it doesn't allow resize screen during the game)
 // int _ANIMATION_ID used for that
-
+// Поэтому надо заводить два ID: один дескриптор и идин id для сохранения масштабированной анимации в HashMap
 public class Assets {
     private Assets(){}
 
@@ -88,6 +88,48 @@ public class Assets {
     public static final AssetDescriptor<Texture> WORLDMAP04 =
             new AssetDescriptor<Texture>("maps/worldmap04.png", Texture.class);
 
+    //Flags
+    public static final AssetDescriptor<TextureAtlas> FLAGRED_ATLAS =
+            new AssetDescriptor<TextureAtlas>("flags_atlas/flag_red.atlas", TextureAtlas.class);
+    public static final AssetDescriptor<TextureAtlas> FLAGBLUE_ATLAS =
+            new AssetDescriptor<TextureAtlas>("flags_atlas/flag_blue.atlas", TextureAtlas.class);
+    public static final AssetDescriptor<TextureAtlas> FLAGGREEN_ATLAS =
+            new AssetDescriptor<TextureAtlas>("flags_atlas/flag_green.atlas", TextureAtlas.class);
+    public static final AssetDescriptor<TextureAtlas> FLAGYELLOW_ATLAS =
+            new AssetDescriptor<TextureAtlas>("flags_atlas/flag_yellow.atlas", TextureAtlas.class);
+    public static final AssetDescriptor<TextureAtlas> FLAGGRAY_ATLAS =
+            new AssetDescriptor<TextureAtlas>("flags_atlas/flag_gray.atlas", TextureAtlas.class);
+    public static final AssetDescriptor<TextureAtlas> FLAGBROWN_ATLAS =
+            new AssetDescriptor<TextureAtlas>("flags_atlas/flag_brown.atlas", TextureAtlas.class);
+    public static final AssetDescriptor<TextureAtlas> FLAGORANGE_ATLAS =
+            new AssetDescriptor<TextureAtlas>("flags_atlas/flag_orange.atlas", TextureAtlas.class);
+    public static final AssetDescriptor<TextureAtlas> FLAGPURPLE_ATLAS =
+            new AssetDescriptor<TextureAtlas>("flags_atlas/flag_purple.atlas", TextureAtlas.class);
+    public static final AssetDescriptor<Texture> FLAGBASEMENTRED =
+            new AssetDescriptor<Texture>("flags_atlas/flagbasement_red.png", Texture.class);
+    public static final AssetDescriptor<Texture> FLAGBASEMENTBLUE =
+            new AssetDescriptor<Texture>("flags_atlas/flagbasement_blue.png", Texture.class);
+    public static final AssetDescriptor<Texture> FLAGBASEMENTGREEN =
+            new AssetDescriptor<Texture>("flags_atlas/flagbasement_green.png", Texture.class);
+    public static final AssetDescriptor<Texture> FLAGBASEMENTYELLOW =
+            new AssetDescriptor<Texture>("flags_atlas/flagbasement_yellow.png", Texture.class);
+    public static final AssetDescriptor<Texture> FLAGBASEMENTGRAY =
+            new AssetDescriptor<Texture>("flags_atlas/flagbasement_gray.png", Texture.class);
+    public static final AssetDescriptor<Texture> FLAGBASEMENTBROWN =
+            new AssetDescriptor<Texture>("flags_atlas/flagbasement_brown.png", Texture.class);
+    public static final AssetDescriptor<Texture> FLAGBASEMENTORANGE =
+            new AssetDescriptor<Texture>("flags_atlas/flagbasement_orange.png", Texture.class);
+    public static final AssetDescriptor<Texture> FLAGBASEMENTPURPLE =
+            new AssetDescriptor<Texture>("flags_atlas/flagbasement_purple.png", Texture.class);
+
+    //Bombs
+    public static final AssetDescriptor<Texture> BOMBTIME =
+            new AssetDescriptor<Texture>("timebomb.png", Texture.class);
+    public static final AssetDescriptor<Texture> BOMBSQUARE01 =
+            new AssetDescriptor<Texture>("squarebomb01.png", Texture.class);
+    public static final AssetDescriptor<Texture> BOMBSQUARE02 =
+            new AssetDescriptor<Texture>("squarebomb02.png", Texture.class);
+
     //Sounds and music
     public static final AssetDescriptor<Music> MUSIC_2_HEARTS =
             new AssetDescriptor<Music>("sounds/2_hearts.mp3", Music.class);
@@ -135,5 +177,29 @@ public class Assets {
     public static final int WORLDMAP02_ANIMATION_ID = 23;
     public static final int WORLDMAP03_ANIMATION_ID = 24;
     public static final int WORLDMAP04_ANIMATION_ID = 25;
+
+    public static final int FLAGRED_ANIMATION_ID = 26;
+    public static final int FLAGBLUE_ANIMATION_ID = 27;
+    public static final int FLAGGREEN_ANIMATION_ID = 28;
+    public static final int FLAGYELLOW_ANIMATION_ID = 29;
+    public static final int FLAGGRAY_ANIMATION_ID = 30;
+    public static final int FLAGBROWN_ANIMATION_ID = 31;
+    public static final int FLAGORANGE_ANIMATION_ID = 32;
+    public static final int FLAGPURPLE_ANIMATION_ID = 33;
+
+    public static final int FLAGBASEMENTRED_ANIMATION_ID = 34;
+    public static final int FLAGBASEMENTBLUE_ANIMATION_ID = 35;
+    public static final int FLAGBASEMENTGREEN_ANIMATION_ID = 36;
+    public static final int FLAGBASEMENTYELLOW_ANIMATION_ID = 37;
+    public static final int FLAGBASEMENTGRAY_ANIMATION_ID = 38;
+    public static final int FLAGBASEMENTBROWN_ANIMATION_ID = 39;
+    public static final int FLAGBASEMENTORANGE_ANIMATION_ID = 40;
+    public static final int FLAGBASEMENTPURPLE_ANIMATION_ID = 41;
+
+    public static final int BOMBTIME_ANIMATION_ID = 42;
+    public static final int BOMBSQUARE01_ANIMATION_ID = 43;
+    public static final int BOMBSQUARE02_ANIMATION_ID = 44;
+
+
 
 }

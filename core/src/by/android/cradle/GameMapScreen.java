@@ -48,7 +48,7 @@ public class GameMapScreen extends BaseScreen {
     private BlackMarket blackMarket;
     private GameMapLevelInfo gameMapLevelInfo; // holds info about winned gameMapLevels
     private ArrowDownActor arrowDownActor;
-    private int kingdomsize;
+    //private int kingdomsize;
 
     public GameMapScreen(CradleGame cradleGame,IPlayServices ply) {
 
@@ -274,7 +274,7 @@ public class GameMapScreen extends BaseScreen {
 
         final int w = Gdx.graphics.getWidth();
         int h = Gdx.graphics.getHeight();
-        kingdomsize = h/9;
+        int kingdomsize = cradleGame.getKingdomsize();
         if (kingdoms!=null){
             for (int i = 0; i < kingdoms.length; i++) {
                 kingdoms[i].saveParams();
@@ -572,6 +572,7 @@ public class GameMapScreen extends BaseScreen {
 
     private void startInfoDialog(int mapLevel){
 
+        final int kingdomsize = cradleGame.getKingdomsize();
         final InputListener inputListener2 = new InputListener() {
             public boolean touchDown (InputEvent e, float x, float y, int pointer, int button){
                 if (!(e instanceof InputEvent))
@@ -896,45 +897,5 @@ public String getTextForMapLevel(int maplevel){
         return gameMapLevelInfo;
     }
 
-    public int getKingdomPlannedProtectionState(int Id){
-        int res=5;
-        switch(Id){
-            //level 1
-            case 0: res=0;break;
-            case 1: res=5;break;
-            case 2: res=7;break;
-            case 3: res=5;break;
-            case 4: res=7;break;
-            case 5: res=5;break;
-            case 6: res=7;break;
 
-            //level 2
-            case 10: res=6;break;
-            case 11: res=8;break;
-            case 12: res=6;break;
-            case 13: res=8;break;
-            case 14: res=6;break;
-            case 15: res=8;break;
-            case 16: res=6;break;
-
-            // level 3
-            case 20: res=7;break;
-            case 21: res=9;break;
-            case 22: res=7;break;
-            case 23: res=9;break;
-            case 24: res=7;break;
-            case 25: res=9;break;
-            case 26: res=7;break;
-
-            // level 4
-            case 30: res=10;break;
-            case 31: res=10;break;
-            case 32: res=8;break;
-            case 33: res=10;break;
-            case 34: res=8;break;
-            case 35: res=10;break;
-            case 36: res=10;break;
-        }
-        return res;
-    }
 }

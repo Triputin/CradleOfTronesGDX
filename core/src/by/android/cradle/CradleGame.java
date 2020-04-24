@@ -13,13 +13,18 @@ import java.util.GregorianCalendar;
 import java.util.Locale;
 
 
+
+
 public class CradleGame extends BaseGame
 {
     //settings
     public  final String leaderboard = "CgkIiby2l-0EEAIQAQ";
     private final String LAST_LOGIN_DAY="lastloginday";
     private final String LAST_KNIGHT_ITEM_GENERATED_DAY="lastknightitemgeneratedday";
+    private final int KINGDOMS_MAX_QTTY = 36;
     private final int DAILY_GIFT_AMOUNT = 25;
+    private  int kingdomsize;
+    private int bombSize;
     public final int MaxGameMapLevel=4;
     private int gameMapLevel; //currentGameMapLevelToShow
     private int maxOpenedMapLevel; // Player win maps levels+1;
@@ -55,7 +60,7 @@ public class CradleGame extends BaseGame
     private final int CellCount = 7;
 
     private static long SPLASH_MINIMUM_MILLIS = 3000L;
-    //private SplashScreen splashScreen;
+    private SplashScreen2 splashScreen;
     //
     private Preferences prefs;
     private IActivityRequestHandler myRequestHandler; //interface for AdMob
@@ -77,12 +82,39 @@ public class CradleGame extends BaseGame
 
     public void create()
     {
+        //splashScreen = new SplashScreen2();
+        //setScreen(splashScreen);
 
-        setScreen(new SplashScreen2());
+        // Get screen size
+        w = Gdx.graphics.getWidth();
+        h = Gdx.graphics.getHeight();
+        resHeight = (int)Math.round(h*0.12);
+        cellSize = (h-resHeight)/CellCount;
+        this.kingdomsize = h/9;
+        bombSize = h / 6;
+
+        setScreen(new LoadingScreen(this));
 
         myRequestHandler.showAds(false);
         super.create();
 
+        //splashScreen.progressLabel.updateText("5%");
+
+/*
+        // post a Runnable to the rendering thread that processes the result
+        Gdx.app.postRunnable(new Runnable() {
+            @Override
+            public void run() {
+                // process the result, e.g. add it to an Array<Result> field of the ApplicationListener.
+                //results.add(result);
+
+
+            }
+        });
+
+*/
+
+/*
         final long splash_start_time = System.currentTimeMillis();
         new Thread(new Runnable() {
             @Override
@@ -92,7 +124,9 @@ public class CradleGame extends BaseGame
                     @Override
                     public void run() {
 
+
                         Init();
+
 
                         // Se muestra el menu principal tras la SpashScreen
                         long splash_elapsed_time = System.currentTimeMillis() - splash_start_time;
@@ -107,129 +141,122 @@ public class CradleGame extends BaseGame
                         } else {
                             setScreen(menuScreen);
                         }
+
+
+
                     }
                 });
             }
         }).start();
 
 
-
+*/
 
 
      }
 
-     public void Init(){
-         // Gdx.app.setLogLevel(Application.LOG_DEBUG);
 
-         // Get screen size
-         w = Gdx.graphics.getWidth();
-         h = Gdx.graphics.getHeight();
-         resHeight = (int)Math.round(h*0.12);
-         cellSize = (h-resHeight)/CellCount;
-
-         //Setup settings provider
-         prefs = Gdx.app.getPreferences("settings.prefs2");
-
-         knightParams = new KnightParams(prefs); // loads Knight settings
-
-         cradleAssetManager.loadAssets();
-         cradleAssetManager.finishLoading();
-         cradleAssetManager.prepareAnimations(this);
-
-         // For debug ru locale
-         //Locale locale = new Locale("it");
-         //languageStrings = I18NBundle.createBundle(Gdx.files.internal("strings/strings"),locale);
-
-         //Default locale for realise
-         languageStrings = I18NBundle.createBundle(Gdx.files.internal("strings/strings"));
-
-         getResFromStorage();
-         //maxOpenedMapLevel=1; // for debug
-         //GameRes.Gold=1000; // for debug
-         //gameMapLevel=1; // for debug
-         //GameRes.Score=999; // for debug
-         knightParams.CheckKnightLevelAtScore(GameRes.Score); // Set KnightLevel according current dependence from Score. It's for old players.
-         menuScreen = new MenuScreen(this,ply);
-         screenGamePlay = new ScreenGamePlay(this,ply);
-
-         int gameLevel = prefs.getInteger("gameLevel", 1);
-         //gameLevel = 1; // for debug purpose
-         screenGamePlay.setGameLevel(gameLevel);
-         difficultyLevel = prefs.getInteger("levelofhardness", 0);
-         //difficultyLevel = 0; // for debug purpose
-
-         gameMapScreen = new GameMapScreen(this,ply);
-         helpScreen = new HelpScreen(this,ply);
-         shopScreen = new ShopScreen(this,ply);
-
-         Kingdom[] kingdoms = gameMapScreen.getKingdoms();
-         if (gameMapLevel==1) {
-             kingdoms[0].setProtectionState(0); // starting Kingdom for player
-         } else {
-             kingdoms[0].setProtectionState(5+gameMapLevel);
-         }
+    public void Init01(){
+        // Gdx.app.setLogLevel(Application.LOG_DEBUG);
 
 
-         for (int i = 1; i < kingdoms.length; i++) {
-             kingdoms[i].setProtectionState(prefs.getInteger("kingdomProtectionState"+i, 5));
 
-             //For Debug
-             //kingdoms[i].setProtectionState(0);
-             //System.out.println("CradleGame.create Get:kingdomProtectionState"+i+);
-         }
-         //kingdoms[0].setProtectionState(1); //for debug
+        //Setup settings provider
+        long ct = System.currentTimeMillis();
+        prefs = Gdx.app.getPreferences("settings.prefs2");
 
-         settingsScreen = new SettingsScreen(this,ply);
-         knightScreen = new KnightScreen(this,ply);
-         worldScreen = new WorldScreen(this,ply);
+        knightParams = new KnightParams(prefs); // loads Knight settings
 
-         // Check daily gift
-         GregorianCalendar calendarG = new GregorianCalendar();
-         calendarG.setTime(new Date());
-         getDailySetOfKnightItems(calendarG);
-         blackMarketScreen = new BlackMarketScreen(this,ply);
 
-         if(!prefs.contains(LAST_LOGIN_DAY)) {
-             //first day in App
-             prefs.putInteger(LAST_LOGIN_DAY, calendarG.get(Calendar.DAY_OF_YEAR));
-             prefs.flush();
-         }
+        checkIfAllKingdomParamsSaved();
 
-         //updateDailyGiftValue(prefs,calendarG); //for Debug only!!!
+        // For debug ru locale
+        //Locale locale = new Locale("it");
+        //languageStrings = I18NBundle.createBundle(Gdx.files.internal("strings/strings"),locale);
 
-         if((prefs.getInteger(LAST_LOGIN_DAY)+1)==calendarG.get(Calendar.DAY_OF_YEAR)){
-             //next loginday up to a year
+        //Default locale for realise
+        languageStrings = I18NBundle.createBundle(Gdx.files.internal("strings/strings"));
 
-             updateDailyGiftValue(prefs,calendarG);
+        getResFromStorage();
+        //maxOpenedMapLevel=1; // for debug
+        //GameRes.Gold=1000; // for debug
+        //gameMapLevel=1; // for debug
+        //GameRes.Score=999; // for debug
+        knightParams.CheckKnightLevelAtScore(GameRes.Score); // Set KnightLevel according current dependence from Score. It's for old players.
+        menuScreen = new MenuScreen(this,ply);
+        screenGamePlay = new ScreenGamePlay(this,ply);
 
-         }else{
+        int gameLevel = prefs.getInteger("gameLevel", 1);
+        //gameLevel = 1; // for debug purpose
+        screenGamePlay.setGameLevel(gameLevel);
+        difficultyLevel = prefs.getInteger("levelofhardness", 0);
+        //difficultyLevel = 0; // for debug purpose
+        System.out.println("Init01 time : " +(System.currentTimeMillis()-ct));
+    }
 
-             if(calendarG.get(Calendar.DAY_OF_YEAR)==1) {
+    public void Init02(){
+        long ct = System.currentTimeMillis();
+        gameMapScreen = new GameMapScreen(this,ply);
+        helpScreen = new HelpScreen(this,ply);
+        shopScreen = new ShopScreen(this,ply);
+        settingsScreen = new SettingsScreen(this,ply);
+        knightScreen = new KnightScreen(this,ply);
+        System.out.println("Init02 time : " +(System.currentTimeMillis()-ct));
+    }
 
-                 // check for the 1st day of the year
+    public void Init03(){
+        long ct = System.currentTimeMillis();
+        worldScreen = new WorldScreen(this,ply);
 
-                 boolean isLeap = calendarG.isLeapYear(calendarG.get(Calendar.YEAR));
-                 if (isLeap && prefs.getInteger(LAST_LOGIN_DAY)==366 ) {
+        // Check daily gift
+        GregorianCalendar calendarG = new GregorianCalendar();
+        calendarG.setTime(new Date());
+        getDailySetOfKnightItems(calendarG);
+        blackMarketScreen = new BlackMarketScreen(this,ply);
 
-                     updateDailyGiftValue(prefs,calendarG);
+        if(!prefs.contains(LAST_LOGIN_DAY)) {
+            //first day in App
+            prefs.putInteger(LAST_LOGIN_DAY, calendarG.get(Calendar.DAY_OF_YEAR));
+            prefs.flush();
+        }
 
-                 }else  if(prefs.getInteger(LAST_LOGIN_DAY)==365){
-                     updateDailyGiftValue(prefs,calendarG);
+        //updateDailyGiftValue(prefs,calendarG); //for Debug only!!!
 
-                 }
-                 else
-                     prefs.putInteger(LAST_LOGIN_DAY,calendarG.get(Calendar.DAY_OF_YEAR));
-                     prefs.putInteger("dailyCombo", 0);
-                     prefs.flush();
-             }
-             else
-                 prefs.putInteger(LAST_LOGIN_DAY,calendarG.get(Calendar.DAY_OF_YEAR));
-                 prefs.putInteger("dailyCombo", 0);
-                 prefs.flush();
+        if((prefs.getInteger(LAST_LOGIN_DAY)+1)==calendarG.get(Calendar.DAY_OF_YEAR)){
+            //next loginday up to a year
 
-         }
+            updateDailyGiftValue(prefs,calendarG);
 
-     }
+        }else{
+
+            if(calendarG.get(Calendar.DAY_OF_YEAR)==1) {
+
+                // check for the 1st day of the year
+
+                boolean isLeap = calendarG.isLeapYear(calendarG.get(Calendar.YEAR));
+                if (isLeap && prefs.getInteger(LAST_LOGIN_DAY)==366 ) {
+
+                    updateDailyGiftValue(prefs,calendarG);
+
+                }else  if(prefs.getInteger(LAST_LOGIN_DAY)==365){
+                    updateDailyGiftValue(prefs,calendarG);
+
+                }
+                else
+                    prefs.putInteger(LAST_LOGIN_DAY,calendarG.get(Calendar.DAY_OF_YEAR));
+                prefs.putInteger("dailyCombo", 0);
+                prefs.flush();
+            }
+            else
+                prefs.putInteger(LAST_LOGIN_DAY,calendarG.get(Calendar.DAY_OF_YEAR));
+            prefs.putInteger("dailyCombo", 0);
+            prefs.flush();
+
+        }
+        System.out.println("Init03 time : " +(System.currentTimeMillis()-ct));
+    }
+
+
 
     public void getResFromStorage(){
         GameRes.Bread=prefs.getInteger("Bread", 100);
@@ -499,8 +526,9 @@ public class CradleGame extends BaseGame
         // reset levelofhardness
         difficultyLevel = 0;
         prefs.putInteger("levelofhardness", difficultyLevel);
-        for (int i =0; i<36; i++){
-            prefs.putInteger("KingdomProtectionState"+i,gameMapScreen.getKingdomPlannedProtectionState(i));
+
+        for (int i =0; i<KINGDOMS_MAX_QTTY; i++){
+            prefs.putInteger("KingdomProtectionState"+i,Kingdom.getKingdomPlannedProtectionState(i));
         }
 
         for (int i=0; i<gameMapScreen.getKingdoms().length;i++){
@@ -556,6 +584,8 @@ public class CradleGame extends BaseGame
         return gameMapLevel;
     }
 
+
+    // Изменяет текущий отображаемый уровень. После этого метода требуется вызов cradleGame.setActiveGameMapScreen(false, gameMapLevel);
     public void setGameMapLevel(int gameMapLevel) {
         // Get screen size
         if (gameMapScreen==null) return;
@@ -569,16 +599,13 @@ public class CradleGame extends BaseGame
             prefs.putInteger("maxOpenedMapLevel", maxOpenedMapLevel);
         }
         Kingdom[] kingdoms = gameMapScreen.getKingdoms();
+
+        //Надо удать это обнуление оно не должно быть здесь
+        /*
         if (gameMapLevel ==1) {
             kingdoms[0].setProtectionState(0); // starting Kingdom for player
         }
-        //-----------Ошибка!!  должны сами королевства со своими id записываться!
-       /*
-        for (int i = 1; i < kingdoms.length; i++) {
-            kingdoms[i].resetProtectionState(gameMapLevel);
-            prefs.putInteger("kingdomProtectionState"+i, kingdoms[i].getProtectionState());
-        }
-        */
+*/
 
         prefs.flush();
 
@@ -816,4 +843,51 @@ public class CradleGame extends BaseGame
     public int getCellCount() {
         return CellCount;
     }
+
+    private void checkIfAllKingdomParamsSaved(){
+    int value = 0;
+        for (int i =0; i<KINGDOMS_MAX_QTTY; i++){
+
+            value = getPrefs().getInteger("LevelOfKingdom"+i,-1);
+            if (value==-1){
+                 getPrefs().putInteger("LevelOfKingdom"+i,1);
+            }
+
+            value = getPrefs().getInteger("KingdomProtectionState"+i,-1);
+            if (value==-1){
+                getPrefs().putInteger("KingdomProtectionState"+i,Kingdom.getKingdomPlannedProtectionState(i));
+            }
+
+            KingdomRes kingdomRes = Kingdom.getKingdomPlannedRes(i);
+            value = getPrefs().getInteger("KingdomGoldParams"+i,-1);
+            if (value==-1){
+                getPrefs().putInteger("KingdomGoldParams"+i,kingdomRes.Gold);
+            }
+
+            value = getPrefs().getInteger("KingdomBreadParams"+i,-1);
+            if (value==-1){
+                getPrefs().putInteger("KingdomBreadParams"+i,kingdomRes.Bread);
+            }
+
+            value = getPrefs().getInteger("KingdomWoodParams"+i,-1);
+            if (value==-1){
+                getPrefs().putInteger("KingdomWoodParams"+i,kingdomRes.Wood);
+            }
+
+        }
+
+        getPrefs().flush();
+    }
+
+
+    public int getKingdomsize() {
+        return kingdomsize;
+    }
+
+    public int getBombSize() {
+        return bombSize;
+    }
+
+
+
 }

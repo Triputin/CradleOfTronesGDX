@@ -14,7 +14,8 @@ public class TimeBomb extends DragAndDropActor {
         setHeight(height);
         setWidth(width);
         this.bombTime = bombTime;
-        loadTexture("timebomb.png", (int) getWidth(), (int) getHeight());
+        //loadTexture("timebomb.png", (int) getWidth(), (int) getHeight());
+        setAnimation(cradleGame.getCradleAssetManager().getAnimation(Assets.BOMBTIME_ANIMATION_ID));
         //AddImage("timebomb.png", 0,0,(int) getWidth(), (int) getHeight());
         this.sandGlass = sandGlass;
     }

@@ -1,0 +1,90 @@
+
+flag_green.png
+size: 1000,1500
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+flag
+  rotate: false
+  xy: 0, 0
+  size: 500, 250
+  orig: 500, 250
+  offset: 0, 0
+  index: 1
+flag
+  rotate: false
+  xy: 501, 0
+  size: 500, 250
+  orig: 500, 250
+  offset: 0, 0
+  index: 2
+flag
+  rotate: false
+  xy: 0, 251
+  size: 500, 250
+  orig: 500, 250
+  offset: 0, 0
+  index: 3
+flag
+  rotate: false
+  xy: 501, 251
+  size: 500, 250
+  orig: 500, 250
+  offset: 0, 0
+  index: 4
+flag
+  rotate: false
+  xy: 0, 501
+  size: 500, 250
+  orig: 500, 250
+  offset: 0, 0
+  index: 5
+flag
+  rotate: false
+  xy: 501, 501
+  size: 500, 250
+  orig: 500, 250
+  offset: 0, 0
+  index: 6
+flag
+  rotate: false
+  xy: 0, 751
+  size: 500, 250
+  orig: 500, 250
+  offset: 0, 0
+  index: 7
+flag
+  rotate: false
+  xy: 501, 751
+  size: 500, 250
+  orig: 500, 250
+  offset: 0, 0
+  index: 8
+flag
+  rotate: false
+  xy: 0, 1001
+  size: 500, 250
+  orig: 500, 250
+  offset: 0, 0
+  index: 9
+flag
+  rotate: false
+  xy: 501, 1001
+  size: 500, 250
+  orig: 500, 250
+  offset: 0, 0
+  index: 10
+flag
+  rotate: false
+  xy: 0, 1251
+  size: 500, 250
+  orig: 500, 250
+  offset: 0, 0
+  index: 11
+flag
+  rotate: false
+  xy: 501, 1251
+  size: 500, 250
+  orig: 500, 250
+  offset: 0, 0
+  index: 12

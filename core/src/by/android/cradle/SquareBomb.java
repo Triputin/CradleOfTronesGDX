@@ -15,9 +15,11 @@ public class SquareBomb extends DragAndDropActor {
         this.squareSize = squareSize;
         this.screenGamePlay = screenGamePlay;
         if (squareSize==1) {
-            loadTexture("squarebomb01.png", (int) getWidth(), (int) getHeight());
+            //loadTexture("squarebomb01.png", (int) getWidth(), (int) getHeight());
+            setAnimation(cradleGame.getCradleAssetManager().getAnimation(Assets.BOMBSQUARE01_ANIMATION_ID));
         } else {
-            loadTexture("squarebomb02.png", (int) getWidth(), (int) getHeight());
+            //loadTexture("squarebomb02.png", (int) getWidth(), (int) getHeight());
+            setAnimation(cradleGame.getCradleAssetManager().getAnimation(Assets.BOMBSQUARE02_ANIMATION_ID));
         }
 
 //setColor(100,0,0,0);

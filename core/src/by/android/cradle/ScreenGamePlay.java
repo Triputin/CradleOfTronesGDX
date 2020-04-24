@@ -35,6 +35,7 @@ public class ScreenGamePlay extends BaseScreen {
     // Game constant params
     private final float SoundEffectsVolume = 0.1f;
     private int LevelDuration = 60; // Time of every level (HourGlass)
+    private final int TIME_BEFORE_SHOW_SOLUTION = 8000;
     private int cellSize;
     private int CellCount;
     private GameField gameField;
@@ -648,7 +649,7 @@ public void RemoveAndFillSquare(int centreRow, int centreCol, int squareSize){
         }
 
         long diffInMillis = TimeUtils.timeSinceMillis(timeLastSelectionEnded);
-        if((diffInMillis>7000) &&(!flag)){
+        if((diffInMillis>TIME_BEFORE_SHOW_SOLUTION) &&(!flag)){
             clearAllSelections();
             SelectSolution(gameField.FindSolutions(CellCount,mainStage));
             timeLastSelectionEnded = TimeUtils.millis();
@@ -1366,13 +1367,13 @@ public void RemoveAndFillSquare(int centreRow, int centreCol, int squareSize){
 
 
         for (int i = 0; i < GameRes.TimeBomb; i++) {
-            new TimeBomb(50, h * 0.5f, h / 6, h / 6, mainStage, Touchable.enabled, sandGlass, 60, cradleGame);
+            new TimeBomb(50, h * 0.5f, cradleGame.getBombSize(), cradleGame.getBombSize(), mainStage, Touchable.enabled, sandGlass, 60, cradleGame);
         }
         for (int i=0;i<GameRes.SquareBomb1;i++) {
-            new SquareBomb(50,h*0.3f,h/6,h/6,mainStage,Touchable.enabled,1,this,cradleGame);
+            new SquareBomb(50,h*0.3f,cradleGame.getBombSize(),cradleGame.getBombSize(),mainStage,Touchable.enabled,1,this,cradleGame);
         }
         for (int i=0;i<GameRes.SquareBomb2;i++) {
-            new SquareBomb(50,h*0.1f,h/6,h/6,mainStage,Touchable.enabled,2,this,cradleGame);
+            new SquareBomb(50,h*0.1f,cradleGame.getBombSize(),cradleGame.getBombSize(),mainStage,Touchable.enabled,2,this,cradleGame);
         }
 
         if (GameRes.TimeBomb>0) {

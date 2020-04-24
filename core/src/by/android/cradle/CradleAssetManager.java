@@ -74,6 +74,28 @@ public class CradleAssetManager  {
         manager.load(Assets.WORLDMAP02);
         manager.load(Assets.WORLDMAP03);
         manager.load(Assets.WORLDMAP04);
+        //Flags
+        manager.load(Assets.FLAGRED_ATLAS);
+        manager.load(Assets.FLAGBLUE_ATLAS);
+        manager.load(Assets.FLAGGREEN_ATLAS);
+        manager.load(Assets.FLAGYELLOW_ATLAS);
+        manager.load(Assets.FLAGGRAY_ATLAS);
+        manager.load(Assets.FLAGBROWN_ATLAS);
+        manager.load(Assets.FLAGORANGE_ATLAS);
+        manager.load(Assets.FLAGPURPLE_ATLAS);
+
+        manager.load(Assets.FLAGBASEMENTRED);
+        manager.load(Assets.FLAGBASEMENTBLUE);
+        manager.load(Assets.FLAGBASEMENTGREEN);
+        manager.load(Assets.FLAGBASEMENTYELLOW);
+        manager.load(Assets.FLAGBASEMENTGRAY);
+        manager.load(Assets.FLAGBASEMENTBROWN);
+        manager.load(Assets.FLAGBASEMENTORANGE);
+        manager.load(Assets.FLAGBASEMENTPURPLE);
+        //Bombs
+        manager.load(Assets.BOMBTIME);
+        manager.load(Assets.BOMBSQUARE01);
+        manager.load(Assets.BOMBSQUARE02);
 
     }
 
@@ -111,9 +133,37 @@ public class CradleAssetManager  {
         hashMapAnimations.put(Assets.WORLDMAP03_ANIMATION_ID,loadAnimationFromAssets(Assets.WORLDMAP03,cradleGame.getW(),  cradleGame.getH()));
         hashMapAnimations.put(Assets.WORLDMAP04_ANIMATION_ID,loadAnimationFromAssets(Assets.WORLDMAP04,cradleGame.getW(),  cradleGame.getH()));
 
+
+        //Flags animations
+        hashMapAnimations.put(Assets.FLAGRED_ANIMATION_ID,loadAnimationFromAssetsAtlas(Assets.FLAGRED_ATLAS,6,2,0.2f, true,  cradleGame.getKingdomsize(),  Math.round(cradleGame.getKingdomsize()/2.3f)));
+        hashMapAnimations.put(Assets.FLAGBLUE_ANIMATION_ID,loadAnimationFromAssetsAtlas(Assets.FLAGBLUE_ATLAS,6,2,0.2f, true,  cradleGame.getKingdomsize(),   Math.round(cradleGame.getKingdomsize()/2.3f)));
+        hashMapAnimations.put(Assets.FLAGGREEN_ANIMATION_ID,loadAnimationFromAssetsAtlas(Assets.FLAGGREEN_ATLAS,6,2,0.2f, true,  cradleGame.getKingdomsize(),   Math.round(cradleGame.getKingdomsize()/2.3f)));
+        hashMapAnimations.put(Assets.FLAGYELLOW_ANIMATION_ID,loadAnimationFromAssetsAtlas(Assets.FLAGYELLOW_ATLAS,6,2,0.2f, true,  cradleGame.getKingdomsize(),   Math.round(cradleGame.getKingdomsize()/2.3f)));
+        hashMapAnimations.put(Assets.FLAGGRAY_ANIMATION_ID,loadAnimationFromAssetsAtlas(Assets.FLAGGRAY_ATLAS,6,2,0.2f, true,  cradleGame.getKingdomsize(),   Math.round(cradleGame.getKingdomsize()/2.3f)));
+        hashMapAnimations.put(Assets.FLAGBROWN_ANIMATION_ID,loadAnimationFromAssetsAtlas(Assets.FLAGBROWN_ATLAS,6,2,0.2f, true,  cradleGame.getKingdomsize(),   Math.round(cradleGame.getKingdomsize()/2.3f)));
+        hashMapAnimations.put(Assets.FLAGORANGE_ANIMATION_ID,loadAnimationFromAssetsAtlas(Assets.FLAGORANGE_ATLAS,6,2,0.2f, true,  cradleGame.getKingdomsize(),   Math.round(cradleGame.getKingdomsize()/2.3f)));
+        hashMapAnimations.put(Assets.FLAGPURPLE_ANIMATION_ID,loadAnimationFromAssetsAtlas(Assets.FLAGPURPLE_ATLAS,6,2,0.2f, true,  cradleGame.getKingdomsize(),   Math.round(cradleGame.getKingdomsize()/2.3f)));
+
+
+        hashMapAnimations.put(Assets.FLAGBASEMENTRED_ANIMATION_ID,loadAnimationFromAssets(Assets.FLAGBASEMENTRED,  cradleGame.getKingdomsize(),  cradleGame.getKingdomsize()));
+        hashMapAnimations.put(Assets.FLAGBASEMENTBLUE_ANIMATION_ID,loadAnimationFromAssets(Assets.FLAGBASEMENTBLUE,  cradleGame.getKingdomsize(),  cradleGame.getKingdomsize()));
+        hashMapAnimations.put(Assets.FLAGBASEMENTGREEN_ANIMATION_ID,loadAnimationFromAssets(Assets.FLAGBASEMENTGREEN,  cradleGame.getKingdomsize(),  cradleGame.getKingdomsize()));
+        hashMapAnimations.put(Assets.FLAGBASEMENTYELLOW_ANIMATION_ID,loadAnimationFromAssets(Assets.FLAGBASEMENTYELLOW,  cradleGame.getKingdomsize(),  cradleGame.getKingdomsize()));
+        hashMapAnimations.put(Assets.FLAGBASEMENTGRAY_ANIMATION_ID,loadAnimationFromAssets(Assets.FLAGBASEMENTGRAY,  cradleGame.getKingdomsize(),  cradleGame.getKingdomsize()));
+        hashMapAnimations.put(Assets.FLAGBASEMENTBROWN_ANIMATION_ID,loadAnimationFromAssets(Assets.FLAGBASEMENTBROWN,  cradleGame.getKingdomsize(),  cradleGame.getKingdomsize()));
+        hashMapAnimations.put(Assets.FLAGBASEMENTORANGE_ANIMATION_ID,loadAnimationFromAssets(Assets.FLAGBASEMENTORANGE,  cradleGame.getKingdomsize(),  cradleGame.getKingdomsize()));
+        hashMapAnimations.put(Assets.FLAGBASEMENTPURPLE_ANIMATION_ID,loadAnimationFromAssets(Assets.FLAGBASEMENTPURPLE,  cradleGame.getKingdomsize(),  cradleGame.getKingdomsize()));
+
+        //Bombs
+        hashMapAnimations.put(Assets.BOMBTIME_ANIMATION_ID,loadAnimationFromAssets(Assets.BOMBTIME,  cradleGame.getBombSize(),  cradleGame.getBombSize()));
+        hashMapAnimations.put(Assets.BOMBSQUARE01_ANIMATION_ID,loadAnimationFromAssets(Assets.BOMBSQUARE01 , cradleGame.getBombSize(),  cradleGame.getBombSize()));
+        hashMapAnimations.put(Assets.BOMBSQUARE02_ANIMATION_ID,loadAnimationFromAssets(Assets.BOMBSQUARE02,  cradleGame.getBombSize(),  cradleGame.getBombSize()));
+
+
+
         //Actors (Images) // Don't work, if actor the same it works equally everywhere
         //hashMapActors.put(Assets.LOCKED_ITEM_LEVEL01_ANIMATION_ID,AddImage(Assets.LOCKED_ITEM_LEVEL01,0,0,cradleGame.getCellSize(),  cradleGame.getCellSize()));
-        // hashMapActors.put(Assets.LOCKED_ITEM_LEVEL02_ANIMATION_ID,AddImage(Assets.LOCKED_ITEM_LEVEL02,0,0,cradleGame.getCellSize(),  cradleGame.getCellSize()));
+        //hashMapActors.put(Assets.LOCKED_ITEM_LEVEL02_ANIMATION_ID,AddImage(Assets.LOCKED_ITEM_LEVEL02,0,0,cradleGame.getCellSize(),  cradleGame.getCellSize()));
 
 
     }
@@ -140,6 +190,7 @@ public class CradleAssetManager  {
         Array<TextureRegion> textureArray = new Array<TextureRegion>();
         Array<TextureAtlas.AtlasRegion> atlasRegions = textureAtlas.getRegions();
         Texture texture = atlasRegions.get(0).getTexture();
+
         texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         int frameWidth = texture.getWidth() / cols;
         int frameHeight = texture.getHeight() / rows;

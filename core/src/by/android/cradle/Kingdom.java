@@ -28,6 +28,7 @@ public class Kingdom extends BaseActor {
     private Animation<TextureRegion> animation;
     private int flagSize;
     private BaseActor baseActor;
+    private BaseActor baseActorFlag;
     private long timeOfLastGoldCollection;
     private Label timeStateLabel;
     private int levelOfKingdom;
@@ -40,7 +41,7 @@ public class Kingdom extends BaseActor {
     private final ResultsActor resultsActor;
 
     private int kingdomID; // Should be an unique number through the whole game
-
+/*
     private String[] filenames0 =
             { "flag_red/flag02.png", "flag_red/flag03.png",
                     "flag_red/flag04.png", "flag_red/flag05.png", "flag_red/flag06.png",
@@ -96,6 +97,8 @@ public class Kingdom extends BaseActor {
                     "flag_gray/flag07.png", "flag_gray/flag08.png", "flag_gray/flag09.png",
                     "flag_gray/flag10.png", "flag_gray/flag11.png", "flag_gray/flag12.png"
             };
+*/
+
 
     public Kingdom(float x, float y, int width, int height, Stage s, Touchable touchable,KingdomNames kingdomNames, int kingdomID, final CradleGame  cradleGame,final ResultsActor resultsActor)
     {
@@ -160,76 +163,95 @@ public class Kingdom extends BaseActor {
         w = Gdx.graphics.getWidth();
         h = Gdx.graphics.getHeight();
 
+        //Get Planned res values
+        KingdomRes kR = getKingdomPlannedRes(kingdomID);
+        kingdomRes.Gold = kR.Gold;
+        kingdomRes.Wood = kR.Wood;
+        kingdomRes.Bread = kR.Bread;
+
+        baseActor = new BaseActor((int) width/2f,(int) (height*0.9f),s,Touchable.enabled,cradleGame);
+        baseActorFlag = new BaseActor((int) width/1.6f,(int) (height*1.47f),s,Touchable.enabled,cradleGame);
+
         switch (kingdomNames){
-            case Kingdom_of_the_North: kingdomRes.Bread = 10;
-                kingdomRes.Gold = 10;
-                kingdomRes.Wood = 10;
-                filenames = filenames0;
-                flagBasementName = "flag_red/flagbasement.png";
-                protectionState=0;
+            case Kingdom_of_the_North:
+                //filenames = filenames0;
+                baseActorFlag.setAnimation(cradleGame.getCradleAssetManager().getAnimation(Assets.FLAGRED_ANIMATION_ID));
+                //flagBasementName = "flag_red/flagbasement.png";
+                baseActor.setAnimation(cradleGame.getCradleAssetManager().getAnimation(Assets.FLAGBASEMENTRED_ANIMATION_ID));
+                //protectionState=0;
                 break;
-            case Kingdom_of_the_Isles_and_Rivers: kingdomRes.Bread = 10;
-                kingdomRes.Gold = 10;
-                kingdomRes.Wood = 10;
-                filenames=filenames1;
-                flagBasementName = "flag_yellow/flagbasement.png";
-                protectionState=5;
+            case Kingdom_of_the_Isles_and_Rivers:
+                //filenames=filenames1;
+                baseActorFlag.setAnimation(cradleGame.getCradleAssetManager().getAnimation(Assets.FLAGYELLOW_ANIMATION_ID));
+                //flagBasementName = "flag_yellow/flagbasement.png";
+                baseActor.setAnimation(cradleGame.getCradleAssetManager().getAnimation(Assets.FLAGBASEMENTYELLOW_ANIMATION_ID));
+                //protectionState=5;
                 break;
-            case Kingdom_of_the_Mountain_and_the_Vale: kingdomRes.Bread = 10;
-                kingdomRes.Gold = 10;
-                kingdomRes.Wood = 10;
-                filenames = filenames2;
-                flagBasementName = "flag_purple/flagbasement.png";
-                protectionState=7;
+            case Kingdom_of_the_Mountain_and_the_Vale:
+                //filenames = filenames2;
+                baseActorFlag.setAnimation(cradleGame.getCradleAssetManager().getAnimation(Assets.FLAGPURPLE_ANIMATION_ID));
+                //flagBasementName = "flag_purple/flagbasement.png";
+                baseActor.setAnimation(cradleGame.getCradleAssetManager().getAnimation(Assets.FLAGBASEMENTPURPLE_ANIMATION_ID));
+                //protectionState=7;
                 break;
-            case Kingdom_of_the_Reach: kingdomRes.Bread = 10;
-                kingdomRes.Gold = 10;
-                kingdomRes.Wood = 10;
-                filenames = filenames3;
-                flagBasementName = "flag_orange/flagbasement.png";
-                protectionState=5;
+            case Kingdom_of_the_Reach:
+                //filenames = filenames3;
+                baseActorFlag.setAnimation(cradleGame.getCradleAssetManager().getAnimation(Assets.FLAGORANGE_ANIMATION_ID));
+                //flagBasementName = "flag_orange/flagbasement.png";
+                baseActor.setAnimation(cradleGame.getCradleAssetManager().getAnimation(Assets.FLAGBASEMENTORANGE_ANIMATION_ID));
+                //protectionState=5;
                 break;
-            case Kingdom_of_the_Rock: kingdomRes.Bread = 10;
-                kingdomRes.Gold = 10;
-                kingdomRes.Wood = 10;
-                filenames=filenames4;
-                flagBasementName = "flag_green/flagbasement.png";
-                protectionState=7;
+            case Kingdom_of_the_Rock:
+                //filenames=filenames4;
+                baseActorFlag.setAnimation(cradleGame.getCradleAssetManager().getAnimation(Assets.FLAGGREEN_ANIMATION_ID));
+                //flagBasementName = "flag_green/flagbasement.png";
+                baseActor.setAnimation(cradleGame.getCradleAssetManager().getAnimation(Assets.FLAGBASEMENTGREEN_ANIMATION_ID));
+                //protectionState=7;
                 break;
-            case Kingdom_of_the_Stormlands: kingdomRes.Bread = 10;
-                kingdomRes.Gold = 10;
-                kingdomRes.Wood = 10;
-                filenames = filenames5;
-                flagBasementName = "flag_brown/flagbasement.png";
-                protectionState=7;
+            case Kingdom_of_the_Stormlands:
+                //filenames = filenames5;
+                baseActorFlag.setAnimation(cradleGame.getCradleAssetManager().getAnimation(Assets.FLAGBROWN_ANIMATION_ID));
+                //flagBasementName = "flag_brown/flagbasement.png";
+                baseActor.setAnimation(cradleGame.getCradleAssetManager().getAnimation(Assets.FLAGBASEMENTBROWN_ANIMATION_ID));
+                //protectionState=7;
                 break;
-            case Principality_of_Dorne: kingdomRes.Bread = 10;
-                kingdomRes.Gold = 10;
-                kingdomRes.Wood = 10;
-                filenames=filenames6;
-                flagBasementName = "flag_blue/flagbasement.png";
-                protectionState=5;
+            case Principality_of_Dorne:
+                //filenames=filenames6;
+                baseActorFlag.setAnimation(cradleGame.getCradleAssetManager().getAnimation(Assets.FLAGBLUE_ANIMATION_ID));
+                //flagBasementName = "flag_blue/flagbasement.png";
+                baseActor.setAnimation(cradleGame.getCradleAssetManager().getAnimation(Assets.FLAGBASEMENTBLUE_ANIMATION_ID));
+                //protectionState=5;
                 break;
 
             default:
-                kingdomRes.Bread = 10;
-                kingdomRes.Gold = 10;
-                kingdomRes.Wood = 10;
-                filenames = filenames00;
-                flagBasementName = "flag_red/flagbasement.png";
+                //filenames = filenames00;
+                //flagBasementName = "flag_red/flagbasement.png";
+                baseActor.setAnimation(cradleGame.getCradleAssetManager().getAnimation(Assets.FLAGBASEMENTRED_ANIMATION_ID));
                 protectionState=1;
 
         }
         getParams();
-        animation = createAnimationFromFiles(filenames, 0.1f, true, flagSize,  flagSize);
-        baseActor = new BaseActor((int) width/2f,(int) (height*0.9f),s,Touchable.enabled,cradleGame);
-        baseActor.setAnimation(animation);
+        System.out.println("setUpKingdomFlagAndResources: kingdomID="+kingdomID);
+        System.out.println("setUpKingdomFlagAndResources: protectionState="+protectionState);
+        // заменить цвет флага если уровень защиты = 0
+        if (protectionState==0){
+            //filenames = filenames0;
+            baseActorFlag.setAnimation(cradleGame.getCradleAssetManager().getAnimation(Assets.FLAGRED_ANIMATION_ID));
+            //flagBasementName = "flag_red/flagbasement.png";
+            baseActor.setAnimation(cradleGame.getCradleAssetManager().getAnimation(Assets.FLAGBASEMENTRED_ANIMATION_ID));
+
+        }
+
+            //animation = createAnimationFromFiles(filenames, 0.1f, true, flagSize, flagSize);
+            //baseActor.setAnimation(animation);
+
+
+        addActor(baseActorFlag);
         addActor(baseActor);
-
-
-        baseActor.AddImage(flagBasementName,0,0,flagSize,flagSize);
+        //baseActor.loadTexture(flagBasementName,flagSize,flagSize);
         baseActor.AddImage("kingdoms/winterfell.png", (int) (0-(width/2.8f)),(int)(0-(height*0.5f)),(int) width, (int) height);
         baseActor.AddImage("shield.png",0-10,(int)(0-(height*0.5f))+5,(int) width/2, (int) height/2);
+        //baseActor.AddImage(flagBasementName,0,0,flagSize,flagSize);
         protectionStateLabel = new Label(""+protectionState, BaseGame.labelStyle);
         if (protectionState==0){
             protectionStateLabel.setText("");
@@ -280,10 +302,12 @@ public class Kingdom extends BaseActor {
     }
 
     private void addRedFlagAnimation(){
-        animation = createAnimationFromFiles(filenames0, 0.1f, true, flagSize,  flagSize);
+        //animation = createAnimationFromFiles(filenames0, 0.1f, true, flagSize,  flagSize);
+
         if(baseActor!=null) {
-            baseActor.setAnimation(animation);
-            baseActor.AddImage("flag_red/flagbasement.png", 0, 0, flagSize, flagSize);
+            baseActorFlag.setAnimation(cradleGame.getCradleAssetManager().getAnimation(Assets.FLAGRED_ANIMATION_ID));
+            //baseActor.setAnimation(animation);
+            //baseActor.AddImage("flag_red/flagbasement.png", 0, 0, flagSize, flagSize);
         }
     }
 
@@ -292,62 +316,8 @@ public class Kingdom extends BaseActor {
     }
 
 public void resetProtectionState(int gameMapLevel) {
-    switch (kingdomNames) {
-        case Kingdom_of_the_North:
-            kingdomRes.Bread = 10 * gameMapLevel;
-            kingdomRes.Gold = 10 * gameMapLevel;
-            kingdomRes.Wood = 10 * gameMapLevel;
-            if(gameMapLevel==1){
-            protectionState = 0;}
-            else {
-                protectionState = 5 + gameMapLevel;
-            }
-            break;
-        case Kingdom_of_the_Isles_and_Rivers:
-            kingdomRes.Bread = 10 * gameMapLevel;
-            kingdomRes.Gold = 10 * gameMapLevel;
-            kingdomRes.Wood = 10 * gameMapLevel;
-            protectionState = 5+gameMapLevel;
-            break;
-        case Kingdom_of_the_Mountain_and_the_Vale:
-            kingdomRes.Bread = 10 * gameMapLevel;
-            kingdomRes.Gold = 25 * gameMapLevel;
-            kingdomRes.Wood = 10 * gameMapLevel;
-            protectionState = 7+gameMapLevel;
-            break;
-        case Kingdom_of_the_Reach:
-            kingdomRes.Bread = 25 * gameMapLevel;
-            kingdomRes.Gold = 10 * gameMapLevel;
-            kingdomRes.Wood = 10 * gameMapLevel;
-            protectionState = 5+gameMapLevel;
-            break;
-        case Kingdom_of_the_Rock:
-            kingdomRes.Bread = 10 * gameMapLevel;
-            kingdomRes.Gold = 10 * gameMapLevel;
-            kingdomRes.Wood = 25 * gameMapLevel;
-            protectionState = 7+gameMapLevel;
-            break;
-        case Kingdom_of_the_Stormlands:
-            kingdomRes.Bread = 20 * gameMapLevel;
-            kingdomRes.Gold = 20 * gameMapLevel;
-            kingdomRes.Wood = 20 * gameMapLevel;
-            protectionState = 7+gameMapLevel;
-            break;
-        case Principality_of_Dorne:
-            kingdomRes.Bread = 5 * gameMapLevel;
-            kingdomRes.Gold = 5 * gameMapLevel;
-            kingdomRes.Wood = 5 * gameMapLevel;
-            protectionState = 5+gameMapLevel;
-            break;
-
-        default:
-            kingdomRes.Bread = 10 * gameMapLevel;
-            kingdomRes.Gold = 10 * gameMapLevel;
-            kingdomRes.Wood = 10 * gameMapLevel;
-            protectionState = 1;
-
-    }
-
+    this.kingdomRes = getKingdomPlannedRes(this.kingdomID);
+    this.protectionState = getKingdomPlannedProtectionState(this.kingdomID);
     saveParams();
 }
 
@@ -374,74 +344,81 @@ public void resetProtectionState(int gameMapLevel) {
         String flagBasementName;
 
         switch (kingdomNames){
-            case Kingdom_of_the_North: kingdomRes.Bread = 10;
-                kingdomRes.Gold = 10;
-                kingdomRes.Wood = 10;
+            case Kingdom_of_the_North:
                 if(protectionState==0){
-                    filenames = filenames0;
-                    flagBasementName = "flag_red/flagbasement.png";
+                    //filenames = filenames0;
+                    baseActorFlag.setAnimation(cradleGame.getCradleAssetManager().getAnimation(Assets.FLAGRED_ANIMATION_ID));
+                    //flagBasementName = "flag_red/flagbasement.png";
+                    baseActor.setAnimation(cradleGame.getCradleAssetManager().getAnimation(Assets.FLAGBASEMENTRED_ANIMATION_ID));
                 }else{
-                    filenames = filenames7;
-                    flagBasementName = "flag_gray/flagbasement.png";
+                    //filenames = filenames7;
+                    baseActorFlag.setAnimation(cradleGame.getCradleAssetManager().getAnimation(Assets.FLAGGRAY_ANIMATION_ID));
+                    //flagBasementName = "flag_gray/flagbasement.png";
+                    baseActor.setAnimation(cradleGame.getCradleAssetManager().getAnimation(Assets.FLAGBASEMENTGRAY_ANIMATION_ID));
                 }
                 break;
-            case Kingdom_of_the_Isles_and_Rivers: kingdomRes.Bread = 10;
-                kingdomRes.Gold = 10;
-                kingdomRes.Wood = 10;
-                filenames=filenames1;
-                flagBasementName = "flag_yellow/flagbasement.png";
+            case Kingdom_of_the_Isles_and_Rivers:
+                //filenames=filenames1;
+                baseActorFlag.setAnimation(cradleGame.getCradleAssetManager().getAnimation(Assets.FLAGYELLOW_ANIMATION_ID));
+                //flagBasementName = "flag_yellow/flagbasement.png";
+                baseActor.setAnimation(cradleGame.getCradleAssetManager().getAnimation(Assets.FLAGBASEMENTYELLOW_ANIMATION_ID));
                 break;
-            case Kingdom_of_the_Mountain_and_the_Vale: kingdomRes.Bread = 10;
-                kingdomRes.Gold = 10;
-                kingdomRes.Wood = 10;
-                filenames = filenames2;
-                flagBasementName = "flag_purple/flagbasement.png";
+            case Kingdom_of_the_Mountain_and_the_Vale:
+                //filenames = filenames2;
+                baseActorFlag.setAnimation(cradleGame.getCradleAssetManager().getAnimation(Assets.FLAGPURPLE_ANIMATION_ID));
+                //flagBasementName = "flag_purple/flagbasement.png";
+                baseActor.setAnimation(cradleGame.getCradleAssetManager().getAnimation(Assets.FLAGBASEMENTPURPLE_ANIMATION_ID));
                 break;
-            case Kingdom_of_the_Reach: kingdomRes.Bread = 10;
-                kingdomRes.Gold = 10;
-                kingdomRes.Wood = 10;
-                filenames = filenames3;
-                flagBasementName = "flag_orange/flagbasement.png";
+            case Kingdom_of_the_Reach:
+                //filenames = filenames3;
+                baseActorFlag.setAnimation(cradleGame.getCradleAssetManager().getAnimation(Assets.FLAGORANGE_ANIMATION_ID));
+                //flagBasementName = "flag_orange/flagbasement.png";
+                baseActor.setAnimation(cradleGame.getCradleAssetManager().getAnimation(Assets.FLAGBASEMENTORANGE_ANIMATION_ID));
                 break;
-            case Kingdom_of_the_Rock: kingdomRes.Bread = 10;
-                kingdomRes.Gold = 10;
-                kingdomRes.Wood = 10;
-                filenames=filenames4;
-                flagBasementName = "flag_green/flagbasement.png";
+            case Kingdom_of_the_Rock:
+                //filenames=filenames4;
+                baseActorFlag.setAnimation(cradleGame.getCradleAssetManager().getAnimation(Assets.FLAGGREEN_ANIMATION_ID));
+                //flagBasementName = "flag_green/flagbasement.png";
+                baseActor.setAnimation(cradleGame.getCradleAssetManager().getAnimation(Assets.FLAGBASEMENTGREEN_ANIMATION_ID));
                 break;
-            case Kingdom_of_the_Stormlands: kingdomRes.Bread = 10;
-                kingdomRes.Gold = 10;
-                kingdomRes.Wood = 10;
-                filenames = filenames5;
-                flagBasementName = "flag_brown/flagbasement.png";
+            case Kingdom_of_the_Stormlands:
+                //filenames = filenames5;
+                baseActorFlag.setAnimation(cradleGame.getCradleAssetManager().getAnimation(Assets.FLAGBROWN_ANIMATION_ID));
+                //flagBasementName = "flag_brown/flagbasement.png";
+                baseActor.setAnimation(cradleGame.getCradleAssetManager().getAnimation(Assets.FLAGBASEMENTBROWN_ANIMATION_ID));
                 break;
-            case Principality_of_Dorne: kingdomRes.Bread = 10;
-                kingdomRes.Gold = 10;
-                kingdomRes.Wood = 10;
-                filenames=filenames6;
-                flagBasementName = "flag_blue/flagbasement.png";
+            case Principality_of_Dorne:
+                //filenames=filenames6;
+                baseActorFlag.setAnimation(cradleGame.getCradleAssetManager().getAnimation(Assets.FLAGBLUE_ANIMATION_ID));
+                //flagBasementName = "flag_blue/flagbasement.png";
+                baseActor.setAnimation(cradleGame.getCradleAssetManager().getAnimation(Assets.FLAGBASEMENTBLUE_ANIMATION_ID));
                 break;
 
             default:
-                kingdomRes.Bread = 10;
-                kingdomRes.Gold = 10;
-                kingdomRes.Wood = 10;
-                filenames = filenames00;
-                flagBasementName = "flag_red/flagbasement.png";
+
+                //filenames = filenames00;
+                baseActorFlag.setAnimation(cradleGame.getCradleAssetManager().getAnimation(Assets.FLAGRED_ANIMATION_ID));
+                //flagBasementName = "flag_red/flagbasement.png";
+                baseActor.setAnimation(cradleGame.getCradleAssetManager().getAnimation(Assets.FLAGBASEMENTRED_ANIMATION_ID));
 
         }
 
         if(protectionState==0){
-            filenames = filenames0;
-            flagBasementName = "flag_red/flagbasement.png";
+            //filenames = filenames0;
+            baseActorFlag.setAnimation(cradleGame.getCradleAssetManager().getAnimation(Assets.FLAGRED_ANIMATION_ID));
+            //flagBasementName = "flag_red/flagbasement.png";
+            baseActor.setAnimation(cradleGame.getCradleAssetManager().getAnimation(Assets.FLAGBASEMENTRED_ANIMATION_ID));
         }
 
-        animation = createAnimationFromFiles(filenames, 0.1f, true, flagSize,  flagSize);
+        //animation = createAnimationFromFiles(filenames, 0.1f, true, flagSize,  flagSize);
+        /*
         if (baseActor != null) {
             baseActor.setAnimation(animation);
             baseActor.AddImage(flagBasementName, 0, 0, flagSize, flagSize);
         }
+*/
 
+        //baseActor.loadTexture(flagBasementName,flagSize,flagSize);
     }
 
     @Override
@@ -509,6 +486,11 @@ public void resetProtectionState(int gameMapLevel) {
         cradleGame.getPrefs().putLong("KingdomTime"+kingdomID,timeOfLastGoldCollection);
         cradleGame.getPrefs().putInteger("LevelOfKingdom"+kingdomID,levelOfKingdom);
         cradleGame.getPrefs().putInteger("KingdomProtectionState"+kingdomID,protectionState);
+
+        cradleGame.getPrefs().putInteger("KingdomGoldParams"+kingdomID,this.kingdomRes.Gold);
+        cradleGame.getPrefs().putInteger("KingdomBreadParams"+kingdomID,this.kingdomRes.Bread);
+        cradleGame.getPrefs().putInteger("KingdomWoodParams"+kingdomID,this.kingdomRes.Wood);
+
         cradleGame.getPrefs().flush();
         System.out.println("saveParams(): setProtectionState id="+kingdomID+ " = "+protectionState);
     }
@@ -517,6 +499,218 @@ public void resetProtectionState(int gameMapLevel) {
         timeOfLastGoldCollection = cradleGame.getPrefs().getLong("KingdomTime"+kingdomID,System.currentTimeMillis());
         levelOfKingdom = cradleGame.getPrefs().getInteger("LevelOfKingdom"+kingdomID,1);
         setProtectionState(cradleGame.getPrefs().getInteger("KingdomProtectionState"+kingdomID,5));
+
+        kingdomRes.Gold = cradleGame.getPrefs().getInteger("KingdomGoldParams"+kingdomID,1);
+        kingdomRes.Bread = cradleGame.getPrefs().getInteger("KingdomBreadParams"+kingdomID,1);
+        kingdomRes.Wood = cradleGame.getPrefs().getInteger("KingdomWoodParams"+kingdomID,1);
+
+
         System.out.println("getParams(): setProtectionState id="+kingdomID+ " = "+ cradleGame.getPrefs().getInteger("KingdomProtectionState"+kingdomID,5));
     }
+
+
+    public static int getKingdomPlannedProtectionState(int Id){
+        int res=5;
+        switch(Id){
+            //level 1
+            case 0: res=0;break;
+            case 1: res=5;break;
+            case 2: res=7;break;
+            case 3: res=5;break;
+            case 4: res=7;break;
+            case 5: res=5;break;
+            case 6: res=7;break;
+
+            //level 2
+            case 10: res=6;break;
+            case 11: res=8;break;
+            case 12: res=6;break;
+            case 13: res=8;break;
+            case 14: res=6;break;
+            case 15: res=8;break;
+            case 16: res=6;break;
+
+            // level 3
+            case 20: res=7;break;
+            case 21: res=9;break;
+            case 22: res=7;break;
+            case 23: res=9;break;
+            case 24: res=7;break;
+            case 25: res=9;break;
+            case 26: res=7;break;
+
+            // level 4
+            case 30: res=10;break;
+            case 31: res=10;break;
+            case 32: res=8;break;
+            case 33: res=10;break;
+            case 34: res=8;break;
+            case 35: res=10;break;
+            case 36: res=10;break;
+        }
+        return res;
+    }
+
+    public static KingdomRes getKingdomPlannedRes(int Id){
+        KingdomRes kingdomRes=new KingdomRes();
+
+        switch(Id){
+            //level 1
+            case 0:
+                kingdomRes.Gold = 10;
+                kingdomRes.Bread = 10;
+                kingdomRes.Wood = 10;
+            break;
+            case 1:
+                kingdomRes.Gold = 15;
+                kingdomRes.Bread = 10;
+                kingdomRes.Wood = 15;
+                break;
+            case 2:
+                kingdomRes.Gold = 10;
+                kingdomRes.Bread = 25;
+                kingdomRes.Wood = 10;
+                break;
+            case 3:
+                kingdomRes.Gold = 20;
+                kingdomRes.Bread = 10;
+                kingdomRes.Wood = 10;
+                break;
+            case 4:
+                kingdomRes.Gold = 10;
+                kingdomRes.Bread = 10;
+                kingdomRes.Wood = 20;
+                break;
+            case 5:
+                kingdomRes.Gold = 20;
+                kingdomRes.Bread = 20;
+                kingdomRes.Wood = 20;
+                break;
+            case 6:
+                kingdomRes.Gold = 5;
+                kingdomRes.Bread = 5;
+                kingdomRes.Wood = 5;
+                break;
+
+            //level 2
+            case 10:
+                kingdomRes.Gold = 20;
+                kingdomRes.Bread = 20;
+                kingdomRes.Wood = 20;
+                break;
+            case 11:
+                kingdomRes.Gold = 30;
+                kingdomRes.Bread = 20;
+                kingdomRes.Wood = 30;
+                break;
+            case 12:
+                kingdomRes.Gold = 10;
+                kingdomRes.Bread = 35;
+                kingdomRes.Wood = 10;
+                break;
+            case 13:
+                kingdomRes.Gold = 40;
+                kingdomRes.Bread = 10;
+                kingdomRes.Wood = 10;
+                break;
+            case 14:
+                kingdomRes.Gold = 10;
+                kingdomRes.Bread = 10;
+                kingdomRes.Wood = 40;
+                break;
+            case 15:
+                kingdomRes.Gold = 30;
+                kingdomRes.Bread = 30;
+                kingdomRes.Wood = 30;
+                break;
+            case 16:
+                kingdomRes.Gold = 10;
+                kingdomRes.Bread = 10;
+                kingdomRes.Wood = 10;
+                break;
+
+            // level 3
+            case 20:
+                kingdomRes.Gold = 30;
+                kingdomRes.Bread = 30;
+                kingdomRes.Wood = 30;
+                break;
+            case 21:
+                kingdomRes.Gold = 50;
+                kingdomRes.Bread = 20;
+                kingdomRes.Wood = 50;
+                break;
+            case 22:
+                kingdomRes.Gold = 20;
+                kingdomRes.Bread = 50;
+                kingdomRes.Wood = 20;
+                break;
+            case 23:
+                kingdomRes.Gold = 80;
+                kingdomRes.Bread = 20;
+                kingdomRes.Wood = 20;
+                break;
+            case 24:
+                kingdomRes.Gold = 20;
+                kingdomRes.Bread = 20;
+                kingdomRes.Wood = 60;
+                break;
+            case 25:
+                kingdomRes.Gold = 50;
+                kingdomRes.Bread = 50;
+                kingdomRes.Wood = 50;
+                break;
+            case 26:
+                kingdomRes.Gold = 20;
+                kingdomRes.Bread = 20;
+                kingdomRes.Wood = 20;
+                break;
+
+            // level 4
+            case 30:
+                kingdomRes.Gold = 40;
+                kingdomRes.Bread = 40;
+                kingdomRes.Wood = 40;
+                break;
+            case 31:
+                kingdomRes.Gold = 70;
+                kingdomRes.Bread = 30;
+                kingdomRes.Wood = 70;
+                break;
+            case 32:
+                kingdomRes.Gold = 30;
+                kingdomRes.Bread = 80;
+                kingdomRes.Wood = 30;
+                break;
+            case 33:
+                kingdomRes.Gold = 90;
+                kingdomRes.Bread = 40;
+                kingdomRes.Wood = 30;
+                break;
+            case 34:
+                kingdomRes.Gold = 30;
+                kingdomRes.Bread = 30;
+                kingdomRes.Wood = 90;
+                break;
+            case 35:
+                kingdomRes.Gold = 80;
+                kingdomRes.Bread = 80;
+                kingdomRes.Wood = 80;
+                break;
+            case 36:
+                kingdomRes.Gold = 30;
+                kingdomRes.Bread = 30;
+                kingdomRes.Wood = 30;
+                break;
+                default:
+                    kingdomRes.Gold = 10;
+                    kingdomRes.Bread = 10;
+                    kingdomRes.Wood = 10;
+                    break;
+        }
+
+        return kingdomRes;
+    }
+
+
 }
