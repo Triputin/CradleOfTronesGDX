@@ -177,13 +177,13 @@ public class MenuScreen extends BaseScreen {
         //LeaderBoard button
         Button.ButtonStyle buttonStyles = new Button.ButtonStyle();
 
-        Texture buttonTexs = new Texture( Gdx.files.internal("leaderboard_button.png") );
+        Texture buttonTexs = new Texture( Gdx.files.internal("leaderboard_button01.png") );
         TextureRegion buttonRegions =  new TextureRegion(buttonTexs);
         buttonStyles.up = new TextureRegionDrawable( buttonRegions );
 
 
         Button leaderBoardButton = new Button( buttonStyles );
-        leaderBoardButton.setSize(h*0.21f,h*0.21f);
+        leaderBoardButton.setSize(h*0.22f,h*0.22f);
         leaderBoardButton.setPosition(w-leaderBoardButton.getWidth()-10,h*0.75f);
         uiStage.addActor(leaderBoardButton);
 

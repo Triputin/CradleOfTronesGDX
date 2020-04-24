@@ -70,11 +70,15 @@ public class CradleGame extends BaseGame
 
     private CradleAssetManager cradleAssetManager;
 
+    private int loadingState = 0;
+    //private CradleGame self;
+
     public CradleGame(IActivityRequestHandler handler, IPlayServices ply, INotification notification) {
         //connect core code with platform objects from launchers which implemented interfaces
         this.myRequestHandler = handler;
         this.ply=ply;
         this.notification = notification;
+        //this.self = this;
         notification.cancelReminder(DefaultWorkerTag); //remove all notifications
         cradleAssetManager = new CradleAssetManager();
 
@@ -98,7 +102,6 @@ public class CradleGame extends BaseGame
         myRequestHandler.showAds(false);
         super.create();
 
-        //splashScreen.progressLabel.updateText("5%");
 
 /*
         // post a Runnable to the rendering thread that processes the result
@@ -114,18 +117,53 @@ public class CradleGame extends BaseGame
 
 */
 
-/*
-        final long splash_start_time = System.currentTimeMillis();
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-
-                Gdx.app.postRunnable(new Runnable() {
-                    @Override
-                    public void run() {
 
 
-                        Init();
+
+
+
+     }
+
+     /*
+public void Init(){
+    final long splash_start_time = System.currentTimeMillis();
+    new Thread(new Runnable() {
+        @Override
+        public void run() {
+
+            //cradleAssetManager.prepareAnimations(self);
+            Gdx.app.postRunnable(new Runnable() {
+                @Override
+                public void run() {
+                    loadingState=1;
+
+                }
+            });
+
+            Init01();
+            Gdx.app.postRunnable(new Runnable() {
+                @Override
+                public void run() {
+                    loadingState=2;
+
+                }
+            });
+            Init02();
+            Gdx.app.postRunnable(new Runnable() {
+                @Override
+                public void run() {
+                    loadingState=3;
+
+                }
+            });
+            Init03();
+            Gdx.app.postRunnable(new Runnable() {
+                @Override
+                public void run() {
+                    loadingState=4;
+
+                }
+            });
 
 
                         // Se muestra el menu principal tras la SpashScreen
@@ -144,22 +182,19 @@ public class CradleGame extends BaseGame
 
 
 
-                    }
-                });
-            }
-        }).start();
 
 
+
+
+        }
+    }).start();
+
+}
 */
-
-
-     }
 
 
     public void Init01(){
         // Gdx.app.setLogLevel(Application.LOG_DEBUG);
-
-
 
         //Setup settings provider
         long ct = System.currentTimeMillis();
@@ -888,6 +923,10 @@ public class CradleGame extends BaseGame
         return bombSize;
     }
 
-
+    /*
+    public int getLoadingState() {
+        return loadingState;
+    }
+*/
 
 }

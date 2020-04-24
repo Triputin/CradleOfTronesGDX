@@ -175,7 +175,7 @@ public class LoadingScreen implements Screen {
 
         if (cradleGame.getCradleAssetManager().manager.update() && (percent>0.49f)&&(loadingPhase==1)) { // Load some, will return true if done loading
 
-            loadingPercentFase2 =0.3f;
+            loadingPercentFase2=0.3f;
             loadingPhase=2;
             System.out.println("Loading... Init01");
             cradleGame.Init01();
