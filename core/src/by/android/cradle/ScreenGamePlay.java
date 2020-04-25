@@ -48,6 +48,7 @@ public class ScreenGamePlay extends BaseScreen {
     private ItemPos directionToFill;
     private ResultsActor resultsActor;
     private Label gameLevelLabel;
+    private AttackTarget attackTarget;
 
     private ScreenGamePlay screenGamePlay;
     private SandGlass sandGlass;
@@ -69,7 +70,6 @@ public class ScreenGamePlay extends BaseScreen {
     private Long timeLastSelectionEnded;
     public Knight knight;
     public Weapon weapon;
-
 
 
     public ScreenGamePlay(CradleGame cradleGame,IPlayServices ply) {
@@ -182,17 +182,22 @@ public class ScreenGamePlay extends BaseScreen {
             if (sandglassduration > 400) sandglassduration = 400;
         }
 
-        sandGlass = new SandGlass(x,y,uiStage,sw, Math.round( gameFieldWidth*0.8f), sandglassduration,cradleGame);
+        sandGlass = new SandGlass(x,0,uiStage,sw, Math.round( gameFieldWidth*0.8f), sandglassduration,cradleGame);
         //Game level
         //gameLevel = 1 ;
-        gameLevelLabel = new Label("  "+0, BaseGame.labelStyle);
+        gameLevelLabel = new Label("  "+0, BaseGame.labelStyle_SuperSmall);
         gameLevelLabel.setText(""+gameLevel);
         gameLevelLabel.setColor( Color.GOLDENROD );
-        gameLevelLabel.setPosition( sandGlass.getX()+sandGlass.getWidth()/3,y-5 );
-        gameLevelLabel.setFontScale(2.0f);
+        gameLevelLabel.setPosition( sandGlass.getX()+sandGlass.getWidth()*0.4f,10 );
+        //gameLevelLabel.setFontScale(2.0f);
         uiStage.addActor(gameLevelLabel);
 
-
+        //Attack target info
+        float targetSizeX = (cradleGame.getW()-(gameField.getX()+gameField.getWidth()))*0.95f;
+        float targetSizeY = targetSizeX*0.5f;
+        float targetPosX = cradleGame.getW()- (cradleGame.getW()-(gameField.getX()+gameField.getWidth()))*0.5f-targetSizeX*0.5f;
+        float targetPosY = cradleGame.getH()*0.875f-targetSizeY;
+        attackTarget = new AttackTarget(targetPosX,targetPosY,uiStage,Math.round(targetSizeX),Math.round(targetSizeY),cradleGame);
 
 /*
 
@@ -562,6 +567,11 @@ public class ScreenGamePlay extends BaseScreen {
         lastSelectedItem = null;
         firstSelectedItem = null;
 
+        if( gameField.CheckWin()){
+            //isEndOfLevelAnimation=true;
+            WinMessageAndNewLevelCreate();
+
+        }
     }
 
 public void RemoveAndFillSquare(int centreRow, int centreCol, int squareSize){
@@ -599,6 +609,12 @@ public void RemoveAndFillSquare(int centreRow, int centreCol, int squareSize){
 
     lastSelectedItem = null;
     firstSelectedItem = null;
+
+    if( gameField.CheckWin()){
+        //isEndOfLevelAnimation=true;
+        WinMessageAndNewLevelCreate();
+
+    }
 
 }
 
@@ -707,9 +723,12 @@ public void RemoveAndFillSquare(int centreRow, int centreCol, int squareSize){
                 }
             }
 
-            // unlock items on fo one level
+            // unlock items on for one level
             for (int i = 0; i < itemArrayList.size(); i++) {
-                itemArrayList.get(i).UnlockForOneLevel();
+                if (itemArrayList.get(i).getLockLevel()>0) {
+                    if (itemArrayList.get(i).UnlockForOneLevel() == 0) {
+                    }
+                }
             }
 
 
@@ -756,6 +775,7 @@ public void RemoveAndFillSquare(int centreRow, int centreCol, int squareSize){
         item1.remove();
         lastSelectedItem=null;
         firstSelectedItem=null;
+        attackTarget.setAttackQtty(cradleGame.getAttackQtty());
         return arrayList;
     }
 
@@ -1353,7 +1373,16 @@ public void RemoveAndFillSquare(int centreRow, int centreCol, int squareSize){
             sandglassduration = getLevelDuration() + gameLevel*2 - 20;
             if (sandglassduration > 400) sandglassduration = 400;
         }
-        sandGlass = new SandGlass(x,y,uiStage,sw,Math.round( cellSize*CellCount*0.8f), sandglassduration,cradleGame);
+        sandGlass = new SandGlass(x,0,uiStage,sw,Math.round( cellSize*CellCount*0.8f), sandglassduration,cradleGame);
+
+        //Attack target info
+        float targetSizeX = (cradleGame.getW()-(gameField.getX()+gameField.getWidth()))*0.95f;
+        float targetSizeY = targetSizeX*0.5f;
+        float targetPosX = cradleGame.getW()- (cradleGame.getW()-(gameField.getX()+gameField.getWidth()))*0.5f-targetSizeX*0.5f;
+        float targetPosY = cradleGame.getH()*0.875f-targetSizeY;
+        attackTarget.remove();
+        attackTarget = new AttackTarget(targetPosX,targetPosY,uiStage,Math.round(targetSizeX),Math.round(targetSizeY),cradleGame);
+        attackTarget.setAttackQtty(cradleGame.getAttackQtty());
         isPaused=false;
 
 

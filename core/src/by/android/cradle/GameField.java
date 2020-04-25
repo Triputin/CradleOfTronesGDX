@@ -232,7 +232,11 @@ public void PrintSolutions(ArrayList<ArrayList<Item>> arrayLists){
 public void changeGameCell(Cell cell){
     for(int i = 0;i<gameCells.size();i++){
         if(gameCells.get(i).getCell().isEqual(cell)){
+            if (gameCells.get(i).getLockLevel()==1){ //lower attack target if cell totally cleared
+                cradleGame.setAttackQtty(cradleGame.getAttackQtty()-1);
+            }
             gameCells.get(i).unLock(cell);
+
         }
     }
 }
@@ -351,6 +355,7 @@ public void changeGameCell(Cell cell){
             }
         }
 
+        cradleGame.setAttackQtty(countOfOrangeCells); // holds target for attack
        // System.out.println("GameField.GenerateLevel: countOfOrangeCells= "+countOfOrangeCells);
 
     }

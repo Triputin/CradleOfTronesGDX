@@ -96,6 +96,9 @@ public class CradleAssetManager  {
         manager.load(Assets.BOMBTIME);
         manager.load(Assets.BOMBSQUARE01);
         manager.load(Assets.BOMBSQUARE02);
+        //Buttons
+        manager.load(Assets.BUTTONGOLD);
+        manager.load(Assets.BUTTONGOLD_PRESSED);
 
     }
 
@@ -104,7 +107,7 @@ public class CradleAssetManager  {
     }
 
     //Scale textures up to screen resolution and prepare animation sets for Actors
-    public void prepareAnimations(CradleGame cradleGame){
+    public void prepareAnimations01(CradleGame cradleGame){
 
         //Animations
         hashMapAnimations.put(Assets.SOLAREFFECT_ANIMATION_ID,loadAnimationFromAssetsAtlas(Assets.SOLAREFFECT_ATLAS,1,5,0.2f, true,  cradleGame.getCellSize(),  cradleGame.getCellSize()));
@@ -133,12 +136,18 @@ public class CradleAssetManager  {
         hashMapAnimations.put(Assets.WORLDMAP03_ANIMATION_ID,loadAnimationFromAssets(Assets.WORLDMAP03,cradleGame.getW(),  cradleGame.getH()));
         hashMapAnimations.put(Assets.WORLDMAP04_ANIMATION_ID,loadAnimationFromAssets(Assets.WORLDMAP04,cradleGame.getW(),  cradleGame.getH()));
 
-
         //Flags animations
         hashMapAnimations.put(Assets.FLAGRED_ANIMATION_ID,loadAnimationFromAssetsAtlas(Assets.FLAGRED_ATLAS,6,2,0.2f, true,  cradleGame.getKingdomsize(),  Math.round(cradleGame.getKingdomsize()/2.3f)));
         hashMapAnimations.put(Assets.FLAGBLUE_ANIMATION_ID,loadAnimationFromAssetsAtlas(Assets.FLAGBLUE_ATLAS,6,2,0.2f, true,  cradleGame.getKingdomsize(),   Math.round(cradleGame.getKingdomsize()/2.3f)));
         hashMapAnimations.put(Assets.FLAGGREEN_ANIMATION_ID,loadAnimationFromAssetsAtlas(Assets.FLAGGREEN_ATLAS,6,2,0.2f, true,  cradleGame.getKingdomsize(),   Math.round(cradleGame.getKingdomsize()/2.3f)));
         hashMapAnimations.put(Assets.FLAGYELLOW_ANIMATION_ID,loadAnimationFromAssetsAtlas(Assets.FLAGYELLOW_ATLAS,6,2,0.2f, true,  cradleGame.getKingdomsize(),   Math.round(cradleGame.getKingdomsize()/2.3f)));
+
+    }
+
+    //Scale textures up to screen resolution and prepare animation sets for Actors
+    public void prepareAnimations02(CradleGame cradleGame){
+
+        //Flags animations
         hashMapAnimations.put(Assets.FLAGGRAY_ANIMATION_ID,loadAnimationFromAssetsAtlas(Assets.FLAGGRAY_ATLAS,6,2,0.2f, true,  cradleGame.getKingdomsize(),   Math.round(cradleGame.getKingdomsize()/2.3f)));
         hashMapAnimations.put(Assets.FLAGBROWN_ANIMATION_ID,loadAnimationFromAssetsAtlas(Assets.FLAGBROWN_ATLAS,6,2,0.2f, true,  cradleGame.getKingdomsize(),   Math.round(cradleGame.getKingdomsize()/2.3f)));
         hashMapAnimations.put(Assets.FLAGORANGE_ANIMATION_ID,loadAnimationFromAssetsAtlas(Assets.FLAGORANGE_ATLAS,6,2,0.2f, true,  cradleGame.getKingdomsize(),   Math.round(cradleGame.getKingdomsize()/2.3f)));
@@ -159,6 +168,9 @@ public class CradleAssetManager  {
         hashMapAnimations.put(Assets.BOMBSQUARE01_ANIMATION_ID,loadAnimationFromAssets(Assets.BOMBSQUARE01 , cradleGame.getBombSize(),  cradleGame.getBombSize()));
         hashMapAnimations.put(Assets.BOMBSQUARE02_ANIMATION_ID,loadAnimationFromAssets(Assets.BOMBSQUARE02,  cradleGame.getBombSize(),  cradleGame.getBombSize()));
 
+        //Buttons
+        hashMapAnimations.put(Assets.BUTTONGOLD_ANIMATION_ID,loadAnimationFromAssets(Assets.BUTTONGOLD,  cradleGame.getButtonXSize(),  cradleGame.getButtonYSize()));
+        hashMapAnimations.put(Assets.BUTTONGOLD_PRESSED_ANIMATION_ID,loadAnimationFromAssets(Assets.BUTTONGOLD_PRESSED,  cradleGame.getButtonXSize(),  cradleGame.getButtonYSize()));
 
 
         //Actors (Images) // Don't work, if actor the same it works equally everywhere
@@ -303,7 +315,7 @@ public class CradleAssetManager  {
         texture200.dispose();
 
 
-        TextureRegion textureRegion=new TextureRegion( texture );
+        //TextureRegion textureRegion=new TextureRegion( texture );
 
         TextureRegion imgTextureRegion = new TextureRegion(texture);
         //imgTextureRegion.setRegion(0,0,getWidth(),getHeight());
@@ -316,6 +328,32 @@ public class CradleAssetManager  {
         //addActor(img);
         //texture.dispose(); // it influences to the image! so image holds pointer to texture.
         return img;
+
+    }
+
+    //Scale textures up to screen resolution
+    public Texture ScaleTexture(AssetDescriptor<Texture> assetDescriptor,int x, int y, int width, int height)
+    {
+
+        Texture texture200 =  manager.get(assetDescriptor);
+        TextureData textureData200 = texture200.getTextureData();
+        if (!textureData200.isPrepared()) {
+            textureData200.prepare();
+        }
+        Pixmap pixmap200 = textureData200.consumePixmap();
+
+        Pixmap pixmap100 = new Pixmap(width, height, pixmap200.getFormat());
+        pixmap100.drawPixmap(pixmap200,
+                0, 0, pixmap200.getWidth(), pixmap200.getHeight(),
+                0, 0, pixmap100.getWidth(), pixmap100.getHeight()
+        );
+        Texture texture = new Texture(pixmap100);
+        texture.setFilter( Texture.TextureFilter.Linear, Texture.TextureFilter.Linear );
+        pixmap200.dispose();
+        pixmap100.dispose();
+        texture200.dispose();
+
+        return texture;
 
     }
 

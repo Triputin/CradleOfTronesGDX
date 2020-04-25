@@ -33,6 +33,11 @@ public abstract class BaseGame extends Game
     protected static BaseGame game;
 
     public static LabelStyle labelStyle; // BitmapFont + Color
+    public static LabelStyle labelStyle_SuperSmall; // BitmapFont + Color
+    public static LabelStyle labelStyle_Small; // BitmapFont + Color
+    public static LabelStyle labelStyle_Middle; // BitmapFont + Color
+    public static LabelStyle labelStyle_Big; // BitmapFont + Color
+
     public static TextButtonStyle textButtonStyle; // NPD + BitmapFont + Color
     public static TextButtonStyle textButtonStyleCheck; // for check boxes
     public static Skin skin;
@@ -40,12 +45,16 @@ public abstract class BaseGame extends Game
 
     public static final String FONT_CHARACTERS = "абвгдеёжзийклмнопрстуфхцчшщъыьэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯabcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789][_!$%#@|\\/?-+=()*&.;,{}\"´`'<>";
 
+
+    protected CradleAssetManager cradleAssetManager;
+
     /**
      *  Called when game is initialized; stores global reference to game object.
      */
-    public BaseGame() 
+    public BaseGame()
     {        
         game = this;
+        cradleAssetManager = new CradleAssetManager();
     }
 
     /**
@@ -55,85 +64,11 @@ public abstract class BaseGame extends Game
     public void create() 
     {        
         // prepare for multiple classes/stages/actors to receive discrete input
-        int w = Gdx.graphics.getWidth();
-        int h = Gdx.graphics.getHeight();
-
         InputMultiplexer im = new InputMultiplexer();
         Gdx.input.setInputProcessor( im );
 
         //Gdx.input.setCatchKey(Input.Keys.BACK, true); //to catch the back key so it is not passed on to the operating system
         //Gdx.input.setCatchKey(Input.Keys.MENU, true);
-
-        // parameters for generating a custom bitmap font
-        FreeTypeFontGenerator fontGenerator = 
-            new FreeTypeFontGenerator(Gdx.files.internal("opensans.ttf"));
-        FreeTypeFontParameter fontParameters = new FreeTypeFontParameter();
-        fontParameters.size = 24;
-        fontParameters.characters = FONT_CHARACTERS;
-        fontParameters.color = Color.WHITE;
-        fontParameters.borderWidth = 2;
-        fontParameters.borderColor = Color.BLACK;
-        fontParameters.borderStraight = true;
-        fontParameters.minFilter = TextureFilter.Linear;
-        fontParameters.magFilter = TextureFilter.Linear;
-
-        BitmapFont customFont = fontGenerator.generateFont(fontParameters);
-
-        labelStyle = new LabelStyle();
-        labelStyle.font = customFont;
-        
-        textButtonStyle = new TextButtonStyle();
-
-        Texture   buttonTex   = new Texture( Gdx.files.internal("goldbutton.png") );
-        NinePatch buttonPatch = new NinePatch(buttonTex, 14,14,24,24);
-        textButtonStyle.up    = new NinePatchDrawable( buttonPatch );
-
-        Texture   buttonTex2   = new Texture( Gdx.files.internal("goldbutton_pressed.png") );
-        NinePatch buttonPatch2 = new NinePatch(buttonTex2, 14,14,24,24);
-        textButtonStyle.down    = new NinePatchDrawable( buttonPatch2 );
-
-        textButtonStyle.font      = customFont;
-        textButtonStyle.fontColor = Color.GRAY;
-
-        skin = new Skin(Gdx.files.internal("data/uiskin.json"));
-
-        if (w>1000){
-            fontParameters.size = 40;
-        } else {
-            fontParameters.size = 24;
-        }
-        BitmapFont customFontCheck = fontGenerator.generateFont(fontParameters);
-        textButtonStyleCheck = new TextButtonStyle();
-
-        Texture   buttonTexCheck   = new Texture( Gdx.files.internal("button01_normal_s.png") );
-        NinePatch buttonPatchCheck = new NinePatch(buttonTexCheck, 14,14,14,14);
-        textButtonStyleCheck.up    = new NinePatchDrawable( buttonPatchCheck );
-
-        Texture   buttonTexCheck3= new Texture( Gdx.files.internal("button01_checked_s.png") );
-        NinePatch buttonPatchCheck3 = new NinePatch(buttonTexCheck3, 14,14,24,24);
-        textButtonStyleCheck.checked = new NinePatchDrawable( buttonPatchCheck3 );
-
-        textButtonStyleCheck.font      = customFontCheck;
-        textButtonStyleCheck.fontColor = Color.GRAY;
-
-
-        //Don't work!!!!! Dialog crashes!
-        // This is the Skin that we'll use to design our dialog
-        dialogSkin = new Skin();
-        // The only mandatory resource required for a Dialog is the WindowStyle
-        Window.WindowStyle ws = new Window.WindowStyle();
-        ws.titleFontColor = Color.GOLD;
-        ws.titleFont = customFont;
-        ws.stageBackground = new Image(new Texture( Gdx.files.internal("goldbutton.png") )).getDrawable();
-
-        TextureRegion texture_region = new TextureRegion(new Texture( Gdx.files.internal("goldbutton.png") ));
-        Sprite sprite = new Sprite(texture_region);
-        NinePatch np = new NinePatch(sprite, 15, 15, 15, 15);
-        NinePatchDrawable npd = new NinePatchDrawable(np);
-        // We're using the 9patch drawable as the dialog element background
-        ws.background = npd;
-        // This WindowStyle needs to be set as the default style in the skin
-        dialogSkin.add("default", ws);
 
     }
 
@@ -144,6 +79,10 @@ public abstract class BaseGame extends Game
     public static void setActiveScreen(BaseScreen s)
     {
         game.setScreen(s);
+    }
+
+    public CradleAssetManager getCradleAssetManager() {
+        return cradleAssetManager;
     }
 
 }

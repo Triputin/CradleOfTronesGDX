@@ -90,36 +90,36 @@ private ShopItem squareBomb2;
         //left square pos
         int rightSqX = leftSqX + sizeSquare ;
 
-        Label leftLabel = new Label(" ", BaseGame.labelStyle);
+        Label leftLabel = new Label(" ", BaseGame.labelStyle_Small);
         String s = cradleGame.getLanguageStrings().get("resources_available");
         leftLabel.setText(s);
         leftLabel.setColor( Color.GOLDENROD );
         leftLabel.setPosition(leftSqX,wh*0.8f);
-        leftLabel.setFontScale(1.1f);
+        //leftLabel.setFontScale(1.1f);
         uiStage.addActor(leftLabel);
 
-        Label rightLabel = new Label(" ", BaseGame.labelStyle);
+        Label rightLabel = new Label(" ", BaseGame.labelStyle_Small);
         s = cradleGame.getLanguageStrings().get("items_for_trade");
         rightLabel.setText(s);
         rightLabel.setColor( Color.GOLDENROD );
         rightLabel.setPosition( leftSqX+sizeSquare,wh*0.8f);
-        rightLabel.setFontScale(1.1f);
+        //rightLabel.setFontScale(1.1f);
         uiStage.addActor(rightLabel);
 
-        Label sLabel = new Label(" ", BaseGame.labelStyle);
+        Label sLabel = new Label(" ", BaseGame.labelStyle_Small);
         s = cradleGame.getLanguageStrings().get("you_will_sell");
         sLabel.setText(s);
         sLabel.setColor( Color.GOLDENROD );
         sLabel.setPosition( leftSqX*0.8f,wh/3);
-        sLabel.setFontScale(1.0f);
+        //sLabel.setFontScale(1.0f);
         uiStage.addActor(sLabel);
 
-        Label gLabel = new Label(" ", BaseGame.labelStyle);
+        Label gLabel = new Label(" ", BaseGame.labelStyle_Small);
         s = cradleGame.getLanguageStrings().get("you_will_get");
         gLabel.setText(s);
         gLabel.setColor( Color.GOLDENROD );
         gLabel.setPosition( leftSqX*2+sizeSquare,wh/3);
-        gLabel.setFontScale(1.0f);
+        //gLabel.setFontScale(1.0f);
         uiStage.addActor(gLabel);
 
 

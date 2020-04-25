@@ -130,6 +130,18 @@ public class Assets {
     public static final AssetDescriptor<Texture> BOMBSQUARE02 =
             new AssetDescriptor<Texture>("squarebomb02.png", Texture.class);
 
+    //Buttons
+    public static final AssetDescriptor<Texture> BUTTONGOLD =
+            new AssetDescriptor<Texture>("buttons/goldbutton.png", Texture.class);
+    public static final AssetDescriptor<Texture> BUTTONGOLD_PRESSED =
+            new AssetDescriptor<Texture>("buttons/goldbutton_pressed.png", Texture.class);
+
+
+    //Frames
+    //public static final AssetDescriptor<Texture> FRAMEGOLD01 =
+    //        new AssetDescriptor<Texture>(".png", Texture.class);
+
+
     //Sounds and music
     public static final AssetDescriptor<Music> MUSIC_2_HEARTS =
             new AssetDescriptor<Music>("sounds/2_hearts.mp3", Music.class);
@@ -200,6 +212,8 @@ public class Assets {
     public static final int BOMBSQUARE01_ANIMATION_ID = 43;
     public static final int BOMBSQUARE02_ANIMATION_ID = 44;
 
+    public static final int BUTTONGOLD_ANIMATION_ID = 45;
+    public static final int BUTTONGOLD_PRESSED_ANIMATION_ID = 46;
 
 
 }

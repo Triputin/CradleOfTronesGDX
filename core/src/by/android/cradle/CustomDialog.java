@@ -21,6 +21,7 @@ public class CustomDialog extends Dialog {
         dialog_height = height;
         int w = Gdx.graphics.getWidth();
         int h = Gdx.graphics.getHeight();
+
         if (w>1000) {
             getButtonTable().defaults().height(height * 0.3f);
         } else
@@ -48,17 +49,20 @@ public class CustomDialog extends Dialog {
     public CustomDialog text(String text) {
         int w = Gdx.graphics.getWidth();
         int h = Gdx.graphics.getHeight();
+        /*
         float fontScale = 1.0f;
         if (w>1000){
             fontScale = 1.5f;
         } else {
             fontScale = 0.6f;
         }
-        Label dialogLabel = new Label(text, BaseGame.labelStyle);
+        */
+
+        Label dialogLabel = new Label(text, BaseGame.labelStyle_SuperSmall);
         dialogLabel.setWrap(true);
         dialogLabel.setAlignment( Align.center );
         dialogLabel.setWidth( dialog_width);
-        dialogLabel.setFontScale(fontScale);
+        //dialogLabel.setFontScale(fontScale);
         dialogLabel.setColor(Color.GOLD);
         text(dialogLabel);
         return this;

@@ -44,6 +44,7 @@ public class BlackMarketScreen extends BaseScreen {
 
         int w = Gdx.graphics.getWidth();
         int h = Gdx.graphics.getHeight();
+        /*
         float fontScale = 1.0f;
         float fontScale2 = 1.0f;
         if (w>1000){
@@ -53,6 +54,7 @@ public class BlackMarketScreen extends BaseScreen {
             fontScale = 0.8f;
             fontScale2 = 2.0f;
         }
+        */
 
         int wh;
         if (w > h) {
@@ -67,19 +69,19 @@ public class BlackMarketScreen extends BaseScreen {
         BaseActor hall = new BaseActor(0, 0, mainStage, Touchable.disabled, cradleGame);
         hall.loadTexture("blackmarketfon.png", w, h);
 
-        Label label = new Label(" ", BaseGame.labelStyle);
+        Label label = new Label(" ", BaseGame.labelStyle_SuperSmall);
         String s = cradleGame.getLanguageStrings().get("moveheretobuy");
         label.setText(s);
         label.setColor(Color.GOLDENROD);
-        label.setFontScale(fontScale);
+        //label.setFontScale(fontScale);
         label.setPosition(w*0.65f , h * 0.35f);
         mainStage.addActor(label);
 
-        Label label2 = new Label(" ", BaseGame.labelStyle);
+        Label label2 = new Label(" ", BaseGame.labelStyle_Small);
         String s2 = cradleGame.getLanguageStrings().get("presstofindoutitemparameters");
         label2.setText(s2);
         label2.setColor(Color.GOLDENROD);
-        label2.setFontScale(fontScale);
+        //label2.setFontScale(fontScale);
         label2.setPosition(w*0.03f , h * 0.93f);
         mainStage.addActor(label2);
 
@@ -174,12 +176,12 @@ public class BlackMarketScreen extends BaseScreen {
         mightBadge.setPosition(mightBadge.getWidth() * 0.3f, mightBadge.getWidth() * 0.05f);
         might.addActor(mightBadge);
 
-        mightLabel = new Label(" ", BaseGame.labelStyle);
+        mightLabel = new Label(" ", BaseGame.labelStyle_Middle);
         s = "";
         mightLabel.setText(s);
         mightLabel.setColor(Color.GOLDENROD);
-        mightLabel.setPosition(lineX + lineSizeW / 1.8f, lineY + might.getHeight() * 0.4f);
-        mightLabel.setFontScale(fontScale2);
+        mightLabel.setPosition(lineX + lineSizeW / 1.8f, lineY + might.getHeight() * 0.2f);
+        //mightLabel.setFontScale(fontScale2);
         mainStage.addActor(mightLabel);
 
 
@@ -194,12 +196,12 @@ public class BlackMarketScreen extends BaseScreen {
         lifeBadge.setPosition(lifeBadge.getWidth() * 0.3f, lifeBadge.getWidth() * 0.05f);
         life.addActor(lifeBadge);
 
-        lifeLabel = new Label(" ", BaseGame.labelStyle);
+        lifeLabel = new Label(" ", BaseGame.labelStyle_Middle);
         s = "";
         lifeLabel.setText(s);
         lifeLabel.setColor(Color.GOLDENROD);
-        lifeLabel.setPosition(lineX+lineSizeW+10 + lineSizeW / 1.8f, lineY  + life.getHeight() * 0.4f);
-        lifeLabel.setFontScale(fontScale2);
+        lifeLabel.setPosition(lineX+lineSizeW+10 + lineSizeW / 1.8f, lineY  + life.getHeight() * 0.2f);
+        //lifeLabel.setFontScale(fontScale2);
         mainStage.addActor(lifeLabel);
 
         // Speed
@@ -213,12 +215,12 @@ public class BlackMarketScreen extends BaseScreen {
         speedBadge.setPosition(speedBadge.getWidth() * 0.3f, speedBadge.getWidth() * 0.05f);
         speedActor.addActor(speedBadge);
 
-        speedLabel = new Label(" ", BaseGame.labelStyle);
+        speedLabel = new Label(" ", BaseGame.labelStyle_Middle);
         s = "";
         speedLabel.setText(s);
         speedLabel.setColor(Color.GOLDENROD);
-        speedLabel.setPosition(lineX+lineSizeW*2+20 + lineSizeW / 1.8f, lineY  + speedActor.getHeight() * 0.4f);
-        speedLabel.setFontScale(fontScale2);
+        speedLabel.setPosition(lineX+lineSizeW*2+20 + lineSizeW / 1.8f, lineY  + speedActor.getHeight() * 0.2f);
+        //speedLabel.setFontScale(fontScale2);
         mainStage.addActor(speedLabel);
 
 

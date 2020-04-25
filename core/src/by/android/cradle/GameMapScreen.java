@@ -213,7 +213,7 @@ public class GameMapScreen extends BaseScreen {
             }
         });
 
-        messageActor01 = new MessageActor01(0,0,uiStage,500,200,cradleGame);
+        messageActor01 = new MessageActor01(0,0,uiStage,Math.round(cradleGame.getH()*0.6f),Math.round(cradleGame.getH()*0.25f),cradleGame);
         messageActor01.setVisible(false);
         UpdateRes();
 
@@ -491,24 +491,24 @@ public class GameMapScreen extends BaseScreen {
         int dialogYSize = Math.round(h*0.8f);
         int dialogXSize = Math.round(w*0.7f);
         if (mapLevelInfoDialog==null) {
-            mapLevelInfoDialog = new DialogBox(w / 2 - dialogXSize / 2, h / 2 - dialogYSize / 2, uiStage, dialogXSize, dialogYSize, cradleGame);
+            mapLevelInfoDialog = new DialogBox(w / 2 - dialogXSize / 2, h / 2 - dialogYSize / 2, uiStage, dialogXSize, dialogYSize, cradleGame, BaseGame.labelStyle_SuperSmall);
         }
         else
         {
             mapLevelInfoDialog.remove();
-            mapLevelInfoDialog = new DialogBox(w / 2 - dialogXSize / 2, h / 2 - dialogYSize / 2, uiStage, dialogXSize, dialogYSize, cradleGame);
+            mapLevelInfoDialog = new DialogBox(w / 2 - dialogXSize / 2, h / 2 - dialogYSize / 2, uiStage, dialogXSize, dialogYSize, cradleGame, BaseGame.labelStyle_SuperSmall);
 
         }
         mapLevelInfoDialog.setVisible(false);
 
         //Castle is yours info dialog
         if (castleIsYoursDialog == null ){
-            castleIsYoursDialog = new DialogBox(0, 0, uiStage, Math.round(w*0.25f), Math.round(h*0.2f), cradleGame);
+            castleIsYoursDialog = new DialogBox(0, 0, uiStage, Math.round(w*0.25f), Math.round(h*0.2f), cradleGame, BaseGame.labelStyle_Small);
 
         } else
         {
             castleIsYoursDialog.remove();
-            castleIsYoursDialog = new DialogBox(0, 0, uiStage, Math.round(w*0.25f), Math.round(h*0.2f), cradleGame);
+            castleIsYoursDialog = new DialogBox(0, 0, uiStage, Math.round(w*0.25f), Math.round(h*0.2f), cradleGame, BaseGame.labelStyle_Small);
         }
         castleIsYoursDialog.setVisible(false);
         castleIsYoursDialog.alignCenter();
@@ -524,7 +524,7 @@ public class GameMapScreen extends BaseScreen {
 
         }
         levelOfHardnessDialog.setVisible(false);
-        levelOfHardnessDialog.setFontScale(1.6f);
+        //levelOfHardnessDialog.setFontScale(1.6f);
         //levelOfHardnessDialog.setZIndex(200);
 
 
@@ -595,11 +595,14 @@ public class GameMapScreen extends BaseScreen {
 
         mapLevelInfoDialog.setText(getTextForMapLevel(mapLevel));
         int w = Gdx.graphics.getWidth();
+
+        /*
         if (w>1000){
             mapLevelInfoDialog.setFontScale(1.4f);
         } else {
             mapLevelInfoDialog.setFontScale(0.6f);
         }
+       */
 
         mapLevelInfoDialog.setZIndex(101);
         mapLevelInfoDialog.showWithOkButton(inputListener2);
@@ -735,8 +738,8 @@ public class GameMapScreen extends BaseScreen {
         actions = sequence(fadeOut(0.01f), Actions.delay(3),fadeIn(1f) , completeAction);
 
         String s = cradleGame.getLanguageStrings().get("throne_is_yours");
-        messageLabel = new Label(s, BaseGame.labelStyle);
-        messageLabel.setFontScale(3);
+        messageLabel = new Label(s, BaseGame.labelStyle_Big);
+        //messageLabel.setFontScale(3);
         messageLabel.setVisible(true);
         messageLabel.setX((ww-messageLabel.getWidth())/2.0f);
         messageLabel.setY(h*0.4f);

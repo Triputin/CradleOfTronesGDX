@@ -52,11 +52,10 @@ public class GameCell extends BaseActor {
         return cell;
     }
 
-    public void unLock(Cell cell){
+    public int unLock(Cell cell){
         if(cell.isEqual(this.cell)){
-            this.lowerLockLevel();
-            //loadTexture("gamecell.png", (int) getWidth(), (int) getHeight());
+                lowerLockLevel();
         }
-
+        return lockLevel;
     }
 }

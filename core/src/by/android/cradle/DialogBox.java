@@ -1,5 +1,6 @@
 package by.android.cradle;
 
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -21,13 +22,13 @@ public class DialogBox extends BaseActor
     private float padding = 42;
     TextButton okButton;
 
-    public DialogBox(float x, float y, Stage s, int width, int height,CradleGame cradleGame1)
+    public DialogBox(float x, float y, Stage s, int width, int height, CradleGame cradleGame1, Label.LabelStyle labelStyle)
     {
         super(x,y,s, Touchable.enabled,cradleGame1);
         loadTexture( "goldenframe01.png",width,height );
         AddImage("fon_white.png",Math.round(width*0.04f),Math.round(height*0.08f),Math.round(width*0.93f), Math.round(height*0.85f));
 
-        dialogLabel = new Label(" ", BaseGame.labelStyle);
+        dialogLabel = new Label(" ",labelStyle);
         dialogLabel.setWrap(true);
         dialogLabel.setAlignment( Align.topLeft );
         dialogLabel.setPosition( Math.round(width*0.075f), Math.round(height*0.1f) );
@@ -85,4 +86,6 @@ public class DialogBox extends BaseActor
 
 
     }
+
+
 }

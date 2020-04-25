@@ -17,22 +17,22 @@ public class ResultsActorForAttack extends BaseActor{
         setWidth(width);
         baseActor.AddImage("results_fo_attack.png",Math.round(x),Math.round(y), (int) getWidth(), (int) getHeight());
 
-        goldQuantityLabel = new Label(" "+0, BaseGame.labelStyle);
+        goldQuantityLabel = new Label(" "+0, BaseGame.labelStyle_Middle);
         goldQuantityLabel.setColor( Color.GOLDENROD );
-        goldQuantityLabel.setPosition( x+width*0.15f,y+20 );
-        goldQuantityLabel.setFontScale(2f);
+        goldQuantityLabel.setPosition( x+width*0.15f,y );
+        //goldQuantityLabel.setFontScale(2f);
         baseActor.addActor(goldQuantityLabel);
 
-        woodQuantityLabel = new Label(" "+0, BaseGame.labelStyle);
+        woodQuantityLabel = new Label(" "+0, BaseGame.labelStyle_Middle);
         woodQuantityLabel.setColor( Color.GOLDENROD );
-        woodQuantityLabel.setPosition( x+width*0.45f,y+20 );
-        woodQuantityLabel.setFontScale(2f);
+        woodQuantityLabel.setPosition( x+width*0.45f,y );
+        //woodQuantityLabel.setFontScale(2f);
         baseActor.addActor(woodQuantityLabel);
 
-        breadQuantityLabel = new Label(" "+0, BaseGame.labelStyle);
+        breadQuantityLabel = new Label(" "+0, BaseGame.labelStyle_Middle);
         breadQuantityLabel.setColor( Color.GOLDENROD );
-        breadQuantityLabel.setPosition( x+width*0.82f,y+20 );
-        breadQuantityLabel.setFontScale(2f);
+        breadQuantityLabel.setPosition( x+width*0.82f,y );
+        //breadQuantityLabel.setFontScale(2f);
         baseActor.addActor(breadQuantityLabel);
 
     }

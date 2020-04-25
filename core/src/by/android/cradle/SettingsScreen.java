@@ -219,7 +219,7 @@ public class SettingsScreen extends BaseScreen {
 
 
         String s = cradleGame.getLanguageStrings().get("information");
-        Dialog dialog = new CustomDialog("", BaseGame.skin, h*0.7f,h*0.3f) {
+        Dialog dialog = new CustomDialog("", BaseGame.skin, h*0.7f,h*0.5f) {
             public void result(Object obj) {
                 if (obj.toString()=="true"){
                 cradleGame.restartGame();

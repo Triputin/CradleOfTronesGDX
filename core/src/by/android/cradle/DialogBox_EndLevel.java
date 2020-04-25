@@ -36,20 +36,23 @@ public class DialogBox_EndLevel  extends BaseActor{
 
         int w = Gdx.graphics.getWidth();
         int h = Gdx.graphics.getHeight();
+        /*
         float fontScale = 1.0f;
         if (w>1000){
             fontScale = 1.5f;
         } else {
             fontScale = 0.8f;
         }
+        */
+
 
         String ms = cradleGame.getLanguageStrings().get("levelresults");
-        dialogLabel = new Label(ms, BaseGame.labelStyle);
+        dialogLabel = new Label(ms, BaseGame.labelStyle_Middle);
         dialogLabel.setWrap(true);
         dialogLabel.setAlignment( Align.center );
-        dialogLabel.setPosition( Math.round(width*0.077f), Math.round(height*0.83f) );
+        dialogLabel.setPosition( Math.round(width*0.077f), Math.round(height*0.81f) );
         dialogLabel.setWidth( width - 2 * padding );
-        dialogLabel.setFontScale(fontScale);
+        //dialogLabel.setFontScale(fontScale);
         dialogLabel.setColor(Color.GOLD);
         this.addActor(dialogLabel);
 
@@ -58,9 +61,9 @@ public class DialogBox_EndLevel  extends BaseActor{
         int pict1posX = Math.round(width*0.2f);
         int pict1posY = Math.round(height*0.63f);
         AddImage("goldcup.png",pict1posX,pict1posY,pictSize,pictSize);
-        scoreLabel = new Label("42", BaseGame.labelStyle);
+        scoreLabel = new Label("42", BaseGame.labelStyle_Middle);
         //pict1Label.setAlignment(Align.left,Align.center);
-        scoreLabel.setFontScale(fontScale);
+        //scoreLabel.setFontScale(fontScale);
         scoreLabel.setPosition(Math.round(width*0.7f),pict1posY+pictSize*.3f);
         this.addActor(scoreLabel);
 
@@ -68,8 +71,8 @@ public class DialogBox_EndLevel  extends BaseActor{
         pict1posX = Math.round(width*0.2f);
         pict1posY = Math.round(height*0.5f);
         AddImage("coin2.png",pict1posX,pict1posY,pictSize,pictSize);
-        goldLabel = new Label("43", BaseGame.labelStyle);
-        goldLabel.setFontScale(fontScale);
+        goldLabel = new Label("43", BaseGame.labelStyle_Middle);
+        //goldLabel.setFontScale(fontScale);
         goldLabel.setPosition(Math.round(width*0.7f),pict1posY+pictSize*.25f);
         this.addActor(goldLabel);
 
@@ -77,8 +80,8 @@ public class DialogBox_EndLevel  extends BaseActor{
         pict1posX = Math.round(width*0.2f);
         pict1posY = Math.round(height*0.36f);
         AddImage("wood.png",pict1posX,pict1posY,pictSize,pictSize);
-        woodLabel = new Label("42", BaseGame.labelStyle);
-        woodLabel.setFontScale(fontScale);
+        woodLabel = new Label("42", BaseGame.labelStyle_Middle);
+        //woodLabel.setFontScale(fontScale);
         woodLabel.setPosition(Math.round(width*0.7f),pict1posY+pictSize*.25f);
         this.addActor(woodLabel);
 
@@ -86,8 +89,8 @@ public class DialogBox_EndLevel  extends BaseActor{
         pict1posX = Math.round(width*0.2f);
         pict1posY = Math.round(height*0.24f);
         AddImage("bread.png",pict1posX,pict1posY,pictSize,pictSize);
-        breadLabel = new Label("42", BaseGame.labelStyle);
-        breadLabel.setFontScale(fontScale);
+        breadLabel = new Label("42", BaseGame.labelStyle_Middle);
+        //breadLabel.setFontScale(fontScale);
         breadLabel.setPosition(Math.round(width*0.7f),pict1posY+pictSize*.25f);
         this.addActor(breadLabel);
 
@@ -98,7 +101,7 @@ public class DialogBox_EndLevel  extends BaseActor{
             okButton.setWidth(okButton.getWidth()*0.8f);
             okButton.setHeight(okButton.getHeight()*0.8f);
         }
-        okButton.setPosition(Math.round(width*0.5f-okButton.getWidth()/2f),height*0.09f);
+        okButton.setPosition(Math.round(width*0.5f-okButton.getWidth()/2f),height*0.12f);
         this.addActor(okButton);
 
     }

@@ -214,6 +214,7 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
 		AdRequest adRequest = new AdRequest.Builder()
 				.addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
 				.addTestDevice("10D929FF85B7803BB2D5CEE273F4FBFE")
+				.addTestDevice("51E3C88D530A640ED6513B1BD4C9DB62")
 				.build();
 		adView.loadAd(adRequest);
 

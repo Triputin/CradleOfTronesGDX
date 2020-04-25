@@ -41,6 +41,7 @@ public class Weapon extends DragAndDropActor {
                 System.out.println("Drop target item row "+ item.getRow()+" col "+item.getCol());
                 //cradleGame.getScreenGamePlay().RemoveAndFillSquare(item.getRow(),item.getCol(),squareSize);
                 cradleGame.getScreenGamePlay().RemoveAndFillCells(item.getRow(),item.getCol(),knight.getCellsQttyToDestroy());
+
             }
         }
     }

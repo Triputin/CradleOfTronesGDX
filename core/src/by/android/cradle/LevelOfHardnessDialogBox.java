@@ -12,7 +12,7 @@ public class LevelOfHardnessDialogBox extends DialogBox {
     Button hardButton;
 
     public LevelOfHardnessDialogBox(float x, float y, Stage s, int width, int height, CradleGame cradleGame1) {
-        super(x, y, s, width, height, cradleGame1);
+        super(x, y, s, width, height, cradleGame1, BaseGame.labelStyle_Small);
 
         int w = Gdx.graphics.getWidth();
         int h = Gdx.graphics.getHeight();

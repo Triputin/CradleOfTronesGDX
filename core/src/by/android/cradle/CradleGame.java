@@ -1,8 +1,22 @@
 package by.android.cradle;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Preferences;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.NinePatch;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Window;
+import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.utils.I18NBundle;
 import com.badlogic.gdx.utils.Timer;
 
@@ -25,6 +39,8 @@ public class CradleGame extends BaseGame
     private final int DAILY_GIFT_AMOUNT = 25;
     private  int kingdomsize;
     private int bombSize;
+    private int buttonXSize;
+    private int buttonYSize;
     public final int MaxGameMapLevel=4;
     private int gameMapLevel; //currentGameMapLevelToShow
     private int maxOpenedMapLevel; // Player win maps levels+1;
@@ -68,7 +84,7 @@ public class CradleGame extends BaseGame
     private IPlayServices ply; //interface to connect core with android google play services
     private INotification notification; // interface for sending notifications to user
 
-    private CradleAssetManager cradleAssetManager;
+    private int attackQtty;
 
     private int loadingState = 0;
     //private CradleGame self;
@@ -80,8 +96,6 @@ public class CradleGame extends BaseGame
         this.notification = notification;
         //this.self = this;
         notification.cancelReminder(DefaultWorkerTag); //remove all notifications
-        cradleAssetManager = new CradleAssetManager();
-
     }
 
     public void create()
@@ -96,6 +110,11 @@ public class CradleGame extends BaseGame
         cellSize = (h-resHeight)/CellCount;
         this.kingdomsize = h/9;
         bombSize = h / 6;
+
+        //buttonXSize = Math.round(h*0.35f);
+        //buttonYSize = Math.round(h*0.2f);
+        buttonXSize = Math.round(h*0.2f);
+        buttonYSize = Math.round(h*0.1f);
 
         setScreen(new LoadingScreen(this));
 
@@ -196,6 +215,8 @@ public void Init(){
     public void Init01(){
         // Gdx.app.setLogLevel(Application.LOG_DEBUG);
 
+        prepareStyles();
+
         //Setup settings provider
         long ct = System.currentTimeMillis();
         prefs = Gdx.app.getPreferences("settings.prefs2");
@@ -219,6 +240,12 @@ public void Init(){
         //GameRes.Score=999; // for debug
         knightParams.CheckKnightLevelAtScore(GameRes.Score); // Set KnightLevel according current dependence from Score. It's for old players.
         menuScreen = new MenuScreen(this,ply);
+
+        System.out.println("Init01 time : " +(System.currentTimeMillis()-ct));
+    }
+
+    public void Init02(){
+        long ct = System.currentTimeMillis();
         screenGamePlay = new ScreenGamePlay(this,ply);
 
         int gameLevel = prefs.getInteger("gameLevel", 1);
@@ -226,22 +253,39 @@ public void Init(){
         screenGamePlay.setGameLevel(gameLevel);
         difficultyLevel = prefs.getInteger("levelofhardness", 0);
         //difficultyLevel = 0; // for debug purpose
-        System.out.println("Init01 time : " +(System.currentTimeMillis()-ct));
-    }
-
-    public void Init02(){
-        long ct = System.currentTimeMillis();
-        gameMapScreen = new GameMapScreen(this,ply);
-        helpScreen = new HelpScreen(this,ply);
-        shopScreen = new ShopScreen(this,ply);
-        settingsScreen = new SettingsScreen(this,ply);
-        knightScreen = new KnightScreen(this,ply);
         System.out.println("Init02 time : " +(System.currentTimeMillis()-ct));
     }
 
     public void Init03(){
         long ct = System.currentTimeMillis();
+        gameMapScreen = new GameMapScreen(this,ply);
+        System.out.println("Init03 time : " +(System.currentTimeMillis()-ct));
+    }
+
+    public void Init04(){
+        long ct = System.currentTimeMillis();
+        helpScreen = new HelpScreen(this,ply);
+        shopScreen = new ShopScreen(this,ply);
+        settingsScreen = new SettingsScreen(this,ply);
+
+        System.out.println("Init04 time : " +(System.currentTimeMillis()-ct));
+    }
+
+    public void Init05(){
+        long ct = System.currentTimeMillis();
+        knightScreen = new KnightScreen(this,ply);
+        System.out.println("Init05 time : " +(System.currentTimeMillis()-ct));
+    }
+
+
+    public void Init06(){
+        long ct = System.currentTimeMillis();
         worldScreen = new WorldScreen(this,ply);
+        System.out.println("Init06 time : " +(System.currentTimeMillis()-ct));
+    }
+
+    public void Init07(){
+        long ct = System.currentTimeMillis();
 
         // Check daily gift
         GregorianCalendar calendarG = new GregorianCalendar();
@@ -288,10 +332,8 @@ public void Init(){
             prefs.flush();
 
         }
-        System.out.println("Init03 time : " +(System.currentTimeMillis()-ct));
+        System.out.println("Init07 time : " +(System.currentTimeMillis()-ct));
     }
-
-
 
     public void getResFromStorage(){
         GameRes.Bread=prefs.getInteger("Bread", 100);
@@ -855,9 +897,7 @@ public void Init(){
         cradleAssetManager.dispose();
     }
 
-    public CradleAssetManager getCradleAssetManager() {
-        return cradleAssetManager;
-    }
+
 
     public int getW() {
         return w;
@@ -923,10 +963,133 @@ public void Init(){
         return bombSize;
     }
 
-    /*
-    public int getLoadingState() {
-        return loadingState;
+    public int getButtonXSize() {
+        return buttonXSize;
     }
+
+    public int getButtonYSize() {
+        return buttonYSize;
+    }
+
+    private void prepareStyles(){
+        int w = Gdx.graphics.getWidth();
+        int h = Gdx.graphics.getHeight();
+
+        // parameters for generating a custom bitmap font
+        FreeTypeFontGenerator fontGenerator =
+                new FreeTypeFontGenerator(Gdx.files.internal("opensans.ttf"));
+        FreeTypeFontGenerator.FreeTypeFontParameter fontParameters = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        fontParameters.size = Math.round(h*0.03f); //24
+        fontParameters.characters = FONT_CHARACTERS;
+        fontParameters.color = Color.WHITE;
+        fontParameters.borderWidth = 2;
+        fontParameters.borderColor = Color.BLACK;
+        fontParameters.borderStraight = true;
+        fontParameters.minFilter = Texture.TextureFilter.Linear;
+        fontParameters.magFilter = Texture.TextureFilter.Linear;
+
+        BitmapFont customFont = fontGenerator.generateFont(fontParameters);
+
+        labelStyle = new Label.LabelStyle();
+        labelStyle.font = customFont;
+
+
+        //SuperSmall label text
+        fontParameters.size = Math.round(h*0.033f);
+        BitmapFont customFont_SuperSmall = fontGenerator.generateFont(fontParameters);
+        labelStyle_SuperSmall = new Label.LabelStyle();
+        labelStyle_SuperSmall.font = customFont_SuperSmall;
+
+        //Small label text
+        fontParameters.size = Math.round(h*0.045f);
+        BitmapFont customFont_small = fontGenerator.generateFont(fontParameters);
+        labelStyle_Small = new Label.LabelStyle();
+        labelStyle_Small.font = customFont_small;
+
+        //Middle label text
+        fontParameters.size = Math.round(h*0.06f);
+        BitmapFont customFont_Middle = fontGenerator.generateFont(fontParameters);
+        labelStyle_Middle = new Label.LabelStyle();
+        labelStyle_Middle.font = customFont_Middle;
+
+        //Big label text
+        fontParameters.size = Math.round(h*0.14f);
+        BitmapFont customFont_Big = fontGenerator.generateFont(fontParameters);
+        labelStyle_Big = new Label.LabelStyle();
+        labelStyle_Big.font = customFont_Big;
+
+
+        //TextButtonStyle
+        textButtonStyle = new TextButton.TextButtonStyle();
+        //Texture   buttonTex   = new Texture( Gdx.files.internal("goldbutton.png") );
+        Texture   buttonTex = getCradleAssetManager().getAnimation(Assets.BUTTONGOLD_ANIMATION_ID).getKeyFrame(0).getTexture();
+        NinePatch buttonPatch = new NinePatch(buttonTex, 10,10,14,14);
+        textButtonStyle.up    = new NinePatchDrawable( buttonPatch );
+        //Texture   buttonTex2   = new Texture( Gdx.files.internal("buttons/goldbutton_pressed.png") );
+        Texture   buttonTex2 = getCradleAssetManager().getAnimation(Assets.BUTTONGOLD_PRESSED_ANIMATION_ID).getKeyFrame(0).getTexture();
+        NinePatch buttonPatch2 = new NinePatch(buttonTex2, 10,10,14,14);
+        textButtonStyle.down    = new NinePatchDrawable( buttonPatch2 );
+        textButtonStyle.font      = customFont;
+        textButtonStyle.fontColor = Color.GRAY;
+/*
+        float scale = 0.5f;
+        float currentHeight = textButtonStyle.up.getMinHeight();
+        textButtonStyle.up.setMinHeight(currentHeight * scale);
+
 */
+
+        skin = new Skin(Gdx.files.internal("data/uiskin.json"));
+
+        /*
+        if (w>1000){
+            fontParameters.size = 40;
+        } else {
+            fontParameters.size = 24;
+        }
+        */
+
+        fontParameters.size = Math.round(h*0.038f);;
+
+        BitmapFont customFontCheck = fontGenerator.generateFont(fontParameters);
+        textButtonStyleCheck = new TextButton.TextButtonStyle();
+
+        Texture   buttonTexCheck   = new Texture( Gdx.files.internal("button01_normal_s.png") );
+        NinePatch buttonPatchCheck = new NinePatch(buttonTexCheck, 14,14,14,14);
+        textButtonStyleCheck.up    = new NinePatchDrawable( buttonPatchCheck );
+
+        Texture   buttonTexCheck3= new Texture( Gdx.files.internal("button01_checked_s.png") );
+        NinePatch buttonPatchCheck3 = new NinePatch(buttonTexCheck3, 14,14,24,24);
+        textButtonStyleCheck.checked = new NinePatchDrawable( buttonPatchCheck3 );
+
+        textButtonStyleCheck.font      = customFontCheck;
+        textButtonStyleCheck.fontColor = Color.GRAY;
+
+
+        //Don't work!!!!! Dialog crashes!
+        // This is the Skin that we'll use to design our dialog
+        dialogSkin = new Skin();
+        // The only mandatory resource required for a Dialog is the WindowStyle
+        Window.WindowStyle ws = new Window.WindowStyle();
+        ws.titleFontColor = Color.GOLD;
+        ws.titleFont = customFont;
+        ws.stageBackground = new Image(new Texture( Gdx.files.internal("buttons/goldbutton.png") )).getDrawable();
+
+        TextureRegion texture_region = new TextureRegion(new Texture( Gdx.files.internal("buttons/goldbutton.png") ));
+        Sprite sprite = new Sprite(texture_region);
+        NinePatch np = new NinePatch(sprite, 15, 15, 15, 15);
+        NinePatchDrawable npd = new NinePatchDrawable(np);
+        // We're using the 9patch drawable as the dialog element background
+        ws.background = npd;
+        // This WindowStyle needs to be set as the default style in the skin
+        dialogSkin.add("default", ws);
+    }
+
+    public int getAttackQtty() {
+        return attackQtty;
+    }
+
+    public void setAttackQtty(int attackQtty) {
+        this.attackQtty = attackQtty;
+    }
 
 }

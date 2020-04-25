@@ -440,10 +440,11 @@ public boolean isLocked(){
         return count;
     }
 
-    public void UnlockForOneLevel(){
+    public int UnlockForOneLevel(){
         if (lockLevel>0){
             setLockLevel(lockLevel-1);
         }
+        return lockLevel;
     }
 
 

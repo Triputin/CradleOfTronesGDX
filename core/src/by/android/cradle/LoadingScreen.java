@@ -152,55 +152,106 @@ public class LoadingScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 
-        if (cradleGame.getCradleAssetManager().manager.update()&& percent>0.99f&& (loadingPhase==4)) { // Load some, will return true if done loading
-            long ct = System.currentTimeMillis();
-            loadingPhase=5;
-            cradleGame.setScreen(cradleGame.getMenuScreen());
-            System.out.println("set Menu Screen time : " +(System.currentTimeMillis()-ct));
-        }
-
         // Interpolate the percentage to make it more smooth
         percent = Interpolation.linear.apply(percent, cradleGame.getCradleAssetManager().manager.getProgress()*0.3f+loadingPercentFase2, 0.1f);
 
 
         if (cradleGame.getCradleAssetManager().manager.update() && (loadingPhase==0)) { // Load some, will return true if done loading
-            System.out.println("Loading... prepareAnimations");
+            System.out.println("Loading... prepareAnimations01");
             long ct = System.currentTimeMillis();
-            cradleGame.getCradleAssetManager().prepareAnimations(cradleGame);
-            System.out.println("prepareAnimations time : " +(System.currentTimeMillis()-ct));
-            loadingPercentFase2 =0.2f;
+            cradleGame.getCradleAssetManager().prepareAnimations01(cradleGame);
+            System.out.println("prepareAnimations01 time : " +(System.currentTimeMillis()-ct));
+            loadingPercentFase2 = 0.1f;
             loadingPhase=1;
-
         }
 
-        if (cradleGame.getCradleAssetManager().manager.update() && (percent>0.49f)&&(loadingPhase==1)) { // Load some, will return true if done loading
+        switch(loadingPhase) {
+            case 1:
+                if (cradleGame.getCradleAssetManager().manager.update()) { // Load some, will return true if done loading
+                    System.out.println("Loading... prepareAnimations02");
+                    long ct = System.currentTimeMillis();
+                    cradleGame.getCradleAssetManager().prepareAnimations02(cradleGame);
+                    System.out.println("prepareAnimations02 time : " +(System.currentTimeMillis()-ct));
+                    loadingPercentFase2 = 0.2f;
+                    loadingPhase=2;
+                }
+                break;
+            case 2:
+                if (cradleGame.getCradleAssetManager().manager.update() && (percent>0.29f)) { // Load some, will return true if done loading
 
-            loadingPercentFase2=0.3f;
-            loadingPhase=2;
-            System.out.println("Loading... Init01");
-            cradleGame.Init01();
+                    loadingPercentFase2=0.1f;
+                    loadingPhase=3;
+                    System.out.println("Loading... Init01");
+                    cradleGame.Init01();
+                }
+                break;
+            case 3:
+                if (cradleGame.getCradleAssetManager().manager.update() && (percent>0.39f)) { // Load some, will return true if done loading
 
+                    loadingPercentFase2=0.2f;
+                    loadingPhase=4;
+                    System.out.println("Loading... Init02");
+                    cradleGame.Init02();
+                }
+                break;
+            case 4:
+                if (cradleGame.getCradleAssetManager().manager.update() && (percent>0.49f)) { // Load some, will return true if done loading
+
+                    loadingPercentFase2=0.3f;
+                    loadingPhase=5;
+                    System.out.println("Loading... Init03");
+                    cradleGame.Init03();
+                }
+                break;
+            case 5:
+                if (cradleGame.getCradleAssetManager().manager.update() && (percent>0.59f)) { // Load some, will return true if done loading
+
+                    loadingPercentFase2=0.4f;
+                    loadingPhase=6;
+                    System.out.println("Loading... Init04");
+                    cradleGame.Init04();
+                }
+                break;
+            case 6:
+                if (cradleGame.getCradleAssetManager().manager.update() && (percent>0.69f)) { // Load some, will return true if done loading
+
+                    loadingPercentFase2=0.5f;
+                    loadingPhase=7;
+                    System.out.println("Loading... Init05");
+                    cradleGame.Init05();
+                }
+                break;
+            case 7:
+                if (cradleGame.getCradleAssetManager().manager.update() && (percent>0.79f)) { // Load some, will return true if done loading
+
+                    loadingPercentFase2=0.6f;
+                    loadingPhase=8;
+                    System.out.println("Loading... Init06");
+                    cradleGame.Init06();
+                }
+                break;
+            case 8:
+                if (cradleGame.getCradleAssetManager().manager.update() && (percent>0.89f)) { // Load some, will return true if done loading
+
+                    loadingPercentFase2=0.7f;
+                    loadingPhase=9;
+                    System.out.println("Loading... Init07");
+                    cradleGame.Init07();
+                }
+                break;
         }
 
-        if (cradleGame.getCradleAssetManager().manager.update() && (percent>0.59f)&&(loadingPhase==2)) { // Load some, will return true if done loading
 
-            cradleGame.getCradleAssetManager().prepareAnimations(cradleGame);
-            loadingPercentFase2 =0.4f;
-            loadingPhase=3;
-            System.out.println("Loading... Init02");
-            cradleGame.Init02();
 
+        // Finish loading
+        if (cradleGame.getCradleAssetManager().manager.update()&& percent>0.99f&& (loadingPhase==9)) {
+            long ct = System.currentTimeMillis();
+            loadingPhase=10;
+            cradleGame.setScreen(cradleGame.getMenuScreen());
+            System.out.println("set Menu Screen time : " +(System.currentTimeMillis()-ct));
         }
 
-        if (cradleGame.getCradleAssetManager().manager.update() && (percent>0.69f)&&(loadingPhase==3)) { // Load some, will return true if done loading
 
-            cradleGame.getCradleAssetManager().prepareAnimations(cradleGame);
-            loadingPercentFase2 =0.7f;
-            loadingPhase=4;
-            System.out.println("Loading... Init03");
-            cradleGame.Init03();
-
-        }
 
         // Update positions (and size) to match the percentage
         loadingBarHidden.setX(startX + endX * percent);
