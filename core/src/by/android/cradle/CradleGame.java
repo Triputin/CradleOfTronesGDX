@@ -1092,4 +1092,7 @@ public void Init(){
         this.attackQtty = attackQtty;
     }
 
+    public IPlayServices getPly() {
+        return ply;
+    }
 }

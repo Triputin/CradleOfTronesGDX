@@ -29,23 +29,24 @@ public class DialogBox_DailyGift extends BaseActor {
 
         int w = Gdx.graphics.getWidth();
         int h = Gdx.graphics.getHeight();
+        /*
         float fontScale = 1.0f;
         if (w>1000){
             fontScale = 1.5f;
         } else {
             fontScale = 0.8f;
         }
-
+        */
         AddImage("fon_white2.png",Math.round(width*0.04f),Math.round(height*0.075f),Math.round(width*0.92f), Math.round(height*0.85f));
         AddImage("goldenframe01.png",0,0,width,height);
 
         String ms = cradleGame.getLanguageStrings().get("dayily_gift_text");
-        dialogLabel = new Label(ms, BaseGame.labelStyle);
+        dialogLabel = new Label(ms, BaseGame.labelStyle_Small);
         dialogLabel.setWrap(true);
         dialogLabel.setAlignment( Align.center );
         dialogLabel.setPosition( Math.round(width*0.07f), Math.round(height*0.8f) );
         dialogLabel.setWidth( width - 2 * padding );
-        dialogLabel.setFontScale(fontScale);
+        //dialogLabel.setFontScale(fontScale);
         dialogLabel.setColor(Color.GOLD);
         this.addActor(dialogLabel);
 
@@ -54,21 +55,21 @@ public class DialogBox_DailyGift extends BaseActor {
         int pict1posX = Math.round(getWidth() * 0.25f);
         int pict1posY = Math.round(getHeight() * 0.5f);
 
-        scoreLabel = new Label("0", BaseGame.labelStyle);
+        scoreLabel = new Label("0", BaseGame.labelStyle_Middle);
         //pict1Label.setAlignment(Align.left,Align.center);
-        scoreLabel.setFontScale(fontScale);
+        //scoreLabel.setFontScale(fontScale);
         scoreLabel.setPosition(Math.round(getWidth()*0.6f),pict1posY+pictSize*.4f);
         this.addActor(scoreLabel);
 
 
 
         String ms2 = cradleGame.getLanguageStrings().get("dayily_gift_text2");
-        dialogLabel2 = new Label(ms2, BaseGame.labelStyle);
+        dialogLabel2 = new Label(ms2, BaseGame.labelStyle_Small);
         dialogLabel2.setWrap(true);
         dialogLabel2.setAlignment( Align.center );
         dialogLabel2.setPosition( Math.round(width*0.07f), Math.round(height*0.4f) );
         dialogLabel2.setWidth( width - 2 * padding );
-        dialogLabel2.setFontScale(fontScale);
+        //dialogLabel2.setFontScale(fontScale);
         dialogLabel2.setColor(Color.GOLD);
         this.addActor(dialogLabel2);
 

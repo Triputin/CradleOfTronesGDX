@@ -48,6 +48,9 @@ public class GameMapScreen extends BaseScreen {
     private BlackMarket blackMarket;
     private GameMapLevelInfo gameMapLevelInfo; // holds info about winned gameMapLevels
     private ArrowDownActor arrowDownActor;
+
+    public DialogBox_AttackTarget dialogBoxAttackTarget;
+
     //private int kingdomsize;
 
     public GameMapScreen(CradleGame cradleGame,IPlayServices ply) {
@@ -217,6 +220,9 @@ public class GameMapScreen extends BaseScreen {
         messageActor01.setVisible(false);
         UpdateRes();
 
+        int dialogSize = Math.round(h*0.9f);
+        dialogBoxAttackTarget = new DialogBox_AttackTarget(w/2-dialogSize/2,h/2-dialogSize/2,uiStage,dialogSize,dialogSize,cradleGame);
+        dialogBoxAttackTarget.setVisible(false);
 
         // Test ---------------------
         /*
@@ -500,6 +506,21 @@ public class GameMapScreen extends BaseScreen {
 
         }
         mapLevelInfoDialog.setVisible(false);
+
+        if (cradleGame.getScreenGamePlay().getGameLevel()==1) {
+            if (dialogBoxAttackTarget == null) {
+                int dialogSize = Math.round(h * 0.9f);
+                dialogBoxAttackTarget = new DialogBox_AttackTarget(w / 2 - dialogSize / 2, h / 2 - dialogSize / 2, uiStage, dialogSize, dialogSize, cradleGame);
+                dialogBoxAttackTarget.setVisible(false);
+
+            } else {
+                dialogBoxAttackTarget.remove();
+                int dialogSize = Math.round(h * 0.9f);
+                dialogBoxAttackTarget = new DialogBox_AttackTarget(w / 2 - dialogSize / 2, h / 2 - dialogSize / 2, uiStage, dialogSize, dialogSize, cradleGame);
+                dialogBoxAttackTarget.setVisible(false);
+
+            }
+        }
 
         //Castle is yours info dialog
         if (castleIsYoursDialog == null ){

@@ -63,6 +63,7 @@ public class ScreenGamePlay extends BaseScreen {
     private DialogBox_EndLevel dialogBox_endLevel;
     private KingdomRes resultAttack;
 
+
     private Label timeBombQttyLabel;
     private Label squareBomb1QttyLabel;
     private Label squareBomb2QttyLabel;
@@ -134,6 +135,8 @@ public class ScreenGamePlay extends BaseScreen {
         int dialogSize = Math.round(h*0.8f);
         dialogBox_endLevel = new DialogBox_EndLevel(w/2-dialogSize/2,h/2-dialogSize/2,uiStage,dialogSize,dialogSize,cradleGame);
         dialogBox_endLevel.setVisible(false);
+
+
 
         cellSize = cradleGame.getCellSize();
         h=h-70; //place for top menu items
@@ -1424,6 +1427,7 @@ public void RemoveAndFillSquare(int centreRow, int centreCol, int squareSize){
         }
 
         timeLastSelectionEnded = TimeUtils.millis();
+
 
     }
 

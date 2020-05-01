@@ -44,9 +44,26 @@ public class MessageActor01 extends BaseActor {
                     GameRes.Wood -= kingdomRes.Wood;
                     GameRes.Bread -= kingdomRes.Bread;
                 }
-                cradleGame.setActivescreenGamePlay(attackType,attackedKingdom);
-                //cradleGame.getScreenGamePlay().UpdateRes();
-                //cradleGame.getScreenGamePlay().StartNewLevel();
+
+                if (cradleGame.getScreenGamePlay().getGameLevel()==1){
+
+                        InputListener inputListener =new InputListener() {
+                            public boolean touchDown (InputEvent e, float x, float y, int pointer, int button){
+                                if (!(e instanceof InputEvent))
+                                    return false;
+
+                                if (!((InputEvent) e).getType().equals(InputEvent.Type.touchDown))
+                                    return false;
+                                cradleGame.getGameMapScreen().dialogBoxAttackTarget.setVisible(false);
+                                cradleGame.setActivescreenGamePlay(attackType, attackedKingdom);
+                                return true;
+                            }
+                        };
+                    cradleGame.getGameMapScreen().dialogBoxAttackTarget.showWithOkButton(inputListener);
+
+                }else {
+                    cradleGame.setActivescreenGamePlay(attackType, attackedKingdom);
+                }
                 return true;
             }
         });
