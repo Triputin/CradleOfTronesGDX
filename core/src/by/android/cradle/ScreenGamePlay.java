@@ -68,10 +68,12 @@ public class ScreenGamePlay extends BaseScreen {
     private Label squareBomb1QttyLabel;
     private Label squareBomb2QttyLabel;
 
+    private Bombs_Frame bombs_frame;
+
     private Long timeLastSelectionEnded;
     public Knight knight;
     public Weapon weapon;
-
+    private ArrowUpActor arrowUpActor;
 
     public ScreenGamePlay(CradleGame cradleGame,IPlayServices ply) {
         super(cradleGame,ply);
@@ -98,22 +100,22 @@ public class ScreenGamePlay extends BaseScreen {
         int resHeight = cradleGame.getResHeight();
         CellCount = cradleGame.getCellCount();
 
-        timeBombQttyLabel = new Label(" ", BaseGame.labelStyle);
+
+        float bombs_frame_sizeX= cradleGame.getBombs_frame_sizeX();
+        float bombs_frame_sizeY= cradleGame.getBombs_frame_sizeY();
+        timeBombQttyLabel = new Label(" ", BaseGame.labelStyle_Middle);
         timeBombQttyLabel.setColor( Color.GOLDENROD );
-        timeBombQttyLabel.setPosition( 15, h * 0.5f+(h*1.0f)/20f);
-        timeBombQttyLabel.setFontScale(1.5f);
+        timeBombQttyLabel.setPosition( bombs_frame_sizeX*0.7f, bombs_frame_sizeY * 0.67f);
         uiStage.addActor(timeBombQttyLabel);
 
-        squareBomb1QttyLabel = new Label(" ", BaseGame.labelStyle);
+        squareBomb1QttyLabel = new Label(" ", BaseGame.labelStyle_Middle);
         squareBomb1QttyLabel.setColor( Color.GOLDENROD );
-        squareBomb1QttyLabel.setPosition( 15, h * 0.3f+(h*1.0f)/20f);
-        squareBomb1QttyLabel.setFontScale(1.5f);
+        squareBomb1QttyLabel.setPosition( bombs_frame_sizeX*0.7f, bombs_frame_sizeY * 0.35f);
         uiStage.addActor(squareBomb1QttyLabel);
 
-        squareBomb2QttyLabel = new Label(" ", BaseGame.labelStyle);
+        squareBomb2QttyLabel = new Label(" ", BaseGame.labelStyle_Middle);
         squareBomb2QttyLabel.setColor( Color.GOLDENROD );
-        squareBomb2QttyLabel.setPosition( 15, h * 0.1f+(h*1.0f)/20f);
-        squareBomb2QttyLabel.setFontScale(1.5f);
+        squareBomb2QttyLabel.setPosition( bombs_frame_sizeX*0.7f, bombs_frame_sizeY* 0.03f);
         uiStage.addActor(squareBomb2QttyLabel);
 
         hall = new BaseActor(0,0, mainStage, Touchable.disabled,cradleGame);
@@ -1288,10 +1290,11 @@ public void RemoveAndFillSquare(int centreRow, int centreCol, int squareSize){
                 System.out.println("knight health"+knight.getHealth());
                 if (attackedKingdom!=null){
                     attackedKingdom.decreaseProtection();
+                    ply.logLevelEndEvent(gameLevel,"attack is won");
                     setGameLevel(gameLevel+1);
-                    ply.logLevelUpEvent("1", "Win attack", "GameLevel Rised");
+                    ply.logLevelUpEvent(gameLevel);
                     if (attackedKingdom.getProtectionState() == 0){
-                        ply.logLevelUpEvent("2", "Protection state of Kingdom lowered to 0", "Kingdom captured");
+                        //ply.logLevelUpEvent("2", "Protection state of Kingdom lowered to 0", "Kingdom captured");
                     }
                 }
 
@@ -1362,6 +1365,8 @@ public void RemoveAndFillSquare(int centreRow, int centreCol, int squareSize){
 
     public void StartNewLevel(){
 
+        ply.logLevelStartEvent(gameLevel);
+
         int w = Gdx.graphics.getWidth();
         int h = Gdx.graphics.getHeight();
         gameField.GenerateLevel(gameLevel,CellCount);
@@ -1393,19 +1398,32 @@ public void RemoveAndFillSquare(int centreRow, int centreCol, int squareSize){
         int wpSize = Math.round(h*0.1f);
         if (knight!=null){knight.remove();}
         if(weapon!=null){weapon.remove();}
-        knight = new Knight(-knSize*0.1f,h-knSize*0.8f,knSize,knSize,mainStage,cradleGame.getKnightParams(),cradleGame);
-        weapon = new Weapon(knSize*0.585f,h-knSize*0.29f,wpSize,wpSize,mainStage,cradleGame,knight);
+        knight = new Knight(-knSize*0.1f,h-knSize*0.5f,knSize,knSize,mainStage,cradleGame.getKnightParams(),cradleGame);
+
+        weapon = new Weapon(knSize*0.585f,h-knSize*0.0f,wpSize,wpSize,mainStage,cradleGame,knight);
+
+        if (!cradleGame.isWeaponUsed()){
+            arrowUpActor = new ArrowUpActor(knSize, h-knSize*0.2f,wpSize, wpSize,uiStage, cradleGame);
+            arrowUpActor.startAnimation(knSize*0.6f,h-knSize*0.4f,knSize*0.6f,h-knSize*0.3f);
+        }
 
 
+        //BombsFrame
+        if (bombs_frame!=null){
+            bombs_frame.remove();
+        }
+        bombs_frame = new Bombs_Frame(0,0,cradleGame.getBombs_frame_sizeX(),cradleGame.getBombs_frame_sizeY(),mainStage,cradleGame);
 
+        float bombPos = cradleGame.getBombs_frame_sizeX()*0.5f-cradleGame.getBombSize()*0.5f;
+        //Bombs
         for (int i = 0; i < GameRes.TimeBomb; i++) {
-            new TimeBomb(50, h * 0.5f, cradleGame.getBombSize(), cradleGame.getBombSize(), mainStage, Touchable.enabled, sandGlass, 60, cradleGame);
+            new TimeBomb(bombPos, cradleGame.getBombs_frame_sizeY() * 0.71f, cradleGame.getBombSize(), cradleGame.getBombSize(), mainStage, Touchable.enabled, sandGlass, 60, cradleGame);
         }
         for (int i=0;i<GameRes.SquareBomb1;i++) {
-            new SquareBomb(50,h*0.3f,cradleGame.getBombSize(),cradleGame.getBombSize(),mainStage,Touchable.enabled,1,this,cradleGame);
+            new SquareBomb(bombPos,cradleGame.getBombs_frame_sizeY() * 0.38f,cradleGame.getBombSize(),cradleGame.getBombSize(),mainStage,Touchable.enabled,1,this,cradleGame);
         }
         for (int i=0;i<GameRes.SquareBomb2;i++) {
-            new SquareBomb(50,h*0.1f,cradleGame.getBombSize(),cradleGame.getBombSize(),mainStage,Touchable.enabled,2,this,cradleGame);
+            new SquareBomb(bombPos,h*0.04f,cradleGame.getBombSize(),cradleGame.getBombSize(),mainStage,Touchable.enabled,2,this,cradleGame);
         }
 
         if (GameRes.TimeBomb>0) {
@@ -1427,6 +1445,7 @@ public void RemoveAndFillSquare(int centreRow, int centreCol, int squareSize){
         }
 
         timeLastSelectionEnded = TimeUtils.millis();
+
 
 
     }
@@ -1463,6 +1482,7 @@ public void RemoveAndFillSquare(int centreRow, int centreCol, int squareSize){
                             return false;
                         knight.doDamage();
                         collectAllKnightItems();
+                        ply.logLevelEndEvent(gameLevel,"attack is lost");
                         cradleGame.setActiveGameMapScreen(false,0);
 
                         return true;
@@ -1655,6 +1675,14 @@ public void RemoveAndFillSquare(int centreRow, int centreCol, int squareSize){
 
         Action actions = sequence(Actions.moveTo(x, y+cellSize, 1.50f, Interpolation.circleOut),fadeOut(0.5f),completeAction);
         resCollectedLabel.addAction(actions);
+
+    }
+
+    public void HideArrowUp(){
+
+        if( arrowUpActor!=null) {
+            arrowUpActor.setVisible(false);
+        }
 
     }
 }

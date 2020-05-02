@@ -734,6 +734,7 @@ public class GameMapScreen extends BaseScreen {
                         UpdateRes();
                         cradleGame.setGameMapLevel(cradleGame.getMaxOpenedMapLevel());
                         setFirstMapLevelRun(true);
+                        //ply.logLevelUpEvent("3", "Level of map is won", "Map level won");
                         cradleGame.setActiveGameMapScreen(false,cradleGame.getGameMapLevel());
                         return true;
                     }

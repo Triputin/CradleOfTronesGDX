@@ -41,6 +41,10 @@ public class CradleGame extends BaseGame
     private int bombSize;
     private int buttonXSize;
     private int buttonYSize;
+    private int bombs_frame_sizeX;
+    private int bombs_frame_sizeY;
+    private int bomb_lock_size;
+
     public final int MaxGameMapLevel=4;
     private int gameMapLevel; //currentGameMapLevelToShow
     private int maxOpenedMapLevel; // Player win maps levels+1;
@@ -52,6 +56,9 @@ public class CradleGame extends BaseGame
     private int isGameLiked; // 0 - didn't asked, 1- didn't like; 2 - liked
     private int lastDayAskedToVote;
     private int lastScoreWhenAskedToVote;
+    //Game tutorial
+    private boolean isWeaponUsed;
+    private boolean isKingdomGoldCollected;
 
     private ArrayList<KnightItemParams> knightItemsParamsDailyArrayList;
 
@@ -111,8 +118,10 @@ public class CradleGame extends BaseGame
         this.kingdomsize = h/9;
         bombSize = h / 6;
 
-        //buttonXSize = Math.round(h*0.35f);
-        //buttonYSize = Math.round(h*0.2f);
+        bombs_frame_sizeY = Math.round(h*0.7f);
+        bombs_frame_sizeX = Math.round(h*0.3f);
+        bomb_lock_size = Math.round(h*0.27f);
+
         buttonXSize = Math.round(h*0.2f);
         buttonYSize = Math.round(h*0.1f);
 
@@ -345,6 +354,7 @@ public void Init(){
         GameRes.Score=prefs.getInteger("Score", 0);
         gameMapLevel = prefs.getInteger("gameMapLevel", 1);
         maxOpenedMapLevel = prefs.getInteger("maxOpenedMapLevel", 1);
+        //maxOpenedMapLevel=4;// for debug
         // for old players who don't have maxOpenedMapLevel in prefs
         if (maxOpenedMapLevel<gameMapLevel){
             maxOpenedMapLevel = gameMapLevel;
@@ -354,6 +364,10 @@ public void Init(){
         isGameLiked = prefs.getInteger("isGameLiked", 0);
         lastDayAskedToVote = prefs.getInteger("lastDayAskedToVote", 0);
         lastScoreWhenAskedToVote = prefs.getInteger("lastScoreWhenAskedToVote", 0);
+        //Tutorial
+        isWeaponUsed=prefs.getBoolean("isweaponused", false);
+        isKingdomGoldCollected=prefs.getBoolean("iskingdomgoldcollected", false);
+
     }
 
     public boolean isSoundOn() {
@@ -517,9 +531,9 @@ public void Init(){
     {
         System.out.println("setActiveGameMapScreen");
         ply.logEvent("6", "setActiveGameMapScreen", "Switch to");
-        ply.logEvent("7", "DifficultyLevel is ", String.valueOf(difficultyLevel));
-        ply.logEvent("8", "GameMapLevel is ", String.valueOf(gameMapLevel));
-        ply.logEvent("9", "gameLevel is ", String.valueOf(screenGamePlay.getGameLevel()));
+        //ply.logEvent("7", "DifficultyLevel is ", String.valueOf(difficultyLevel));
+        //ply.logEvent("8", "GameMapLevel is ", String.valueOf(gameMapLevel));
+        //ply.logEvent("9", "gameLevel is ", String.valueOf(screenGamePlay.getGameLevel()));
 
         GdxLog.print("setActiveGameMapScreen():","Called");
         int w = Gdx.graphics.getWidth();
@@ -698,7 +712,7 @@ public void Init(){
             }
         }
 
-        ply.logLevelUpEvent(String.valueOf(gameMapLevel), "setGameMapLevel", "setGameMapLevel");
+        //ply.logLevelUpEvent(String.valueOf(gameMapLevel), "setGameMapLevel", "setGameMapLevel");
     }
 
     public I18NBundle getLanguageStrings() {
@@ -1095,4 +1109,25 @@ public void Init(){
     public IPlayServices getPly() {
         return ply;
     }
+
+    public int getBombs_frame_sizeX() {
+        return bombs_frame_sizeX;
+    }
+
+    public int getBombs_frame_sizeY() {
+        return bombs_frame_sizeY;
+    }
+
+    public int getBomb_lock_size() {
+        return bomb_lock_size;
+    }
+
+    public boolean isWeaponUsed() {
+        return isWeaponUsed;
+    }
+
+    public boolean isKingdomGoldCollected() {
+        return isKingdomGoldCollected;
+    }
+
 }

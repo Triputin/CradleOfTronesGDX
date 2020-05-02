@@ -223,6 +223,7 @@ public class SettingsScreen extends BaseScreen {
             public void result(Object obj) {
                 if (obj.toString()=="true"){
                 cradleGame.restartGame();
+                cradleGame.setActiveMenuScreen();
                     System.out.println("Game restarted");
                 }
             }

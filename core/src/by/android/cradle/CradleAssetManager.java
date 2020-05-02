@@ -96,9 +96,14 @@ public class CradleAssetManager  {
         manager.load(Assets.BOMBTIME);
         manager.load(Assets.BOMBSQUARE01);
         manager.load(Assets.BOMBSQUARE02);
+        //Bombs frame
+        manager.load(Assets.BOMBS_FRAME);
+        manager.load(Assets.BOMB_LOCK);
+
         //Buttons
         manager.load(Assets.BUTTONGOLD);
         manager.load(Assets.BUTTONGOLD_PRESSED);
+
 
     }
 
@@ -172,6 +177,9 @@ public class CradleAssetManager  {
         hashMapAnimations.put(Assets.BUTTONGOLD_ANIMATION_ID,loadAnimationFromAssets(Assets.BUTTONGOLD,  cradleGame.getButtonXSize(),  cradleGame.getButtonYSize()));
         hashMapAnimations.put(Assets.BUTTONGOLD_PRESSED_ANIMATION_ID,loadAnimationFromAssets(Assets.BUTTONGOLD_PRESSED,  cradleGame.getButtonXSize(),  cradleGame.getButtonYSize()));
 
+        //Bombs frame
+        hashMapAnimations.put(Assets.BOMBS_FRAME_ANIMATION_ID,loadAnimationFromAssets(Assets.BOMBS_FRAME,  cradleGame.getBombs_frame_sizeX(),  cradleGame.getBombs_frame_sizeY()));
+        hashMapAnimations.put(Assets.BOMB_LOCK_ANIMATION_ID,loadAnimationFromAssets(Assets.BOMB_LOCK,  cradleGame.getBomb_lock_size(),  cradleGame.getBomb_lock_size()));
 
         //Actors (Images) // Don't work, if actor the same it works equally everywhere
         //hashMapActors.put(Assets.LOCKED_ITEM_LEVEL01_ANIMATION_ID,AddImage(Assets.LOCKED_ITEM_LEVEL01,0,0,cradleGame.getCellSize(),  cradleGame.getCellSize()));

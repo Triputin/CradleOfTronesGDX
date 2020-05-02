@@ -44,8 +44,8 @@ public class DialogBox_DailyGift extends BaseActor {
         dialogLabel = new Label(ms, BaseGame.labelStyle_Small);
         dialogLabel.setWrap(true);
         dialogLabel.setAlignment( Align.center );
-        dialogLabel.setPosition( Math.round(width*0.07f), Math.round(height*0.8f) );
-        dialogLabel.setWidth( width - 2 * padding );
+        dialogLabel.setPosition( Math.round(width*0.06f), Math.round(height*0.8f) );
+        dialogLabel.setWidth( width*0.9f );
         //dialogLabel.setFontScale(fontScale);
         dialogLabel.setColor(Color.GOLD);
         this.addActor(dialogLabel);

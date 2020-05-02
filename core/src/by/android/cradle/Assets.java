@@ -136,6 +136,11 @@ public class Assets {
     public static final AssetDescriptor<Texture> BUTTONGOLD_PRESSED =
             new AssetDescriptor<Texture>("buttons/goldbutton_pressed.png", Texture.class);
 
+    //Bombs frame
+    public static final AssetDescriptor<Texture> BOMBS_FRAME =
+            new AssetDescriptor<Texture>("bombs/bombs_frame.png", Texture.class);
+    public static final AssetDescriptor<Texture> BOMB_LOCK =
+            new AssetDescriptor<Texture>("bombs/bomb_lock.png", Texture.class);
 
     //Frames
     //public static final AssetDescriptor<Texture> FRAMEGOLD01 =
@@ -215,5 +220,7 @@ public class Assets {
     public static final int BUTTONGOLD_ANIMATION_ID = 45;
     public static final int BUTTONGOLD_PRESSED_ANIMATION_ID = 46;
 
+    public static final int BOMBS_FRAME_ANIMATION_ID = 47;
+    public static final int BOMB_LOCK_ANIMATION_ID = 48;
 
 }

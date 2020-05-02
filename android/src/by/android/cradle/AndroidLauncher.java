@@ -595,18 +595,35 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
 		bundle.putString(FirebaseAnalytics.Param.ITEM_ID, id);
 		bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, name);
 		bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, content_type);
-		mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+		mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_ITEM, bundle);
 	}
 
 	@Override
-	public void logLevelUpEvent( String id, String name, String content_type){
+	public void logLevelUpEvent( long idLevel){
 
 		Bundle bundle = new Bundle();
-		bundle.putString(FirebaseAnalytics.Param.ITEM_ID, id);
-		bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, name);
-		bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, content_type);
+		bundle.putLong(FirebaseAnalytics.Param.LEVEL, idLevel);
 		mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.LEVEL_UP, bundle);
 	}
+
+
+	@Override
+	public void logLevelStartEvent( long levelName){
+
+		Bundle bundle = new Bundle();
+		bundle.putLong(FirebaseAnalytics.Param.LEVEL_NAME, levelName);
+		mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.LEVEL_START, bundle);
+	}
+
+	@Override
+	public void logLevelEndEvent( long levelName, String success){
+
+		Bundle bundle = new Bundle();
+		bundle.putLong(FirebaseAnalytics.Param.LEVEL_NAME, levelName);
+		bundle.putString(FirebaseAnalytics.Param.SUCCESS, success);
+		mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.LEVEL_END, bundle);
+	}
+
 	@Override
 	public void connectUs() {
 

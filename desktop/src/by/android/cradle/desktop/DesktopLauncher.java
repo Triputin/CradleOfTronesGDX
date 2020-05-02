@@ -92,8 +92,13 @@ public class DesktopLauncher implements IActivityRequestHandler, IPlayServices, 
 	}
 
 	@Override
-	public void logLevelUpEvent(String id, String name, String content_type){
-	}
+	public void logLevelUpEvent(long idLevel){}
+
+	@Override
+	public void logLevelStartEvent(long levelName){}
+
+	@Override
+	public void logLevelEndEvent( long levelName, String success){}
 
 	@Override
 	public void connectUs() {
