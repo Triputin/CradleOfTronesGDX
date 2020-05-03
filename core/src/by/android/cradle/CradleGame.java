@@ -237,6 +237,7 @@ public void Init(){
 
         // For debug ru locale
         //Locale locale = new Locale("it");
+        //Locale locale = new Locale("en");
         //languageStrings = I18NBundle.createBundle(Gdx.files.internal("strings/strings"),locale);
 
         //Default locale for realise
@@ -649,6 +650,9 @@ public void Init(){
         knightParams.reset();
         if (screenGamePlay.knight!=null) {screenGamePlay.knight.reDraw();}
 
+        //Tutorial
+        prefs.putBoolean("isweaponused", false);
+        prefs.putBoolean("iskingdomgoldcollected", false);
 
         prefs.flush();
         ply.logEvent("10", "restartGame", "Game restarted");

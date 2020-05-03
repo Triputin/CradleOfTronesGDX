@@ -147,6 +147,11 @@ public class Kingdom extends BaseActor {
                             goldImage.addAction(actions);
                             goldImage.addAction(fadeOut(2.0f));
                             cradleGame.getPly().logEvent("20", "Kingdom gold collected", "Kingdom gold collected");
+                            if (!cradleGame.isKingdomGoldCollected()) {
+                                cradleGame.getPrefs().putBoolean("iskingdomgoldcollected", true);
+                                cradleGame.getPrefs().flush();
+                                //cradleGame.getScreenGamePlay().HideGoldArrow();
+                            }
                         }
 
                         return  true;

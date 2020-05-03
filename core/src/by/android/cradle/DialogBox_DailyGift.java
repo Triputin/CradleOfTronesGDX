@@ -68,8 +68,7 @@ public class DialogBox_DailyGift extends BaseActor {
         dialogLabel2.setWrap(true);
         dialogLabel2.setAlignment( Align.center );
         dialogLabel2.setPosition( Math.round(width*0.07f), Math.round(height*0.4f) );
-        dialogLabel2.setWidth( width - 2 * padding );
-        //dialogLabel2.setFontScale(fontScale);
+        dialogLabel2.setWidth( width*0.9f );
         dialogLabel2.setColor(Color.GOLD);
         this.addActor(dialogLabel2);
 

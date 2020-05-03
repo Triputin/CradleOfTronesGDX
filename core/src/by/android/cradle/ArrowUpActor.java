@@ -25,24 +25,29 @@ public class ArrowUpActor extends BaseActor {
         setWidth(width);
         int w = Gdx.graphics.getWidth();
         int h = Gdx.graphics.getHeight();
+        int arrowSize= Math.round(cradleGame.getKingdomsize());
+        arrowActor = new BaseActor(0,height,s,Touchable.disabled,cradleGame);
+        arrowActor.setSize(arrowSize, arrowSize);
+        arrowActor.AddImage("arrow_up.png", 0,0,arrowSize, arrowSize);
 
-        arrowActor = new BaseActor(0,0,s,Touchable.disabled,cradleGame);
-        arrowActor.setSize((int) getWidth(), (int) getHeight());
-        arrowActor.AddImage("arrow_up.png", 0,0,(int) getWidth(), (int) getHeight());
         //arrowActor.addAction(fadeOut(0.01f));
         String st = cradleGame.getLanguageStrings().get("useweapon");
-        label = new Label(st, BaseGame.labelStyle_Small);
+        label = new Label(st, BaseGame.labelStyle_SuperSmall);
         label.setWrap(true);
-        label.setWidth(width*2.0f);
+        label.setWidth(width*0.8f);
         label.setColor(Color.GOLD);
         label.setAlignment(Align.center);
+        label.setPosition(Math.round(width*0.08f), height*0.5f);
+
+        AddImage("fon_white2.png",Math.round(width*0.04f),Math.round(height*0.05f),Math.round(width*0.92f), Math.round(height*0.9f));
+        AddImage("goldenframe01.png",0,0,Math.round(width),Math.round(height));
         addActor(label);
     }
 
     public void startAnimation(float x, float y, float x2, float y2){
         Action actions;
         arrowActor.setPosition(x,y);
-        label.setPosition(-arrowActor.getHeight()*1.2f,-arrowActor.getHeight()*1.4f);
+        //label.setPosition(0,-arrowActor.getHeight()*1.4f);
         actions = Actions.forever(sequence( Actions.moveTo(x2,y2,0.6f, Interpolation.smooth),Actions.delay(0.02f), Actions.moveTo(x,y,0.6f, Interpolation.smooth)));
         arrowActor.addAction(actions);
     }

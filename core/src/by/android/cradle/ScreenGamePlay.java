@@ -1403,8 +1403,10 @@ public void RemoveAndFillSquare(int centreRow, int centreCol, int squareSize){
         weapon = new Weapon(knSize*0.585f,h-knSize*0.0f,wpSize,wpSize,mainStage,cradleGame,knight);
 
         if (!cradleGame.isWeaponUsed()){
-            arrowUpActor = new ArrowUpActor(knSize, h-knSize*0.2f,wpSize, wpSize,uiStage, cradleGame);
-            arrowUpActor.startAnimation(knSize*0.6f,h-knSize*0.4f,knSize*0.6f,h-knSize*0.3f);
+            //Message size and pos
+            arrowUpActor = new ArrowUpActor(knSize*0.3f, h-knSize*2.0f,knSize*0.7f, knSize*1.6f,uiStage, cradleGame);
+            //arrow pos
+            arrowUpActor.startAnimation(knSize*0.6f,h-knSize*0.5f,knSize*0.6f,h-knSize*0.4f);
         }
 
 
