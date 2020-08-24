@@ -7,6 +7,7 @@ public enum KingdomNames {
     Kingdom_of_the_Rock,
     Kingdom_of_the_Stormlands,
     Kingdom_of_the_Reach,
-    Principality_of_Dorne
+    Principality_of_Dorne,
+    Kingdom_Main01
 
 }

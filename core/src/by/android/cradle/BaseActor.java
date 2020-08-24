@@ -964,5 +964,11 @@ public class BaseActor extends Group
 
     public void setElapsedTime(float elapsedTime) {
         this.elapsedTime = elapsedTime;
+        System.out.println("setElapsedTime="+elapsedTime);
+    }
+
+    public float getAnimationDuration()
+    {
+        return animation.getAnimationDuration();
     }
 }

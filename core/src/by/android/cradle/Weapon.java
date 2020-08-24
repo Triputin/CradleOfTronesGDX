@@ -37,9 +37,10 @@ public class Weapon extends DragAndDropActor {
 
             if (hasDropTarget()) {
                 //System.out.println("mace has target");
-                cradleGame.getPrefs().putBoolean("isweaponused", true);
-                cradleGame.getPrefs().flush();
-                cradleGame.getScreenGamePlay().HideArrowUp();
+                if (!cradleGame.isWeaponUsed()) {
+                    cradleGame.getScreenGamePlay().HideArrowUp();
+                    cradleGame.setWeaponUsed(true);
+                }
                 Item item = (Item) dropTarget;
                 System.out.println("Drop target item row "+ item.getRow()+" col "+item.getCol());
                 //cradleGame.getScreenGamePlay().RemoveAndFillSquare(item.getRow(),item.getCol(),squareSize);

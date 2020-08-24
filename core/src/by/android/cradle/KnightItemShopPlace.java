@@ -64,5 +64,14 @@ public class KnightItemShopPlace extends DropTargetActor {
         priceLabel.setText(price);
 
     }
+
+    /*
+    public void removeKnightItemFromPlaceIfEqual(KnightItem knightItem){
+        if (this.knightItem == knightItem){
+            setKnightItem(null);
+        }
+    }
+    */
+
 }
 

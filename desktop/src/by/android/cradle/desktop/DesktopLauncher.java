@@ -4,12 +4,14 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import by.android.cradle.CradleGame;
 import by.android.cradle.IActivityRequestHandler;
+import by.android.cradle.IGoogleServices;
 import by.android.cradle.INotification;
 import by.android.cradle.IPlayServices;
+import by.android.cradle.IVideoEventListener;
 import by.android.cradle.SplashScreen;
 
 
-public class DesktopLauncher implements IActivityRequestHandler, IPlayServices, INotification {
+public class DesktopLauncher implements IActivityRequestHandler, IPlayServices, INotification , IGoogleServices{
 	private static DesktopLauncher application;
 	public static void main (String[] argv) {
 		if (application == null) {
@@ -21,7 +23,7 @@ public class DesktopLauncher implements IActivityRequestHandler, IPlayServices, 
 
 		config.width = 1520;
 		config.height = 720;
-		CradleGame cradleGame = new CradleGame(application,application,application);
+		CradleGame cradleGame = new CradleGame(application,application,application,application);
 		new LwjglApplication(cradleGame, config);
 
 	}
@@ -114,4 +116,20 @@ public class DesktopLauncher implements IActivityRequestHandler, IPlayServices, 
 	public void cancelReminder(String tag){
 
 	}
+
+	public boolean hasVideoLoaded(){
+			return true;
+		}
+
+	public void loadRewardedVideoAd() {
+
+	}
+	public void showRewardedVideoAd(){
+
+	}
+
+	public void setVideoEventListener (IVideoEventListener listener) {
+	}
+
+
 }

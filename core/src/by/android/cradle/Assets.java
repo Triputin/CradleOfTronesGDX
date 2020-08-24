@@ -142,6 +142,12 @@ public class Assets {
     public static final AssetDescriptor<Texture> BOMB_LOCK =
             new AssetDescriptor<Texture>("bombs/bomb_lock.png", Texture.class);
 
+    //Kingdoms Castles
+    public static final AssetDescriptor<Texture> CASTLE_BASE01 =
+            new AssetDescriptor<Texture>("kingdoms/winterfell.png", Texture.class);
+    public static final AssetDescriptor<Texture> CASTLE_MAIN01 =
+            new AssetDescriptor<Texture>("kingdoms/castle_main01.png", Texture.class);
+
     //Frames
     //public static final AssetDescriptor<Texture> FRAMEGOLD01 =
     //        new AssetDescriptor<Texture>(".png", Texture.class);
@@ -222,5 +228,8 @@ public class Assets {
 
     public static final int BOMBS_FRAME_ANIMATION_ID = 47;
     public static final int BOMB_LOCK_ANIMATION_ID = 48;
+
+    public static final int CASTLE_BASE01_ANIMATION_ID = 49;
+    public static final int CASTLE_MAIN01_ANIMATION_ID = 50;
 
 }

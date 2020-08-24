@@ -21,6 +21,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
+import static by.android.cradle.KingdomNames.Kingdom_Main01;
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.fadeIn;
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.fadeOut;
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.moveTo;
@@ -216,7 +217,7 @@ public class GameMapScreen extends BaseScreen {
             }
         });
 
-        messageActor01 = new MessageActor01(0,0,uiStage,Math.round(cradleGame.getH()*0.6f),Math.round(cradleGame.getH()*0.25f),cradleGame);
+        messageActor01 = new MessageActor01(0,0,uiStage,Math.round(cradleGame.getH()*0.6f),Math.round(cradleGame.getH()*0.4f),cradleGame);
         messageActor01.setVisible(false);
         UpdateRes();
 
@@ -281,6 +282,7 @@ public class GameMapScreen extends BaseScreen {
         final int w = Gdx.graphics.getWidth();
         int h = Gdx.graphics.getHeight();
         int kingdomsize = cradleGame.getKingdomsize();
+        int kingdomMainSize = cradleGame.getMainKingdomsize();
         if (kingdoms!=null){
             for (int i = 0; i < kingdoms.length; i++) {
                 kingdoms[i].saveParams();
@@ -308,7 +310,7 @@ public class GameMapScreen extends BaseScreen {
         }
 */
 
-        kingdoms = new Kingdom[7];
+        kingdoms = new Kingdom[8];
         if( worldMap==null) {
             worldMap = new BaseActor(0, 0, mainStage, Touchable.disabled,cradleGame);
         }
@@ -328,8 +330,10 @@ public class GameMapScreen extends BaseScreen {
                     kingdoms[4] = new Kingdom(w*0.45f, h*0.15f,kingdomsize,kingdomsize,uiStage,Touchable.enabled,KingdomNames.Kingdom_of_the_Rock,14,cradleGame,resultsActor);
                     kingdoms[5] = new Kingdom(w*0.75f, h*0.25f,kingdomsize,kingdomsize,uiStage,Touchable.enabled,KingdomNames.Kingdom_of_the_Stormlands,15,cradleGame,resultsActor);
                     kingdoms[6] = new Kingdom(w*0.72f, h*0.6f,kingdomsize,kingdomsize,uiStage,Touchable.enabled,KingdomNames.Principality_of_Dorne,16,cradleGame,resultsActor);
-                    arena = new Arena(w * 0.3f, h * 0.18f, Math.round(kingdomsize * 1.56f), kingdomsize, uiStage, Touchable.enabled,cradleGame);
-                    blackMarket = new BlackMarket(w * 0.54f, h * 0.4f, Math.round(kingdomsize * 1.56f), kingdomsize, uiStage, Touchable.enabled,cradleGame);
+                    kingdoms[7] = new Kingdom(w*0.5f, h*0.37f,kingdomMainSize,kingdomMainSize,uiStage,Touchable.enabled, Kingdom_Main01,17,cradleGame,resultsActor);
+
+                arena = new Arena(w * 0.3f, h * 0.18f, Math.round(kingdomsize * 1.56f), kingdomsize, uiStage, Touchable.enabled,cradleGame);
+                    blackMarket = new BlackMarket(w * 0.75f, h * 0.45f, Math.round(kingdomsize * 1.56f), kingdomsize, uiStage, Touchable.enabled,cradleGame);
                     instrumental = musicArray[1];
                 break;
             case 1:
@@ -339,11 +343,13 @@ public class GameMapScreen extends BaseScreen {
                     kingdoms[0] = new Kingdom(w * 0.16f, h * 0.56f, kingdomsize, kingdomsize, uiStage, Touchable.enabled, KingdomNames.Kingdom_of_the_North,0,cradleGame,resultsActor);
                     kingdoms[1] = new Kingdom(w * 0.28f, h * 0.3f, kingdomsize, kingdomsize, uiStage, Touchable.enabled, KingdomNames.Kingdom_of_the_Isles_and_Rivers,1,cradleGame,resultsActor);
                     kingdoms[2] = new Kingdom(w*0.6f, h*0.4f,kingdomsize,kingdomsize,uiStage,Touchable.enabled,KingdomNames.Kingdom_of_the_Mountain_and_the_Vale,2,cradleGame,resultsActor);
-                    kingdoms[3] = new Kingdom(w*0.4f, h*0.28f,kingdomsize,kingdomsize,uiStage,Touchable.enabled,KingdomNames.Kingdom_of_the_Reach,3,cradleGame,resultsActor);
-                    kingdoms[4] = new Kingdom(w*0.45f, h*0.15f,kingdomsize,kingdomsize,uiStage,Touchable.enabled,KingdomNames.Kingdom_of_the_Rock,4,cradleGame,resultsActor);
-                    kingdoms[5] = new Kingdom(w*0.14f, h*0.25f,kingdomsize,kingdomsize,uiStage,Touchable.enabled,KingdomNames.Kingdom_of_the_Stormlands,5,cradleGame,resultsActor);
+                    kingdoms[3] = new Kingdom(w*0.15f, h*0.12f,kingdomsize,kingdomsize,uiStage,Touchable.enabled,KingdomNames.Kingdom_of_the_Reach,3,cradleGame,resultsActor);
+                    kingdoms[4] = new Kingdom(w*0.6f, h*0.03f,kingdomsize,kingdomsize,uiStage,Touchable.enabled,KingdomNames.Kingdom_of_the_Rock,4,cradleGame,resultsActor);
+                    kingdoms[5] = new Kingdom(w*0.14f, h*0.35f,kingdomsize,kingdomsize,uiStage,Touchable.enabled,KingdomNames.Kingdom_of_the_Stormlands,5,cradleGame,resultsActor);
                     kingdoms[6] = new Kingdom(w*0.78f, h*0.35f,kingdomsize,kingdomsize,uiStage,Touchable.enabled,KingdomNames.Principality_of_Dorne,6,cradleGame,resultsActor);
-                    arena = new Arena(w * 0.75f, h * 0.25f, Math.round(kingdomsize * 1.56f), kingdomsize, uiStage, Touchable.enabled,cradleGame);
+                    kingdoms[7] = new Kingdom(w*0.4f, h*0.17f,kingdomMainSize,kingdomMainSize,uiStage,Touchable.enabled, Kingdom_Main01,7,cradleGame,resultsActor);
+
+                arena = new Arena(w * 0.75f, h * 0.25f, Math.round(kingdomsize * 1.56f), kingdomsize, uiStage, Touchable.enabled,cradleGame);
                     blackMarket = new BlackMarket(w * 0.68f, h * 0.32f, Math.round(kingdomsize * 1.56f), kingdomsize, uiStage, Touchable.enabled,cradleGame);
                     if ((cradleGame.getGameMapLevel()==1)&&(cradleGame.getScreenGamePlay().getGameLevel()==1)){
                        arrowDownActor = new ArrowDownActor(w*0.6f, h*0.5f,kingdomsize, kingdomsize,uiStage, cradleGame);
@@ -362,8 +368,10 @@ public class GameMapScreen extends BaseScreen {
                 kingdoms[4] = new Kingdom(w*0.45f, h*0.15f,kingdomsize,kingdomsize,uiStage,Touchable.enabled,KingdomNames.Kingdom_of_the_Rock,24,cradleGame,resultsActor);
                 kingdoms[5] = new Kingdom(w*0.6f, h*0.25f,kingdomsize,kingdomsize,uiStage,Touchable.enabled,KingdomNames.Kingdom_of_the_Stormlands,25,cradleGame,resultsActor);
                 kingdoms[6] = new Kingdom(w*0.75f, h*0.6f,kingdomsize,kingdomsize,uiStage,Touchable.enabled,KingdomNames.Principality_of_Dorne,26,cradleGame,resultsActor);
+                kingdoms[7] = new Kingdom(w*0.25f, h*0.2f,kingdomMainSize,kingdomMainSize,uiStage,Touchable.enabled, Kingdom_Main01,27,cradleGame,resultsActor);
+
                 arena = new Arena(w * 0.15f, h * 0.15f, Math.round(kingdomsize * 1.56f), kingdomsize, uiStage, Touchable.enabled,cradleGame);
-                blackMarket = new BlackMarket(w * 0.3f, h * 0.2f, Math.round(kingdomsize * 1.56f), kingdomsize, uiStage, Touchable.enabled,cradleGame);
+                blackMarket = new BlackMarket(w * 0.5f, h * 0.35f, Math.round(kingdomsize * 1.56f), kingdomsize, uiStage, Touchable.enabled,cradleGame);
 
                 break;
 
@@ -372,13 +380,15 @@ public class GameMapScreen extends BaseScreen {
                 //worldMap.loadTexture("maps/worldmap04.png", w, h);
                 worldMap.setAnimation(cradleGame.getCradleAssetManager().getAnimation(Assets.WORLDMAP04_ANIMATION_ID));
 
-                kingdoms[0] = new Kingdom(w * 0.5f, h * 0.45f, kingdomsize, kingdomsize, uiStage, Touchable.enabled, KingdomNames.Kingdom_of_the_North,30,cradleGame,resultsActor);
+                kingdoms[0] = new Kingdom(w * 0.5f, h * 0.3f, kingdomsize, kingdomsize, uiStage, Touchable.enabled, KingdomNames.Kingdom_of_the_North,30,cradleGame,resultsActor);
                 kingdoms[1] = new Kingdom(w * 0.4f, h * 0.3f, kingdomsize, kingdomsize, uiStage, Touchable.enabled, KingdomNames.Kingdom_of_the_Isles_and_Rivers,31,cradleGame,resultsActor);
                 kingdoms[2] = new Kingdom(w*0.45f, h*0.65f,kingdomsize,kingdomsize,uiStage,Touchable.enabled,KingdomNames.Kingdom_of_the_Mountain_and_the_Vale,32,cradleGame,resultsActor);
                 kingdoms[3] = new Kingdom(w*0.3f, h*0.45f,kingdomsize,kingdomsize,uiStage,Touchable.enabled,KingdomNames.Kingdom_of_the_Reach,33,cradleGame,resultsActor);
                 kingdoms[4] = new Kingdom(w*0.6f, h*0.33f,kingdomsize,kingdomsize,uiStage,Touchable.enabled,KingdomNames.Kingdom_of_the_Rock,34,cradleGame,resultsActor);
                 kingdoms[5] = new Kingdom(w*0.7f, h*0.3f,kingdomsize,kingdomsize,uiStage,Touchable.enabled,KingdomNames.Kingdom_of_the_Stormlands,35,cradleGame,resultsActor);
                 kingdoms[6] = new Kingdom(w*0.65f, h*0.6f,kingdomsize,kingdomsize,uiStage,Touchable.enabled,KingdomNames.Principality_of_Dorne,36,cradleGame,resultsActor);
+                kingdoms[7] = new Kingdom(w*0.5f, h*0.45f,kingdomMainSize,kingdomMainSize,uiStage,Touchable.enabled, Kingdom_Main01,37,cradleGame,resultsActor);
+
                 arena = new Arena(w * 0.6f, h * 0.15f, Math.round(kingdomsize * 1.56f), kingdomsize, uiStage, Touchable.enabled,cradleGame);
                 blackMarket = new BlackMarket(w * 0.45f, h * 0.27f, Math.round(kingdomsize * 1.56f), kingdomsize, uiStage, Touchable.enabled,cradleGame);
 
@@ -388,6 +398,7 @@ public class GameMapScreen extends BaseScreen {
 
         PauseMusic();
 
+        // Listeners for Kingdoms
         InputListener inputListener = new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -430,7 +441,16 @@ public class GameMapScreen extends BaseScreen {
                     messageActor01.SetRes(kingdomRes);
                     messageActor01.setAttackType(AttackType.AttackKingdom);
                     messageActor01.setAttackedKingdom(kingdom);
-                    messageActor01.setVisible(true);
+                    if (kingdom.getKingdomNames() == Kingdom_Main01){
+                        if(checkIfNotAllSimpleKingdomsCaptured()){
+                        messageActor01.showDialog(true);
+                        }else {
+                            messageActor01.showDialog(false);
+                        }
+
+                    }else{
+                    messageActor01.showDialog(false);
+                    }
 
                 }
                 return false;
@@ -443,7 +463,7 @@ public class GameMapScreen extends BaseScreen {
         }
         kingdoms[0].resetFlag();// if protection state>0 then setup gray flag
 
-
+    // Listener for Arena
         inputListener = new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -461,7 +481,7 @@ public class GameMapScreen extends BaseScreen {
                     messageActor01.SetRes(kingdomRes);
                     messageActor01.setAttackType(AttackType.AttackArena);
                     messageActor01.setAttackedKingdom(null);
-                    messageActor01.setVisible(true);
+                    messageActor01.showDialog(false);
 
                 }
                 return false;
@@ -470,6 +490,7 @@ public class GameMapScreen extends BaseScreen {
 
         arena.addListener(inputListener);
 
+        // Listener for BlackMarket
         inputListener = new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -656,6 +677,16 @@ public class GameMapScreen extends BaseScreen {
     {
 
     }
+
+    private boolean checkIfNotAllSimpleKingdomsCaptured() {
+        for (int i = 0; i < kingdoms.length; i++) {
+            if (kingdoms[i].getProtectionState() > 0) {
+                if (kingdoms[i].getKingdomNames() != Kingdom_Main01) return true;
+            }
+        }
+        return false;
+    }
+
 
     public void checkWin(){
         for (int i=0; i<kingdoms.length;i++){

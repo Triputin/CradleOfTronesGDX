@@ -30,7 +30,7 @@ public class GameField extends BaseActor {
             }
         }
 
-        GenerateLevel(gameLevel,cellsCount);
+        GenerateLevel(gameLevel,cellsCount,AttackTypeInfo.SingleResources);
        //this.setColor(255,255,255,255);
 
 
@@ -241,7 +241,7 @@ public void changeGameCell(Cell cell){
     }
 }
 
-    public void GenerateLevel(int levelnumber, int CellCount) {
+    public void GenerateLevel(int levelnumber, int CellCount,AttackTypeInfo attackTypeInfo) {
         //Generate cells
 
         int countOfOrangeCells = 0;
@@ -281,6 +281,10 @@ public void changeGameCell(Cell cell){
             for (int j = 0; j < CellCount; j++) {
                 gameCells.get(i * CellCount + j).setLockLevel(0);
             }
+        }
+
+        if ((attackTypeInfo==AttackTypeInfo.SingleResources)||(attackTypeInfo==AttackTypeInfo.SingleTimeResources)||(attackTypeInfo==AttackTypeInfo.DoubleResources)){
+            return;
         }
 
         // Lock cells
@@ -360,7 +364,7 @@ public void changeGameCell(Cell cell){
 
     }
 
-    public  boolean CheckWin(){
+    public boolean CheckWin(){
     for (int i = 0;i<gameCells.size();i++){
         if(gameCells.get(i).getLockLevel()!=0){
             return false;

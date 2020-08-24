@@ -73,7 +73,7 @@ public class DialogBox_AttackTarget extends BaseActor {
         int pictSize = Math.round(getHeight() * 0.15f);
         int pictposX = Math.round(getWidth() * 0.15f);
         int pict1posY = Math.round(getHeight() * 0.65f);
-        AddImage("helpimages/at_01.png", pictposX, pict1posY, pictSize, pictSize);
+        //AddImage("helpimages/at_01.png", pictposX, pict1posY, pictSize, pictSize);
         int pict2posY = Math.round(getHeight() * 0.45f);
         AddImage("helpimages/at_02.png", pictposX, pict2posY, pictSize, pictSize);
         int pict3posY = Math.round(getHeight() * 0.25f);
@@ -92,10 +92,29 @@ public class DialogBox_AttackTarget extends BaseActor {
     }
 
 
-    public void showWithOkButton(InputListener inputListener){
+    public void showWithOkButton(InputListener inputListener, AttackTypeInfo attackTypeInfo){
         addActor(okButton);
         okButton.clearListeners(); //!!!!
         okButton.addListener(inputListener);
+
+        int pictSize = Math.round(getHeight() * 0.15f);
+        int pictposX = Math.round(getWidth() * 0.15f);
+        int pict1posY = Math.round(getHeight() * 0.65f);
+        String ms;
+        switch(attackTypeInfo){
+            case SingleTimeResources:
+            case SingleResources:
+            case DoubleResources:
+                ms = cradleGame.getLanguageStrings().get("attactargetinfo011");
+                AddImage("helpimages/at_011.png", pictposX, pict1posY, pictSize, pictSize);
+                break;
+            default:
+                ms = cradleGame.getLanguageStrings().get("attactargetinfo01");
+                AddImage("helpimages/at_01.png", pictposX, pict1posY, pictSize, pictSize);
+        }
+
+        dialogLabel01.setText(ms);
+
 
         Action actions = sequence(Actions.scaleTo(1,0,0.01f),fadeIn(0.01f),Actions.scaleTo(1,1,0.5f));
 

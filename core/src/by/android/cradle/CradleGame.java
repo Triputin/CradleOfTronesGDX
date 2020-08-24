@@ -29,7 +29,7 @@ import java.util.Locale;
 
 
 
-public class CradleGame extends BaseGame
+public class CradleGame extends BaseGame implements IVideoEventListener
 {
     //settings
     public  final String leaderboard = "CgkIiby2l-0EEAIQAQ";
@@ -38,6 +38,7 @@ public class CradleGame extends BaseGame
     private final int KINGDOMS_MAX_QTTY = 36;
     private final int DAILY_GIFT_AMOUNT = 25;
     private  int kingdomsize;
+    private  int kingdom_main_size;
     private int bombSize;
     private int buttonXSize;
     private int buttonYSize;
@@ -96,13 +97,19 @@ public class CradleGame extends BaseGame
     private int loadingState = 0;
     //private CradleGame self;
 
-    public CradleGame(IActivityRequestHandler handler, IPlayServices ply, INotification notification) {
+    public IGoogleServices iGoogleServices;
+
+    public CradleGame(IActivityRequestHandler handler, IPlayServices ply, INotification notification,IGoogleServices iGoogleServices) {
         //connect core code with platform objects from launchers which implemented interfaces
         this.myRequestHandler = handler;
         this.ply=ply;
         this.notification = notification;
         //this.self = this;
         notification.cancelReminder(DefaultWorkerTag); //remove all notifications
+        this.iGoogleServices = iGoogleServices;
+        this.iGoogleServices.setVideoEventListener(this);
+
+
     }
 
     public void create()
@@ -116,6 +123,7 @@ public class CradleGame extends BaseGame
         resHeight = (int)Math.round(h*0.12);
         cellSize = (h-resHeight)/CellCount;
         this.kingdomsize = h/9;
+        kingdom_main_size = Math.round(this.kingdomsize * 1.5f);
         bombSize = h / 6;
 
         bombs_frame_sizeY = Math.round(h*0.7f);
@@ -977,6 +985,10 @@ public void Init(){
         return kingdomsize;
     }
 
+    public int getMainKingdomsize() {
+        return kingdom_main_size;
+    }
+
     public int getBombSize() {
         return bombSize;
     }
@@ -1130,8 +1142,37 @@ public void Init(){
         return isWeaponUsed;
     }
 
+    public void setWeaponUsed(boolean weaponUsed) {
+        isWeaponUsed = weaponUsed;
+        prefs.putBoolean("isweaponused", true);
+        prefs.flush();
+    }
+
     public boolean isKingdomGoldCollected() {
         return isKingdomGoldCollected;
     }
 
+
+    @Override
+    public void onRewardedEvent(String type, int amount) {
+        // player has just finished the video and was rewarded
+        System.out.println("player has just finished the video and was rewarded");
+        screenGamePlay.useRewardForVideo();
+    }
+
+    @Override
+    public void onRewardedVideoAdLoadedEvent() {
+        // video is ready and can be presented to the player
+    }
+
+    @Override
+    public void onRewardedVideoAdClosedEvent() {
+        // player has closed the video so no reward for him
+        System.out.println("player has closed the video so no reward for him");
+        screenGamePlay.NouseRewardForVideo();
+    }
+
+    public IGoogleServices getiGoogleServices() {
+        return iGoogleServices;
+    }
 }

@@ -8,44 +8,108 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Align;
 
 public class AttackTarget extends BaseActor {
-    private Label attackLabel;
-
-    private Label qttyLabel;
-
+    private Label attackTextLabel;
+    private Label qttyCelltoClearLabel;
+    private Image imageCelltoClear;
+    private ResultsActorForAttack resultsActorForAttack;
 
     public AttackTarget(float x, float y, Stage s, int width, int height , final CradleGame cradleGame) {
         super(x, y, s, Touchable.enabled, cradleGame);
         this.setSize(width, height);
         AddImage("fon_white2.png",Math.round(width*0.02f),Math.round(height*0.02f),Math.round(width*.98f), Math.round(height*0.98f));
         AddImage("goldenframe03.png",0,0,width,height);
-        Image img = new Image(cradleGame.getCradleAssetManager().getAnimation(Assets.GAMECELL_LOCK01_ANIMATION_ID).getKeyFrame(0).getTexture());
-        img.setPosition(width*0.35f, height*0.1f);
-        addActor(img);
+        imageCelltoClear = new Image(cradleGame.getCradleAssetManager().getAnimation(Assets.GAMECELL_LOCK01_ANIMATION_ID).getKeyFrame(0).getTexture());
+        imageCelltoClear.setPosition(width*0.35f, height*0.1f);
+        addActor(imageCelltoClear);
 
         // Attack label
         String ms = cradleGame.getLanguageStrings().get("destroy");
-        attackLabel = new Label(ms, BaseGame.labelStyle_Small);
-        attackLabel.setWrap(true);
-        attackLabel.setAlignment( Align.center );
-        attackLabel.setPosition( Math.round(width*0.077f), Math.round(height*0.67f) );
-        attackLabel.setWidth( width*0.8f );
-        attackLabel.setColor(Color.GOLD);
-        addActor(attackLabel);
+        attackTextLabel = new Label(ms, BaseGame.labelStyle_Small);
+        attackTextLabel.setWrap(true);
+        attackTextLabel.setAlignment( Align.center );
+        attackTextLabel.setPosition( Math.round(width*0.077f), Math.round(height*0.67f) );
+        attackTextLabel.setWidth( width*0.8f );
+        attackTextLabel.setColor(Color.GOLD);
+        addActor(attackTextLabel);
 
         // Qtty label
-        qttyLabel = new Label("1", BaseGame.labelStyle_Small);
-        qttyLabel.setWrap(true);
-        qttyLabel.setAlignment( Align.center );
-        qttyLabel.setPosition( Math.round(width*0.077f), Math.round(height*0.2f) );
-        qttyLabel.setWidth( width*0.8f );
-        qttyLabel.setColor(Color.GOLD);
-        addActor(qttyLabel);
+        qttyCelltoClearLabel = new Label("1", BaseGame.labelStyle_Small);
+        qttyCelltoClearLabel.setWrap(true);
+        qttyCelltoClearLabel.setAlignment( Align.center );
+        qttyCelltoClearLabel.setPosition( Math.round(width*0.077f), Math.round(height*0.2f) );
+        qttyCelltoClearLabel.setWidth( width*0.8f );
+        qttyCelltoClearLabel.setColor(Color.GOLD);
+        addActor(qttyCelltoClearLabel);
 
+        //BaseActor baseActorRes = new BaseActor(x,y,getStage(),Touchable.disabled,cradleGame);
+        //resultsActorForAttack = new ResultsActorForAttack(x+width*0.1f,(int)(y+height/2),(int)(width*0.8f),(int)(height*0.25f),s,Touchable.disabled,this,cradleGame);
+        resultsActorForAttack = new ResultsActorForAttack(width*0.1f,(int)(height/4),(int)(width*0.8f),(int)(height*0.25f),s,Touchable.disabled,this,cradleGame,BaseGame.labelStyle_Small);
+
+        addActor(resultsActorForAttack);
 
     }
 
+/*
+    public void setAttackQtty(int qttyCelltoClear){
+        qttyCelltoClearLabel.setText(qttyCelltoClear);
 
-    public void setAttackQtty(int qtty){
-        qttyLabel.setText(qtty);
     }
+*/
+    public void setAttackTypeAndQtty(AttackTargetInfo attackTargetInfo, int qttyCelltoClear){
+        qttyCelltoClearLabel.setText(qttyCelltoClear);
+        resultsActorForAttack.UpdateRes(attackTargetInfo.kingdomRes);
+        String ms;
+
+        switch(attackTargetInfo.attackTypeInfo){
+            case SingleTimeClearUp:
+                ms = cradleGame.getLanguageStrings().get("destroy");
+                attackTextLabel.setText(ms);
+                qttyCelltoClearLabel.setVisible(true);
+                imageCelltoClear.setVisible(true);
+                resultsActorForAttack.setVisible(false);
+                break;
+            case SingleTimeResources:
+                ms = cradleGame.getLanguageStrings().get("collect");
+                attackTextLabel.setText(ms);
+                qttyCelltoClearLabel.setVisible(false);
+                imageCelltoClear.setVisible(false);
+                resultsActorForAttack.setVisible(true);
+                break;
+            case SingleClearUp:
+                ms = cradleGame.getLanguageStrings().get("destroy");
+                attackTextLabel.setText(ms);
+                qttyCelltoClearLabel.setVisible(true);
+                imageCelltoClear.setVisible(true);
+                resultsActorForAttack.setVisible(false);
+                break;
+            case SingleResources:
+                ms = cradleGame.getLanguageStrings().get("collect");
+                attackTextLabel.setText(ms);
+                qttyCelltoClearLabel.setVisible(false);
+                imageCelltoClear.setVisible(false);
+                resultsActorForAttack.setVisible(true);
+                break;
+            case DoubleClearUp:
+                ms = cradleGame.getLanguageStrings().get("destroy");
+                attackTextLabel.setText(ms);
+                qttyCelltoClearLabel.setVisible(true);
+                imageCelltoClear.setVisible(true);
+                resultsActorForAttack.setVisible(false);
+                break;
+            case DoubleResources:
+                ms = cradleGame.getLanguageStrings().get("collect");
+                attackTextLabel.setText(ms);
+                qttyCelltoClearLabel.setVisible(false);
+                imageCelltoClear.setVisible(false);
+                resultsActorForAttack.setVisible(true);
+                break;
+            default:
+                ms = cradleGame.getLanguageStrings().get("destroy");
+                attackTextLabel.setText(ms);
+                qttyCelltoClearLabel.setVisible(true);
+                imageCelltoClear.setVisible(true);
+                resultsActorForAttack.setVisible(false);
+        }
+    }
+
 }

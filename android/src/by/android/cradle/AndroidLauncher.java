@@ -76,9 +76,12 @@ import com.google.example.games.basegameutils.GameHelper;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.reward.RewardItem;
+import com.google.android.gms.ads.reward.RewardedVideoAd;
+import com.google.android.gms.ads.reward.RewardedVideoAdListener;
 
-
-public class AndroidLauncher extends AndroidApplication implements IActivityRequestHandler,IPlayServices,INotification  {
+public class AndroidLauncher extends AndroidApplication implements IActivityRequestHandler,IPlayServices,INotification, IGoogleServices, RewardedVideoAdListener  {
 
 	public static String Default_notification_channel_id="channel01";
 	public static String Default_notification_channel_name="Information";
@@ -99,6 +102,11 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
 	private FirebaseAnalytics mFirebaseAnalytics;
 	private CradleGame cradleGame;
 
+	private RewardedVideoAd adRewardedVideoView;
+	private static final String REWARDED_VIDEO_AD_UNIT_ID = "ca-app-pub-6101517213308128/2984805776";
+	//private static final String REWARDED_VIDEO_AD_UNIT_ID ="ca-app-pub-3940256099942544/5224354917"; // Test video ad
+	private IVideoEventListener vel;
+	private boolean is_video_ad_loaded;
 
 	//GPS First try
 	// Client used to sign in with Google APIs
@@ -183,7 +191,7 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
 
 		AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
 		// Create the libgdx View
-		cradleGame = new CradleGame(this,this,this);
+		cradleGame = new CradleGame(this,this,this,this);
 		gameView = initializeForView(cradleGame, config);
 
 		// Create and setup the AdMob view
@@ -268,15 +276,16 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
 		// Hook it all up
 		setContentView(layout);
 
+		setupRewarded();
 
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 			// Create channel to show notifications.
 			String channelId  = AndroidLauncher.Default_notification_channel_id;
 			String channelName = AndroidLauncher.Default_notification_channel_name;
-			NotificationManager notificationManager =
-					getSystemService(NotificationManager.class);
-			notificationManager.createNotificationChannel(new NotificationChannel(channelId,
-					channelName, NotificationManager.IMPORTANCE_LOW));
+			NotificationManager notificationManager = getSystemService(NotificationManager.class);
+			NotificationChannel channel = new NotificationChannel(channelId, channelName,
+					NotificationManager.IMPORTANCE_LOW);
+			notificationManager.createNotificationChannel(channel);
 		}
 
 		// If a notification message is tapped, any data accompanying the notification
@@ -710,5 +719,103 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
 		super.onUserLeaveHint();
 	}
 
+
+
+	public void loadRewardedVideoAd() {
+		AdRequest adRequest = new AdRequest.Builder()
+				.addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
+				.addTestDevice("10D929FF85B7803BB2D5CEE273F4FBFE")
+				.addTestDevice("51E3C88D530A640ED6513B1BD4C9DB62")
+				.build();
+		adRewardedVideoView.loadAd(REWARDED_VIDEO_AD_UNIT_ID, adRequest);
+
+	}
+
+	public void setupRewarded() {
+		adRewardedVideoView = MobileAds.getRewardedVideoAdInstance(this);
+		adRewardedVideoView.setRewardedVideoAdListener(this);
+		loadRewardedVideoAd();
+	}
+
+	public boolean hasVideoLoaded(){
+		if(is_video_ad_loaded) {
+			return true;
+		}
+		runOnUiThread(new Runnable() {
+			public void run() {
+				if (!adRewardedVideoView.isLoaded()) {
+					loadRewardedVideoAd();
+				}
+			}
+		});
+		return false;
+	}
+
+	public void showRewardedVideoAd(){
+		runOnUiThread(new Runnable() {
+			public void run() {
+				if (adRewardedVideoView.isLoaded()) {
+					adRewardedVideoView.show();
+				} else {
+					loadRewardedVideoAd();
+				}
+			}
+		});
+	}
+
+
+	@Override
+	public void onRewarded(RewardItem reward) {
+		if(vel != null) {
+			// The type and the amount can be set in your AdMob console
+			vel.onRewardedEvent(reward.getType(), reward.getAmount());
+		}
+	}
+
+	// Each time the video ends we need to load a new one
+	@Override
+	public void onRewardedVideoAdClosed() {
+		is_video_ad_loaded = false;
+		loadRewardedVideoAd();
+		if(vel != null) {
+			vel.onRewardedVideoAdClosedEvent();
+		}
+	}
+
+	@Override
+	public void onRewardedVideoAdLoaded() {
+		if(vel != null) {
+			vel.onRewardedVideoAdLoadedEvent();
+		}
+		is_video_ad_loaded = true;
+	}
+
+	@Override
+	public void onRewardedVideoAdOpened() {
+
+	}
+
+	@Override
+	public void onRewardedVideoStarted() {
+
+	}
+	@Override
+	public void onRewardedVideoAdLeftApplication() {
+
+	}
+
+	@Override
+	public void onRewardedVideoAdFailedToLoad(int i) {
+
+	}
+
+	@Override
+	public void onRewardedVideoCompleted() {
+
+	}
+
+	public void setVideoEventListener (IVideoEventListener listener) {
+		this.vel = listener;
+	}
 
 }

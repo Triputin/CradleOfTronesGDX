@@ -48,6 +48,8 @@ public abstract class BaseGame extends Game
 
     protected CradleAssetManager cradleAssetManager;
 
+
+
     /**
      *  Called when game is initialized; stores global reference to game object.
      */

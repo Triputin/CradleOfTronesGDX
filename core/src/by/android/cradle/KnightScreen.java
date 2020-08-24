@@ -267,11 +267,15 @@ public class KnightScreen extends BaseScreen {
                 if (ie.getType().equals(InputEvent.Type.touchDown)) {
                     KnightItem knightItem = knightItemSellPlace.getKnightItem();
                     if (knightItem!=null){
-                        int itemPrice = Math.round(knightItem.getKnightItemParams().getPrice()*sellItemKf);
-                        cradleGame.setGameResGold(GameRes.Gold + itemPrice);
-                        cradleGame.getKnightParams().removeKnightItemParams(knightItemSellPlace.getKnightItem().getKnightItemParams());
-                        knightItem.remove();
-                        knightItemSellPlace.setKnightItem(null);
+                        if(knightItem.overlaps(knightItemSellPlace)) {
+                            int itemPrice = Math.round(knightItem.getKnightItemParams().getPrice() * sellItemKf);
+                            cradleGame.setGameResGold(GameRes.Gold + itemPrice);
+                            cradleGame.getKnightParams().moveToPassiveItemParams(knightItem.getKnightItemParams());
+                            cradleGame.getKnightParams().removeKnightItemParams(knightItemSellPlace.getKnightItem().getKnightItemParams());
+                            knightItem.remove();
+                            knightItemSellPlace.setKnightItem(null);
+                            SetParams(cradleGame.getKnightParams());
+                        }
                     }
                     return true;
                 }

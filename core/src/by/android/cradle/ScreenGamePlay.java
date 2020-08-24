@@ -23,6 +23,8 @@ import com.badlogic.gdx.utils.TimeUtils;
 
 import java.util.ArrayList;
 
+import static by.android.cradle.AttackTypeInfo.SingleTimeClearUp;
+import static by.android.cradle.AttackTypeInfo.SingleTimeResources;
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.fadeIn;
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.fadeOut;
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.sequence;
@@ -49,6 +51,7 @@ public class ScreenGamePlay extends BaseScreen {
     private ResultsActor resultsActor;
     private Label gameLevelLabel;
     private AttackTarget attackTarget;
+    private AttackTargetSteps attackTargetSteps;
 
     private ScreenGamePlay screenGamePlay;
     private SandGlass sandGlass;
@@ -61,8 +64,9 @@ public class ScreenGamePlay extends BaseScreen {
     private BaseActor hall;
     private float score_during_attack;
     private DialogBox_EndLevel dialogBox_endLevel;
+    private DialogBox_NotEnoughSteps dialogBox_notEnoughSteps;
+    private int QttyRewardedVideoWatched;
     private KingdomRes resultAttack;
-
 
     private Label timeBombQttyLabel;
     private Label squareBomb1QttyLabel;
@@ -138,6 +142,9 @@ public class ScreenGamePlay extends BaseScreen {
         dialogBox_endLevel = new DialogBox_EndLevel(w/2-dialogSize/2,h/2-dialogSize/2,uiStage,dialogSize,dialogSize,cradleGame);
         dialogBox_endLevel.setVisible(false);
 
+        dialogBox_notEnoughSteps = new DialogBox_NotEnoughSteps(w/2-dialogSize/2,h/2-dialogSize/2,uiStage,dialogSize,dialogSize,cradleGame);
+        dialogBox_notEnoughSteps.setVisible(false);
+        QttyRewardedVideoWatched = 0;
 
 
         cellSize = cradleGame.getCellSize();
@@ -203,9 +210,38 @@ public class ScreenGamePlay extends BaseScreen {
         float targetPosX = cradleGame.getW()- (cradleGame.getW()-(gameField.getX()+gameField.getWidth()))*0.5f-targetSizeX*0.5f;
         float targetPosY = cradleGame.getH()*0.875f-targetSizeY;
         attackTarget = new AttackTarget(targetPosX,targetPosY,uiStage,Math.round(targetSizeX),Math.round(targetSizeY),cradleGame);
+        attackTargetSteps = new AttackTargetSteps(targetPosX,targetPosY-targetSizeY,uiStage,Math.round(targetSizeX),Math.round(targetSizeY),cradleGame);
+
+        /*
+        //Test video ad button
+        Button.ButtonStyle buttonStyle = new Button.ButtonStyle();
+
+        Texture buttonTex = new Texture( Gdx.files.internal("undo.png") );
+        TextureRegion buttonRegion =  new TextureRegion(buttonTex);
+        buttonStyle.up = new TextureRegionDrawable( buttonRegion );
+
+        Button testVideoAdButton = new Button( buttonStyle );
+        testVideoAdButton.setColor( Color.CYAN );
+        testVideoAdButton.setPosition(250,250);
+        uiStage.addActor(testVideoAdButton);
+
+        testVideoAdButton.addListener(new InputListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                InputEvent ie = (InputEvent)event;
+                if ( ie.getType().equals(InputEvent.Type.touchDown) ) {
+
+                    if(cradleGame.getiGoogleServices().hasVideoLoaded()) {
+                        cradleGame.getiGoogleServices().showRewardedVideoAd();
+                    }
+                }
+                return false;
+            }
+        });
+
+*/
 
 /*
-
 
         //Restart button
         Button.ButtonStyle buttonStyle = new Button.ButtonStyle();
@@ -362,7 +398,7 @@ public class ScreenGamePlay extends BaseScreen {
                         lastSelectedItem = null;
                         firstSelectedItem = null;
                     }
-                    if( gameField.CheckWin()){
+                    if( isWin()){
                         //isEndOfLevelAnimation=true;
                         WinMessageAndNewLevelCreate();
 
@@ -572,7 +608,7 @@ public class ScreenGamePlay extends BaseScreen {
         lastSelectedItem = null;
         firstSelectedItem = null;
 
-        if( gameField.CheckWin()){
+        if( isWin()){
             //isEndOfLevelAnimation=true;
             WinMessageAndNewLevelCreate();
 
@@ -615,7 +651,7 @@ public void RemoveAndFillSquare(int centreRow, int centreCol, int squareSize){
     lastSelectedItem = null;
     firstSelectedItem = null;
 
-    if( gameField.CheckWin()){
+    if( isWin()){
         //isEndOfLevelAnimation=true;
         WinMessageAndNewLevelCreate();
 
@@ -664,17 +700,61 @@ public void RemoveAndFillSquare(int centreRow, int centreCol, int squareSize){
 
     public void update(float dt)
     {
+        InputListener inputListenerCancel =new InputListener() {
+            public boolean touchDown (InputEvent e, float x, float y, int pointer, int button){
+                if (!(e instanceof InputEvent))
+                    return false;
 
-        if (sandGlass.isAnimationFinished()&&!isPaused) {
-            LoseLevel();
+                if (!((InputEvent) e).getType().equals(InputEvent.Type.touchDown))
+                    return false;
+                dialogBox_notEnoughSteps.setVisible(false);
+                LoseLevel();
+                return true;
+            }
+        };
+        InputListener inputListenerWatchVideo = new InputListener() {
+            public boolean touchDown (InputEvent e, float x, float y, int pointer, int button){
+                if (!(e instanceof InputEvent))
+                    return false;
+
+                if (!((InputEvent) e).getType().equals(InputEvent.Type.touchDown))
+                    return false;
+
+                dialogBox_notEnoughSteps.setVisible(false);
+
+                if(cradleGame.getiGoogleServices().hasVideoLoaded()) {
+                    cradleGame.getiGoogleServices().showRewardedVideoAd();
+                }
+
+                //isPaused=false;
+                return true;
+            }
+        };
+
+
+        if (sandGlass.isVisible()&& sandGlass.isAnimationFinished()&&!isPaused) {
+            if ((attackedKingdom==null)||(QttyRewardedVideoWatched>0)) {LoseLevel(); return;}
+
+            isPaused=true; // block timer in update
+            dialogBox_notEnoughSteps.showWithOkButton(inputListenerWatchVideo,inputListenerCancel,attackedKingdom.getAttackTargetInfo().attackTypeInfo);
         }
 
-        long diffInMillis = TimeUtils.timeSinceMillis(timeLastSelectionEnded);
-        if((diffInMillis>TIME_BEFORE_SHOW_SOLUTION) &&(!flag)){
-            clearAllSelections();
-            SelectSolution(gameField.FindSolutions(CellCount,mainStage));
-            timeLastSelectionEnded = TimeUtils.millis();
+        if (!sandGlass.isVisible()&&!isPaused&&(attackTargetSteps.getAttackStepsQtty()<=0)){
+            if ((attackedKingdom==null)||(QttyRewardedVideoWatched>0)) {LoseLevel(); return;}
+            isPaused=true; // block timer in update
+            System.out.println("attackTargetSteps.getAttackStepsQtty()="+attackTargetSteps.getAttackStepsQtty());
+            dialogBox_notEnoughSteps.showWithOkButton(inputListenerWatchVideo,inputListenerCancel,attackedKingdom.getAttackTargetInfo().attackTypeInfo);
         }
+
+        if(!isPaused) {
+            long diffInMillis = TimeUtils.timeSinceMillis(timeLastSelectionEnded);
+            if ((diffInMillis > TIME_BEFORE_SHOW_SOLUTION) && (!flag)) {
+                clearAllSelections();
+                SelectSolution(gameField.FindSolutions(CellCount, mainStage));
+                timeLastSelectionEnded = TimeUtils.millis();
+            }
+        }
+
     }
 
     public void clearAllSelections(){
@@ -755,6 +835,8 @@ public void RemoveAndFillSquare(int centreRow, int centreCol, int squareSize){
             }
 
             mainStage.addActor(boom);
+
+            // Lowered cradleGame.setAttackQtty -1 !!!
             gameField.changeGameCell(item1.getCell());
 
 
@@ -775,13 +857,68 @@ public void RemoveAndFillSquare(int centreRow, int centreCol, int squareSize){
         }
         mainStage.addActor(boom);
 
+        // Lowered cradleGame.setAttackQtty -1 !!!
         gameField.changeGameCell(item1.getCell());
 
         item1.remove();
         lastSelectedItem=null;
         firstSelectedItem=null;
-        attackTarget.setAttackQtty(cradleGame.getAttackQtty());
+        //attackTarget.setAttackQtty(cradleGame.getAttackQtty());
+
+        if (attackedKingdom!=null) {
+            attackTarget.setAttackTypeAndQtty(getAttackTargetLeftInfo(), cradleGame.getAttackQtty());
+        } else{
+            AttackTargetInfo atf = new AttackTargetInfo(0);
+            attackTarget.setAttackTypeAndQtty(atf, cradleGame.getAttackQtty());
+        }
+
+        attackTargetSteps.setAttackStepsQtty(attackTargetSteps.getAttackStepsQtty()-1);
         return arrayList;
+    }
+
+    public AttackTargetInfo getAttackTargetLeftInfo(){
+        AttackTargetInfo atf = new AttackTargetInfo(0);
+        if (attackedKingdom!=null) {
+            atf = new AttackTargetInfo(attackedKingdom.getAttackTargetInfo());
+        }
+
+        atf.kingdomRes.Wood -= resultAttack.Wood;
+        if (atf.kingdomRes.Wood<0) {atf.kingdomRes.Wood = 0;}
+        atf.kingdomRes.Bread -= resultAttack.Bread;
+        if (atf.kingdomRes.Bread<0) {atf.kingdomRes.Bread = 0;}
+        atf.kingdomRes.Gold -= resultAttack.Gold;
+        if (atf.kingdomRes.Gold<0) {atf.kingdomRes.Gold = 0;}
+        atf.stepsQtty = cradleGame.getAttackQtty();
+        return atf;
+    }
+
+    public boolean isWin(){
+        boolean win=true;
+        AttackTargetInfo atf = getAttackTargetLeftInfo();
+        if (atf.kingdomRes.Wood>0) win = false;
+        if (atf.kingdomRes.Gold>0) win = false;
+        if (atf.kingdomRes.Bread>0) win = false;
+        switch (atf.attackTypeInfo){
+            case SingleTimeClearUp:
+                win=gameField.CheckWin();
+                break;
+            case SingleTimeResources:
+                break;
+            case SingleClearUp:
+                win=gameField.CheckWin();
+                break;
+            case SingleResources:
+                break;
+            case DoubleClearUp:
+                win=gameField.CheckWin();
+                break;
+            case DoubleResources:
+                break;
+            default:
+                win=gameField.CheckWin();
+        }
+        return win;
+
     }
 
     public void FillRemovedCells(ArrayList<Cell> arrayList){
@@ -1366,10 +1503,14 @@ public void RemoveAndFillSquare(int centreRow, int centreCol, int squareSize){
     public void StartNewLevel(){
 
         ply.logLevelStartEvent(gameLevel);
-
+        QttyRewardedVideoWatched = 0;
         int w = Gdx.graphics.getWidth();
         int h = Gdx.graphics.getHeight();
-        gameField.GenerateLevel(gameLevel,CellCount);
+        if (attackedKingdom!=null) {
+            gameField.GenerateLevel(gameLevel, CellCount, attackedKingdom.getAttackTargetInfo().attackTypeInfo);
+        } else { //Arena
+            gameField.GenerateLevel(gameLevel, CellCount, SingleTimeClearUp);
+        }
         GenerateLevel(gameLevel);
         sandGlass.remove();
         //SandGlass recreation for restarting of animation
@@ -1390,17 +1531,64 @@ public void RemoveAndFillSquare(int centreRow, int centreCol, int squareSize){
         float targetPosY = cradleGame.getH()*0.875f-targetSizeY;
         attackTarget.remove();
         attackTarget = new AttackTarget(targetPosX,targetPosY,uiStage,Math.round(targetSizeX),Math.round(targetSizeY),cradleGame);
-        attackTarget.setAttackQtty(cradleGame.getAttackQtty());
+        //attackTarget.setAttackQtty(cradleGame.getAttackQtty());
+        if (attackedKingdom!=null) {
+            attackTarget.setAttackTypeAndQtty(attackedKingdom.getAttackTargetInfo(), cradleGame.getAttackQtty());
+        } else{
+            AttackTargetInfo atf = new AttackTargetInfo(0);
+            attackTarget.setAttackTypeAndQtty(atf, cradleGame.getAttackQtty());
+        }
         isPaused=false;
 
+        //Attack target Moves left
+        attackTargetSteps.remove();
+        attackTargetSteps = new AttackTargetSteps(targetPosX,targetPosY-targetSizeY,uiStage,Math.round(targetSizeX),Math.round(targetSizeY),cradleGame);
+        if (attackedKingdom!=null) { //null if Arena attacked
+            attackTargetSteps.setAttackStepsQtty(attackedKingdom.getAttackTargetInfo().stepsQtty);
+
+
+            switch (attackedKingdom.getAttackTargetInfo().attackTypeInfo) {
+                case SingleTimeClearUp:
+                    sandGlass.setVisible(true);
+                    attackTargetSteps.setVisible(false);
+                    break;
+                case SingleTimeResources:
+                    sandGlass.setVisible(true);
+                    attackTargetSteps.setVisible(false);
+                    break;
+                case SingleClearUp:
+                    sandGlass.setVisible(false);
+                    attackTargetSteps.setVisible(true);
+                    break;
+                case SingleResources:
+                    sandGlass.setVisible(false);
+                    attackTargetSteps.setVisible(true);
+                    break;
+                case DoubleClearUp:
+                    sandGlass.setVisible(false);
+                    attackTargetSteps.setVisible(true);
+                    break;
+                case DoubleResources:
+                    sandGlass.setVisible(false);
+                    attackTargetSteps.setVisible(true);
+                    break;
+                default:
+                    sandGlass.setVisible(true);
+                    attackTargetSteps.setVisible(false);
+            }
+
+        } else { // Arena
+            sandGlass.setVisible(true);
+            attackTargetSteps.setVisible(false);
+        }
 
         int knSize = Math.round(h*0.4f);
         int wpSize = Math.round(h*0.1f);
         if (knight!=null){knight.remove();}
         if(weapon!=null){weapon.remove();}
-        knight = new Knight(-knSize*0.1f,h-knSize*0.5f,knSize,knSize,mainStage,cradleGame.getKnightParams(),cradleGame);
+        knight = new Knight(-knSize*0.1f,h-knSize*0.57f,knSize,knSize,mainStage,cradleGame.getKnightParams(),cradleGame);
 
-        weapon = new Weapon(knSize*0.585f,h-knSize*0.0f,wpSize,wpSize,mainStage,cradleGame,knight);
+        weapon = new Weapon(knSize*0.585f,h-knSize*0.07f,wpSize,wpSize,mainStage,cradleGame,knight);
 
         if (!cradleGame.isWeaponUsed()){
             //Message size and pos
@@ -1680,11 +1868,40 @@ public void RemoveAndFillSquare(int centreRow, int centreCol, int squareSize){
 
     }
 
+
+
     public void HideArrowUp(){
 
         if( arrowUpActor!=null) {
             arrowUpActor.setVisible(false);
         }
+    }
 
+
+    public void useRewardForVideo(){
+        QttyRewardedVideoWatched++;  //Controls if video was already used by player
+
+        if(attackedKingdom==null){ //Arena
+            sandGlass.setElapsedTime(sandGlass.getAnimationDuration()-20);
+            return;
+        }
+
+        switch(attackedKingdom.getAttackTargetInfo().attackTypeInfo){
+            case SingleTimeClearUp:
+            case SingleTimeResources:
+                //sandGlass.setElapsedTime(sandGlass.getElapsedTime()-20);
+                sandGlass.setElapsedTime(sandGlass.getAnimationDuration()-20);
+                return;
+                //break;
+            default:
+                attackTargetSteps.setAttackStepsQtty(attackTargetSteps.getAttackStepsQtty()+5);
+        }
+
+        isPaused=false;
+    }
+
+    public void NouseRewardForVideo(){
+
+        isPaused=false;
     }
 }
