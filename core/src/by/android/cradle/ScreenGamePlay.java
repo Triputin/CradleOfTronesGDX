@@ -79,6 +79,8 @@ public class ScreenGamePlay extends BaseScreen {
     public Weapon weapon;
     private ArrowUpActor arrowUpActor;
 
+    private EnemyKnight enemyKnight;
+
     public ScreenGamePlay(CradleGame cradleGame,IPlayServices ply) {
         super(cradleGame,ply);
     }
@@ -202,7 +204,13 @@ public class ScreenGamePlay extends BaseScreen {
         gameLevelLabel.setColor( Color.GOLDENROD );
         gameLevelLabel.setPosition( sandGlass.getX()+sandGlass.getWidth()*0.4f,10 );
         //gameLevelLabel.setFontScale(2.0f);
-        uiStage.addActor(gameLevelLabel);
+        //uiStage.addActor(gameLevelLabel);
+
+
+
+
+
+
 
         //Attack target info
         float targetSizeX = (cradleGame.getW()-(gameField.getX()+gameField.getWidth()))*0.95f;
@@ -211,6 +219,16 @@ public class ScreenGamePlay extends BaseScreen {
         float targetPosY = cradleGame.getH()*0.875f-targetSizeY;
         attackTarget = new AttackTarget(targetPosX,targetPosY,uiStage,Math.round(targetSizeX),Math.round(targetSizeY),cradleGame);
         attackTargetSteps = new AttackTargetSteps(targetPosX,targetPosY-targetSizeY,uiStage,Math.round(targetSizeX),Math.round(targetSizeY),cradleGame);
+
+
+
+        //EnemyKnight
+        float enemySizeX = (cradleGame.getW()-(gameField.getX()+gameField.getWidth()))*0.95f;
+        float enemySizeY = enemySizeX*0.94f;
+        float enemyPosX = cradleGame.getW()- (cradleGame.getW()-(gameField.getX()+gameField.getWidth()))*0.5f-targetSizeX*0.5f;
+        float enemyPosY = 0;//cradleGame.getH()*0.875f-targetSizeY;
+        enemyKnight = new EnemyKnight(targetPosX,enemyPosY,mainStage,Math.round(enemySizeX), Math.round(enemySizeY),cradleGame,cradleGame.getKnightParams());
+
 
         /*
         //Test video ad button
