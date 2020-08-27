@@ -488,6 +488,282 @@ public class ScreenGamePlay extends BaseScreen {
 
     }
 
+    //Called when new attack started
+    public void StartNewLevel(){
+
+        ply.logLevelStartEvent(gameLevel);
+        QttyRewardedVideoWatched = 0;
+        int w = Gdx.graphics.getWidth();
+        int h = Gdx.graphics.getHeight();
+        if (attackedKingdom!=null) {
+            gameField.GenerateLevel(gameLevel, CellCount, attackedKingdom.getAttackTargetInfo().attackTypeInfo);
+        } else { //Arena
+            gameField.GenerateLevel(gameLevel, CellCount, SingleTimeClearUp);
+        }
+        GenerateLevel(gameLevel);
+        sandGlass.remove();
+        //SandGlass recreation for restarting of animation
+        float x = gameFieldX+cellSize*CellCount+10;
+        float y = gameFieldY+cellSize*CellCount*0.05f;;
+        int sw = (int)(Gdx.graphics.getWidth()-x);
+        int sandglassduration = getLevelDuration();
+        if (gameLevel>20) {
+            sandglassduration = getLevelDuration() + gameLevel*2 - 20;
+            if (sandglassduration > 400) sandglassduration = 400;
+        }
+        sandGlass = new SandGlass(x,0,uiStage,sw,Math.round( cellSize*CellCount*0.8f), sandglassduration,cradleGame);
+
+        //Attack target info
+        float targetSizeX = (cradleGame.getW()-(gameField.getX()+gameField.getWidth()))*0.95f;
+        float targetSizeY = targetSizeX*0.5f;
+        float targetPosX = cradleGame.getW()- (cradleGame.getW()-(gameField.getX()+gameField.getWidth()))*0.5f-targetSizeX*0.5f;
+        float targetPosY = cradleGame.getH()*0.875f-targetSizeY;
+        attackTarget.remove();
+        attackTarget = new AttackTarget(targetPosX,targetPosY,uiStage,Math.round(targetSizeX),Math.round(targetSizeY),cradleGame);
+        //attackTarget.setAttackQtty(cradleGame.getAttackQtty());
+        if (attackedKingdom!=null) {
+            attackTarget.setAttackTypeAndQtty(attackedKingdom.getAttackTargetInfo(), cradleGame.getAttackQtty());
+        } else{
+            AttackTargetInfo atf = new AttackTargetInfo(0);
+            attackTarget.setAttackTypeAndQtty(atf, cradleGame.getAttackQtty());
+        }
+        isPaused=false;
+
+        //Attack target Moves left
+        attackTargetSteps.remove();
+        attackTargetSteps = new AttackTargetSteps(targetPosX,targetPosY-targetSizeY,uiStage,Math.round(targetSizeX),Math.round(targetSizeY),cradleGame);
+        if (attackedKingdom!=null) { //null if Arena attacked
+            attackTargetSteps.setAttackStepsQtty(attackedKingdom.getAttackTargetInfo().stepsQtty);
+
+
+            switch (attackedKingdom.getAttackTargetInfo().attackTypeInfo) {
+                case SingleTimeClearUp:
+                    sandGlass.setVisible(true);
+                    attackTargetSteps.setVisible(false);
+                    enemyKnight.setVisible(false);
+                    break;
+                case SingleTimeResources:
+                    sandGlass.setVisible(true);
+                    attackTargetSteps.setVisible(false);
+                    enemyKnight.setVisible(false);
+                    break;
+                case SingleClearUp:
+                    sandGlass.setVisible(false);
+                    attackTargetSteps.setVisible(true);
+                    enemyKnight.setVisible(false);
+                    break;
+                case SingleResources:
+                    sandGlass.setVisible(false);
+                    attackTargetSteps.setVisible(true);
+                    enemyKnight.setVisible(false);
+                    break;
+                case DoubleClearUp:
+                    sandGlass.setVisible(false);
+                    attackTargetSteps.setVisible(true);
+                    enemyKnight.setVisible(false);
+                    break;
+                case DoubleResources:
+                    sandGlass.setVisible(false);
+                    attackTargetSteps.setVisible(false);
+                    enemyKnight.setVisible(false);
+                    break;
+                case DoubleFight:
+                    sandGlass.setVisible(false);
+                    attackTargetSteps.setVisible(false);
+                    enemyKnight.setVisible(true);
+                    enemyKnight.setKnightParamsForAttack(attackedKingdom.getAttackTargetInfo().knightParamsForAttack.HealthPoints);
+                    break;
+                default:
+                    sandGlass.setVisible(true);
+                    attackTargetSteps.setVisible(false);
+                    enemyKnight.setVisible(false);
+            }
+
+        } else { // Arena
+            sandGlass.setVisible(true);
+            attackTargetSteps.setVisible(false);
+            enemyKnight.setVisible(false);
+        }
+
+        int knSize = Math.round(h*0.4f);
+        int wpSize = Math.round(h*0.1f);
+        if (knight!=null){knight.remove();}
+        if(weapon!=null){weapon.remove();}
+        knight = new Knight(-knSize*0.1f,h-knSize*0.57f,knSize,knSize,mainStage,cradleGame.getKnightParams(),cradleGame);
+
+        weapon = new Weapon(knSize*0.585f,h-knSize*0.07f,wpSize,wpSize,mainStage,cradleGame,knight);
+
+        if (!cradleGame.isWeaponUsed()){
+            //Message size and pos
+            arrowUpActor = new ArrowUpActor(knSize*0.3f, h-knSize*2.0f,knSize*0.7f, knSize*1.6f,uiStage, cradleGame);
+            //arrow pos
+            arrowUpActor.startAnimation(knSize*0.6f,h-knSize*0.5f,knSize*0.6f,h-knSize*0.4f);
+        }
+
+
+        //BombsFrame
+        if (bombs_frame!=null){
+            bombs_frame.remove();
+        }
+        bombs_frame = new Bombs_Frame(0,0,cradleGame.getBombs_frame_sizeX(),cradleGame.getBombs_frame_sizeY(),mainStage,cradleGame);
+
+        float bombPos = cradleGame.getBombs_frame_sizeX()*0.5f-cradleGame.getBombSize()*0.5f;
+        //Bombs
+        for (int i = 0; i < GameRes.TimeBomb; i++) {
+            new TimeBomb(bombPos, cradleGame.getBombs_frame_sizeY() * 0.71f, cradleGame.getBombSize(), cradleGame.getBombSize(), mainStage, Touchable.enabled, sandGlass, 60, cradleGame);
+        }
+        for (int i=0;i<GameRes.SquareBomb1;i++) {
+            new SquareBomb(bombPos,cradleGame.getBombs_frame_sizeY() * 0.38f,cradleGame.getBombSize(),cradleGame.getBombSize(),mainStage,Touchable.enabled,1,this,cradleGame);
+        }
+        for (int i=0;i<GameRes.SquareBomb2;i++) {
+            new SquareBomb(bombPos,h*0.04f,cradleGame.getBombSize(),cradleGame.getBombSize(),mainStage,Touchable.enabled,2,this,cradleGame);
+        }
+
+        if (GameRes.TimeBomb>0) {
+            timeBombQttyLabel.setText("" + GameRes.TimeBomb);
+        } else {
+            timeBombQttyLabel.setText("");
+        }
+
+        if (GameRes.SquareBomb1>0) {
+            squareBomb1QttyLabel.setText("" + GameRes.SquareBomb1);
+        } else {
+            squareBomb1QttyLabel.setText("");
+        }
+
+        if (GameRes.SquareBomb2>0) {
+            squareBomb2QttyLabel.setText("" + GameRes.SquareBomb2);
+        } else {
+            squareBomb2QttyLabel.setText("");
+        }
+
+        timeLastSelectionEnded = TimeUtils.millis();
+
+
+
+    }
+
+    public void LoseLevel(){
+        //System.out.println("LoseLevel()");
+        GdxLog.print("LoseLevel():","Called");
+        isPaused=true; // block timer in update
+        Action actions;
+        //Fon
+        /*
+        BaseActor fon = new BaseActor(0,0,uiStage,Touchable.disabled);
+        fon.loadTexture("fon_orange.png",cellSize*CellCount,cellSize*CellCount);
+        fon.setX(gameFieldX);
+        fon.setY(gameFieldY);
+        fon.centerAtPosition(gameFieldX+cellSize*CellCount/2,gameFieldY+cellSize*CellCount/2);
+        fon.setOpacity(80);
+        actions = sequence(fadeIn(0.5f), Actions.delay(3) ,fadeOut(1f));
+        fon.addAction(actions);
+        */
+
+        Action completeAction = new Action(){
+            public boolean act( float delta ) {
+
+                //Show dialog
+                dialogBox_endLevel.setResults(0,resultAttack.Gold,resultAttack.Wood,resultAttack.Bread);
+
+                InputListener inputListener3 =new InputListener() {
+                    public boolean touchDown (InputEvent e, float x, float y, int pointer, int button){
+                        if (!(e instanceof InputEvent))
+                            return false;
+
+                        if (!((InputEvent) e).getType().equals(InputEvent.Type.touchDown))
+                            return false;
+                        knight.doDamage();
+                        collectAllKnightItems();
+                        ply.logLevelEndEvent(gameLevel,"attack is lost");
+                        cradleGame.setActiveGameMapScreen(false,0);
+
+                        return true;
+                    }
+                };
+
+                dialogBox_endLevel.showWithOkButton(inputListener3);
+                return true;
+            }
+        };
+
+        actions = sequence(fadeIn(0.5f), Actions.delay(3) ,fadeOut(1f), completeAction);
+        String s = cradleGame.getLanguageStrings().get("you_lose");
+        messageLabel.setText(s);
+        messageLabel.setColor(Color.RED);
+        messageLabel.setVisible(true);
+        messageLabel.addAction(actions);
+
+    }
+
+    public void update(float dt)
+    {
+        InputListener inputListenerCancel =new InputListener() {
+            public boolean touchDown (InputEvent e, float x, float y, int pointer, int button){
+                if (!(e instanceof InputEvent))
+                    return false;
+
+                if (!((InputEvent) e).getType().equals(InputEvent.Type.touchDown))
+                    return false;
+                dialogBox_notEnoughSteps.setVisible(false);
+                LoseLevel();
+                return true;
+            }
+        };
+        InputListener inputListenerWatchVideo = new InputListener() {
+            public boolean touchDown (InputEvent e, float x, float y, int pointer, int button){
+                if (!(e instanceof InputEvent))
+                    return false;
+
+                if (!((InputEvent) e).getType().equals(InputEvent.Type.touchDown))
+                    return false;
+
+                dialogBox_notEnoughSteps.setVisible(false);
+
+                if(cradleGame.getiGoogleServices().hasVideoLoaded()) {
+                    cradleGame.getiGoogleServices().showRewardedVideoAd();
+                }
+
+                //isPaused=false;
+                return true;
+            }
+        };
+
+        //Check if game has time limit
+        if (sandGlass.isVisible()&& sandGlass.isAnimationFinished()&&!isPaused) {
+            if ((attackedKingdom==null)||(QttyRewardedVideoWatched>0)) {LoseLevel(); return;}
+
+            isPaused=true; // block timer in update
+            dialogBox_notEnoughSteps.showWithOkButton(inputListenerWatchVideo,inputListenerCancel,attackedKingdom.getAttackTargetInfo().attackTypeInfo);
+        }
+
+        //Check if game has steps limit
+        if (!sandGlass.isVisible()&&!isPaused&&(attackTargetSteps.getAttackStepsQtty()<=0)&&(attackedKingdom.getAttackTargetInfo().attackTypeInfo!=AttackTypeInfo.DoubleFight)){
+            if ((attackedKingdom==null)||(QttyRewardedVideoWatched>0)) {LoseLevel(); return;}
+            isPaused=true; // block timer in update
+            System.out.println("attackTargetSteps.getAttackStepsQtty()="+attackTargetSteps.getAttackStepsQtty());
+            dialogBox_notEnoughSteps.showWithOkButton(inputListenerWatchVideo,inputListenerCancel,attackedKingdom.getAttackTargetInfo().attackTypeInfo);
+        }
+
+        //Check if game has doublefight type
+        if (!sandGlass.isVisible()&&!isPaused&&(attackedKingdom.getAttackTargetInfo().attackTypeInfo==AttackTypeInfo.DoubleFight)) {
+            if (enemyKnight.getCurKnightParams().HealthPoints <= 0) {
+                LoseLevel();
+                return;
+            }
+
+        }
+
+            if(!isPaused) {
+            long diffInMillis = TimeUtils.timeSinceMillis(timeLastSelectionEnded);
+            if ((diffInMillis > TIME_BEFORE_SHOW_SOLUTION) && (!flag)) {
+                clearAllSelections();
+                SelectSolution(gameField.FindSolutions(CellCount, mainStage));
+                timeLastSelectionEnded = TimeUtils.millis();
+            }
+        }
+
+    }
 
     // used for weapon
     public void RemoveAndFillCells(int centreRow, int centreCol, int cellQttyToRemove){
@@ -716,64 +992,6 @@ public void RemoveAndFillSquare(int centreRow, int centreCol, int squareSize){
         arrayList.get(arrayList.size()-1).setSelected(true,arrayList.get(arrayList.size()-2));
     }
 
-    public void update(float dt)
-    {
-        InputListener inputListenerCancel =new InputListener() {
-            public boolean touchDown (InputEvent e, float x, float y, int pointer, int button){
-                if (!(e instanceof InputEvent))
-                    return false;
-
-                if (!((InputEvent) e).getType().equals(InputEvent.Type.touchDown))
-                    return false;
-                dialogBox_notEnoughSteps.setVisible(false);
-                LoseLevel();
-                return true;
-            }
-        };
-        InputListener inputListenerWatchVideo = new InputListener() {
-            public boolean touchDown (InputEvent e, float x, float y, int pointer, int button){
-                if (!(e instanceof InputEvent))
-                    return false;
-
-                if (!((InputEvent) e).getType().equals(InputEvent.Type.touchDown))
-                    return false;
-
-                dialogBox_notEnoughSteps.setVisible(false);
-
-                if(cradleGame.getiGoogleServices().hasVideoLoaded()) {
-                    cradleGame.getiGoogleServices().showRewardedVideoAd();
-                }
-
-                //isPaused=false;
-                return true;
-            }
-        };
-
-
-        if (sandGlass.isVisible()&& sandGlass.isAnimationFinished()&&!isPaused) {
-            if ((attackedKingdom==null)||(QttyRewardedVideoWatched>0)) {LoseLevel(); return;}
-
-            isPaused=true; // block timer in update
-            dialogBox_notEnoughSteps.showWithOkButton(inputListenerWatchVideo,inputListenerCancel,attackedKingdom.getAttackTargetInfo().attackTypeInfo);
-        }
-
-        if (!sandGlass.isVisible()&&!isPaused&&(attackTargetSteps.getAttackStepsQtty()<=0)){
-            if ((attackedKingdom==null)||(QttyRewardedVideoWatched>0)) {LoseLevel(); return;}
-            isPaused=true; // block timer in update
-            System.out.println("attackTargetSteps.getAttackStepsQtty()="+attackTargetSteps.getAttackStepsQtty());
-            dialogBox_notEnoughSteps.showWithOkButton(inputListenerWatchVideo,inputListenerCancel,attackedKingdom.getAttackTargetInfo().attackTypeInfo);
-        }
-
-        if(!isPaused) {
-            long diffInMillis = TimeUtils.timeSinceMillis(timeLastSelectionEnded);
-            if ((diffInMillis > TIME_BEFORE_SHOW_SOLUTION) && (!flag)) {
-                clearAllSelections();
-                SelectSolution(gameField.FindSolutions(CellCount, mainStage));
-                timeLastSelectionEnded = TimeUtils.millis();
-            }
-        }
-
-    }
 
     public void clearAllSelections(){
         ArrayList<Item> arrayList = gameField.GetAllItems();
@@ -885,12 +1103,24 @@ public void RemoveAndFillSquare(int centreRow, int centreCol, int squareSize){
 
         if (attackedKingdom!=null) {
             attackTarget.setAttackTypeAndQtty(getAttackTargetLeftInfo(), cradleGame.getAttackQtty());
+            //Do damage to enemy knight if needed
+            if (attackedKingdom.getAttackTargetInfo().attackTypeInfo==AttackTypeInfo.DoubleFight){
+
+                /*
+                attackedKingdom.getAttackTargetInfo().knightParamsForAttack.HealthPoints
+                        уменьшить на
+                resCollected
+                */
+                enemyKnight.doDamage(resCollected);
+
+            }
         } else{
             AttackTargetInfo atf = new AttackTargetInfo(0);
             attackTarget.setAttackTypeAndQtty(atf, cradleGame.getAttackQtty());
         }
 
         attackTargetSteps.setAttackStepsQtty(attackTargetSteps.getAttackStepsQtty()-1);
+
         return arrayList;
     }
 
@@ -931,6 +1161,13 @@ public void RemoveAndFillSquare(int centreRow, int centreCol, int squareSize){
                 win=gameField.CheckWin();
                 break;
             case DoubleResources:
+                break;
+            case DoubleFight:
+                if (enemyKnight.getCurEnemyKnightParamsForAttack().HealthPoints <= 0) {
+                    win=true;
+                } else {
+                    win = false;
+                }
                 break;
             default:
                 win=gameField.CheckWin();
@@ -1518,198 +1755,6 @@ public void RemoveAndFillSquare(int centreRow, int centreCol, int squareSize){
 
     }
 
-    public void StartNewLevel(){
-
-        ply.logLevelStartEvent(gameLevel);
-        QttyRewardedVideoWatched = 0;
-        int w = Gdx.graphics.getWidth();
-        int h = Gdx.graphics.getHeight();
-        if (attackedKingdom!=null) {
-            gameField.GenerateLevel(gameLevel, CellCount, attackedKingdom.getAttackTargetInfo().attackTypeInfo);
-        } else { //Arena
-            gameField.GenerateLevel(gameLevel, CellCount, SingleTimeClearUp);
-        }
-        GenerateLevel(gameLevel);
-        sandGlass.remove();
-        //SandGlass recreation for restarting of animation
-        float x = gameFieldX+cellSize*CellCount+10;
-        float y = gameFieldY+cellSize*CellCount*0.05f;;
-        int sw = (int)(Gdx.graphics.getWidth()-x);
-        int sandglassduration = getLevelDuration();
-        if (gameLevel>20) {
-            sandglassduration = getLevelDuration() + gameLevel*2 - 20;
-            if (sandglassduration > 400) sandglassduration = 400;
-        }
-        sandGlass = new SandGlass(x,0,uiStage,sw,Math.round( cellSize*CellCount*0.8f), sandglassduration,cradleGame);
-
-        //Attack target info
-        float targetSizeX = (cradleGame.getW()-(gameField.getX()+gameField.getWidth()))*0.95f;
-        float targetSizeY = targetSizeX*0.5f;
-        float targetPosX = cradleGame.getW()- (cradleGame.getW()-(gameField.getX()+gameField.getWidth()))*0.5f-targetSizeX*0.5f;
-        float targetPosY = cradleGame.getH()*0.875f-targetSizeY;
-        attackTarget.remove();
-        attackTarget = new AttackTarget(targetPosX,targetPosY,uiStage,Math.round(targetSizeX),Math.round(targetSizeY),cradleGame);
-        //attackTarget.setAttackQtty(cradleGame.getAttackQtty());
-        if (attackedKingdom!=null) {
-            attackTarget.setAttackTypeAndQtty(attackedKingdom.getAttackTargetInfo(), cradleGame.getAttackQtty());
-        } else{
-            AttackTargetInfo atf = new AttackTargetInfo(0);
-            attackTarget.setAttackTypeAndQtty(atf, cradleGame.getAttackQtty());
-        }
-        isPaused=false;
-
-        //Attack target Moves left
-        attackTargetSteps.remove();
-        attackTargetSteps = new AttackTargetSteps(targetPosX,targetPosY-targetSizeY,uiStage,Math.round(targetSizeX),Math.round(targetSizeY),cradleGame);
-        if (attackedKingdom!=null) { //null if Arena attacked
-            attackTargetSteps.setAttackStepsQtty(attackedKingdom.getAttackTargetInfo().stepsQtty);
-
-
-            switch (attackedKingdom.getAttackTargetInfo().attackTypeInfo) {
-                case SingleTimeClearUp:
-                    sandGlass.setVisible(true);
-                    attackTargetSteps.setVisible(false);
-                    break;
-                case SingleTimeResources:
-                    sandGlass.setVisible(true);
-                    attackTargetSteps.setVisible(false);
-                    break;
-                case SingleClearUp:
-                    sandGlass.setVisible(false);
-                    attackTargetSteps.setVisible(true);
-                    break;
-                case SingleResources:
-                    sandGlass.setVisible(false);
-                    attackTargetSteps.setVisible(true);
-                    break;
-                case DoubleClearUp:
-                    sandGlass.setVisible(false);
-                    attackTargetSteps.setVisible(true);
-                    break;
-                case DoubleResources:
-                    sandGlass.setVisible(false);
-                    attackTargetSteps.setVisible(true);
-                    break;
-                default:
-                    sandGlass.setVisible(true);
-                    attackTargetSteps.setVisible(false);
-            }
-
-        } else { // Arena
-            sandGlass.setVisible(true);
-            attackTargetSteps.setVisible(false);
-        }
-
-        int knSize = Math.round(h*0.4f);
-        int wpSize = Math.round(h*0.1f);
-        if (knight!=null){knight.remove();}
-        if(weapon!=null){weapon.remove();}
-        knight = new Knight(-knSize*0.1f,h-knSize*0.57f,knSize,knSize,mainStage,cradleGame.getKnightParams(),cradleGame);
-
-        weapon = new Weapon(knSize*0.585f,h-knSize*0.07f,wpSize,wpSize,mainStage,cradleGame,knight);
-
-        if (!cradleGame.isWeaponUsed()){
-            //Message size and pos
-            arrowUpActor = new ArrowUpActor(knSize*0.3f, h-knSize*2.0f,knSize*0.7f, knSize*1.6f,uiStage, cradleGame);
-            //arrow pos
-            arrowUpActor.startAnimation(knSize*0.6f,h-knSize*0.5f,knSize*0.6f,h-knSize*0.4f);
-        }
-
-
-        //BombsFrame
-        if (bombs_frame!=null){
-            bombs_frame.remove();
-        }
-        bombs_frame = new Bombs_Frame(0,0,cradleGame.getBombs_frame_sizeX(),cradleGame.getBombs_frame_sizeY(),mainStage,cradleGame);
-
-        float bombPos = cradleGame.getBombs_frame_sizeX()*0.5f-cradleGame.getBombSize()*0.5f;
-        //Bombs
-        for (int i = 0; i < GameRes.TimeBomb; i++) {
-            new TimeBomb(bombPos, cradleGame.getBombs_frame_sizeY() * 0.71f, cradleGame.getBombSize(), cradleGame.getBombSize(), mainStage, Touchable.enabled, sandGlass, 60, cradleGame);
-        }
-        for (int i=0;i<GameRes.SquareBomb1;i++) {
-            new SquareBomb(bombPos,cradleGame.getBombs_frame_sizeY() * 0.38f,cradleGame.getBombSize(),cradleGame.getBombSize(),mainStage,Touchable.enabled,1,this,cradleGame);
-        }
-        for (int i=0;i<GameRes.SquareBomb2;i++) {
-            new SquareBomb(bombPos,h*0.04f,cradleGame.getBombSize(),cradleGame.getBombSize(),mainStage,Touchable.enabled,2,this,cradleGame);
-        }
-
-        if (GameRes.TimeBomb>0) {
-            timeBombQttyLabel.setText("" + GameRes.TimeBomb);
-        } else {
-            timeBombQttyLabel.setText("");
-        }
-
-        if (GameRes.SquareBomb1>0) {
-            squareBomb1QttyLabel.setText("" + GameRes.SquareBomb1);
-        } else {
-            squareBomb1QttyLabel.setText("");
-        }
-
-        if (GameRes.SquareBomb2>0) {
-            squareBomb2QttyLabel.setText("" + GameRes.SquareBomb2);
-        } else {
-            squareBomb2QttyLabel.setText("");
-        }
-
-        timeLastSelectionEnded = TimeUtils.millis();
-
-
-
-    }
-
-    public void LoseLevel(){
-        //System.out.println("LoseLevel()");
-        GdxLog.print("LoseLevel():","Called");
-        isPaused=true; // block timer in update
-        Action actions;
-        //Fon
-        /*
-        BaseActor fon = new BaseActor(0,0,uiStage,Touchable.disabled);
-        fon.loadTexture("fon_orange.png",cellSize*CellCount,cellSize*CellCount);
-        fon.setX(gameFieldX);
-        fon.setY(gameFieldY);
-        fon.centerAtPosition(gameFieldX+cellSize*CellCount/2,gameFieldY+cellSize*CellCount/2);
-        fon.setOpacity(80);
-        actions = sequence(fadeIn(0.5f), Actions.delay(3) ,fadeOut(1f));
-        fon.addAction(actions);
-        */
-
-        Action completeAction = new Action(){
-            public boolean act( float delta ) {
-
-                //Show dialog
-                dialogBox_endLevel.setResults(0,resultAttack.Gold,resultAttack.Wood,resultAttack.Bread);
-
-                 InputListener inputListener3 =new InputListener() {
-                    public boolean touchDown (InputEvent e, float x, float y, int pointer, int button){
-                        if (!(e instanceof InputEvent))
-                            return false;
-
-                        if (!((InputEvent) e).getType().equals(InputEvent.Type.touchDown))
-                            return false;
-                        knight.doDamage();
-                        collectAllKnightItems();
-                        ply.logLevelEndEvent(gameLevel,"attack is lost");
-                        cradleGame.setActiveGameMapScreen(false,0);
-
-                        return true;
-                    }
-                };
-
-                dialogBox_endLevel.showWithOkButton(inputListener3);
-                return true;
-            }
-        };
-
-        actions = sequence(fadeIn(0.5f), Actions.delay(3) ,fadeOut(1f), completeAction);
-        String s = cradleGame.getLanguageStrings().get("you_lose");
-        messageLabel.setText(s);
-        messageLabel.setColor(Color.RED);
-        messageLabel.setVisible(true);
-        messageLabel.addAction(actions);
-
-    }
 
 
     // set res for add after winnning on Arena

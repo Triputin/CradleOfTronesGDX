@@ -41,6 +41,7 @@ public class Kingdom extends BaseActor {
     private final ResultsActor resultsActor;
     private AttackTargetInfo attackTargetInfo;
 
+
     private int kingdomID; // Should be an unique number through the whole game
 
 

@@ -4,9 +4,10 @@ public class AttackTargetInfo {
     public AttackTypeInfo attackTypeInfo;
     public KingdomRes kingdomRes;
     public int stepsQtty;
+    KnightParamsForAttack knightParamsForAttack;
 
     public AttackTargetInfo(int kingdomId){
-
+        knightParamsForAttack = new KnightParamsForAttack(1);
         kingdomRes = new KingdomRes();
         switch(kingdomId){
             case 0:
@@ -50,10 +51,9 @@ public class AttackTargetInfo {
                 stepsQtty = 20;
                 break;
             case 7:
-                attackTypeInfo = AttackTypeInfo.SingleTimeResources;
-                kingdomRes.Wood = 30;
-                kingdomRes.Gold = 30;
-                kingdomRes.Bread = 30;
+                attackTypeInfo = AttackTypeInfo.DoubleFight;
+                knightParamsForAttack.HealthPoints = 50;
+                stepsQtty = 40;
                 break;
             case 10:
                 attackTypeInfo = AttackTypeInfo.SingleTimeClearUp;
@@ -90,10 +90,9 @@ public class AttackTargetInfo {
                 stepsQtty = 20;
                 break;
             case 17:
-                attackTypeInfo = AttackTypeInfo.SingleTimeResources;
-                kingdomRes.Wood = 50;
-                kingdomRes.Gold = 50;
-                kingdomRes.Bread = 50;
+                attackTypeInfo = AttackTypeInfo.DoubleFight;
+                knightParamsForAttack.HealthPoints = 80;
+                stepsQtty = 40;
                 break;
 
             case 20:
@@ -134,10 +133,9 @@ public class AttackTargetInfo {
                 stepsQtty = 18;
                 break;
             case 27:
-                attackTypeInfo = AttackTypeInfo.SingleTimeResources;
-                kingdomRes.Wood = 60;
-                kingdomRes.Gold = 60;
-                kingdomRes.Bread = 60;
+                attackTypeInfo = AttackTypeInfo.DoubleFight;
+                knightParamsForAttack.HealthPoints = 100;
+                stepsQtty = 40;
                 break;
 
             case 30:
@@ -178,10 +176,9 @@ public class AttackTargetInfo {
                 stepsQtty = 15;
                 break;
             case 37:
-                attackTypeInfo = AttackTypeInfo.SingleTimeResources;
-                kingdomRes.Wood = 70;
-                kingdomRes.Gold = 60;
-                kingdomRes.Bread = 50;
+                attackTypeInfo = AttackTypeInfo.DoubleFight;
+                knightParamsForAttack.HealthPoints = 150;
+                stepsQtty = 40;
                 break;
 
 
@@ -198,6 +195,8 @@ public class AttackTargetInfo {
         kingdomRes.Gold = attackTargetInfo.kingdomRes.Gold;
         kingdomRes.Bread = attackTargetInfo.kingdomRes.Bread;
         stepsQtty = attackTargetInfo.stepsQtty;
+        knightParamsForAttack = new KnightParamsForAttack(attackTargetInfo.knightParamsForAttack.HealthPoints);
+
     }
 
 }
