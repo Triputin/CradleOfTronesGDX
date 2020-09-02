@@ -52,6 +52,7 @@ public class ScreenGamePlay extends BaseScreen {
     private Label gameLevelLabel;
     private AttackTarget attackTarget;
     private AttackTargetSteps attackTargetSteps;
+    private AttackTargetDialog attackTargetDialog;
 
     private ScreenGamePlay screenGamePlay;
     private SandGlass sandGlass;
@@ -220,7 +221,10 @@ public class ScreenGamePlay extends BaseScreen {
         attackTarget = new AttackTarget(targetPosX,targetPosY,uiStage,Math.round(targetSizeX),Math.round(targetSizeY),cradleGame);
         attackTargetSteps = new AttackTargetSteps(targetPosX,targetPosY-targetSizeY,uiStage,Math.round(targetSizeX),Math.round(targetSizeY),cradleGame);
 
-
+        // Attack target is shown before attack
+        int AttackTargetDialogSizeX = Math.round(w*0.4f);
+        int AttackTargetDialogSizeY = Math.round(h*0.4f);
+        attackTargetDialog = new AttackTargetDialog(w/2-AttackTargetDialogSizeX/2,h/2-AttackTargetDialogSizeY/2,uiStage,AttackTargetDialogSizeX,AttackTargetDialogSizeY,cradleGame);
 
         //EnemyKnight
         float enemySizeX = (cradleGame.getW()-(gameField.getX()+gameField.getWidth()))*0.95f;
@@ -523,11 +527,16 @@ public class ScreenGamePlay extends BaseScreen {
         //attackTarget.setAttackQtty(cradleGame.getAttackQtty());
         if (attackedKingdom!=null) {
             attackTarget.setAttackTypeAndQtty(attackedKingdom.getAttackTargetInfo(), cradleGame.getAttackQtty());
+            attackTargetDialog.setAttackTypeAndQtty(attackedKingdom.getAttackTargetInfo(), cradleGame.getAttackQtty());
         } else{
             AttackTargetInfo atf = new AttackTargetInfo(0);
             attackTarget.setAttackTypeAndQtty(atf, cradleGame.getAttackQtty());
+            attackTargetDialog.setAttackTypeAndQtty(atf, cradleGame.getAttackQtty());
         }
         isPaused=false;
+
+        attackTargetDialog.setVisible(false);
+
 
         //Attack target Moves left
         attackTargetSteps.remove();
@@ -639,7 +648,14 @@ public class ScreenGamePlay extends BaseScreen {
 
         timeLastSelectionEnded = TimeUtils.millis();
 
+        final Action  completeAction = new Action(){
+            public boolean act( float delta ) {
+                // Do your stuff
+                return true;
+            }
+        };
 
+        attackTargetDialog.showForTime(2,completeAction);
 
     }
 

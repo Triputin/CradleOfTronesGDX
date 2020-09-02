@@ -76,7 +76,7 @@ public class AttackTargetInfo {
                 kingdomRes.Wood = 30;
                 kingdomRes.Gold = 40;
                 kingdomRes.Bread = 30;
-                stepsQtty = 30;
+                stepsQtty = 35;
                 break;
             case 15:
                 attackTypeInfo = AttackTypeInfo.SingleClearUp;
@@ -87,7 +87,7 @@ public class AttackTargetInfo {
                 kingdomRes.Wood = 40;
                 kingdomRes.Gold = 0;
                 kingdomRes.Bread = 40;
-                stepsQtty = 20;
+                stepsQtty = 35;
                 break;
             case 17:
                 attackTypeInfo = AttackTypeInfo.DoubleFight;
@@ -119,7 +119,7 @@ public class AttackTargetInfo {
                 kingdomRes.Wood = 35;
                 kingdomRes.Gold = 40;
                 kingdomRes.Bread = 30;
-                stepsQtty = 25;
+                stepsQtty = 30;
                 break;
             case 25:
                 attackTypeInfo = AttackTypeInfo.SingleClearUp;
@@ -130,7 +130,7 @@ public class AttackTargetInfo {
                 kingdomRes.Wood = 50;
                 kingdomRes.Gold = 0;
                 kingdomRes.Bread = 50;
-                stepsQtty = 18;
+                stepsQtty = 30;
                 break;
             case 27:
                 attackTypeInfo = AttackTypeInfo.DoubleFight;
@@ -173,7 +173,7 @@ public class AttackTargetInfo {
                 kingdomRes.Wood = 60;
                 kingdomRes.Gold = 0;
                 kingdomRes.Bread = 60;
-                stepsQtty = 15;
+                stepsQtty = 30;
                 break;
             case 37:
                 attackTypeInfo = AttackTypeInfo.DoubleFight;
