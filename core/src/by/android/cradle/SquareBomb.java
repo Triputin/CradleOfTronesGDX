@@ -2,6 +2,7 @@ package by.android.cradle;
 
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
+import com.badlogic.gdx.utils.TimeUtils;
 
 
 public class SquareBomb extends DragAndDropActor {
@@ -33,6 +34,7 @@ public class SquareBomb extends DragAndDropActor {
             System.out.println("Drop target item row "+ item.getRow()+" col "+item.getCol());
             self.remove();
             screenGamePlay.RemoveAndFillSquare(item.getRow(),item.getCol(),squareSize);
+
             if (squareSize==1) {
                 GameRes.SquareBomb1--;
                 screenGamePlay.setSquareBomb1QttyLabelText(String.valueOf(GameRes.SquareBomb1));

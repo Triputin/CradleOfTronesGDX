@@ -96,6 +96,12 @@ public class CradleAssetManager  {
         manager.load(Assets.BOMBTIME);
         manager.load(Assets.BOMBSQUARE01);
         manager.load(Assets.BOMBSQUARE02);
+
+        //Bomb's shadows
+        manager.load(Assets.BOMBTIME_SH);
+        manager.load(Assets.BOMBSQUARE01_SH);
+        manager.load(Assets.BOMBSQUARE02_SH);
+
         //Bombs frame
         manager.load(Assets.BOMBS_FRAME);
         manager.load(Assets.BOMB_LOCK);
@@ -176,6 +182,12 @@ public class CradleAssetManager  {
         hashMapAnimations.put(Assets.BOMBTIME_ANIMATION_ID,loadAnimationFromAssets(Assets.BOMBTIME,  cradleGame.getBombSize(),  cradleGame.getBombSize()));
         hashMapAnimations.put(Assets.BOMBSQUARE01_ANIMATION_ID,loadAnimationFromAssets(Assets.BOMBSQUARE01 , cradleGame.getBombSize(),  cradleGame.getBombSize()));
         hashMapAnimations.put(Assets.BOMBSQUARE02_ANIMATION_ID,loadAnimationFromAssets(Assets.BOMBSQUARE02,  cradleGame.getBombSize(),  cradleGame.getBombSize()));
+
+        //Bomb's shadow
+        hashMapAnimations.put(Assets.SH_BOMBTIME_ANIMATION_ID,loadAnimationFromAssets(Assets.BOMBTIME_SH,  cradleGame.getBombSize(),  cradleGame.getBombSize()));
+        hashMapAnimations.put(Assets.SH_BOMBSQUARE01_ANIMATION_ID,loadAnimationFromAssets(Assets.BOMBSQUARE01_SH , cradleGame.getBombSize(),  cradleGame.getBombSize()));
+        hashMapAnimations.put(Assets.SH_BOMBSQUARE02_ANIMATION_ID,loadAnimationFromAssets(Assets.BOMBSQUARE02_SH,  cradleGame.getBombSize(),  cradleGame.getBombSize()));
+
 
         //Buttons
         hashMapAnimations.put(Assets.BUTTONGOLD_ANIMATION_ID,loadAnimationFromAssets(Assets.BUTTONGOLD,  cradleGame.getButtonXSize(),  cradleGame.getButtonYSize()));

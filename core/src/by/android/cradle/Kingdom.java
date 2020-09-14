@@ -220,7 +220,14 @@ public class Kingdom extends BaseActor {
     }
 
     public KingdomRes getKingdomResForAttack(){
-        return kingdomRes;
+        //increase res with lowering protection state
+        KingdomRes kr = new KingdomRes();
+        int dif = getKingdomPlannedProtectionState(kingdomID) - protectionState;
+        kr.Bread = kingdomRes.Bread+10*dif;
+        kr.Gold = kingdomRes.Gold+10*dif;
+        kr.Wood = kingdomRes.Wood+10*dif;
+        return kr;
+
     }
 
     public void decreaseProtection(){

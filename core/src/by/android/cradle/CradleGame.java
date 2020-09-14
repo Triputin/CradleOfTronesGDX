@@ -49,7 +49,7 @@ public class CradleGame extends BaseGame implements IVideoEventListener
     public final int MaxGameMapLevel=4;
     private int gameMapLevel; //currentGameMapLevelToShow
     private int maxOpenedMapLevel; // Player win maps levels+1;
-    private int difficultyLevel;
+    private int difficultyLevel; //1-easy 2-middle 3-hard
     private KnightParams knightParams;
     private boolean isSoundOn;
     private boolean isMusicOn;

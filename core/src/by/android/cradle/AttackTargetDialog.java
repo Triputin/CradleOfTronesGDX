@@ -19,39 +19,51 @@ import static com.badlogic.gdx.scenes.scene2d.actions.Actions.sequence;
 
 public class AttackTargetDialog extends BaseActor {
     private Label attackTextLabel;
+    private Label attackTargetTextLabel;
     private Label qttyCelltoClearLabel;
     private Image imageCelltoClear;
     private ResultsActorForAttack resultsActorForAttack;
-    TextButton retreatButton;
+    //TextButton retreatButton;
 
     public AttackTargetDialog(float x, float y, Stage s, int width, int height , final CradleGame cradleGame) {
         super(x, y, s, Touchable.enabled, cradleGame);
         this.setSize(width, height);
         AddImage("fon_white2.png",Math.round(width*0.02f),Math.round(height*0.02f),Math.round(width*.98f), Math.round(height*0.98f));
-        AddImage("goldenframe03.png",0,0,width,height);
+        AddImage("goldenframe01.png",0,0,width,height);
         imageCelltoClear = new Image(cradleGame.getCradleAssetManager().getAnimation(Assets.GAMECELL_LOCK01_ANIMATION_ID).getKeyFrame(0).getTexture());
-        imageCelltoClear.setPosition(width*0.35f, height*0.1f);
+        imageCelltoClear.setPosition(width*0.5f-imageCelltoClear.getWidth()*0.5f, height*0.1f);
         addActor(imageCelltoClear);
 
         int w = Gdx.graphics.getWidth();
         int h = Gdx.graphics.getHeight();
 
+        // Target of attack label
+        String ms = cradleGame.getLanguageStrings().get("attacktarget");
+        attackTargetTextLabel = new Label(ms, BaseGame.labelStyle_Small);
+        attackTargetTextLabel.setWrap(true);
+        attackTargetTextLabel.setAlignment( Align.center );
+        attackTargetTextLabel.setPosition( Math.round(width*0.077f), Math.round(height*0.75f) );
+        attackTargetTextLabel.setWidth( width*0.8f );
+        attackTargetTextLabel.setColor(Color.GOLD);
+        addActor(attackTargetTextLabel);
+
+
         // Attack label
-        String ms = cradleGame.getLanguageStrings().get("destroy");
+         ms = cradleGame.getLanguageStrings().get("destroy");
         attackTextLabel = new Label(ms, BaseGame.labelStyle_Small);
         attackTextLabel.setWrap(true);
         attackTextLabel.setAlignment( Align.center );
-        attackTextLabel.setPosition( Math.round(width*0.077f), Math.round(height*0.55f) );
         attackTextLabel.setWidth( width*0.8f );
         attackTextLabel.setColor(Color.GOLD);
+        attackTextLabel.setPosition( width*0.5f-attackTextLabel.getWidth()*0.5f, Math.round(height*0.5f) );
         addActor(attackTextLabel);
 
         // Qtty label
         qttyCelltoClearLabel = new Label("1", BaseGame.labelStyle_Small);
         qttyCelltoClearLabel.setWrap(true);
         qttyCelltoClearLabel.setAlignment( Align.center );
-        qttyCelltoClearLabel.setPosition( Math.round(width*0.077f), Math.round(height*0.2f) );
-        qttyCelltoClearLabel.setWidth( width*0.8f );
+        qttyCelltoClearLabel.setPosition(imageCelltoClear.getX()+imageCelltoClear.getWidth()*0.5f- qttyCelltoClearLabel.getWidth()*0.5f, imageCelltoClear.getY()+imageCelltoClear.getHeight()*0.5f- qttyCelltoClearLabel.getHeight()*0.5f);
+        //qttyCelltoClearLabel.setWidth( width*0.8f );
         qttyCelltoClearLabel.setColor(Color.GOLD);
         addActor(qttyCelltoClearLabel);
 
@@ -62,6 +74,7 @@ public class AttackTargetDialog extends BaseActor {
         addActor(resultsActorForAttack);
 
         //Retreat Button
+        /*
         ms = " "+cradleGame.getLanguageStrings().get("retreat")+" ";
         retreatButton = new TextButton( ms, BaseGame.textButtonStyleCheck );
         if (w<1000) {
@@ -84,6 +97,7 @@ public class AttackTargetDialog extends BaseActor {
 
         retreatButton.addListener(inputListenerRetreat);
 
+*/
 
     }
 
@@ -104,7 +118,7 @@ public class AttackTargetDialog extends BaseActor {
             case SingleTimeClearUp:
                 ms = cradleGame.getLanguageStrings().get("destroy");
                 attackTextLabel.setText(ms);
-                retreatButton.setVisible(false);
+                //retreatButton.setVisible(false);
                 qttyCelltoClearLabel.setVisible(true);
                 imageCelltoClear.setVisible(true);
                 resultsActorForAttack.setVisible(false);
@@ -112,7 +126,7 @@ public class AttackTargetDialog extends BaseActor {
             case SingleTimeResources:
                 ms = cradleGame.getLanguageStrings().get("collect");
                 attackTextLabel.setText(ms);
-                retreatButton.setVisible(false);
+                //retreatButton.setVisible(false);
                 qttyCelltoClearLabel.setVisible(false);
                 imageCelltoClear.setVisible(false);
                 resultsActorForAttack.setVisible(true);
@@ -120,7 +134,7 @@ public class AttackTargetDialog extends BaseActor {
             case SingleClearUp:
                 ms = cradleGame.getLanguageStrings().get("destroy");
                 attackTextLabel.setText(ms);
-                retreatButton.setVisible(false);
+                //retreatButton.setVisible(false);
                 qttyCelltoClearLabel.setVisible(true);
                 imageCelltoClear.setVisible(true);
                 resultsActorForAttack.setVisible(false);
@@ -128,7 +142,7 @@ public class AttackTargetDialog extends BaseActor {
             case SingleResources:
                 ms = cradleGame.getLanguageStrings().get("collect");
                 attackTextLabel.setText(ms);
-                retreatButton.setVisible(false);
+                //retreatButton.setVisible(false);
                 qttyCelltoClearLabel.setVisible(false);
                 imageCelltoClear.setVisible(false);
                 resultsActorForAttack.setVisible(true);
@@ -136,7 +150,7 @@ public class AttackTargetDialog extends BaseActor {
             case DoubleClearUp:
                 ms = cradleGame.getLanguageStrings().get("destroy");
                 attackTextLabel.setText(ms);
-                retreatButton.setVisible(false);
+                //retreatButton.setVisible(false);
                 qttyCelltoClearLabel.setVisible(true);
                 imageCelltoClear.setVisible(true);
                 resultsActorForAttack.setVisible(false);
@@ -144,7 +158,7 @@ public class AttackTargetDialog extends BaseActor {
             case DoubleResources:
                 ms = cradleGame.getLanguageStrings().get("collect");
                 attackTextLabel.setText(ms);
-                retreatButton.setVisible(false);
+                //retreatButton.setVisible(false);
                 qttyCelltoClearLabel.setVisible(false);
                 imageCelltoClear.setVisible(false);
                 resultsActorForAttack.setVisible(true);
@@ -154,7 +168,7 @@ public class AttackTargetDialog extends BaseActor {
                 //attackTextLabel.setPosition( Math.round(this.getWidth()*0.15f), Math.round(this.getHeight()*2.1f) );
                 attackTextLabel.setFontScale(0.7f);
                 attackTextLabel.setText(ms);
-                retreatButton.setVisible(true);
+                //retreatButton.setVisible(true);
                 qttyCelltoClearLabel.setVisible(false);
                 imageCelltoClear.setVisible(false);
                 resultsActorForAttack.setVisible(false);
@@ -163,7 +177,7 @@ public class AttackTargetDialog extends BaseActor {
                 ms = cradleGame.getLanguageStrings().get("destroy");
                 attackTextLabel.setText(ms);
                 //attackTextLabel.setPosition( Math.round(this.getWidth()*0.077f), Math.round(this.getHeight()*0.67f) );
-                retreatButton.setVisible(false);
+                //retreatButton.setVisible(false);
                 qttyCelltoClearLabel.setVisible(true);
                 imageCelltoClear.setVisible(true);
                 resultsActorForAttack.setVisible(false);

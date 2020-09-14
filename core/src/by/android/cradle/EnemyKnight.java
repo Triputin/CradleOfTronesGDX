@@ -1,13 +1,17 @@
 package by.android.cradle;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 
 public class EnemyKnight extends BaseActor {
 
     private BaseActor healthKnightActor;
+    private Label curKnightHealthLabel;
     private BaseActor healthEnemyKnightActor;
+    private Label curEnemyHealthLabel;
     private KnightParams knightParams; //Player Knight params
     private KnightParamsForAttack curKnightParams; // Current Player Knight params
     private KnightParamsForAttack enemyKnightParamsForAttack; //Enemy Knight params
@@ -49,6 +53,23 @@ public class EnemyKnight extends BaseActor {
         addActor(healthEnemyKnightActor);
 
 
+
+
+
+        curKnightHealthLabel = new Label(""+1000, BaseGame.labelStyle);
+        //curKnightHealthLabel.setText(""+curKnightParams.HealthPoints);
+        curKnightHealthLabel.setColor( Color.GOLDENROD );
+        curKnightHealthLabel.setFontScale(2.0f);
+        curKnightHealthLabel.setPosition( healthKnightActor.getX()+healthKnightActor.getWidth()*0.5f-curKnightHealthLabel.getWidth()*0.5f,healthKnightActor.getY()+healthKnightActor.getHeight()*0.5f-curKnightHealthLabel.getHeight()*0.5f);
+        addActor(curKnightHealthLabel);
+
+        curEnemyHealthLabel = new Label(""+100, BaseGame.labelStyle);
+        //curEnemyHealthLabel.setText(""+curEnemyKnightParamsForAttack.HealthPoints);
+        curEnemyHealthLabel.setColor( Color.GOLDENROD );
+        curEnemyHealthLabel.setFontScale(2.0f);
+        curEnemyHealthLabel.setPosition( healthEnemyKnightActor.getX()+healthEnemyKnightActor.getWidth()*0.5f-curEnemyHealthLabel.getWidth()*0.5f,healthEnemyKnightActor.getY()+healthEnemyKnightActor.getHeight()*0.5f-curEnemyHealthLabel.getHeight()*0.5f);
+        addActor(curEnemyHealthLabel);
+
         showHealth();
 
     }
@@ -64,12 +85,24 @@ public class EnemyKnight extends BaseActor {
         showHealth();
     }
 
+    public void doDamageToHero(int damagePoints){
+
+        curKnightParams.HealthPoints-=damagePoints;
+        if (curKnightParams.HealthPoints<0){
+            curKnightParams.HealthPoints=0;
+        }
+
+        showHealth();
+    }
 
     private void showHealth(){
         int n = Math.round(10-10f*curKnightParams.HealthPoints/knightParams.getCurrentHealthMaximum());
         healthKnightActor.setElapsedTime(n);
         n = Math.round(10-10f*curEnemyKnightParamsForAttack.HealthPoints/enemyKnightParamsForAttack.HealthPoints);
         healthEnemyKnightActor.setElapsedTime(n);
+
+        curKnightHealthLabel.setText(""+curKnightParams.HealthPoints);
+        curEnemyHealthLabel.setText(""+curEnemyKnightParamsForAttack.HealthPoints);
         //System.out.println("showHealth: setElapsedTime = "+ n);
         //System.out.println("knightParams.getHealth()= " + knightParams.getHealth());
     }

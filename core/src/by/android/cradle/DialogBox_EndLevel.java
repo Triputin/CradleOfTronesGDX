@@ -20,6 +20,9 @@ public class DialogBox_EndLevel  extends BaseActor{
     private Label dialogLabel;
     private float padding = 42;
     private TextButton okButton;
+    private TextButton videoButton;
+    private Label watchVideoLabel;
+
     private Label scoreLabel;
     private Label goldLabel;
     private Label woodLabel;
@@ -36,15 +39,6 @@ public class DialogBox_EndLevel  extends BaseActor{
 
         int w = Gdx.graphics.getWidth();
         int h = Gdx.graphics.getHeight();
-        /*
-        float fontScale = 1.0f;
-        if (w>1000){
-            fontScale = 1.5f;
-        } else {
-            fontScale = 0.8f;
-        }
-        */
-
 
         String ms = cradleGame.getLanguageStrings().get("levelresults");
         dialogLabel = new Label(ms, BaseGame.labelStyle_Middle);
@@ -78,7 +72,7 @@ public class DialogBox_EndLevel  extends BaseActor{
 
         //results wood
         pict1posX = Math.round(width*0.2f);
-        pict1posY = Math.round(height*0.36f);
+        pict1posY = Math.round(height*0.38f);
         AddImage("wood.png",pict1posX,pict1posY,pictSize,pictSize);
         woodLabel = new Label("42", BaseGame.labelStyle_Middle);
         //woodLabel.setFontScale(fontScale);
@@ -87,12 +81,33 @@ public class DialogBox_EndLevel  extends BaseActor{
 
         //results bread
         pict1posX = Math.round(width*0.2f);
-        pict1posY = Math.round(height*0.24f);
+        pict1posY = Math.round(height*0.28f);
         AddImage("bread.png",pict1posX,pict1posY,pictSize,pictSize);
         breadLabel = new Label("42", BaseGame.labelStyle_Middle);
         //breadLabel.setFontScale(fontScale);
         breadLabel.setPosition(Math.round(width*0.7f),pict1posY+pictSize*.25f);
         this.addActor(breadLabel);
+
+        //Watch video label
+        ms = cradleGame.getLanguageStrings().get("doubleattackresults");
+        watchVideoLabel = new Label(ms, BaseGame.labelStyle_SuperSmall);
+        watchVideoLabel.setWrap(true);
+        watchVideoLabel.setAlignment( Align.center );
+        watchVideoLabel.setPosition( Math.round(width*0.04f), Math.round(height*0.2f) );
+        watchVideoLabel.setWidth( width *0.45f );
+        watchVideoLabel.setColor(Color.GOLD);
+        this.addActor(watchVideoLabel);
+
+        //Watch video Button
+        ms = cradleGame.getLanguageStrings().get("watchads");
+        videoButton = new TextButton( ms, BaseGame.textButtonStyle );
+
+        if (w<1000) {
+            videoButton.setWidth(videoButton.getWidth()*0.8f);
+            videoButton.setHeight(videoButton.getHeight()*0.8f);
+        }
+        videoButton.setPosition(Math.round(getWidth()/4-videoButton.getWidth()/2),Math.round(height*0.07f));
+
 
         //Ok Button
         ms = cradleGame.getLanguageStrings().get("ok");
@@ -101,7 +116,7 @@ public class DialogBox_EndLevel  extends BaseActor{
             okButton.setWidth(okButton.getWidth()*0.8f);
             okButton.setHeight(okButton.getHeight()*0.8f);
         }
-        okButton.setPosition(Math.round(width*0.5f-okButton.getWidth()/2f),height*0.12f);
+        okButton.setPosition(Math.round(getWidth()/4*3-okButton.getWidth()/2),Math.round(height*0.07f));
         this.addActor(okButton);
 
     }
@@ -128,7 +143,7 @@ public class DialogBox_EndLevel  extends BaseActor{
 
     public void alignCenter()
     {  dialogLabel.setAlignment( Align.center );  }
-
+/*
     public void showForTime(int seconds, Action completeAction ){
         Action actions = sequence(Actions.scaleTo(0,0,0.01f),fadeIn(0.01f),Actions.scaleTo(1,1,2.0f), Actions.delay(seconds) ,fadeOut(1f), completeAction);
 
@@ -136,11 +151,19 @@ public class DialogBox_EndLevel  extends BaseActor{
         this.addAction( actions );
 
     }
+*/
 
-    public void showWithOkButton(InputListener inputListener){
+    public void showWithOkButton(InputListener inputListenerOK, InputListener inputListenerAds){
+        cradleGame.getScreenGamePlay().setEndLevelDialogActive(true);
+        videoButton.setVisible(true);
+        watchVideoLabel.setVisible(true);
         addActor(okButton);
         okButton.clearListeners(); //!!!!
-        okButton.addListener(inputListener);
+        okButton.addListener(inputListenerOK);
+        addActor(videoButton);
+        videoButton.clearListeners(); //!!!!
+        videoButton.addListener(inputListenerAds);
+
 
         Action actions = sequence(Actions.scaleTo(1,0,0.01f),fadeIn(0.01f),Actions.scaleTo(1,1,0.5f));
 
@@ -149,4 +172,11 @@ public class DialogBox_EndLevel  extends BaseActor{
 
 
     }
+
+    public void hideWatchAdButton(){
+        videoButton.setVisible(false);
+        watchVideoLabel.setVisible(false);
+    }
+
+
 }

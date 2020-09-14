@@ -3,8 +3,6 @@ package by.android.cradle;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -13,18 +11,14 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
-import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.TimeUtils;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import static by.android.cradle.AttackTypeInfo.SingleTimeClearUp;
-import static by.android.cradle.AttackTypeInfo.SingleTimeResources;
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.fadeIn;
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.fadeOut;
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.sequence;
@@ -38,6 +32,7 @@ public class ScreenGamePlay extends BaseScreen {
     private final float SoundEffectsVolume = 0.1f;
     private int LevelDuration = 60; // Time of every level (HourGlass)
     private final int TIME_BEFORE_SHOW_SOLUTION = 8000;
+    private final int TIME_BEFORE_SHOW_ENEMY_STEP = 1000;
     private int cellSize;
     private int CellCount;
     private GameField gameField;
@@ -65,6 +60,7 @@ public class ScreenGamePlay extends BaseScreen {
     private BaseActor hall;
     private float score_during_attack;
     private DialogBox_EndLevel dialogBox_endLevel;
+    private boolean isEndLevelDialogActive;
     private DialogBox_NotEnoughSteps dialogBox_notEnoughSteps;
     private int QttyRewardedVideoWatched;
     private KingdomRes resultAttack;
@@ -81,6 +77,7 @@ public class ScreenGamePlay extends BaseScreen {
     private ArrowUpActor arrowUpActor;
 
     private EnemyKnight enemyKnight;
+    private boolean enemyTurn;// true => enemy makes its turn
 
     public ScreenGamePlay(CradleGame cradleGame,IPlayServices ply) {
         super(cradleGame,ply);
@@ -96,6 +93,8 @@ public class ScreenGamePlay extends BaseScreen {
         messageLabel.setVisible(false);
         uiTable.add(messageLabel).expandY();
         score_during_attack=0;
+        enemyTurn=false;
+        isEndLevelDialogActive=false;
         //explosionSound = Gdx.audio.newSound(Gdx.files.internal("sounds/glass_windows_breaking.mp3"));
         explosionSound = cradleGame.getCradleAssetManager().manager.get(Assets.SOUND_GLASS_WINDOW_BREAKING);
         timeLastSelectionEnded= TimeUtils.millis();;
@@ -141,7 +140,7 @@ public class ScreenGamePlay extends BaseScreen {
             }
         }
 
-        int dialogSize = Math.round(h*0.8f);
+        int dialogSize = Math.round(h*0.95f);
         dialogBox_endLevel = new DialogBox_EndLevel(w/2-dialogSize/2,h/2-dialogSize/2,uiStage,dialogSize,dialogSize,cradleGame);
         dialogBox_endLevel.setVisible(false);
 
@@ -155,8 +154,6 @@ public class ScreenGamePlay extends BaseScreen {
         if (w<h) {
             h=w;
         } else w=h;
-
-
 
 
         BaseActor.setWorldBounds(cellSize*CellCount,cellSize*CellCount);
@@ -318,6 +315,7 @@ public class ScreenGamePlay extends BaseScreen {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 if (isPaused) return true;
+                if (enemyTurn) return true;
 
                 flag = true;
 
@@ -497,6 +495,8 @@ public class ScreenGamePlay extends BaseScreen {
 
         ply.logLevelStartEvent(gameLevel);
         QttyRewardedVideoWatched = 0;
+        enemyTurn=false;
+        isEndLevelDialogActive=false;
         int w = Gdx.graphics.getWidth();
         int h = Gdx.graphics.getHeight();
         if (attackedKingdom!=null) {
@@ -655,14 +655,16 @@ public class ScreenGamePlay extends BaseScreen {
             }
         };
 
-        attackTargetDialog.showForTime(2,completeAction);
+        attackTargetDialog.showForTime(3,completeAction);
 
     }
 
     public void LoseLevel(){
         //System.out.println("LoseLevel()");
-        GdxLog.print("LoseLevel():","Called");
+        //GdxLog.print("LoseLevel():","Called");
+        System.out.println("LoseLevel called");
         isPaused=true; // block timer in update
+        score_during_attack=0;
         Action actions;
         //Fon
         /*
@@ -693,12 +695,30 @@ public class ScreenGamePlay extends BaseScreen {
                         collectAllKnightItems();
                         ply.logLevelEndEvent(gameLevel,"attack is lost");
                         cradleGame.setActiveGameMapScreen(false,0);
-
+                        setEndLevelDialogActive(false);
                         return true;
                     }
                 };
 
-                dialogBox_endLevel.showWithOkButton(inputListener3);
+                InputListener inputListenerWatchVideo = new InputListener() {
+                    public boolean touchDown (InputEvent e, float x, float y, int pointer, int button){
+                        if (!(e instanceof InputEvent))
+                            return false;
+
+                        if (!((InputEvent) e).getType().equals(InputEvent.Type.touchDown))
+                            return false;
+
+
+                        if(cradleGame.getiGoogleServices().hasVideoLoaded()) {
+                            cradleGame.getiGoogleServices().showRewardedVideoAd();
+                        }
+
+                        //isPaused=false;
+                        return true;
+                    }
+                };
+                QttyRewardedVideoWatched=0;
+                dialogBox_endLevel.showWithOkButton(inputListener3, inputListenerWatchVideo);
                 return true;
             }
         };
@@ -714,6 +734,12 @@ public class ScreenGamePlay extends BaseScreen {
 
     public void update(float dt)
     {
+
+        if(isEndLevelDialogActive) {
+            return;
+        }
+
+
         InputListener inputListenerCancel =new InputListener() {
             public boolean touchDown (InputEvent e, float x, float y, int pointer, int button){
                 if (!(e instanceof InputEvent))
@@ -771,13 +797,35 @@ public class ScreenGamePlay extends BaseScreen {
         }
 
             if(!isPaused) {
+
             long diffInMillis = TimeUtils.timeSinceMillis(timeLastSelectionEnded);
-            if ((diffInMillis > TIME_BEFORE_SHOW_SOLUTION) && (!flag)) {
-                clearAllSelections();
-                SelectSolution(gameField.FindSolutions(CellCount, mainStage));
-                timeLastSelectionEnded = TimeUtils.millis();
+            if ((diffInMillis > TIME_BEFORE_SHOW_SOLUTION) && (!flag)&& (!enemyTurn)) {
+                    clearAllSelections();
+                    SelectSolution(gameField.FindSolutions(CellCount, mainStage));
+                    timeLastSelectionEnded = TimeUtils.millis();
             }
+
+                // Make the enemy step
+                if ((diffInMillis > TIME_BEFORE_SHOW_ENEMY_STEP) && (!flag) && (enemyTurn)) {
+                    clearAllSelections();
+                    SelectSolution(gameField.FindSolutions(CellCount, mainStage));
+                    timeLastSelectionEnded = TimeUtils.millis();
+                    // make enemy's turn and switch turn if it's figth type of game
+                    if (attackedKingdom!=null){
+                        if((attackedKingdom.getAttackTargetInfo().attackTypeInfo==AttackTypeInfo.DoubleFight)&&enemyTurn){
+                            if (firstSelectedItem!=null) {
+                                if (firstSelectedItem.getCountOfSelectedItems() >= 2) {
+                                    FillRemovedCells(removeSelectedItems());
+                                    enemyTurn = false;
+                                    return;
+                                }
+                            }
+                        }
+                    }
+                }
+
         }
+
 
     }
 
@@ -918,14 +966,19 @@ public class ScreenGamePlay extends BaseScreen {
         lastSelectedItem = null;
         firstSelectedItem = null;
 
+
+
         if( isWin()){
             //isEndOfLevelAnimation=true;
             WinMessageAndNewLevelCreate();
 
         }
+
+
     }
 
-public void RemoveAndFillSquare(int centreRow, int centreCol, int squareSize){
+    //used for square bomb
+    public void RemoveAndFillSquare(int centreRow, int centreCol, int squareSize){
 
     //Find leftdown cell coordinates and actual size of square
     Cell leftDownCell = new Cell(0,0);
@@ -936,7 +989,7 @@ public void RemoveAndFillSquare(int centreRow, int centreCol, int squareSize){
     if((centreRow+squareSize)<CellCount){sqVerticalSize=centreRow+squareSize+1-leftDownCell.getRow();}else{sqVerticalSize=CellCount-leftDownCell.getRow();}
     if((centreCol+squareSize)<CellCount){sqHorizontalSize=centreCol+squareSize+1-leftDownCell.getCol();}else{sqHorizontalSize=CellCount-leftDownCell.getCol();}
 
-// Select items inside of square
+    // Select items inside of square
     Cell cell = new Cell(0,0);
     Item prevItem = null;
     Item curItem = null;
@@ -955,6 +1008,7 @@ public void RemoveAndFillSquare(int centreRow, int centreCol, int squareSize){
         }
 
     FillRemovedCells(removeSelectedItems());
+        timeLastSelectionEnded = TimeUtils.millis();
 
            // ((Item)CoinActor).setSelected(false,null);
 
@@ -981,8 +1035,8 @@ public void RemoveAndFillSquare(int centreRow, int centreCol, int squareSize){
         return hall;
     }
 
-
-    public void SelectSolution(ArrayList<ArrayList<Item>> arrayLists){
+    // select randomly or with hardeness level for enemy turn
+    public void SelectSolution(ArrayList<SortableArrayListOfItems> arrayLists){
         if (flag){return;}
 
         if(arrayLists.size()<1){
@@ -992,14 +1046,61 @@ public void RemoveAndFillSquare(int centreRow, int centreCol, int squareSize){
 
         }
 
-        //Choose solution randomly
-        int sol = (int) Math.round(Math.random()*(arrayLists.size()-1));
-        if (sol>(arrayLists.size()-1)){
-            sol = arrayLists.size()-1;
+        int sol=0;
+        ArrayList<Item> arrayList;
+        if(!enemyTurn) {
+            //Choose solution randomly
+            sol = (int) Math.round(Math.random() * (arrayLists.size() - 1));
+            if (sol > (arrayLists.size() - 1)) {
+                sol = arrayLists.size() - 1;
+            }
+
+            arrayList = arrayLists.get(sol);
+        }else{
+            //Choose solution according to difficulty level
+            Collections.sort(arrayLists);
+            //choose solution depending on difficultyLevel
+            //hard - top solution
+            //middle - 0.75 solution
+            //easy - 0.5 solution
+            switch(cradleGame.getDifficultyLevel()){
+                case 1:
+                    sol = Math.round(0.85f*(arrayLists.size()-1));
+                    break;
+                case 2:
+                    sol = Math.round(0.95f*(arrayLists.size()-1));
+                    break;
+                default:
+                    sol = arrayLists.size() - 1;
+
+            }
+
+            if (sol > (arrayLists.size() - 1)) {
+                sol = arrayLists.size() - 1;
+            }
+            arrayList = (ArrayList<Item>) arrayLists.get(sol);
+
+            //for debug
+            /*
+            System.out.println("Sol choosed = "+sol);
+            for(int i=0; i<arrayLists.size();i++){
+                System.out.println("Sol"+i+" size"+arrayLists.get(i).size());
+            }
+            */
+
         }
-        ArrayList<Item> arrayList = arrayLists.get(sol);
-        if (arrayList.size()<3){return;}
+
+
+        //System.out.println("cradleGame.getDifficultyLevel() = "+cradleGame.getDifficultyLevel());
+        if ((arrayList.size()<3)&&(!enemyTurn)){
+            //System.out.println("solution size <3");
+            return;}
+        if ((arrayList.size()<2)&&(enemyTurn)){
+            //System.out.println("solution size <2");
+            return;}
+
         arrayList.get(0).setSelected(true,null);
+        firstSelectedItem=arrayList.get(0);
         arrayList.get(0).setSelectedNext(arrayList.get(1));
         for (int i=1;i<arrayList.size()-1;i++){
             arrayList.get(i).setSelected(true,arrayList.get(i-1));
@@ -1007,6 +1108,7 @@ public void RemoveAndFillSquare(int centreRow, int centreCol, int squareSize){
         }
         arrayList.get(arrayList.size()-1).setSelected(true,arrayList.get(arrayList.size()-2));
     }
+
 
 
     public void clearAllSelections(){
@@ -1072,6 +1174,7 @@ public void RemoveAndFillSquare(int centreRow, int centreCol, int squareSize){
         //remove items
         item1= firstSelectedItem;
         item2=null;
+        int countofitemremoved=0;
         while (item1.getNext()!=null){
             item2 = item1.getNext();
             arrayList.add(item1.getCell());
@@ -1094,11 +1197,19 @@ public void RemoveAndFillSquare(int centreRow, int centreCol, int squareSize){
 
             item1.remove();
             item1=item2;
+            countofitemremoved++;
         }
+
         arrayList.add(item1.getCell());
         className = item1.getClass().getName();
         resCollected += IncreaseRes(className);
-        ShowCollectedResCount(item1.getX(),item1.getY(),resCollected);
+        countofitemremoved++;
+        if (!enemyTurn) {
+            ShowCollectedResCount(item1.getX(), item1.getY(), resCollected);
+        }
+        else {
+            ShowCollectedResCount(item1.getX(), item1.getY(), countofitemremoved);
+        }
         //Explosion
         ExplosionEffect boom = new ExplosionEffect();
         boom.centerAtActor( item1 );
@@ -1122,12 +1233,12 @@ public void RemoveAndFillSquare(int centreRow, int centreCol, int squareSize){
             //Do damage to enemy knight if needed
             if (attackedKingdom.getAttackTargetInfo().attackTypeInfo==AttackTypeInfo.DoubleFight){
 
-                /*
-                attackedKingdom.getAttackTargetInfo().knightParamsForAttack.HealthPoints
-                        уменьшить на
-                resCollected
-                */
-                enemyKnight.doDamage(resCollected);
+                if (!enemyTurn) {
+                    enemyKnight.doDamage(resCollected);
+                }else
+                {
+                    enemyKnight.doDamageToHero(countofitemremoved);
+                }
 
             }
         } else{
@@ -1238,7 +1349,13 @@ public void RemoveAndFillSquare(int centreRow, int centreCol, int squareSize){
 
         }
 
-
+        // switch turn if it's fight type of game
+        if (attackedKingdom!=null){
+            if(attackedKingdom.getAttackTargetInfo().attackTypeInfo==AttackTypeInfo.DoubleFight){
+                enemyTurn=!enemyTurn;
+                //System.out.println("enemyTurn="+enemyTurn);
+            }
+        }
     }
 
 
@@ -1531,6 +1648,8 @@ public void RemoveAndFillSquare(int centreRow, int centreCol, int squareSize){
     public int IncreaseRes(String className){
 
         int resCollectedCount=0; //indicates if res was collected
+        if (enemyTurn) return resCollectedCount; // if enemy collected res? than forget it
+
         switch (className)
         {
             case "by.android.cradle.Coin2":
@@ -1729,14 +1848,33 @@ public void RemoveAndFillSquare(int centreRow, int centreCol, int squareSize){
 
                         GameRes.Score=GameRes.Score+Math.round(score_during_attack); // increase score if win
                         collectAllKnightItems();
+                        setEndLevelDialogActive(false);
                         cradleGame.setActiveGameMapScreen(isHeroLevelNeedsShow,0);
-
 
                         return true;
                     }
                 };
 
-                dialogBox_endLevel.showWithOkButton(inputListener2);
+                InputListener inputListenerWatchVideo = new InputListener() {
+                    public boolean touchDown (InputEvent e, float x, float y, int pointer, int button){
+                        if (!(e instanceof InputEvent))
+                            return false;
+
+                        if (!((InputEvent) e).getType().equals(InputEvent.Type.touchDown))
+                            return false;
+
+
+                        if(cradleGame.getiGoogleServices().hasVideoLoaded()) {
+                            cradleGame.getiGoogleServices().showRewardedVideoAd();
+                        }
+
+                        //isPaused=false;
+                        return true;
+                    }
+                };
+
+                QttyRewardedVideoWatched=0;
+                dialogBox_endLevel.showWithOkButton(inputListener2,inputListenerWatchVideo);
 
                 return true;
             }
@@ -1959,6 +2097,19 @@ public void RemoveAndFillSquare(int centreRow, int centreCol, int squareSize){
 
     public void useRewardForVideo(){
         QttyRewardedVideoWatched++;  //Controls if video was already used by player
+        System.out.println("useRewardForVideo called");
+        if (isEndLevelDialogActive){
+            dialogBox_endLevel.setResults(Math.round(score_during_attack)*(QttyRewardedVideoWatched+1),resultAttack.Gold*(QttyRewardedVideoWatched+1),resultAttack.Wood*(QttyRewardedVideoWatched+1),resultAttack.Bread*(QttyRewardedVideoWatched+1));
+            GameRes.Score+=Math.round(score_during_attack);
+            GameRes.Gold += resultAttack.Gold;
+            GameRes.Wood += resultAttack.Wood;
+            GameRes.Bread += resultAttack.Bread;
+            if (QttyRewardedVideoWatched>1){
+                dialogBox_endLevel.hideWatchAdButton();
+                QttyRewardedVideoWatched=0;
+            }
+            return;
+        }
 
         if(attackedKingdom==null){ //Arena
             sandGlass.setElapsedTime(sandGlass.getAnimationDuration()-20);
@@ -1976,11 +2127,24 @@ public void RemoveAndFillSquare(int centreRow, int centreCol, int squareSize){
                 attackTargetSteps.setAttackStepsQtty(attackTargetSteps.getAttackStepsQtty()+5);
         }
 
-        isPaused=false;
+        if(!isEndLevelDialogActive) {
+            isPaused=false;
+        }
     }
 
     public void NouseRewardForVideo(){
 
-        isPaused=false;
+        if(!isEndLevelDialogActive) {
+            isPaused=false;
+        }
+    }
+
+
+    public boolean isEndLevelDialogActive() {
+        return isEndLevelDialogActive;
+    }
+
+    public void setEndLevelDialogActive(boolean endLevelDialogActive) {
+        isEndLevelDialogActive = endLevelDialogActive;
     }
 }

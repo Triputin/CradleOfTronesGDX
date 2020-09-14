@@ -130,6 +130,14 @@ public class Assets {
     public static final AssetDescriptor<Texture> BOMBSQUARE02 =
             new AssetDescriptor<Texture>("squarebomb02.png", Texture.class);
 
+    //Bomb's shadows
+    public static final AssetDescriptor<Texture> BOMBTIME_SH =
+            new AssetDescriptor<Texture>("bombs/timebomb_gray.png", Texture.class);
+    public static final AssetDescriptor<Texture> BOMBSQUARE01_SH =
+            new AssetDescriptor<Texture>("bombs/squarebomb01_gray.png", Texture.class);
+    public static final AssetDescriptor<Texture> BOMBSQUARE02_SH =
+            new AssetDescriptor<Texture>("bombs/squarebomb02_gray.png", Texture.class);
+
     //Buttons
     public static final AssetDescriptor<Texture> BUTTONGOLD =
             new AssetDescriptor<Texture>("buttons/goldbutton.png", Texture.class);
@@ -231,5 +239,10 @@ public class Assets {
 
     public static final int CASTLE_BASE01_ANIMATION_ID = 49;
     public static final int CASTLE_MAIN01_ANIMATION_ID = 50;
+
+    public static final int SH_BOMBTIME_ANIMATION_ID = 51;
+    public static final int SH_BOMBSQUARE01_ANIMATION_ID = 52;
+    public static final int SH_BOMBSQUARE02_ANIMATION_ID = 53;
+
 
 }

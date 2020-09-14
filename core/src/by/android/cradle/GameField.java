@@ -64,10 +64,10 @@ public class GameField extends BaseActor {
 */
 
 // Find solution for all Items on the field
-public ArrayList<ArrayList<Item>> FindSolutions(int cellsCount, Stage stage){
+public ArrayList<SortableArrayListOfItems> FindSolutions(int cellsCount, Stage stage){
 
-    ArrayList<ArrayList<Item>> arraySolutions = new ArrayList<>();
-    ArrayList<Item> arrayList;
+    ArrayList<SortableArrayListOfItems> arraySolutions = new ArrayList<>();
+    SortableArrayListOfItems arrayList;
     Cell cell = new Cell(0,0);
     for (int i =0; i< cellsCount;i++){
        for (int j =0; j< cellsCount;j++){
@@ -75,7 +75,7 @@ public ArrayList<ArrayList<Item>> FindSolutions(int cellsCount, Stage stage){
             cell.setRow(i);
             if (!GetItemAtCell(cell,stage).isLocked()) {
                 arrayList = GetSoluton(cell, stage, cellsCount);
-                if (arrayList.size() > 2) {
+                if (arrayList.size() > 1) {
                     arraySolutions.add(arrayList);
                 }
             }
@@ -85,7 +85,7 @@ public ArrayList<ArrayList<Item>> FindSolutions(int cellsCount, Stage stage){
 
 
     //for debug only
-    PrintSolutions(arraySolutions);
+    //PrintSolutions(arraySolutions);
 
 
     return arraySolutions;
@@ -120,8 +120,8 @@ public Item GetItemAtCell(Cell cell, Stage stage){
 }
 
 
-public ArrayList<Item> GetSoluton (Cell cell, Stage stage, int cellCount){
-    ArrayList<Item> arrayList= new ArrayList<>();
+public SortableArrayListOfItems GetSoluton (Cell cell, Stage stage, int cellCount){
+    SortableArrayListOfItems arrayList= new SortableArrayListOfItems();
     Item item1 = GetItemAtCell(cell, stage);
     Item item2;
     String className1 = item1.getClass().getName();
