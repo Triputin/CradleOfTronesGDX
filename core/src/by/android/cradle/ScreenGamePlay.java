@@ -616,9 +616,13 @@ public class ScreenGamePlay extends BaseScreen {
         int wpSize = Math.round(h*0.1f);
         if (knight!=null){knight.remove();}
         if(weapon!=null){weapon.remove();}
-        knight = new Knight(-knSize*0.1f,h-knSize*0.57f,knSize,knSize,mainStage,cradleGame.getKnightParams(),cradleGame);
-
-        weapon = new Weapon(knSize*0.585f,h-knSize*0.07f,wpSize,wpSize,mainStage,cradleGame,knight);
+        if(cradleGame.isAdMobViewCreated()) {
+            knight = new Knight(-knSize * 0.1f, h - knSize * 0.57f, knSize, knSize, mainStage, cradleGame.getKnightParams(), cradleGame);
+            weapon = new Weapon(knSize * 0.585f, h - knSize * 0.07f, wpSize, wpSize, mainStage, cradleGame, knight);
+        }else{
+            knight = new Knight(-knSize * 0.1f, h - knSize + knSize * 0.15f, knSize, knSize, mainStage, cradleGame.getKnightParams(), cradleGame);
+            weapon = new Weapon(knSize*0.585f,h-knSize*0.34f,wpSize,wpSize,mainStage,cradleGame,knight);
+        }
 
         if (!cradleGame.isWeaponUsed()){
             //Message size and pos

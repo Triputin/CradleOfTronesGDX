@@ -34,6 +34,12 @@ public class DesktopLauncher implements IActivityRequestHandler, IPlayServices, 
 
 	}
 
+	public boolean isAdMobViewCreated(){
+
+			return false;
+
+	}
+
 	@Override
 	public void onStartMethod() {
 

@@ -131,20 +131,20 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
 	{
 		@Override
 		public void handleMessage(Message msg) {
-			switch(msg.what) {
-				case SHOW_ADS:
-				{
-					adView.setVisibility(View.VISIBLE);
-					gameViewParams.bottomMargin = AdSize.BANNER.getHeightInPixels(self)+2;
-					gameView.setLayoutParams(gameViewParams);
-					break;
-				}
-				case HIDE_ADS:
-				{
-					adView.setVisibility(View.GONE);
-					gameViewParams.bottomMargin = 0;
-					gameView.setLayoutParams(gameViewParams);
-					break;
+			if (adView != null) {
+				switch (msg.what) {
+					case SHOW_ADS: {
+						adView.setVisibility(View.VISIBLE);
+						gameViewParams.bottomMargin = AdSize.BANNER.getHeightInPixels(self) + 2;
+						gameView.setLayoutParams(gameViewParams);
+						break;
+					}
+					case HIDE_ADS: {
+						adView.setVisibility(View.GONE);
+						gameViewParams.bottomMargin = 0;
+						gameView.setLayoutParams(gameViewParams);
+						break;
+					}
 				}
 			}
 		}
@@ -194,18 +194,19 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
 		cradleGame = new CradleGame(this,this,this,this);
 		gameView = initializeForView(cradleGame, config);
 
-		// Create and setup the AdMob view
-		adView = new AdView(this);
-		adView.setAdSize(AdSize.BANNER);
+		// Create and setup the AdMob view for banner
+		//adView = new AdView(this);
+		//adView.setAdSize(AdSize.BANNER);
+
 		//Test settings
 		//adView.setAdUnitId("ca-app-pub-3940256099942544/6300978111");
 		//MobileAds.initialize(this, "ca-app-pub-3940256099942544/6300978111");
 
 		//Work settings
-		adView.setAdUnitId("ca-app-pub-6101517213308128/5757251577");
-		MobileAds.initialize(this, "ca-app-pub-6101517213308128~2009578256");
+		//adView.setAdUnitId("ca-app-pub-6101517213308128/5757251577");
+		//MobileAds.initialize(this, "ca-app-pub-6101517213308128~2009578256");
 
-
+/*
 		MobileAds.initialize(this, new OnInitializationCompleteListener() {
 			@Override
 			public void onInitializationComplete(InitializationStatus initializationStatus) {
@@ -218,13 +219,13 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
 			}
 		});
 
-		// I/Ads: Use RequestConfiguration.Builder().setTestDeviceIds(Arrays.asList("10D929FF85B7803BB2D5CEE273F4FBFE")
 		AdRequest adRequest = new AdRequest.Builder()
 				.addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
 				.addTestDevice("10D929FF85B7803BB2D5CEE273F4FBFE")
 				.addTestDevice("51E3C88D530A640ED6513B1BD4C9DB62")
 				.build();
 		adView.loadAd(adRequest);
+*/
 
 		// Add the libgdx view
 		gameViewParams =
@@ -241,7 +242,7 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
 		adParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
 		adParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
 
-		layout.addView(adView, adParams);
+		//layout.addView(adView, adParams);
 /*
 		// Add the test view
 		RelativeLayout.LayoutParams params =
@@ -336,7 +337,13 @@ public class AndroidLauncher extends AndroidApplication implements IActivityRequ
 	public void showAds(boolean show) {
 		handler.sendEmptyMessage(show ? SHOW_ADS : HIDE_ADS);
 	}
-
+	public boolean isAdMobViewCreated(){
+		if(adView!=null){
+			return  true;
+		}else{
+			return false;
+		}
+	}
 
 	public boolean isSignedIn() {
 		//return GoogleSignIn.getLastSignedInAccount(this) != null;

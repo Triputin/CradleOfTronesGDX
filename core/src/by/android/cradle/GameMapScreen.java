@@ -122,7 +122,10 @@ public class GameMapScreen extends BaseScreen {
         int knSize = Math.round(h*0.4f);
         int wpSize = Math.round(h*0.1f);
         if (knight!=null){knight.remove();}
-        knight = new Knight(-knSize*0.1f,h-knSize+knSize*0.15f,knSize,knSize,uiStage,cradleGame.getKnightParams(),cradleGame);
+
+            knight = new Knight(-knSize * 0.1f, h - knSize + knSize * 0.15f, knSize, knSize, uiStage, cradleGame.getKnightParams(), cradleGame);
+
+
         knight.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {

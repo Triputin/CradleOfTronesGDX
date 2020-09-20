@@ -1175,4 +1175,9 @@ public void Init(){
     public IGoogleServices getiGoogleServices() {
         return iGoogleServices;
     }
+
+    public boolean isAdMobViewCreated(){
+        return myRequestHandler.isAdMobViewCreated();
+    }
+
 }
