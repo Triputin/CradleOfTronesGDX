@@ -451,6 +451,15 @@ public class ScreenGamePlay extends BaseScreen {
                                         }
                                         lastSelectedItem.setSelectedNext((Item) CoinActor);// change image after next selected
                                         lastSelectedItem = ((Item) CoinActor);
+                                    } else{
+                                        //if user selects back
+                                        if (!((Item) CoinActor).isLocked()){
+                                           if( ((Item) CoinActor).getNext()!=null){
+                                               ((Item) CoinActor).getNext().setSelected(false,null);
+                                               ((Item) CoinActor).setSelectedNext(null);
+                                               lastSelectedItem = ((Item) CoinActor);
+                                           }
+                                        }
                                     }
 
                                 }
@@ -470,6 +479,15 @@ public class ScreenGamePlay extends BaseScreen {
                                                 }
                                                 lastSelectedItem.setSelectedNext((Item) CoinActor);// change image after next selected
                                                 lastSelectedItem = ((Item) CoinActor);
+                                    }else{
+                                        //if user selects back
+                                        if (!((Item) CoinActor).isLocked()){
+                                            if( ((Item) CoinActor).getNext()!=null){
+                                                ((Item) CoinActor).getNext().setSelected(false,null);
+                                                ((Item) CoinActor).setSelectedNext(null);
+                                                lastSelectedItem = ((Item) CoinActor);
+                                            }
+                                        }
                                     }
 
                                 }
